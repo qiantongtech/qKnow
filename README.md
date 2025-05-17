@@ -1,37 +1,150 @@
-# qKnow
+![banner.png](.gitee/banner.png)
+<p align="center">
+ <img src="https://img.shields.io/badge/JDK-1.8+-brightgreen.svg" alt="JDK">
+ <img src="https://img.shields.io/badge/Spring%20Boot-2.5.15-blue.svg" alt="Downloads">
+ <img src="https://img.shields.io/badge/Vue-3.4.31-blue.svg" alt="Downloads">
+ <img src="https://img.shields.io/github/license/qiantongtech/qKnow" alt=""/>
+ <img src="https://img.shields.io/badge/qKnow-v1.0.0-blue.svg" alt=""/>
+ <img src="https://gitee.com/qiantongtech/qKnow/badge/star.svg" alt=""/>
+ <img src="https://img.shields.io/github/stars/qiantongtech/qKnow?label=Github%20Stars" alt=""/>
+</p>
 
-#### 介绍
-千知平台是一个面向企业级应用的开源知识管理系统。平台深度融合了知识抽取、知识融合、知识推理与知识图谱等核心功能模块，支持从非结构化和结构化数据中高效提取知识，助力企业快速构建可落地的知识图谱体系。
-
-#### 软件架构
-软件架构说明
-
-
-#### 安装教程
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 使用说明
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+<p align="center">
+  📖简体中文 | <a href="README.en.md">📖English</a>
+</p>
 
 
-#### 特技
+## 🌈平台简介
+**千知平台（qKnow）**是一款**面向企业级应用**的开源知识管理系统，深度融合**知识抽取**、**知识融合**、**知识推理**与**知识图谱**构建等核心能力。平台集成先进的**大语言模型（LLM）技术**，显著提升对结构化、非结构化数据的理解与处理能力，实现更智能、高效的**知识提取**与**语义融合**。借助大模型强大的推理与表达能力，千知平台可帮助企事业单位快速构建高质量、可落地的**知识图谱体系**，驱动**智能化决策**与**业务创新**。
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+<!--  ✨✨✨**演示地址**✨✨✨ [**点击跳转**](https://gitee.com/qiantongtech/qKnow) -->
+
+## 🍱 使用场景
+- 企业内部知识管理：技术文档库、员工手册、项目文档等。
+- 客户服务支持：在线客服、帮助中心、FAQ等。
+- 决策支持与战略规划：行业分析报告、竞争对手情报、市场需求预测等。
+- 教育与培训：在线课程、职业培训、技能提升等。
+- 故障诊断与维护：IT系统运维、生产设备维护、车辆维修等。
+- 法规遵从与风险管理：合同审查、政策更新、风险评估等。
+
+## 🚀 优势
+- 知识图谱为骨，大模型为脑。
+- 企业级架构，轻量级上手。
+- 功能模块自由组合，扩展性强如拼乐高。
+- 初生即开源，成长由社区共塑。
+- 技术有温度，知识有脉络。
+
+## ✨ 核心功能
+- [x] **`知识中心`** 包含知识分类和文件管理，助力用户迅速定位所需知识资源。
+- [x] **`概念配置`** 自定义配置知识抽取的概念规则。
+- [x] **`关系配置`** 自定义配置知识抽取的关系规则。
+- [x] **`非结构化抽取`** 运用预训练模型，从非结构化数据源中抽取有价值的知识。
+- [x] **`结构化抽取`** 从数据库等结构化数据集中系统性地抽取、转换并加载知识元素。
+- [x] **`图谱探索`** 提供直观且交互性强的图形界面，可视化地浏览和分析复杂的知识图谱。
+- [x] **`系统管理`** 系统的基础信息管理，包括用户管理、角色管理、部门管理、菜单管理、日志管理等功能。
+
+## 🌱 待办
+- [ ] **`知识融合`** 整合来自不同源的知识，通过融合策略提高知识的一致性和准确性。
+- [ ] **`知识推理`** 使用逻辑推理技术增强知识的理解和应用，不仅能理解知识间的直接关联，还能推断出潜在的间接关系。
+- [ ] **`知识问答`** 基于大模型技术（LLM），集成NLP技术和知识图谱的智能问答平台，允许通过自然语言提问。
+- [ ] **`知识检索`** 基于知识库检索模型，结合全文检索技术和语义分析，允许通过自然语言对知识库内容的快速而准确的搜索功能。
+- [ ] **`服务管理`** 一站式的后台服务管理解决方案，支持服务的注册、监控、维护及优化。
+- [ ] **`服务日志`** 自动记录所有服务请求和服务响应详情，便于进行故障排查和性能评估。
+
+## 🚨 默认端口
+
+| 端口号  | 协议   | 说明         |
+|------|------|------------|
+| 8090 | http | 服务端        |
+| 80   | http | 网页端        |
+| 7687 | http | Neo4j数据库   |
+| 7474 | http | Neo4j可视化面板 |
+| 3306 | http | mysql数据库   |
+| 6379 | http | Redis      |
+
+**访问地址**：127.0.0.1:80 端口同上，账号：admin 密码：qKnow123
+
+## 🧩 架构图
+敬请期待～
+<!-- ![framework.png](.gitee/framework.png) -->
+
+## 🛠️ 技术栈
+qData 平台采用前后端分离架构，后端基于 Spring Boot，前端基于 Vue 3，整合常用中间件与数据工具，构建一站式数据中台解决方案。
+
+### 🖥️ 后端技术栈
+
+| 技术框架             | 描述                      |
+|------------------|-------------------------|
+| Spring Boot      | 主体框架，简化配置与开发            |
+| MyBatis-Plus     | ORM 框架，简化数据库操作          |
+| Spring Framework | 基础架构支持，包括依赖注入、面向切面编程等功能 |
+| Quartz           | 定时任务调度                  |
+| Spring Security  | 安全框架，提供认证、授权等安全功能       |
+| Alibaba Druid    | 数据库连接池，优化数据库访问性能        |
+
+### 🌐 前端技术栈
+
+| 技术框架         | 描述                        |
+|--------------|---------------------------|
+| Vue 3        | 渐进式前端框架                   |
+| Vite         | 快速构建工具，替代 Vue CLI         |
+| Element Plus | UI 组件库                    |
+| Axios        | HTTP 请求库                  |
+| Pinia        | 状态管理（替代 Vuex）             |
+| Vue Router   | 前端路由控制                    |
+| Vis          | 知识图谱展示，创建动态、交互式的可视化图表和网络图 |
+| Echarts      | 数据可视化库，支持多种类型的图表          |
+
+### 🧩 通用组件 & 第三方依赖
+
+| 组件 / 工具    | 描述                        |
+|------------|---------------------------|
+| DeepKE     | 知识抽取工具，利用深度学习技术从文本中提取实体关系 |
+| MySQL      | 核心关系型数据库                  |
+| Neo4j      | 图数据库                      |
+| Redis      | 数据缓存与高性能数据读取              |
+| Swagger    | 接口文档生成工具                  |
+| Docker（可选） | 容器化部署支持                   |
+
+## 🏗️ 部署要求
+在部署 qKnow 之前，请确保以下环境和工具已正确安装：
+
+### 🖥️ 服务端环境要求（后端）
+
+| 项目    | 推荐版本                  | 说明                  |
+|-------|-----------------------|---------------------|
+| JDK   | 1.8 或以上               | 建议使用 OpenJDK 8 或 11 |
+| Maven | 3.6+                  | 项目构建与依赖管理           |
+| MySQL | 5.7 或 8.0             | 关系型数据库              |
+| Neo4j | 3.4.5                 | 图数据库                |
+| Redis | 5.0+                  | 缓存与消息功能支持           |
+| 操作系统  | Windows / Linux / Mac | 通用环境均可运行            |
+
+### 🌐 前端环境要求（可选，若需本地构建）
+
+| 项目                | 推荐版本 | 说明     |
+|-------------------|------|--------|
+| Node.js           | 16+  | 构建工具依赖 |
+| npm / pnpm / yarn | 任一即可 | 包管理器   |
+| Vue CLI / Vite    | 最新版  | 脚手架工具  |
+
+## 🚀 快速开始
+👉 点击下方按钮，查看完整的安装与部署指南：
+
+[🧭 查看快速开始文档](QUICKSTART.md)
+
+## 👥 QQ交流群
+欢迎加入 qData 官方 QQ 交流群，获取最新动态、技术支持与使用交流。
+
+[![加入QQ群](https://img.shields.io/badge/QQ群-277328475-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=XwhV8deuZXt__yteR1clNanVSXzA-ugq&authKey=ezgwKqEZPdP%2FgC9I03OBkJb%2Biii8yvVfwrcQuu0%2FL6ILXcRdHYDBFKCXeoeBT0E6&noverify=0&group_code=277328475)
+
+## 🖼️ 系统配图
+敬请期待～
+<!--
+<table>
+    <tr>
+        <td><img alt="" src=""/></td>
+        <td><img alt="" src=""/></td>
+    </tr>
+</table>
+-->
