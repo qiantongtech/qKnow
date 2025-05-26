@@ -2,6 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -35,48 +36,17 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.5.5.Final/mapstruct-processor-1.5.5.Final.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.5.Final/mapstruct-1.5.5.Final.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
+          <entry name="/usr/local/repository/org/mapstruct/mapstruct-processor/1.5.5.Final/mapstruct-processor-1.5.5.Final.jar" />
+          <entry name="/usr/local/repository/org/mapstruct/mapstruct/1.5.5.Final/mapstruct-1.5.5.Final.jar" />
+          <entry name="/usr/local/repository/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
         </processorPath>
         <module name="qknow-server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="qKnow" target="1.8" />
-      <module name="qknow-auth" target="1.8" />
-      <module name="qknow-common" target="1.8" />
-      <module name="qknow-config" target="1.8" />
-      <module name="qknow-es" target="1.8" />
-      <module name="qknow-file" target="1.8" />
-      <module name="qknow-framework" target="1.8" />
-      <module name="qknow-generator" target="1.8" />
-      <module name="qknow-module-app" target="1.8" />
-      <module name="qknow-module-app-api" target="1.8" />
-      <module name="qknow-module-app-biz" target="1.8" />
-      <module name="qknow-module-dm" target="1.8" />
-      <module name="qknow-module-dm-api" target="1.8" />
-      <module name="qknow-module-dm-biz" target="1.8" />
       <module name="qknow-module-example" target="1.8" />
       <module name="qknow-module-example-api" target="1.8" />
       <module name="qknow-module-example-biz" target="1.8" />
-      <module name="qknow-module-ext" target="1.8" />
-      <module name="qknow-module-ext-api" target="1.8" />
-      <module name="qknow-module-ext-biz" target="1.8" />
-      <module name="qknow-module-kmc" target="1.8" />
-      <module name="qknow-module-kmc-api" target="1.8" />
-      <module name="qknow-module-kmc-biz" target="1.8" />
-      <module name="qknow-module-system" target="1.8" />
-      <module name="qknow-module-system-api" target="1.8" />
-      <module name="qknow-module-system-biz" target="1.8" />
-      <module name="qknow-mybatis" target="1.8" />
-      <module name="qknow-neo4j" target="1.8" />
-      <module name="qknow-pay" target="1.8" />
-      <module name="qknow-quartz" target="1.8" />
-      <module name="qknow-redis" target="1.8" />
-      <module name="qknow-security" target="1.8" />
-      <module name="qknow-server" target="1.8" />
-      <module name="qknow-websocket" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
