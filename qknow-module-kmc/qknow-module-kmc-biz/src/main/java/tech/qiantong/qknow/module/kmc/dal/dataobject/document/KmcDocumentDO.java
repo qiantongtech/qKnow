@@ -45,9 +45,6 @@ public class KmcDocumentDO extends BaseEntity {
     /** 文件名称 */
     private String name;
 
-    /** 文件标签 */
-    private String tagIds;
-
     /** 文件路径 */
     private String path;
 
@@ -60,11 +57,5 @@ public class KmcDocumentDO extends BaseEntity {
     /** 删除标志 */
     @TableLogic
     private Boolean delFlag;
-
-    /** 预览次数 */
-    private Long previewCount;
-
-    /** 下载次数 */
-    private Long downloadCount;
 
 }

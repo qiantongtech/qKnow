@@ -113,17 +113,17 @@ dromara:
 
 ---
 
-## 四、知识抽取工具配置（DeepKe）<small>（深度学习模型配置）</small>
+## 四、知识抽取工具配置（DeepKE）<small>（深度学习模型配置）</small>
 
-当前开源版本采用 [**DeepKe**](https://github.com/zjunlp/DeepKE) 作为知识抽取工具。请参考官方文档进行安装，推荐使用 Docker 安装。
+当前开源版本采用 [**开源中文知识图谱抽取框架开箱即用特别版DeepKE-cnSchema**](https://github.com/zjunlp/DeepKE/blob/main/README_CNSCHEMA_CN.md) 作为知识抽取工具。请参考官方文档进行安装，推荐使用 Docker 安装。
 
-#### <span style="color:#4CAF50">修改 DeepKe 执行脚本</span>
+#### <span style="color:#4CAF50">修改 DeepKE 执行脚本</span>
 
-路径：`qKnow/bin/deepke/start.sh`
+路径：`qKnow/bin/DeepKE/start.sh`
 
 ```bash
 #!/bin/bash                    
-# deepke.sh
+# DeepKE.sh
  
 if [ $# -lt 1 ]; then
     echo "Usage: $0 <text>"
@@ -131,7 +131,8 @@ if [ $# -lt 1 ]; then
 fi
 
 TEXT="$1"
-# 此处请换成你的docker容器id
+
+# 注意：此处请换成你的docker容器id
 docker exec afd0ee75f9e1 python -u predict.py text='\"$TEXT\"'
 ```
 
@@ -140,16 +141,9 @@ docker exec afd0ee75f9e1 python -u predict.py text='\"$TEXT\"'
 路径：`qKnow/qknow-module-ext/qknow-module-ext-biz/src/main/resources/application-ext-dev.yml`
 
 ```yaml
-# 非结构化抽取方式选择：deepke或者model，当前开源版本请选择deepke
-unstruct:
-  type: deepke
-
-# 如果是本地化部署DeepKE，请将deepke.baseUrl修改为本地的路径
+# deepke抽取脚本路径
 deepke:
-  baseUrl: D:\qiantong
-  predictYaml: ${deepke.baseUrl}\cnschema\conf\predict.yaml
-  relatinCsv: ${deepke.baseUrl}\cnschema\data\test.csv
-  conceptYaml: ${deepke.baseUrl}\DeepKE\example\ner\standard\conf\train.yaml
+  startShPath: /Users/shaun/workspace/OpenSource/qKnow/bin/DeepKE/start.sh
 ```
 
 ---

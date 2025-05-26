@@ -24,7 +24,6 @@ public class KmcDocumentSaveReqVO extends BaseEntity{
     private Long id;
 
     @Schema(description = "工作区id", example = "")
-//    @NotNull(message = "工作区id不能为空")
     private Long workspaceId;
 
     @Schema(description = "知识分类id", example = "")
@@ -39,9 +38,6 @@ public class KmcDocumentSaveReqVO extends BaseEntity{
     @NotBlank(message = "文件名称不能为空")
     @Size(max = 256, message = "文件名称长度不能超过256个字符")
     private String name;
-
-    @Schema(description = "文件标签", example = "")
-    private String tagIds;
 
     @Schema(description = "文件路径", example = "")
     @NotBlank(message = "文件路径不能为空")
@@ -58,11 +54,4 @@ public class KmcDocumentSaveReqVO extends BaseEntity{
     @Schema(description = "备注", example = "")
     @Size(max = 256, message = "备注长度不能超过256个字符")
     private String remark;
-
-    @Schema(description = "预览次数", example = "")
-    private Long previewCount;
-
-    @Schema(description = "下载次数", example = "")
-    private Long downloadCount;
-
 }

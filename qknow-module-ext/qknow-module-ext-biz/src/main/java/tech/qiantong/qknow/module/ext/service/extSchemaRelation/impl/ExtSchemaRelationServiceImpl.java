@@ -39,13 +39,9 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class ExtSchemaRelationServiceImpl extends ServiceImpl<ExtSchemaRelationMapper, ExtSchemaRelationDO> implements IExtSchemaRelationService {
-    @Value("${deepke.relatinCsv}")
-    private String relatinCsv;
 
     @Resource
     private ExtSchemaRelationMapper extSchemaRelationMapper;
-    @Resource
-    private IExtSchemaService extSchemaService;
 
     @Override
     public PageResult<ExtSchemaRelationDO> getExtSchemaRelationPage(ExtSchemaRelationPageReqVO pageReqVO) {
@@ -56,12 +52,6 @@ public class ExtSchemaRelationServiceImpl extends ServiceImpl<ExtSchemaRelationM
     public Long createExtSchemaRelation(ExtSchemaRelationSaveReqVO createReqVO) {
         ExtSchemaRelationDO dictType = BeanUtils.toBean(createReqVO, ExtSchemaRelationDO.class);
         extSchemaRelationMapper.insert(dictType);
-
-        //每次变更直接查询全表 更新关系Schema
-//        PageResult<ExtSchemaRelationDO> pageResult = extSchemaRelationMapper.selectPage(new ExtSchemaRelationPageReqVO());
-//        List<ExtSchemaRelationDO> relationDOS = BeanUtils.toBean(pageResult.getRows(), ExtSchemaRelationDO.class);
-//        //更新关系Schema
-//        updateRelationSchemaCSV(relationDOS);
         return dictType.getId();
 
     }
@@ -71,70 +61,7 @@ public class ExtSchemaRelationServiceImpl extends ServiceImpl<ExtSchemaRelationM
 
         // 更新关系配置
         ExtSchemaRelationDO updateObj = BeanUtils.toBean(updateReqVO, ExtSchemaRelationDO.class);
-
-        //每次变更直接查询全表 更新关系Schema
-//        PageResult<ExtSchemaRelationDO> pageResult = extSchemaRelationMapper.selectPage(new ExtSchemaRelationPageReqVO());
-//        List<ExtSchemaRelationDO> relationDOS = BeanUtils.toBean(pageResult.getRows(), ExtSchemaRelationDO.class);
-//        //更新关系Schema
-//        updateRelationSchemaCSV(relationDOS);
         return extSchemaRelationMapper.updateById(updateObj);
-    }
-
-    /**
-     * 修改关系Schema
-     *
-     * @return
-     */
-    private void updateRelationSchemaCSV(List<ExtSchemaRelationDO> relationDOS) {
-        List<ExtSchemaDO> schemaAllList = extSchemaService.getExtSchemaAllList(new ExtSchemaDO());
-        // 读取CSV文件
-//            CSVReader csvReader = new CSVReader(new FileReader(inputCsv));
-//            List<String[]> rows = csvReader.readAll();
-//            csvReader.close();
-        try {
-            List<String[]> rows = new ArrayList<>();
-            // 修改数据，忽略前两行
-            for (int i = 0; i < relationDOS.size() + 2; i++) {
-                // 修改数据
-                String[] row = new String[4];
-                if (i == 0) {
-                    row[0] = "head_type";     // 修改第一列
-                    row[1] = "tail_type";     // 修改第二列
-                    row[2] = "ralation";      // 修改第三列
-                    row[3] = "index";         // 修改第四列
-                } else if (i == 1) {
-                    row[0] = "None"; // 修改第一列
-                    row[1] = "None";      // 修改第二列
-                    row[2] = "None";      // 修改第三列
-                    row[3] = "0"; // 修改第四列
-                } else {
-                    ExtSchemaRelationDO relationDO = relationDOS.get(i - 2);
-                    String head = "";
-                    String tail = "";
-                    for (ExtSchemaDO extSchemaDO : schemaAllList) {
-                        if (relationDO.getStartSchemaId().equals(extSchemaDO.getId())) {
-                            head = extSchemaDO.getName();
-                        }
-                        if (relationDO.getEndSchemaId().equals(extSchemaDO.getId())) {
-                            tail = extSchemaDO.getName();
-                        }
-                    }
-                    row[0] = head; // 修改第一列
-                    row[1] = tail;      // 修改第二列
-                    row[2] = relationDO.getRelation();      // 修改第三列
-                    row[3] = "" + (i - 1); // 修改第四列
-                }
-                rows.add(row);
-            }
-            // 写回原始CSV文件，覆盖原文件
-            CSVWriter csvWriter = new CSVWriter(new FileWriter(relatinCsv));
-            csvWriter.writeAll(rows);
-            csvWriter.close();
-            log.info("-------修改关系配置CSV成功!------");
-        } catch (IOException e) {
-            log.info("修改关系Schema异常:{}", e);
-            throw new RuntimeException("修改关系Schema异常" + e.getMessage());
-        }
     }
 
     @Override

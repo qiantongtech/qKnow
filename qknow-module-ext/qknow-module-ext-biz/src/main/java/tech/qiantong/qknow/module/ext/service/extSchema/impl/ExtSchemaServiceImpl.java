@@ -1,19 +1,11 @@
 package tech.qiantong.qknow.module.ext.service.extSchema.impl;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.opencsv.CSVWriter;
 import lombok.extern.slf4j.Slf4j;
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.yaml.snakeyaml.DumperOptions;
-import org.yaml.snakeyaml.Yaml;
 import tech.qiantong.qknow.common.core.page.PageResult;
 import tech.qiantong.qknow.common.exception.ServiceException;
 import tech.qiantong.qknow.common.utils.StringUtils;
@@ -26,7 +18,6 @@ import tech.qiantong.qknow.module.ext.controller.admin.extSchema.vo.ExtSchemaPag
 import tech.qiantong.qknow.module.ext.controller.admin.extSchema.vo.ExtSchemaRespVO;
 import tech.qiantong.qknow.module.ext.controller.admin.extSchema.vo.ExtSchemaSaveReqVO;
 import tech.qiantong.qknow.module.ext.dal.dataobject.extSchema.ExtSchemaDO;
-import tech.qiantong.qknow.module.ext.dal.dataobject.extSchemaRelation.ExtSchemaRelationDO;
 import tech.qiantong.qknow.module.ext.dal.mapper.extSchema.ExtSchemaMapper;
 import tech.qiantong.qknow.module.ext.service.extSchema.IExtSchemaService;
 /**
@@ -39,8 +30,6 @@ import tech.qiantong.qknow.module.ext.service.extSchema.IExtSchemaService;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class ExtSchemaServiceImpl  extends ServiceImpl<ExtSchemaMapper,ExtSchemaDO> implements IExtSchemaService {
-    @Value("${deepke.conceptYaml}")
-    private String conceptYaml;
 
     @Resource
     private ExtSchemaMapper extSchemaMapper;
@@ -54,10 +43,6 @@ public class ExtSchemaServiceImpl  extends ServiceImpl<ExtSchemaMapper,ExtSchema
     public Long createExtSchema(ExtSchemaSaveReqVO createReqVO) {
         ExtSchemaDO dictType = BeanUtils.toBean(createReqVO, ExtSchemaDO.class);
         extSchemaMapper.insert(dictType);
-
-//        PageResult<ExtSchemaDO> pageResult = extSchemaMapper.selectPage(new ExtSchemaPageReqVO());
-//        List<ExtSchemaDO> schemaDOList = BeanUtils.toBean(pageResult.getRows(), ExtSchemaDO.class);
-//        updateConceptSchemaYAML(schemaDOList);
         return dictType.getId();
     }
 
@@ -67,58 +52,8 @@ public class ExtSchemaServiceImpl  extends ServiceImpl<ExtSchemaMapper,ExtSchema
 
         // 更新概念配置
         ExtSchemaDO updateObj = BeanUtils.toBean(updateReqVO, ExtSchemaDO.class);
-
-//        PageResult<ExtSchemaDO> pageResult = extSchemaMapper.selectPage(new ExtSchemaPageReqVO());
-//        List<ExtSchemaDO> schemaDOList = BeanUtils.toBean(pageResult.getRows(), ExtSchemaDO.class);
-//        updateConceptSchemaYAML(schemaDOList);
         return extSchemaMapper.updateById(updateObj);
     }
-
-    /**
-     * 修改概念配置yaml
-     * @param schemaDOList
-     */
-    private void updateConceptSchemaYAML(List<ExtSchemaDO> schemaDOList) {
-        String[] row = new String[schemaDOList.size()];
-        for (int i = 0; i < row.length; i++) {
-            row[i] = schemaDOList.get(i).getName();
-        }
-        List<String> list = Arrays.asList(row);
-        String lables = "[" + String.join(", ",
-                list.stream()
-                        .map(s -> "'" + s + "'")  // 为每个元素添加单引号
-                        .toArray(String[]::new))  // 转换为数组传递给 String.join()
-                + "]";
-        //修改deepke中的lables
-        updatePythonYmalContent(conceptYaml,lables);
-    }
-
-    /**
-     * 修改deepke中yaml
-     * @param yamlUrl
-     * @param lables
-     * @return
-     */
-    private boolean updatePythonYmalContent(String yamlUrl, String lables) {
-        try {
-            // 读取 YAML 文件
-            File file = new File(yamlUrl);
-            Yaml yaml = new Yaml();
-            Map<String, Object> data = yaml.loadAs(new FileReader(file), Map.class);
-            // 修改 labels 字段的内容
-            data.put("lables", lables);
-            // 将修改后的内容写回文件
-            DumperOptions options = new DumperOptions();
-            options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK); // 设置输出格式为块样式
-            Yaml newYaml = new Yaml(options);
-            newYaml.dump(data, new FileWriter(file));
-        } catch (IOException e) {
-            log.info("修改 lables 字段的内容异常:{}", e);
-            return false;
-        }
-        return true;
-    }
-
 
     @Override
     public int removeExtSchema(Collection<Long> idList) {

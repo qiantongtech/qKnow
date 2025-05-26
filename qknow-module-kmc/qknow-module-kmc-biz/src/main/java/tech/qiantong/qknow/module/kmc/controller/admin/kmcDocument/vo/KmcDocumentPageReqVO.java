@@ -32,23 +32,12 @@ public class KmcDocumentPageReqVO extends PageParam {
     @Schema(description = "文件名称", example = "")
     private String name;
 
-    @Schema(description = "文件标签", example = "")
-    private String tagIds;
-
     @Schema(description = "文件路径", example = "")
     private String path;
 
     @Schema(description = "文件描述", example = "")
     private String description;
 
-    @Schema(description = "预览次数", example = "")
-    private Long previewCount;
-
-    @Schema(description = "下载次数", example = "")
-    private Long downloadCount;
-
     @TableField(exist = false)
     private List<Long> ids ;
-
-
 }

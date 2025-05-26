@@ -184,24 +184,6 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="24">
-            <el-form-item label="文件标签" prop="tagIdArr">
-              <el-select
-                  v-model="form.tagIdArr"
-                  multiple
-                  placeholder="文件标签"
-              >
-                <el-option
-                    v-for="item in document_tags"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                />
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="24">
             <el-form-item label="文件路径" prop="path">
               <FileUpload v-model="form.path" :fileName="form.name" :limit="1" :fileSize="15" :platForm="platForm"  @update:fileName="updateFormFileName"></FileUpload>
             </el-form-item>
@@ -286,7 +268,6 @@ import FileUpload from "@/components/FileUpload2/index.vue";
 
 const { proxy } = getCurrentInstance();
 
-const {document_tags} = proxy.useDict('document_tags')
 const documentList = ref([]);
 const platForm = ref("aliyun-oss-qt");
 const env = import.meta.env.VITE_APP_ENV;
@@ -373,7 +354,6 @@ const data = reactive({
     workspaceId: [{ required: true, message: "工作区id不能为空", trigger: "blur" }],
     categoryId: [{ required: true, message: "知识分类id不能为空", trigger: "blur" }],
     name: [{ required: true, message: "文件名称不能为空", trigger: "blur" }],
-    tagIds: [{ required: true, message: "文件标签不能为空", trigger: "change" }],
     path: [{ required: true, message: "文件路径不能为空", trigger: "blur" }],
     validFlag: [{ required: true, message: "是否有效不能为空", trigger: "blur" }],
     delFlag: [{ required: true, message: "删除标志不能为空", trigger: "blur" }],
@@ -568,9 +548,6 @@ function handleUpdate(row) {
   const _id = row.id || ids.value
   getDocument(_id).then(response => {
     form.value = response.data;
-    if (response.data.tagIds) {
-      form.value.tagIdArr = response.data.tagIds.split(",");
-    }
     open.value = true;
     title.value = "修改知识文件";
   });
@@ -585,9 +562,6 @@ function submitForm() {
       }
       if (form.value.updateTime != null) {
         form.value.updateTime = moment(form.value.updateTime).format('YYYY-MM-DD HH:mm:ss');
-      }
-      if (form.value.tagIdArr) {
-        form.value.tagIds = form.value.tagIdArr.join(",");
       }
       if (form.value.id != null) {
         updateDocument(form.value).then(response => {
@@ -770,29 +744,6 @@ function previewRefactoring(row) {
   fileUrl.value = path;
   dialogVisible.value = true;
 }
-
-// function previewRefactoring(row) {
-//   let path = "";
-//   if ( env === 'production' ) {
-//     path = 'http://10.32.80.211:8090/prod-api/profile' + row.path
-//   } else {
-//     path = row.path
-//   }
-//   // else {
-//   //   path = 'http://localhost:9035/profile' + row.path
-//   // }
-//   getPdfPreview({url: path}).then((res) => {
-//     console.log(res)
-//     if (res.data.fileBase64 == "") {
-//       this.$modal.msgError("文件无内容");
-//     } else {
-//       viewPdf(res.data.fileBase64,row.name);
-//       //修改浏览次数
-//       updatePreviewCount(row.id).then(response => {
-//       })
-//     }
-//   });
-// }
 
 // content是base64格式
 function viewPdf(content,name) {

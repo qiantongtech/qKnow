@@ -5,9 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="322ddf82-6903-4669-979a-406aaa8be08e" name="Changes" comment="账号密码更改+电子邮箱更改+登录页按钮跳转官网+后端启动名称改为qknow">
-      <change beforePath="$PROJECT_DIR$/qknow-framework/qknow-file/src/main/resources/application-file-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-framework/qknow-file/src/main/resources/application-file-dev.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-framework/qknow-file/src/main/resources/application-file-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-framework/qknow-file/src/main/resources/application-file-prod.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-ui/src/components/FileUpload2/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-ui/src/components/FileUpload2/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitee/framework.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/QUICKSTART.md" beforeDir="false" afterPath="$PROJECT_DIR$/QUICKSTART.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/controller/admin/extSchemaAttribute/ExtSchemaAttributeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/controller/admin/extSchemaAttribute/ExtSchemaAttributeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/extEnum/ExtTaskStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/extEnum/ExtTaskStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/deepke/impl/DeepkeExtractionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/deepke/impl/DeepkeExtractionServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/extSchema/impl/ExtSchemaServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/extSchema/impl/ExtSchemaServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/extSchemaRelation/impl/ExtSchemaRelationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/extSchemaRelation/impl/ExtSchemaRelationServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/extUnstructTask/impl/ExtUnstructTaskServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/extUnstructTask/impl/ExtUnstructTaskServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/test/DeepkeTestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/test/DeepkeTestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/test/TestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/test/TestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/resources/application-ext-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/resources/application-ext-dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/resources/application-ext-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/resources/application-ext-prod.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/resources/application-ext-stage.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/controller/admin/kmcDocument/KmcDocumentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/controller/admin/kmcDocument/KmcDocumentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/controller/admin/kmcDocument/vo/KmcDocumentPageReqVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/controller/admin/kmcDocument/vo/KmcDocumentPageReqVO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/controller/admin/kmcDocument/vo/KmcDocumentRespVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/controller/admin/kmcDocument/vo/KmcDocumentRespVO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/controller/admin/kmcDocument/vo/KmcDocumentSaveReqVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/controller/admin/kmcDocument/vo/KmcDocumentSaveReqVO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/dal/dataobject/document/KmcDocumentDO.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/dal/dataobject/document/KmcDocumentDO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/service/kmcDocument/impl/KmcDocumentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/service/kmcDocument/impl/KmcDocumentServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-server/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-server/src/main/resources/application-dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-ui/src/views/kmc/kmcDocument/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-ui/src/views/kmc/kmcDocument/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sql/pdman/qknow.pdma.json" beforeDir="false" afterPath="$PROJECT_DIR$/sql/pdman/qknow.pdma.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,22 +54,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="customMavenHome" value="/usr/local/apache-maven-3.6.3" />
-        <option name="localRepository" value="/usr/local/repository" />
-        <option name="mavenHomeTypeForPersistence" value="CUSTOM" />
-        <option name="userSettingsFile" value="/usr/local/apache-maven-3.6.3/conf/settings.xml" />
-      </MavenGeneralSettings>
-    </option>
-  </component>
   <component name="MavenRunner">
     <option name="skipTests" value="true" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 7
-}]]></component>
   <component name="ProjectId" id="2xCcdHALLkSn8qFtrbzJE8iRwmy" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
@@ -58,29 +65,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.git.unshallow": "true",
-    "Spring Boot.AniviaApplication.executor": "JRebel Debug",
-    "git-widget-placeholder": "feature-source",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "MavenSettings",
-    "ts.external.directory.path": "/Applications/IntelliJ IDEA.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external",
-    "vue.rearranger.settings.migration": "true"
-  }
-}]]></component>
+  <component name="PropertiesComponent">
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.2137998" />
+    <property name="project.structure.side.proportion" value="0.2835821" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+    <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -104,15 +103,6 @@
       <module />
       <method />
     </configuration>
-    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType">
-      <module name="" />
-      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
-      <option name="PROGRAM_PARAMETERS" />
-      <predefined_log_file enabled="true" id="idea.log" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <method v="2">
@@ -126,9 +116,23 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="qknow-es" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="qknow-es" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="AniviaApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="qknow-server" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="tech.qiantong.qknow.server.AniviaApplication" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -138,6 +142,15 @@
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
       <properties />
       <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+      <option name="PROGRAM_PARAMETERS" />
+      <predefined_log_file enabled="true" id="idea.log" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -164,6 +177,8 @@
       <workItem from="1747883912299" duration="11635000" />
       <workItem from="1747963739431" duration="19772000" />
       <workItem from="1748228499147" duration="8471000" />
+      <workItem from="1748251228928" duration="106000" />
+      <workItem from="1748251390052" duration="329000" />
     </task>
     <task id="LOCAL-00001" summary="若依标识去除">
       <option name="closed" value="true" />
@@ -200,16 +215,5 @@
     <MESSAGE value="若依标识去除-补充中文去除" />
     <MESSAGE value="账号密码更改+电子邮箱更改+登录页按钮跳转官网+后端启动名称改为qknow" />
     <option name="LAST_COMMIT_MESSAGE" value="账号密码更改+电子邮箱更改+登录页按钮跳转官网+后端启动名称改为qknow" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/qknow-framework/qknow-file/src/main/java/tech/qiantong/qknow/file/util/FileUploadUtil.java</url>
-          <line>99</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
