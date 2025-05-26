@@ -100,7 +100,7 @@ const uploadFileUrl = ref(import.meta.env.VITE_APP_BASE_API + "/upload"); // 上
 const headers = ref({ Authorization: "Bearer " + getToken() });
 const fileList = ref([]);
 const uploadData = ref({
-  platForm: env === 'production' ? 'local' : 'aliyun-oss-qt'
+  platForm: 'local'
 });
 const showTip = computed(
   () => props.isShowTip && (props.fileType || props.fileSize)
