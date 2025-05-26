@@ -92,15 +92,6 @@
       </el-col>
 
       <el-col :xs="24" :sm="24" :md="6" :lg="6" class="home-gutter">
-<!--        <div class="border-item module-report">-->
-<!--          &lt;!&ndash;                    <el-button class="button" type="primary" @click="changeReport">&ndash;&gt;-->
-<!--          &lt;!&ndash;                        报工&ndash;&gt;-->
-<!--          &lt;!&ndash;                    </el-button>&ndash;&gt;-->
-<!--          <el-button class="report-button" type="primary" icon="Tickets" plain @click="changeReport" @mousedown="(e) => e.preventDefault()">-->
-<!--            <p>&nbsp;报&nbsp;工</p>-->
-<!--            &lt;!&ndash;                        <img src="@/assets/icons/svg/报工统计.svg" style="width: 22px;" alt="" />&nbsp;报工&ndash;&gt;-->
-<!--          </el-button>-->
-<!--        </div>-->
         <div class="border-item module-6 home-gutter">
           <div class="border-item-head">
             <span class="head-title">新闻公告 </span>
@@ -115,36 +106,26 @@
           </div>
         </div>
         <div class="border-item module-7">
-          <div class="border-item-head">
-            <span class="head-title">千知平台 </span>
-            <el-link type="primary" :underline="false">查看更多 </el-link>
-          </div>
-          <div class="border-item-body">
-            <!-- <el-carousel
-                            trigger="click"
-                            ref="carousel"
-                            arrow="always"
-                            style="height: 100%"
-                        >
-                            <el-carousel-item v-for="item in 4" :key="item">
-                                <div class="module-item">
-                                    <img
-                                        src="@/assets/system/images/login/login-background.jpg"
-                                        style="object-fit: cover; width: 100%; height: 100%"
-                                    />
-                                </div>
-                            </el-carousel-item>
-                        </el-carousel> -->
-            <button class="qhbut" @click="prevSlide">{{ "<" }}</button>
-            <div class="carouselcont">
-              <el-carousel ref="carousel" arrow="always" style="height: 100%" indicator-position="none">
-                <el-carousel-item v-for="item in 4" :key="item">
-                  <img src="@/assets/system/images/login/logo.png" style="object-fit: contain; width: 100%; height: 100%" />
-                </el-carousel-item>
-              </el-carousel>
+          <div class="news">
+            <div class="border-item">
+              <div class="border-item-head">
+                <span class="head-title">快捷功能入口</span>
+                <router-link to="/"> </router-link>
+              </div>
+              <div class="border-item-body" style="padding-top: 8px; padding-left: 5px">
+                <div class="all-entrance">
+                  <div class="entrance-item" v-for="item in entranceList" :key="item.name" v-hasPermi="item.perm"
+                       @click="routeTo(item.path, item.query)">
+                    <div class="image">
+                      <div class="icon-background" :class="item.color">
+                        <i class="icon iconfont">&#xe6d6;</i>
+                      </div>
+                    </div>
+                    <div class="name">{{ item.name }}</div>
+                  </div>
+                </div>
+              </div>
             </div>
-
-            <button class="qhbut" @click="nextSlide">{{ ">" }}</button>
           </div>
         </div>
       </el-col>
@@ -185,55 +166,55 @@
       </el-col>
     </el-row>
   </div>
-<!--  <ReportAddOrEdit v-show="open" v-model:open="open" :title="reportTitle" :itemId="reportItemId" @close-dialog="handleChildClose"></ReportAddOrEdit>-->
 </template>
 
 <script setup name="Index">
 import useUserStore from "@/store/system/user";
 import { listNotice } from "@/api/system/system/notice.js";
-import useAppStore from "@/store/system/app";
 import * as echarts from "echarts";
 // eslint-disable-next-line no-unused-vars
 import { onBeforeUnmount, onMounted, ref, watch, getCurrentInstance } from "vue";
 
 let { proxy } = getCurrentInstance();
+const router = useRouter();
 const { sys_notice_type } = proxy.useDict("sys_notice_type");
 const getAssetsFile = (url) => {
   return new URL(`../../assets/system/images/index/${url}`, import.meta.url).href;
 };
 
-const carousel = ref(null);
-
-const prevSlide = () => {
-  carousel.value.prev();
-};
-
-const nextSlide = () => {
-  carousel.value.next();
-};
-
-//------------报工---------------------------
-const open = ref(false);
-const reportTitle = ref("报工");
-const reportItemId = ref(null);
-
-// 点击报工
-function changeReport() {
-  open.value = true;
-  console.log("打开或者关闭弹窗状态", open.value);
-}
-
-// 父组件接收子组件发出的事件
-const handleChildClose = () => {
-  open.value = false;
-  console.log("子组件的弹窗关闭了");
-  // 在这里执行关闭弹窗后需要进行的逻辑
-};
-//------------报工---------------------------
+const entranceList = [
+  {
+    name: '文件管理',
+    path: '/kmc/kmcDocument',
+    query: {},
+    perm: ['kmcDocument:kmcDocument:document:list'],
+    color: 'color-primary'
+  },
+  {
+    name: '非结构化抽取',
+    path: '/ext/unstructTask',
+    query: {},
+    perm: ['ext:extUnstructTask:unstructtask:list'],
+    color: 'color-pale-blue'
+  },
+  {
+    name: '结构化抽取',
+    path: '/ext/extStructTask',
+    query: {},
+    perm: ['ext:extStructTask:struct:list'],
+    color: 'color-orange'
+  },
+  {
+    name: '图谱探索',
+    path: '/app/graphExploration',
+    query: {},
+    perm: [''],
+    color: 'color-pink'
+  }
+];
 
 const chartIntances = [];
 // eslint-disable-next-line no-unused-vars
-const appStore = useAppStore();
 const userStore = useUserStore();
 const module1 = ref([
   {
@@ -280,6 +261,27 @@ function goxinwen() {
 
 function goprofile() {
   proxy.$router.push("/user/profile"); // 内部页面路径
+}
+
+async function routeTo(link, query = {}) {
+  if (link && link.indexOf('http') !== -1) {
+    window.location.href = link;
+    return;
+  }
+
+  if (link) {
+    if (link === router.currentRoute.value.path) {
+      window.location.reload();
+    } else {
+      try {
+        await router.push({ path: link, query });
+        // 跳转成功后再刷新
+        window.location.reload();
+      } catch (err) {
+        console.error('路由跳转失败:', err);
+      }
+    }
+  }
 }
 //获取心灵鸡汤内容
 const xljtcont = ref("");
@@ -1248,47 +1250,91 @@ onMounted(() => {
 }
 
 .module-7 {
-  .border-item-body {
-    padding: 21px 0px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    .carouselcont {
-      height: 100%;
-      width: calc(100% - 84px);
-      margin-left: 8px;
-      margin-right: 8px;
+  .news {
+    height: 245px;
+
+    .border-item-body {
+      display: block;
     }
-    .qhbut {
-      width: 21px;
-      height: 21px;
-      background: var(--el-color-primary);
-      border-radius: 50%;
-      border: 0px;
-      color: #ffffff;
-      text-align: center;
+
+    .toAll {
+      font-family: PingFangSC-Regular;
+      font-size: 14px;
+      color: #262626;
+      font-weight: 400;
+
+      &:hover {
+        color: #0f62ff;
+      }
+    }
+
+    .all-entrance {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+
+      .entrance-item {
+        padding: 7px;
+        text-align: center;
+
+        .name {
+          margin-top: 5px;
+          color: #5a5e66;
+        }
+
+        .image {
+          height: 44px;
+          display: flex;
+          justify-content: center;
+
+          // 图标圆角方形背景
+          .icon-background {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            position: relative;
+          }
+
+          // 图标
+          .icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: #fff;
+            line-height: 40px;
+          }
+
+          // 背景色：主色
+          .color-primary {
+            background-image: linear-gradient(to bottom right,
+                #2162fc 30%,
+                #4f84fd 80%);
+          }
+
+          // 背景色：橙色
+          .color-orange {
+            background-image: linear-gradient(to bottom right,
+                #f59040 30%,
+                #f9bd77 90%);
+          }
+
+          // 背景色：淡蓝色
+          .color-pale-blue {
+            background-image: linear-gradient(to bottom right,
+                #348bf2 10%,
+                #63abff 60%);
+          }
+
+          // 背景色：粉红色
+          .color-pink {
+            background-image: linear-gradient(to bottom right,
+                #fb6594 20%,
+                #fc92bb 80%);
+          }
+        }
+      }
     }
   }
-  .module-item {
-    height: 100%;
-    // background-color: #f6f6f6;
-    // width: 100%;
-    // height: 100%;
-    // display: flex;
-    // justify-content: center;
-  }
-  // ::v-deep {
-  //     // .el-carousel__arrow {
-  //     //     width: 21px;
-  //     //     height: 21px;
-  //     // }
-  //     .el-carousel__arrow--left {
-  //         display: none;
-  //     }
-  //     .el-carousel__arrow--right {
-  //         display: none;
-  //     }
-  // }
 }
 
 .module-9 {
