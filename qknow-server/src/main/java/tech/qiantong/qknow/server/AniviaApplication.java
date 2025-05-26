@@ -23,10 +23,11 @@ public class AniviaApplication
         // System.setProperty("spring.devtools.restart.enabled", "false");
         SpringApplication.run(AniviaApplication.class, args);
         System.out.println("(♥◠‿◠)ﾉﾞ  千知平台启动成功   ლ(´ڡ`ლ)ﾞ  \n" +
-                "    _            _         _        \n" +
-                "   / \\    _ __  (_)__   __(_)  __ _ \n" +
-                "  / _ \\  | '_ \\ | |\\ \\ / /| | / _` |\n" +
-                " / ___ \\ | | | || | \\ V / | || (_| |\n" +
-                "/_/   \\_\\|_| |_||_|  \\_/  |_| \\__,_|");
+                "        _  __                    \n" +
+                "   __ _| |/ /_ __   _____      __\n" +
+                "  / _` | ' /| '_ \\ / _ \\ \\ /\\ / /\n" +
+                " | (_| | . \\| | | | (_) \\ V  V / \n" +
+                "  \\__, |_|\\_\\_| |_|\\___/ \\_/\\_/  \n" +
+                "     |_|                         ");
     }
 }

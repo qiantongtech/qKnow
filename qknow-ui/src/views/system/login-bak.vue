@@ -30,7 +30,7 @@
         <div class="greeting">
           <div class="entry_period">亲爱的朋友，{{ greetingsTitle }}！</div>
           <div class="entry_greeting">
-            相信自己，你可以成为你想成为的人。
+            知识平台是未来的考古层，今天存储的每条数据都在书写明天的历史。
           </div>
         </div>
         <div class="login-panel">
@@ -114,8 +114,8 @@
             <img src="@/assets/system/images/login/email.png" />
             <div>
               <p>电子邮箱：</p>
-<!--              <p>sales@qiantong.tech</p>-->
-              <p>{{contentDetail && contentDetail.email ? contentDetail.email : 'sales@qiantong.tech'}}</p>
+<!--              <p>support@qiantong.tech</p>-->
+              <p>{{contentDetail && contentDetail.email ? contentDetail.email : 'support@qiantong.tech'}}</p>
             </div>
           </div>
         </div>
