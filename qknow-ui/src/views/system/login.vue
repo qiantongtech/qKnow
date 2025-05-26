@@ -478,7 +478,7 @@ function goPage() {
 
 //点击备案号调整工信部
 function goKtPage() {
-  window.open('http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32011502010895', '_blank'); // 在新窗口打开链接
+  window.open('https://beian.miit.gov.cn/#/Integrated/index', '_blank'); // 在新窗口打开链接
 }
 
 </script>

@@ -174,7 +174,7 @@
                   <div class="table-column-code">{{ scope.row.id }}</div>
                 </template>
               </el-table-column>
-              <el-table-column prop="name" label="任务名称" width="200"/>
+              <el-table-column prop="name" label="任务名称" width="300"/>
               <el-table-column prop="status" align="center" label="任务状态" />
               <el-table-column prop="publishStatus" align="center" label="发布状态" />
               <el-table-column prop="publishBy" align="center" label="发布人" />
@@ -317,32 +317,32 @@ function initModule4() {
     // },
     {
       value: 130,
-      legendname: "种类08",
-      name: "种类08",
+      legendname: "基础理论",
+      name: "基础理论",
       // itemStyle: { color: '#fdb301' }
     },
     {
       value: 150,
-      legendname: "种类09",
-      name: "种类09",
+      legendname: "智能技术",
+      name: "智能技术",
       // itemStyle: { color: '#57e7ec' }
     },
     {
       value: 100,
-      legendname: "种类10",
-      name: "种类10",
+      legendname: "行业应用",
+      name: "行业应用",
       // itemStyle: { color: '#cf9ef1' }
     },
     {
       value: 190,
-      legendname: "种类11",
-      name: "种类11",
+      legendname: "未来趋势",
+      name: "未来趋势",
       // itemStyle: { color: '#57e7ec' }
     },
     {
       value: 200,
-      legendname: "种类12",
-      name: "种类12",
+      legendname: "其他",
+      name: "其他",
       // itemStyle: { color: '#cf9ef1' }
     },
   ];
@@ -726,7 +726,7 @@ function initModule8() {
 const module9 = ref([
   {
     id: "1",
-    name: "抽取任务名称一",
+    name: "《2030年知识经济预测模型》",
     status: "进行中",
     publishStatus: "已发布",
     publishBy: "千知",
@@ -734,7 +734,7 @@ const module9 = ref([
   },
   {
     id: "2",
-    name: "抽取任务名称二",
+    name: "《金融知识图谱构建与风险预警白皮书》",
     status: "已完成",
     publishStatus: "已发布",
     publishBy: "千知",
@@ -742,7 +742,7 @@ const module9 = ref([
   },
   {
     id: "3",
-    name: "抽取任务名称三",
+    name: "《多模态知识融合算法白皮书》",
     status: "进行中",
     publishStatus: "已发布",
     publishBy: "千知",
@@ -750,7 +750,7 @@ const module9 = ref([
   },
   {
     id: "4",
-    name: "抽取任务名称四",
+    name: "《智慧城市知识管理解决方案》",
     status: "已完成",
     publishStatus: "未发布",
     publishBy: "千知",
@@ -758,7 +758,7 @@ const module9 = ref([
   },
   {
     id: "5",
-    name: "抽取任务名称五",
+    name: "《智能教育平台知识点分类体系》",
     status: "进行中",
     publishStatus: "已发布",
     publishBy: "千知",
