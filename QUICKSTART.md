@@ -152,7 +152,7 @@ deepke:
 
 1. 使用 IntelliJ IDEA 或 Eclipse 导入项目。
 2. IDE 将自动加载 Maven 依赖，初次加载可能较慢。
-3. 运行 `tech.qiantong.qknow.server.AniviaApplication.java`。启动成功后，可通过 `http://localhost:8090` 访问后端服务。
+3. 运行 `tech.qiantong.qknow.server.QKnowApplication.java`。启动成功后，可通过 `http://localhost:8090` 访问后端服务。
 
 > **注意**: 仅启动后端服务不会显示静态页面，请继续部署前端服务。
 

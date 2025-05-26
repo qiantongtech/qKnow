@@ -16,12 +16,12 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @ComponentScan(basePackages = {"tech.qiantong"})
 @SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-public class AniviaApplication
+public class QKnowApplication
 {
     public static void main(String[] args)
     {
         // System.setProperty("spring.devtools.restart.enabled", "false");
-        SpringApplication.run(AniviaApplication.class, args);
+        SpringApplication.run(QKnowApplication.class, args);
         System.out.println("(♥◠‿◠)ﾉﾞ  千知平台启动成功   ლ(´ڡ`ლ)ﾞ  \n" +
                 "        _  __                    \n" +
                 "   __ _| |/ /_ __   _____      __\n" +

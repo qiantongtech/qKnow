@@ -8,11 +8,11 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  *
  * @author qknow
  */
-public class AniviaServletInitializer extends SpringBootServletInitializer
+public class QKnowServletInitializer extends SpringBootServletInitializer
 {
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application)
     {
-        return application.sources(AniviaApplication.class);
+        return application.sources(QKnowApplication.class);
     }
 }
