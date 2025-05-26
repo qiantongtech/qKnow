@@ -4,13 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="322ddf82-6903-4669-979a-406aaa8be08e" name="Changes" comment="若依标识去除-补充中文去除">
-      <change beforePath="$PROJECT_DIR$/qknow-server/src/main/java/tech/qiantong/qknow/server/AniviaApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-server/src/main/java/tech/qiantong/qknow/server/AniviaApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-ui/login/loginPages/loginPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-ui/login/loginPages/loginPage.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-ui/src/views/system/login-bak.vue" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-ui/src/views/system/login-bak.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-ui/src/views/system/login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-ui/src/views/system/login.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-ui/ssoLogin/loginPages/loginPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-ui/ssoLogin/loginPages/loginPage.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql/mysql/qknow_20250522.sql" beforeDir="false" afterPath="$PROJECT_DIR$/sql/mysql/qknow_20250522.sql" afterDir="false" />
+    <list default="true" id="322ddf82-6903-4669-979a-406aaa8be08e" name="Changes" comment="账号密码更改+电子邮箱更改+登录页按钮跳转官网+后端启动名称改为qknow">
+      <change beforePath="$PROJECT_DIR$/qknow-framework/qknow-file/src/main/resources/application-file-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-framework/qknow-file/src/main/resources/application-file-dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-framework/qknow-file/src/main/resources/application-file-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-framework/qknow-file/src/main/resources/application-file-prod.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-ui/src/components/FileUpload2/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-ui/src/components/FileUpload2/index.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,7 +163,7 @@
       <workItem from="1747883203069" duration="673000" />
       <workItem from="1747883912299" duration="11635000" />
       <workItem from="1747963739431" duration="19772000" />
-      <workItem from="1748228499147" duration="6971000" />
+      <workItem from="1748228499147" duration="8471000" />
     </task>
     <task id="LOCAL-00001" summary="若依标识去除">
       <option name="closed" value="true" />
@@ -184,7 +181,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748230528730</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="账号密码更改+电子邮箱更改+登录页按钮跳转官网+后端启动名称改为qknow">
+      <option name="closed" value="true" />
+      <created>1748243063853</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1748243063853</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -193,6 +198,18 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="若依标识去除" />
     <MESSAGE value="若依标识去除-补充中文去除" />
-    <option name="LAST_COMMIT_MESSAGE" value="若依标识去除-补充中文去除" />
+    <MESSAGE value="账号密码更改+电子邮箱更改+登录页按钮跳转官网+后端启动名称改为qknow" />
+    <option name="LAST_COMMIT_MESSAGE" value="账号密码更改+电子邮箱更改+登录页按钮跳转官网+后端启动名称改为qknow" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/qknow-framework/qknow-file/src/main/java/tech/qiantong/qknow/file/util/FileUploadUtil.java</url>
+          <line>99</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
