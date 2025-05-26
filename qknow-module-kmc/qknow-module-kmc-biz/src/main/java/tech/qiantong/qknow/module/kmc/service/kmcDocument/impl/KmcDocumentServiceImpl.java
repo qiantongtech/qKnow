@@ -49,9 +49,6 @@ public class KmcDocumentServiceImpl  extends ServiceImpl<KmcDocumentMapper, KmcD
     @Resource
     private KmcCategoryMapper kmcCategoryMapper;
 
-    @Resource
-    private IRedisService redisService;
-
     @Override
     public PageResult<KmcDocumentDO> getKmcDocumentPage(KmcDocumentPageReqVO pageReqVO) {
         return kmcDocumentMapper.selectPage(pageReqVO);
@@ -66,13 +63,11 @@ public class KmcDocumentServiceImpl  extends ServiceImpl<KmcDocumentMapper, KmcD
     public Long createKmcDocument(KmcDocumentSaveReqVO createReqVO) {
         KmcDocumentDO dictType = BeanUtils.toBean(createReqVO, KmcDocumentDO.class);
         kmcDocumentMapper.insert(dictType);
-        redisService.leftPush("create:file", dictType.getId().toString());
         return dictType.getId();
     }
 
     @Override
     public int updateKmcDocument(KmcDocumentSaveReqVO updateReqVO) {
-        redisService.leftPush("update:file", updateReqVO.getId().toString());
         // 相关校验
 
         // 更新知识文件
@@ -81,9 +76,6 @@ public class KmcDocumentServiceImpl  extends ServiceImpl<KmcDocumentMapper, KmcD
     }
     @Override
     public int removeKmcDocument(Collection<Long> idList) {
-        redisService.leftPushAll("delete:file", idList.stream()
-                .map(String::valueOf)
-                .collect(Collectors.toList()));
         // 批量删除知识文件
         return kmcDocumentMapper.deleteBatchIds(idList);
     }
