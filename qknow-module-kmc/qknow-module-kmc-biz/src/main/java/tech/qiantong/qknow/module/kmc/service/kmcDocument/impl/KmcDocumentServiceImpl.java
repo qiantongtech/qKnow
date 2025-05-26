@@ -57,6 +57,7 @@ public class KmcDocumentServiceImpl  extends ServiceImpl<KmcDocumentMapper, KmcD
         return kmcDocumentMapper.selectPage(pageReqVO);
     }
 
+    @Override
     public List<KmcDocumentDO> getKmcDocumentListByIds(List<Long> ids) {
         return kmcDocumentMapper.getKmcDocumentListByIds(ids);
     }

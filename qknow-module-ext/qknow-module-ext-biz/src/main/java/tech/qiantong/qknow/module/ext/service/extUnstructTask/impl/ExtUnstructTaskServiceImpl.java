@@ -89,76 +89,21 @@ public class ExtUnstructTaskServiceImpl extends ServiceImpl<ExtUnstructTaskMappe
     private String unstructType;
 
     /**
-     * 消费队列任务, 执行任务抽取
+     * 执行任务抽取，先放入redis队列中
      * @author shaun
-     * @date 2025/05/23 11:21
-     * @return void
-     */
-    @Override
-    public void consumeQueue() {
-        while (true) {
-            String taskId = redisService.leftPop("ext_unstruck");
-            // 如果任务ID为空，休眠 1000 毫秒后再继续轮询
-            if (taskId == null || taskId.isEmpty()) {
-                try {
-                    // 每次轮询之间休眠1000ms，减少CPU占用
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    log.error("Sleep interrupted: {}", e.getMessage());
-                    Thread.currentThread().interrupt();
-                }
-                continue;
-            }
-            log.info("----------------非结构化抽取任务开始-----------------------taskId:{}", taskId);
-            try {
-                ExtUnstructTaskDO unstructTaskDO = extUnstructTaskMapper.selectById(taskId);
-                ExtUnstructTaskDocRelPageReqVO docRelPageReqVO = new ExtUnstructTaskDocRelPageReqVO();
-                docRelPageReqVO.setTaskId(Long.valueOf(taskId));
-                // 获取所有关联任务
-                PageResult<ExtUnstructTaskDocRelDO> docRelPage = extUnstructTaskDocRelService.getExtUnstructTaskDocRelPage(docRelPageReqVO);
-                List<ExtUnstructTaskDocRelDO> taskDocRelDOList = BeanUtils.toBean(docRelPage.getRows(), ExtUnstructTaskDocRelDO.class);
-
-                if (UnstructTypeEnums.MODEL.eq(unstructType)) {
-                    // TODO 使用大模型抽取
-                } else {
-                    // 创建异步任务
-                    CompletableFuture<Void> future = this.getStringCompletableFuture(unstructTaskDO, taskDocRelDOList)
-                            .thenRun(() -> {
-                                // 处理任务完成后的状态更新
-                                unstructTaskDO.setStatus(2);
-                                extUnstructTaskMapper.updateExtUnstructTask(unstructTaskDO);
-                            })
-                            .exceptionally(exception -> {
-                                // 处理异常情况
-                                log.error("抽取线程执行异常: {}", exception.getMessage());
-                                unstructTaskDO.setStatus(3);
-                                extUnstructTaskMapper.updateExtUnstructTask(unstructTaskDO);
-                                return null;  // 这里返回 null 表示异常已处理
-                            });
-                    // 等待当前任务完成再进行下一个任务
-                    future.join(); // 这里调用 join() 确保当前任务完成后才进行下一次循环
-                }
-                log.info("----------------非结构化抽取任务结束-----------------------taskId:{}", taskId);
-            } catch (Exception e) {
-                e.printStackTrace();
-                // 捕获异常并打印日志
-                log.error("非结构化任务抽取处理失败: {}", e.getMessage());
-            }
-        }
-    }
-
-    /**
-     * 具体任务异步执行
-     *
+     * @date 2025/05/26 15:48
      * @param createReqVO
-     * @return
+     * @return tech.qiantong.qknow.common.core.domain.AjaxResult
      */
     @Override
     public AjaxResult executeExtraction(ExtUnstructTaskSaveReqVO createReqVO) {
-        //任务id
-        Long id = createReqVO.getId();
-        CompletableFuture<String> future = null;
-        ExtUnstructTaskDO unstructTaskDO = extUnstructTaskMapper.selectById(createReqVO.getId());
+        // 任务id
+        Long taskId = createReqVO.getId();
+
+        // 根据任务id获取非结构化抽取任务
+        ExtUnstructTaskDO unstructTaskDO = extUnstructTaskMapper.selectById(taskId);
+
+        // 校验任务状态
         if (ReleaseStatus.PUBLISHED.getValue().equals(unstructTaskDO.getPublishStatus())) {
             throw new RuntimeException("已发布状态不能重新执行抽取");
         }
@@ -166,32 +111,83 @@ public class ExtUnstructTaskServiceImpl extends ServiceImpl<ExtUnstructTaskMappe
             throw new RuntimeException("执行中不能重新执行抽取");
         }
 
+        // 校验任务是否关联文件
         ExtUnstructTaskDocRelPageReqVO docRelPageReqVO = new ExtUnstructTaskDocRelPageReqVO();
-        docRelPageReqVO.setTaskId(id);
+        docRelPageReqVO.setTaskId(taskId);
         docRelPageReqVO.setDelFlag(false);
-        //获取所有关联任务
         PageResult<ExtUnstructTaskDocRelDO> docRelPage = extUnstructTaskDocRelService.getExtUnstructTaskDocRelPage(docRelPageReqVO);
         if (docRelPage.getRows().size() == 0) {
-            return AjaxResult.error("没有关联任务");
+            return AjaxResult.error("当前任务没有关联需要抽取的文件");
         }
-        unstructTaskDO.setStatus(1);
+
+        // 变更任务执行状态
+        unstructTaskDO.setStatus(ExtTaskStatus.INPROGRESS.getValue());
         extUnstructTaskMapper.updateExtUnstructTask(unstructTaskDO);
 
-        //放入redis队列中, 按顺序 一个一个执行
-        redisService.leftPush("ext_unstruck", String.valueOf(id));
+        // 放入redis队列中, 按顺序 一个一个执行
+        redisService.leftPush("ext_unstruck", String.valueOf(taskId));
         return AjaxResult.success("操作成功,执行中");
     }
 
+    /**
+     * 定时任务，消费队列任务, 执行任务抽取
+     * @author shaun
+     * @date 2025/05/23 11:21
+     * @return void
+     */
     @Override
-    public AjaxResult getExtExtraction(ExtExtractionDO extExtractionDO) {
-        ExtUnstructTaskDO unstructTaskDO = extUnstructTaskMapper.selectById(extExtractionDO.getTaskId());
-        AjaxResult ajaxResult = extNeo4jService.getExtExtraction(extExtractionDO);
-        if (ajaxResult.isSuccess()) {
-            HashMap<String, Object> hashMap = (HashMap<String, Object>) ajaxResult.get("data");
-            hashMap.put("releaseStatus", unstructTaskDO.getPublishStatus());
-            return AjaxResult.success("", hashMap);
+    public void consumeQueue() {
+        // 取出队列中的任务id
+        String taskId = redisService.leftPop("ext_unstruck");
+
+        // 判断队列是否为空
+        if (StringUtils.isEmpty(taskId)) {
+            log.info("队列中没有等待抽取的任务");
+            return;
         }
-        return ajaxResult;
+
+        // 开始抽取
+        log.info("----------------非结构化抽取任务开始-----------------------taskId:{}", taskId);
+
+        try {
+            // 获取抽取任务
+            ExtUnstructTaskDO unstructTaskDO = extUnstructTaskMapper.selectById(taskId);
+
+            // 获取任务关联的文件
+            ExtUnstructTaskDocRelPageReqVO docRelPageReqVO = new ExtUnstructTaskDocRelPageReqVO();
+            docRelPageReqVO.setTaskId(Long.valueOf(taskId));
+            PageResult<ExtUnstructTaskDocRelDO> docRelPage = extUnstructTaskDocRelService.getExtUnstructTaskDocRelPage(docRelPageReqVO);
+            List<ExtUnstructTaskDocRelDO> taskDocRelDOList = BeanUtils.toBean(docRelPage.getRows(), ExtUnstructTaskDocRelDO.class);
+
+            // 根据配置文件判断使用哪种方式进行抽取
+            if (UnstructTypeEnums.MODEL.eq(unstructType)) {
+                // TODO 使用大模型抽取，开源版本暂未支持，如有需要请咨询相关管理人员
+                log.warn("大模型抽取暂未支持～");
+            } else {
+                // 使用DeepKE进行抽取
+                // 创建新线程执行任务
+                CompletableFuture<Void> future = this.getStringCompletableFuture(unstructTaskDO, taskDocRelDOList)
+                        .thenRun(() -> {
+                            // 处理任务完成后的状态更新
+                            unstructTaskDO.setStatus(ExtTaskStatus.EXECUTED.getValue());
+                            extUnstructTaskMapper.updateExtUnstructTask(unstructTaskDO);
+                        })
+                        .exceptionally(exception -> {
+                            // 处理异常情况
+                            log.error("抽取线程执行异常: {}", exception.getMessage());
+                            unstructTaskDO.setStatus(ExtTaskStatus.ERROR.getValue());
+                            extUnstructTaskMapper.updateExtUnstructTask(unstructTaskDO);
+                            return null;  // 这里返回 null 表示异常已处理
+                        });
+                // 等待当前任务完成再进行下一个任务
+                future.join(); // 这里调用 join() 确保当前任务完成后才进行下一次循环
+            }
+            log.info("----------------非结构化抽取任务结束-----------------------taskId:{}", taskId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 捕获异常并打印日志
+            log.error("非结构化任务抽取处理失败: {}", e.getMessage());
+        }
     }
 
     /**
@@ -289,50 +285,16 @@ public class ExtUnstructTaskServiceImpl extends ServiceImpl<ExtUnstructTaskMappe
         });
     }
 
-    /**
-     * 存储知识推荐实体标签
-     *
-     * @param unstructTaskDO
-     */
-    private void insertExtractionListT(ExtUnstructTaskDO unstructTaskDO) {
-        ExtExtractionDO extExtractionDO = new ExtExtractionDO();
-        extExtractionDO.setTaskId(unstructTaskDO.getId());
-
-        Map<String, Object> result = extNeo4jService.getExtExtraction(extExtractionDO);
-
-        // 从结果中安全地获取 "data" 字段，并转换为 Map 类型，避免 NullPointerException
-        Map<String, Object> dataMap = Optional.ofNullable(result.get("data"))
-                .filter(Map.class::isInstance)  // 确保是 Map 类型
-                .map(Map.class::cast)           // 进行类型转换
-                .orElse(Collections.emptyMap()); // 如果为空，则返回一个空 Map，防止后续操作出错
-
-        // 获取 relationships 数据
-        Object entitys = dataMap.get("entities");
-        List<ExtractionResult> extractionResults = new ArrayList<>();
-
-        // 确保 relationships 是 Set 类型，避免 ClassCastException
-        if (entitys instanceof Set<?>) {
-            extractionResults = ((Set<?>) entitys).stream()
-                    // 过滤出 ExtNeo4jEntity.Entity 类型的数据
-                    .filter(ExtNeo4jEntity.Entity.class::isInstance)
-                    // 进行类型转换
-                    .map(ExtNeo4jEntity.Entity.class::cast)
-                    // 将 Entity 对象转换为 ExtractionResult
-                    .map(relationship -> {
-                        ExtractionResult extractionResult = new ExtractionResult();
-                        extractionResult.setId(relationship.getId());
-                        extractionResult.setTaskId(relationship.getTaskId());
-                        extractionResult.setName(relationship.getName());
-                        extractionResult.setDocId(relationship.getDocId());
-                        extractionResult.setParagraphIndex(relationship.getParagraphIndex());
-                        return extractionResult;
-                    })
-                    .collect(Collectors.toList());
-
-        } else {
-            // 如果 relationships 不是 Set 类型，则记录警告日志，方便排查问题
-            log.warn("Unexpected relationships type: {}", entitys != null ? entitys.getClass().getName() : "null");
+    @Override
+    public AjaxResult getExtExtraction(ExtExtractionDO extExtractionDO) {
+        ExtUnstructTaskDO unstructTaskDO = extUnstructTaskMapper.selectById(extExtractionDO.getTaskId());
+        AjaxResult ajaxResult = extNeo4jService.getExtExtraction(extExtractionDO);
+        if (ajaxResult.isSuccess()) {
+            HashMap<String, Object> hashMap = (HashMap<String, Object>) ajaxResult.get("data");
+            hashMap.put("releaseStatus", unstructTaskDO.getPublishStatus());
+            return AjaxResult.success("", hashMap);
         }
+        return ajaxResult;
     }
 
     @Override
@@ -542,137 +504,5 @@ public class ExtUnstructTaskServiceImpl extends ServiceImpl<ExtUnstructTaskMappe
             resultMsg.append("恭喜您，数据已全部导入成功！共 ").append(successNum).append(" 条。");
         }
         return resultMsg.toString();
-    }
-
-    /**
-     * 结果处理
-     * @param result
-     */
-    private Map<String, Object> resultUnstruct(String result, ExtUnstructTaskDO unstructTaskDO,  Long docId) {
-        List<DynamicEntity> list = Lists.newArrayList();
-        Map<String, List<ExtUnstructTaskTextDO>> textMap = Maps.newHashMap();
-        Map<String, String> typeMap = Maps.newHashMap();
-        if (result.startsWith("data:")) {
-            result = result.substring(5).trim();
-        } else {
-            return Maps.newHashMap();
-        }
-        JSONObject jsonObject = JSONObject.parseObject(result);
-        if ("workflow_finished".equals(jsonObject.getString("event"))) {
-            JSONObject data = jsonObject.getJSONObject("data");
-            // 获取抽取结果
-            JSONObject outputs = data.getJSONObject("outputs");
-            JSONArray jsonArray = outputs.getJSONArray("result");
-
-            Map<String, DynamicEntity> entityMap = Maps.newHashMap();
-            // 分析结果
-            for (JSONObject s : jsonArray.toList(JSONObject.class)) {
-                // 实体
-                JSONArray entities = s.getJSONArray("entities");
-                for (JSONObject entity : entities.toList(JSONObject.class)) {
-                    String entityName = entity.getString("实体文本");
-                    // 概念
-                    String entityType = entity.getString("实体类型");
-                    typeMap.put(entityName, entityType);
-                    // 片段
-                    String segments = entity.getString("片段");
-                    ExtUnstructTaskTextDO unstructTaskTextDO = this.getExtUnstructTaskTextDO(unstructTaskDO, docId, segments);
-                    if (textMap.get(entityName) != null) {
-                        textMap.get(entityName).add(unstructTaskTextDO);
-                    } else {
-                        textMap.put(entityName, Lists.newArrayList(unstructTaskTextDO));
-                    }
-                    // 实体
-                    DynamicEntity dynamicEntity = new DynamicEntity();
-                    dynamicEntity.addLabels(Neo4jLabelEnum.UNSTRUCTURED.getLabel());
-                    dynamicEntity.putDynamicProperties("name", entityName);
-                    dynamicEntity.putDynamicProperties("doc_id", docId);
-                    dynamicEntity.putDynamicProperties("workspace_id", unstructTaskDO.getWorkspaceId());
-                    list.add(dynamicEntity);
-                    entityMap.put(entityName, dynamicEntity);
-                }
-                // 关系
-                JSONArray relations = s.getJSONArray("relations");
-                for (JSONObject relation : relations.toList(JSONObject.class)) {
-                    String startEntityName = relation.getString("头实体");
-                    String relationName = relation.getString("关系");
-                    String endEntityName = relation.getString("尾实体");
-                    // 实体和实体的关系
-                    DynamicEntity startEntity = entityMap.get(startEntityName);
-                    DynamicEntity endEntity = entityMap.get(endEntityName);
-                    if (startEntity != null && endEntity != null) {
-                        startEntity.addRelationship(relationName, endEntity);
-                    }
-                }
-            }
-        }
-
-        Map<String, Object> map = Maps.newHashMap();
-        map.put("entityList", list);
-        map.put("textMap", textMap);
-        map.put("typeMap", typeMap);
-        return map;
-    }
-
-    private ExtUnstructTaskTextDO getExtUnstructTaskTextDO(ExtUnstructTaskDO unstructTaskDO, Long docId, String segments) {
-        ExtUnstructTaskTextDO unstructTaskTextDO = new ExtUnstructTaskTextDO();
-        unstructTaskTextDO.setWorkspaceId(unstructTaskDO.getWorkspaceId());
-        unstructTaskTextDO.setDocId(docId);
-        unstructTaskTextDO.setTaskId(unstructTaskDO.getId());
-        unstructTaskTextDO.setCreateBy(unstructTaskDO.getUpdateBy());
-        unstructTaskTextDO.setUpdateBy(unstructTaskDO.getUpdateBy());
-        unstructTaskTextDO.setCreatorId(unstructTaskDO.getUpdaterId());
-        unstructTaskTextDO.setUpdaterId(unstructTaskDO.getUpdaterId());
-        unstructTaskTextDO.setCreateTime(DateUtils.getNowDate());
-        unstructTaskTextDO.setUpdateTime(DateUtils.getNowDate());
-        unstructTaskTextDO.setText(segments);
-        return unstructTaskTextDO;
-    }
-
-    private List<DynamicEntity> mergeEntitiesByName(List<DynamicEntity> entityList, Long taskId) {
-        Map<String, DynamicEntity> mergedMap = Maps.newHashMap();
-        Map<DynamicEntity, DynamicEntity> oldToNewMap = new HashMap<>();
-
-        // 第一步：合并实体
-        for (DynamicEntity entity : entityList) {
-            String name = (String) entity.getProperty("name");
-            if (mergedMap.containsKey(name)) {
-                DynamicEntity existingEntity = mergedMap.get(name);
-                existingEntity.getDynamicProperties().putAll(entity.getDynamicProperties());
-                if (entity.getRelationshipEntityMap() != null) {
-                    existingEntity.mergeRelationshipEntityMap(entity.getRelationshipEntityMap());
-                }
-                oldToNewMap.put(entity, existingEntity);
-            } else {
-                DynamicEntity newEntity = new DynamicEntity();
-                newEntity.setLabels(entity.getLabels());
-                newEntity.putDynamicProperties("task_id", taskId);
-                newEntity.putDynamicProperties("release_status", ReleaseStatus.UNPUBLISHED.getValue());
-                newEntity.putDynamicProperties("entity_type", ExtractType.UNSTRUCTURED.getValue());
-                newEntity.getDynamicProperties().putAll(entity.getDynamicProperties());
-                newEntity.setRelationshipEntityMap(Maps.newHashMap());
-                if (entity.getRelationshipEntityMap() != null) {
-                    newEntity.getRelationshipEntityMap().putAll(entity.getRelationshipEntityMap());
-                }
-                mergedMap.put(name, newEntity);
-                oldToNewMap.put(entity, newEntity);
-            }
-        }
-
-        // 第二步：更新 relationshipEntityMap 中的实体引用
-        for (DynamicEntity newEntity : mergedMap.values()) {
-            Map<String, List<DynamicEntityRelationship>> relationshipMap = newEntity.getRelationshipEntityMap();
-            for (List<DynamicEntityRelationship> relatedRelationships : relationshipMap.values()) {
-                for (DynamicEntityRelationship relationship : relatedRelationships) {
-                    DynamicEntity oldRelatedEntity = relationship.getEndNode();
-                    DynamicEntity newRelatedEntity = oldToNewMap.get(oldRelatedEntity);
-                    if (newRelatedEntity != null) {
-                        relationship.setEndNode(newRelatedEntity);
-                    }
-                }
-            }
-        }
-
-        return Lists.newArrayList(mergedMap.values());
     }
 }

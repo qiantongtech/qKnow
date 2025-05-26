@@ -93,7 +93,7 @@ mysql:
   # 主库用户名
   username: root
   # 主库密码
-  password: admin123
+  password:
 
 # 达梦配置文件
 dm8:

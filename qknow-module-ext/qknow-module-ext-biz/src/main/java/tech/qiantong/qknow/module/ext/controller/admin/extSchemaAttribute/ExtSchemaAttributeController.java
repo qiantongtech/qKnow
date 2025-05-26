@@ -44,7 +44,6 @@ public class ExtSchemaAttributeController extends BaseController {
     private IExtSchemaAttributeService extSchemaAttributeService;
 
     @Operation(summary = "查询概念属性列表")
-    @PreAuthorize("@ss.hasPermi('ext:extSchemaAttribute:attribute:list')")
     @GetMapping("/list")
     public CommonResult<PageResult<ExtSchemaAttributeRespVO>> list(ExtSchemaAttributePageReqVO extSchemaAttribute) {
         PageResult<ExtSchemaAttributeDO> page = extSchemaAttributeService.getExtSchemaAttributePage(extSchemaAttribute);
@@ -52,7 +51,6 @@ public class ExtSchemaAttributeController extends BaseController {
     }
 
     @Operation(summary = "导出概念属性列表")
-    @PreAuthorize("@ss.hasPermi('ext:extSchemaAttribute:attribute:export')")
     @Log(title = "概念属性", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, ExtSchemaAttributePageReqVO exportReqVO) {
@@ -63,7 +61,6 @@ public class ExtSchemaAttributeController extends BaseController {
     }
 
     @Operation(summary = "导入概念属性列表")
-    @PreAuthorize("@ss.hasPermi('ext:extSchemaAttribute:attribute:import')")
     @Log(title = "概念属性", businessType = BusinessType.IMPORT)
     @PostMapping("/importData")
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
@@ -75,7 +72,6 @@ public class ExtSchemaAttributeController extends BaseController {
     }
 
     @Operation(summary = "获取概念属性详细信息")
-    @PreAuthorize("@ss.hasPermi('ext:extSchemaAttribute:attribute:query')")
     @GetMapping(value = "/{id}")
     public CommonResult<ExtSchemaAttributeRespVO> getInfo(@PathVariable("id") Long id) {
         ExtSchemaAttributeDO extSchemaAttributeDO = extSchemaAttributeService.getExtSchemaAttributeById(id);
@@ -83,7 +79,6 @@ public class ExtSchemaAttributeController extends BaseController {
     }
 
     @Operation(summary = "新增概念属性")
-    @PreAuthorize("@ss.hasPermi('ext:extSchemaAttribute:attribute:add')")
     @Log(title = "概念属性", businessType = BusinessType.INSERT)
     @PostMapping
     public CommonResult<Long> add(@Valid @RequestBody ExtSchemaAttributeSaveReqVO extSchemaAttribute) {
@@ -95,7 +90,6 @@ public class ExtSchemaAttributeController extends BaseController {
     }
 
     @Operation(summary = "修改概念属性")
-    @PreAuthorize("@ss.hasPermi('ext:extSchemaAttribute:attribute:edit')")
     @Log(title = "概念属性", businessType = BusinessType.UPDATE)
     @PutMapping
     public CommonResult<Integer> edit(@Valid @RequestBody ExtSchemaAttributeSaveReqVO extSchemaAttribute) {
@@ -106,7 +100,6 @@ public class ExtSchemaAttributeController extends BaseController {
     }
 
     @Operation(summary = "删除概念属性")
-    @PreAuthorize("@ss.hasPermi('ext:extSchemaAttribute:attribute:remove')")
     @Log(title = "概念属性", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public CommonResult<Integer> remove(@PathVariable Long[] ids) {

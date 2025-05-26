@@ -39,9 +39,6 @@ public class KmcDocumentRespVO implements Serializable {
     @Schema(description = "文件名称", example = "")
     private String name;
 
-    @Schema(description = "文件标签", example = "")
-    private String tagIds;
-
     @Excel(name = "文件路径")
     @Schema(description = "文件路径", example = "")
     private String path;
@@ -85,13 +82,4 @@ public class KmcDocumentRespVO implements Serializable {
     @Excel(name = "备注")
     @Schema(description = "备注", example = "")
     private String remark;
-
-    @Excel(name = "预览次数")
-    @Schema(description = "预览次数", example = "")
-    private Long previewCount;
-
-    @Excel(name = "下载次数")
-    @Schema(description = "下载次数", example = "")
-    private Long downloadCount;
-
 }

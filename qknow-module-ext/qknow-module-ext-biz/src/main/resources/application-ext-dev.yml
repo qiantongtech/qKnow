@@ -1,16 +1,3 @@
-deepke:
-  startShPath: /mnt/c/Users/13121/startDeepKE.sh
-  baseUrl: D:\qiantong
-  #执行脚本
-  batPath: C:\Users\13121\Desktop\run_c.bat
-  #预测文本路径
-  predictYaml: ${deepke.baseUrl}\cnschema\conf\predict.yaml
-  #关系配置文件地址
-  relatinCsv: ${deepke.baseUrl}\cnschema\data\test.csv
-  #概念配置文件地址
-  conceptYaml: ${deepke.baseUrl}\DeepKE\example\ner\standard\conf\train.yaml
-model:
-  api-key: app-2RKc0QrFvrK5UXdk2RyC5YLI
-# 非结构化抽取方式选择：deepke或者model
+# 非结构化抽取方式选择：deepke或者model。注：type参数请选择deepke，开源版本暂未支持大模型抽取，如有需要请咨询相关管理人员
 unstruct:
-  type: model
+  type: deepke

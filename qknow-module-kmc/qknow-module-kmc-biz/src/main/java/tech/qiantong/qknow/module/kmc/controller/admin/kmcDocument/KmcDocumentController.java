@@ -105,8 +105,6 @@ public class KmcDocumentController extends BaseController {
         kmcDocument.setCreateBy(getNickName());
         kmcDocument.setCreateTime(DateUtil.date());
         kmcDocument.setWorkspaceId(super.getWorkSpaceId());
-        kmcDocument.setPreviewCount(0L);
-        kmcDocument.setDownloadCount(0L);
         return CommonResult.toAjax(kmcDocumentService.createKmcDocument(kmcDocument));
     }
 
@@ -170,29 +168,6 @@ public class KmcDocumentController extends BaseController {
             logger.error("系统错误：", e);
         }
         return CommonResult.success(stringMap);
-    }
-
-
-    @Operation(summary = "修改下载次数")
-    @GetMapping(value = "/downloadCount/{id}")
-    public CommonResult<KmcDocumentSaveReqVO> updateDownloadCount(@PathVariable("id") Long id) {
-        KmcDocumentDO kmcDocumentDO = kmcDocumentService.getKmcDocumentById(id);
-        //当值为null的情况下，赋值0用于计算
-        kmcDocumentDO.setDownloadCount((kmcDocumentDO.getDownloadCount() == null ? 0 : kmcDocumentDO.getDownloadCount()) + 1);
-        KmcDocumentSaveReqVO dictType = BeanUtils.toBean(kmcDocumentDO, KmcDocumentSaveReqVO.class);
-        kmcDocumentService.updateKmcDocument(dictType);
-        return CommonResult.success(BeanUtils.toBean(kmcDocumentDO, KmcDocumentSaveReqVO.class));
-    }
-
-    @Operation(summary = "修改预览次数")
-    @GetMapping(value = "/previewCount/{id}")
-    public CommonResult<KmcDocumentSaveReqVO> updatePreviewCount(@PathVariable("id") Long id) {
-        KmcDocumentDO kmcDocumentDO = kmcDocumentService.getKmcDocumentById(id);
-        //当值为null的情况下，赋值0用于计算
-        kmcDocumentDO.setPreviewCount((kmcDocumentDO.getPreviewCount() == null ? 0 : kmcDocumentDO.getPreviewCount()) + 1);
-        KmcDocumentSaveReqVO dictType = BeanUtils.toBean(kmcDocumentDO, KmcDocumentSaveReqVO.class);
-        kmcDocumentService.updateKmcDocument(dictType);
-        return CommonResult.success(BeanUtils.toBean(kmcDocumentDO, KmcDocumentSaveReqVO.class));
     }
 
     @Operation(summary = "根据条件查询知识文件列表")
