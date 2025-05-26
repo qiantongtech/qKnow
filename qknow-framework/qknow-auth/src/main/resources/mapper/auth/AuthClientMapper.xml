@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.qiantong.auth.mapper.AuthClientMapper">
+
+    <resultMap type="AuthClient" id="AuthClientResult">
+        <result property="id"    column="id"    />
+        <result property="secretKey"    column="secret_key"    />
+        <result property="name"    column="name"    />
+        <result property="type"    column="type"    />
+        <result property="icon"    column="icon"    />
+        <result property="homeUrl"    column="home_url"    />
+        <result property="syncUrl"    column="sync_url"    />
+        <result property="redirectUrl"    column="redirect_url"    />
+        <result property="publicFlag"    column="public_flag"    />
+        <result property="validFlag"    column="valid_flag"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="creatorId"    column="creator_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updatorId"    column="updator_id"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectAuthClientVo">
+        select id, secret_key, name, type, icon, home_url, sync_url, redirect_url, public_flag, valid_flag, del_flag, create_by, creator_id, create_time, update_by, updator_id, update_time, remark from auth_client
+    </sql>
+
+    <select id="selectAuthClientList" parameterType="AuthClient" resultMap="AuthClientResult">
+        <include refid="selectAuthClientVo"/>
+        <where>
+            <if test="id != null "> and id = #{id}</if>
+            <if test="secretKey != null  and secretKey != ''"> and secret_key = #{secretKey}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="icon != null  and icon != ''"> and icon = #{icon}</if>
+            <if test="homeUrl != null  and homeUrl != ''"> and home_url = #{homeUrl}</if>
+            <if test="syncUrl != null  and syncUrl != ''"> and sync_url = #{syncUrl}</if>
+            <if test="redirectUrl != null  and redirectUrl != ''"> and redirect_url = #{redirectUrl}</if>
+            <if test="publicFlag != null "> and public_flag = #{publicFlag}</if>
+            <if test="validFlag != null "> and valid_flag = #{validFlag}</if>
+            <if test="delFlag != null "> and del_flag = #{delFlag}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="creatorId != null "> and creator_id = #{creatorId}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by = #{updateBy}</if>
+            <if test="updatorId != null  and updatorId != ''"> and updator_id = #{updatorId}</if>
+            <if test="updateTime != null "> and update_time = #{updateTime}</if>
+            <if test="remark != null  and remark != ''"> and remark = #{remark}</if>
+        </where>
+    </select>
+
+    <select id="selectAuthClientById" parameterType="Long" resultMap="AuthClientResult">
+        <include refid="selectAuthClientVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertAuthClient" parameterType="AuthClient" useGeneratedKeys="true" keyProperty="id">
+        insert into auth_client
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="secretKey != null and secretKey != ''">secret_key,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="type != null">type,</if>
+            <if test="icon != null">icon,</if>
+            <if test="homeUrl != null">home_url,</if>
+            <if test="syncUrl != null and syncUrl != ''">sync_url,</if>
+            <if test="redirectUrl != null and redirectUrl != ''">redirect_url,</if>
+            <if test="publicFlag != null">public_flag,</if>
+            <if test="validFlag != null">valid_flag,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="creatorId != null">creator_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updatorId != null">updator_id,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="secretKey != null and secretKey != ''">#{secretKey},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="type != null">#{type},</if>
+            <if test="icon != null">#{icon},</if>
+            <if test="homeUrl != null">#{homeUrl},</if>
+            <if test="syncUrl != null and syncUrl != ''">#{syncUrl},</if>
+            <if test="redirectUrl != null and redirectUrl != ''">#{redirectUrl},</if>
+            <if test="publicFlag != null">#{publicFlag},</if>
+            <if test="validFlag != null">#{validFlag},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="creatorId != null">#{creatorId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updatorId != null">#{updatorId},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAuthClient" parameterType="AuthClient">
+        update auth_client
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="secretKey != null and secretKey != ''">secret_key = #{secretKey},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="icon != null">icon = #{icon},</if>
+            <if test="homeUrl != null">home_url = #{homeUrl},</if>
+            <if test="syncUrl != null and syncUrl != ''">sync_url = #{syncUrl},</if>
+            <if test="redirectUrl != null and redirectUrl != ''">redirect_url = #{redirectUrl},</if>
+            <if test="publicFlag != null">public_flag = #{publicFlag},</if>
+            <if test="validFlag != null">valid_flag = #{validFlag},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="creatorId != null">creator_id = #{creatorId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updatorId != null">updator_id = #{updatorId},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAuthClientById" parameterType="Long">
+        delete from auth_client where id = #{id}
+    </delete>
+
+    <delete id="deleteAuthClientByIds" parameterType="String">
+        delete from auth_client where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

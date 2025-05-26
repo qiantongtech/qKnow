@@ -3,6 +3,36 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/qKnow.iml" filepath="$PROJECT_DIR$/.idea/qKnow.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-framework/qknow-auth/qknow-auth.iml" filepath="$PROJECT_DIR$/qknow-framework/qknow-auth/qknow-auth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-framework/qknow-common/qknow-common.iml" filepath="$PROJECT_DIR$/qknow-framework/qknow-common/qknow-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-framework/qknow-config/qknow-config.iml" filepath="$PROJECT_DIR$/qknow-framework/qknow-config/qknow-config.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-framework/qknow-es/qknow-es.iml" filepath="$PROJECT_DIR$/qknow-framework/qknow-es/qknow-es.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-framework/qknow-file/qknow-file.iml" filepath="$PROJECT_DIR$/qknow-framework/qknow-file/qknow-file.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-framework/qknow-framework.iml" filepath="$PROJECT_DIR$/qknow-framework/qknow-framework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-framework/qknow-generator/qknow-generator.iml" filepath="$PROJECT_DIR$/qknow-framework/qknow-generator/qknow-generator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-module-app/qknow-module-app.iml" filepath="$PROJECT_DIR$/qknow-module-app/qknow-module-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-module-app/qknow-module-app-api/qknow-module-app-api.iml" filepath="$PROJECT_DIR$/qknow-module-app/qknow-module-app-api/qknow-module-app-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-module-app/qknow-module-app-biz/qknow-module-app-biz.iml" filepath="$PROJECT_DIR$/qknow-module-app/qknow-module-app-biz/qknow-module-app-biz.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-module-dm/qknow-module-dm.iml" filepath="$PROJECT_DIR$/qknow-module-dm/qknow-module-dm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-module-dm/qknow-module-dm-api/qknow-module-dm-api.iml" filepath="$PROJECT_DIR$/qknow-module-dm/qknow-module-dm-api/qknow-module-dm-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-module-dm/qknow-module-dm-biz/qknow-module-dm-biz.iml" filepath="$PROJECT_DIR$/qknow-module-dm/qknow-module-dm-biz/qknow-module-dm-biz.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-module-ext/qknow-module-ext.iml" filepath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-api/qknow-module-ext-api.iml" filepath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-api/qknow-module-ext-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/qknow-module-ext-biz.iml" filepath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/qknow-module-ext-biz.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc.iml" filepath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-api/qknow-module-kmc-api.iml" filepath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-api/qknow-module-kmc-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/qknow-module-kmc-biz.iml" filepath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/qknow-module-kmc-biz.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-module-system/qknow-module-system.iml" filepath="$PROJECT_DIR$/qknow-module-system/qknow-module-system.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-module-system/qknow-module-system-api/qknow-module-system-api.iml" filepath="$PROJECT_DIR$/qknow-module-system/qknow-module-system-api/qknow-module-system-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-module-system/qknow-module-system-biz/qknow-module-system-biz.iml" filepath="$PROJECT_DIR$/qknow-module-system/qknow-module-system-biz/qknow-module-system-biz.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-framework/qknow-mybatis/qknow-mybatis.iml" filepath="$PROJECT_DIR$/qknow-framework/qknow-mybatis/qknow-mybatis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-framework/qknow-neo4j/qknow-neo4j.iml" filepath="$PROJECT_DIR$/qknow-framework/qknow-neo4j/qknow-neo4j.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-framework/qknow-pay/qknow-pay.iml" filepath="$PROJECT_DIR$/qknow-framework/qknow-pay/qknow-pay.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-framework/qknow-quartz/qknow-quartz.iml" filepath="$PROJECT_DIR$/qknow-framework/qknow-quartz/qknow-quartz.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-framework/qknow-redis/qknow-redis.iml" filepath="$PROJECT_DIR$/qknow-framework/qknow-redis/qknow-redis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-framework/qknow-security/qknow-security.iml" filepath="$PROJECT_DIR$/qknow-framework/qknow-security/qknow-security.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-server/qknow-server.iml" filepath="$PROJECT_DIR$/qknow-server/qknow-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qknow-framework/qknow-websocket/qknow-websocket.iml" filepath="$PROJECT_DIR$/qknow-framework/qknow-websocket/qknow-websocket.iml" />
     </modules>
   </component>
 </project>

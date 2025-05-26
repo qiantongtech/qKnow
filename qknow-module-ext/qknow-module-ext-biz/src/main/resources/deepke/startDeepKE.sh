@@ -1,0 +1,1 @@
+docker exec 6066f79798c6 python -u predict.py text="'$1'";
