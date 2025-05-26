@@ -25,7 +25,7 @@
         <div class="greeting">
           <div class="entry_period">亲爱的朋友，{{ greetingsTitle }}！</div>
           <div class="entry_greeting">
-            相信自己，你可以成为你想成为的人。
+            知识平台是未来的考古层，今天存储的每条数据都在书写明天的历史。
           </div>
         </div>
         <div class="login-panel">
@@ -108,7 +108,7 @@
             <img src="@/assets/system/images/login/email.png" />
             <div>
               <p>电子邮箱：</p>
-              <p>sales@qiantong.tech</p>
+              <p>support@qiantong.tech</p>
             </div>
           </div>
         </div>
@@ -203,7 +203,7 @@
     title="忘记密码"
     class="fp-form-dialog"
     width="650px"
-    :append-to="$refs['app-container']" 
+    :append-to="$refs['app-container']"
   >
     <el-form :model="fpForm" label-width="auto" style="padding: 10px 60px 0;">
       <el-form-item label="用户名">

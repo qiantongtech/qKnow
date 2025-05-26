@@ -23,16 +23,16 @@ create table system_dept (
 -- ----------------------------
 -- 初始化-部门表数据
 -- ----------------------------
-insert into system_dept values(100,  0,   '0',          '千桐科技',   0, '唐朝辉', '15888888888', 'sales@qiantong.tech', '0', '0', 'admin', sysdate(), '', null);
-insert into system_dept values(101,  100, '0,100',      '南京总公司', 1, '唐朝辉', '15888888888', 'sales@qiantong.tech', '0', '0', 'admin', sysdate(), '', null);
-insert into system_dept values(102,  100, '0,100',      '郑州分公司', 2, '唐朝辉', '15888888888', 'sales@qiantong.tech', '0', '0', 'admin', sysdate(), '', null);
-insert into system_dept values(103,  101, '0,100,101',  '研发部门',   1, '唐朝辉', '15888888888', 'sales@qiantong.tech', '0', '0', 'admin', sysdate(), '', null);
-insert into system_dept values(104,  101, '0,100,101',  '市场部门',   2, '唐朝辉', '15888888888', 'sales@qiantong.tech', '0', '0', 'admin', sysdate(), '', null);
-insert into system_dept values(105,  101, '0,100,101',  '测试部门',   3, '唐朝辉', '15888888888', 'sales@qiantong.tech', '0', '0', 'admin', sysdate(), '', null);
-insert into system_dept values(106,  101, '0,100,101',  '财务部门',   4, '唐朝辉', '15888888888', 'sales@qiantong.tech', '0', '0', 'admin', sysdate(), '', null);
-insert into system_dept values(107,  101, '0,100,101',  '运维部门',   5, '唐朝辉', '15888888888', 'sales@qiantong.tech', '0', '0', 'admin', sysdate(), '', null);
-insert into system_dept values(108,  102, '0,100,102',  '市场部门',   1, '唐朝辉', '15888888888', 'sales@qiantong.tech', '0', '0', 'admin', sysdate(), '', null);
-insert into system_dept values(109,  102, '0,100,102',  '财务部门',   2, '唐朝辉', '15888888888', 'sales@qiantong.tech', '0', '0', 'admin', sysdate(), '', null);
+insert into system_dept values(100,  0,   '0',          '千桐科技',   0, '唐朝辉', '15888888888', 'support@qiantong.tech', '0', '0', 'admin', sysdate(), '', null);
+insert into system_dept values(101,  100, '0,100',      '南京总公司', 1, '唐朝辉', '15888888888', 'support@qiantong.tech', '0', '0', 'admin', sysdate(), '', null);
+insert into system_dept values(102,  100, '0,100',      '郑州分公司', 2, '唐朝辉', '15888888888', 'support@qiantong.tech', '0', '0', 'admin', sysdate(), '', null);
+insert into system_dept values(103,  101, '0,100,101',  '研发部门',   1, '唐朝辉', '15888888888', 'support@qiantong.tech', '0', '0', 'admin', sysdate(), '', null);
+insert into system_dept values(104,  101, '0,100,101',  '市场部门',   2, '唐朝辉', '15888888888', 'support@qiantong.tech', '0', '0', 'admin', sysdate(), '', null);
+insert into system_dept values(105,  101, '0,100,101',  '测试部门',   3, '唐朝辉', '15888888888', 'support@qiantong.tech', '0', '0', 'admin', sysdate(), '', null);
+insert into system_dept values(106,  101, '0,100,101',  '财务部门',   4, '唐朝辉', '15888888888', 'support@qiantong.tech', '0', '0', 'admin', sysdate(), '', null);
+insert into system_dept values(107,  101, '0,100,101',  '运维部门',   5, '唐朝辉', '15888888888', 'support@qiantong.tech', '0', '0', 'admin', sysdate(), '', null);
+insert into system_dept values(108,  102, '0,100,102',  '市场部门',   1, '唐朝辉', '15888888888', 'support@qiantong.tech', '0', '0', 'admin', sysdate(), '', null);
+insert into system_dept values(109,  102, '0,100,102',  '财务部门',   2, '唐朝辉', '15888888888', 'support@qiantong.tech', '0', '0', 'admin', sysdate(), '', null);
 
 
 -- ----------------------------
@@ -65,7 +65,7 @@ create table system_user (
 -- ----------------------------
 -- 初始化-用户信息表数据
 -- ----------------------------
-insert into system_user values(1,  103, 'admin', '千知', '00', 'sales@qiantong.tech', '15888888888', '0', '', '$2a$10$7axdNeV8M2WAl5lOsIIheu4qfXq5/3ZIGdFqyVC8QjJEwUpO64tXK', '0', '0', '127.0.0.1', sysdate(), 'admin', sysdate(), '', null, '管理员');
+insert into system_user values(1,  103, 'qKnow', '千知', '00', 'support@qiantong.tech', '15888888888', '0', '', '$2a$10$M9QTlVS3URMVLDMMmJYYress8MgeKE0ahcNQSwO.T/TI8/U1U7pF6', '0', '0', '127.0.0.1', sysdate(), 'admin', sysdate(), '', null, '管理员');
 
 
 -- ----------------------------
@@ -713,7 +713,7 @@ CREATE TABLE `system_content` (
 -- Records of system_content
 -- ----------------------------
 BEGIN;
-INSERT INTO `system_content` (`id`, `sys_name`, `logo`, `login_logo`, `carousel_image`, `contact_number`, `email`, `copyright`, `record_number`, `del_flag`, `status`, `create_by`, `creator_id`, `create_time`, `update_by`, `updater_id`, `update_time`, `remark`) VALUES (1, NULL, '', '', '', '400-660-8208', 'sales@qiantong.tech', 'Copyright© 2025 江苏干桐科技有限公司 版权所有', '苏ICP备2022008519号-1', 0, NULL, NULL, NULL, NULL, 'admin', 1, '2025-01-13 13:18:06', NULL);
+INSERT INTO `system_content` (`id`, `sys_name`, `logo`, `login_logo`, `carousel_image`, `contact_number`, `email`, `copyright`, `record_number`, `del_flag`, `status`, `create_by`, `creator_id`, `create_time`, `update_by`, `updater_id`, `update_time`, `remark`) VALUES (1, NULL, '', '', '', '400-660-8208', 'support@qiantong.tech', 'Copyright© 2025 江苏干桐科技有限公司 版权所有', '苏ICP备2022008519号-3', 0, NULL, NULL, NULL, NULL, 'admin', 1, '2025-01-13 13:18:06', NULL);
 COMMIT;
 
 -- ----------------------------

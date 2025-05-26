@@ -30,7 +30,7 @@
         <div class="greeting">
           <div class="entry_period">亲爱的朋友，{{ greetingsTitle }}！</div>
           <div class="entry_greeting">
-            相信自己，你可以成为你想成为的人。
+            知识平台是未来的考古层，今天存储的每条数据都在书写明天的历史。
           </div>
         </div>
         <div class="login-panel">
@@ -123,8 +123,8 @@
             </div>
             <div>
               <p>电子邮箱：</p>
-              <!--              <p>sales@qiantong.tech</p>-->
-              <p>{{ contentDetail && contentDetail.email ? contentDetail.email : 'sales@qiantong.tech' }}</p>
+              <!--              <p>support@qiantong.tech</p>-->
+              <p>{{ contentDetail && contentDetail.email ? contentDetail.email : 'support@qiantong.tech' }}</p>
             </div>
           </div>
         </div>
@@ -196,15 +196,15 @@
           </a>
         </div>
         <div class="bottom-info">
-          <div class="copy-right">
+          <div class="copy-right" @click="goPage()">
             <!--            Copyright© 2023 江苏干桐科技有限公司 版权所有-->
             {{ contentDetail && contentDetail.copyright ? contentDetail.copyright : `Copyright© ${parseTime(new Date(), "{y}")} 江苏干桐科技有限公司 版权所有` }}
           </div>
           <div class="record" @click="goKtPage()">
             <img src="https://www.asktempo.com/statics/images/an.png" alt=""/>
-            <!--            &nbsp;&nbsp; 苏ICP备2022008519号-1-->
+            <!--            &nbsp;&nbsp; 苏ICP备2022008519号-3-->
             &nbsp;&nbsp;
-            {{ contentDetail && contentDetail.recordNumber ? contentDetail.recordNumber : '苏ICP备2022008519号-1' }}
+            {{ contentDetail && contentDetail.recordNumber ? contentDetail.recordNumber : '苏ICP备2022008519号-3' }}
           </div>
         </div>
       </div>
@@ -472,10 +472,15 @@ function handleFPCodeClick() {
   }, 1000)
 }
 
+function goPage() {
+  window.open('https://qiantong.tech/', '_blank'); // 在新窗口打开链接
+}
+
 //点击备案号调整工信部
 function goKtPage() {
   window.open('http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32011502010895', '_blank'); // 在新窗口打开链接
 }
+
 </script>
 
 <style lang="scss">
