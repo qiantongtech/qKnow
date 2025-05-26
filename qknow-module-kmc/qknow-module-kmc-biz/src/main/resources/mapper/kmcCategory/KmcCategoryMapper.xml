@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.qiantong.qknow.module.kmc.dal.mapper.kmcCategory.KmcCategoryMapper">
+
+    <resultMap type="KmcCategoryDO" id="HubCategoryResult">
+        <result property="id"    column="id"    />
+        <result property="workspaceId"    column="workspace_id"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="name"    column="name"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="ancestors"    column="ancestors"    />
+        <result property="validFlag"    column="valid_flag"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="creatorId"    column="creator_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updaterId"    column="updater_id"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectHubCategoryVo">
+        select id, workspace_id, parent_id, name, order_num, ancestors, valid_flag, del_flag, create_by, creator_id, create_time, update_by, updater_id, update_time, remark from kmc_category
+    </sql>
+
+    <select id="getKmcCategoryAllList" parameterType="KmcCategoryDO" resultMap="HubCategoryResult">
+        <include refid="selectHubCategoryVo"/>
+        <where>
+            <if test="id != null "> and id = #{id}</if>
+            <if test="workspaceId != null "> and workspace_id = #{workspaceId}</if>
+            <if test="parentId != null "> and parent_id = #{parentId}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="orderNum != null "> and order_num = #{orderNum}</if>
+            <if test="ancestors != null  and ancestors != ''"> and ancestors = #{ancestors}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="delFlag != null "> and del_flag = #{delFlag}</if>
+            <if test="validFlag != null "> and valid_flag = #{validFlag}</if>
+        </where>
+        order by order_num ASC
+    </select>
+
+    <select id="selectKmcCategoryById" parameterType="Long" resultMap="HubCategoryResult">
+        select d.id, d.workspace_id, d.parent_id, d.name, d.order_num, d.ancestors, d.valid_flag, d.del_flag, d.create_by, d.creator_id, d.create_time, d.update_by, d.updater_id, d.update_time, d.remark,
+               (select name from kmc_category where id = d.parent_id) name
+        from kmc_category d
+        where d.id = #{id}
+    </select>
+
+    <insert id="insertHubCategory" parameterType="KmcCategoryDO" useGeneratedKeys="true" keyProperty="id">
+        insert into kmc_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workspaceId != null">workspace_id,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="orderNum != null">order_num,</if>
+            <if test="ancestors != null">ancestors,</if>
+            <if test="validFlag != null">valid_flag,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="creatorId != null">creator_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updaterId != null">updater_id,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workspaceId != null">#{workspaceId},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="orderNum != null">#{orderNum},</if>
+            <if test="ancestors != null">#{ancestors},</if>
+            <if test="validFlag != null">#{validFlag},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="creatorId != null">#{creatorId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updaterId != null">#{updaterId},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateHubCategory" parameterType="KmcCategoryDO">
+        update kmc_category
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workspaceId != null">workspace_id = #{workspaceId},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="orderNum != null">order_num = #{orderNum},</if>
+            <if test="ancestors != null">ancestors = #{ancestors},</if>
+            <if test="validFlag != null">valid_flag = #{validFlag},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="creatorId != null">creator_id = #{creatorId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updaterId != null">updater_id = #{updaterId},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteHubCategoryById" parameterType="Long">
+        delete from kmc_category where id = #{id}
+    </delete>
+
+    <delete id="deleteHubCategoryByIds" parameterType="String">
+        delete from kmc_category where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

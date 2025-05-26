@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.qiantong.qknow.module.kmc.dal.mapper.kmcDocument.KmcDocumentMapper">
+
+    <resultMap type="KmcDocumentDO" id="KmcDocumentResult">
+        <result property="id"    column="id"    />
+        <result property="workspaceId"    column="workspace_id"    />
+        <result property="categoryId"    column="category_id"    />
+        <result property="categoryName"    column="category_name"    />
+        <result property="name"    column="name"    />
+        <result property="path"    column="path"    />
+        <result property="description"    column="description"    />
+        <result property="validFlag"    column="valid_flag"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="creatorId"    column="creator_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updaterId"    column="updater_id"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectKmcDocumentVo">
+        select id, workspace_id, category_id, category_name, name, path, description, valid_flag, del_flag, create_by, creator_id, create_time, update_by, updater_id, update_time, remark from kmc_document
+    </sql>
+
+    <select id="selectKmcDocumentList" parameterType="KmcDocumentDO" resultMap="KmcDocumentResult">
+        <include refid="selectKmcDocumentVo"/>
+        <where>
+            <if test="workspaceId != null "> and workspace_id = #{workspaceId}</if>
+            <if test="categoryId != null "> and category_id = #{categoryId}</if>
+            <if test="categoryName != null  and categoryName != ''"> and category_name like concat('%', #{categoryName}, '%')</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="path != null  and path != ''"> and path = #{path}</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="updaterId != null "> and updater_id = #{updaterId}</if>
+        </where>
+    </select>
+
+    <select id="selectKmcDocumentById" parameterType="Long" resultMap="KmcDocumentResult">
+        <include refid="selectKmcDocumentVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertKmcDocument" parameterType="KmcDocumentDO" useGeneratedKeys="true" keyProperty="id">
+        insert into kmc_document
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workspaceId != null">workspace_id,</if>
+            <if test="categoryId != null">category_id,</if>
+            <if test="categoryName != null">category_name,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="path != null and path != ''">path,</if>
+            <if test="description != null">description,</if>
+            <if test="validFlag != null">valid_flag,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="creatorId != null">creator_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updaterId != null">updater_id,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workspaceId != null">#{workspaceId},</if>
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="categoryName != null">#{categoryName},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="path != null and path != ''">#{path},</if>
+            <if test="description != null">#{description},</if>
+            <if test="validFlag != null">#{validFlag},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="creatorId != null">#{creatorId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updaterId != null">#{updaterId},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateKmcDocument" parameterType="KmcDocumentDO">
+        update kmc_document
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workspaceId != null">workspace_id = #{workspaceId},</if>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="categoryName != null">category_name = #{categoryName},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="path != null and path != ''">path = #{path},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="validFlag != null">valid_flag = #{validFlag},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="creatorId != null">creator_id = #{creatorId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updaterId != null">updater_id = #{updaterId},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteKmcDocumentById" parameterType="Long">
+        delete from kmc_document where id = #{id}
+    </delete>
+
+    <delete id="deleteKmcDocumentByIds" parameterType="String">
+        delete from kmc_document where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

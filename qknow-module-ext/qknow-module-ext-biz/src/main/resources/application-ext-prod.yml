@@ -1,0 +1,16 @@
+deepke:
+  startShPath: /home/qtt/opt/qKnow-admin/deepke.sh
+  baseUrl: D:\qiantong
+  #执行脚本
+  batPath: C:\Users\13121\Desktop\run_c.bat
+  #预测文本路径
+  predictYaml: ${deepke.baseUrl}\cnschema\conf\predict.yaml
+  #关系配置文件地址
+  relatinCsv: ${deepke.baseUrl}\cnschema\data\test.csv
+  #概念配置文件地址
+  conceptYaml: ${deepke.baseUrl}\DeepKE\example\ner\standard\conf\train.yaml
+model:
+  api-key: app-rgCTiSyg76zkcDGXyA8D4aHV
+# 非结构化抽取方式选择：deepke或者model
+unstruct:
+  type: model

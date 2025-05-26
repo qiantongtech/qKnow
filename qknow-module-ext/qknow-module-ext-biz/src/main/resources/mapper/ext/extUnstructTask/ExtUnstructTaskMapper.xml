@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.qiantong.qknow.module.ext.dal.mapper.extUnstructTask.ExtUnstructTaskMapper">
+
+    <resultMap type="ExtUnstructTaskDO" id="ExtUnstructTaskResult">
+        <result property="id"    column="id"    />
+        <result property="workspaceId"    column="workspace_id"    />
+        <result property="name"    column="name"    />
+        <result property="status"    column="status"    />
+        <result property="publishStatus"    column="publish_status"    />
+        <result property="publishTime"    column="publish_time"    />
+        <result property="publisherId"    column="publisher_id"    />
+        <result property="publishBy"    column="publish_by"    />
+        <result property="validFlag"    column="valid_flag"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="creatorId"    column="creator_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updaterId"    column="updater_id"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectExtUnstructTaskVo">
+        select id, workspace_id, name, status, publish_status, publish_time, publisher_id, publish_by, valid_flag, del_flag, create_by, creator_id, create_time, update_by, updater_id, update_time, remark from ext_unstruct_task
+    </sql>
+
+    <select id="selectExtUnstructTaskList" parameterType="ExtUnstructTaskDO" resultMap="ExtUnstructTaskResult">
+        <include refid="selectExtUnstructTaskVo"/>
+        <where>
+            <if test="workspaceId != null "> and workspace_id = #{workspaceId}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="publishStatus != null "> and publish_status = #{publishStatus}</if>
+            <if test="publishTime != null "> and publish_time = #{publishTime}</if>
+            <if test="publisherId != null "> and publisher_id = #{publisherId}</if>
+            <if test="publishBy != null  and publishBy != ''"> and publish_by = #{publishBy}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+        </where>
+    </select>
+
+    <select id="selectExtUnstructTaskById" parameterType="Long" resultMap="ExtUnstructTaskResult">
+        <include refid="selectExtUnstructTaskVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertExtUnstructTask" parameterType="ExtUnstructTaskDO" useGeneratedKeys="true" keyProperty="id">
+        insert into ext_unstruct_task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workspaceId != null">workspace_id,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="status != null">status,</if>
+            <if test="publishStatus != null">publish_status,</if>
+            <if test="publishTime != null">publish_time,</if>
+            <if test="publisherId != null">publisher_id,</if>
+            <if test="publishBy != null">publish_by,</if>
+            <if test="validFlag != null">valid_flag,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="creatorId != null">creator_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updaterId != null">updater_id,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workspaceId != null">#{workspaceId},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="status != null">#{status},</if>
+            <if test="publishStatus != null">#{publishStatus},</if>
+            <if test="publishTime != null">#{publishTime},</if>
+            <if test="publisherId != null">#{publisherId},</if>
+            <if test="publishBy != null">#{publishBy},</if>
+            <if test="validFlag != null">#{validFlag},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="creatorId != null">#{creatorId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updaterId != null">#{updaterId},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateExtUnstructTask" parameterType="ExtUnstructTaskDO">
+        update ext_unstruct_task
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workspaceId != null">workspace_id = #{workspaceId},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="publishStatus != null">publish_status = #{publishStatus},</if>
+            <if test="publishTime != null">publish_time = #{publishTime},</if>
+            <if test="publisherId != null">publisher_id = #{publisherId},</if>
+            <if test="publishBy != null">publish_by = #{publishBy},</if>
+            <if test="validFlag != null">valid_flag = #{validFlag},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="creatorId != null">creator_id = #{creatorId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updaterId != null">updater_id = #{updaterId},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteExtUnstructTaskById" parameterType="Long">
+        delete from ext_unstruct_task where id = #{id}
+    </delete>
+
+    <delete id="deleteExtUnstructTaskByIds" parameterType="String">
+        delete from ext_unstruct_task where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

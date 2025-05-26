@@ -1,6 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-auth/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-auth/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-config/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-config/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-es/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-es/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-file/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-file/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-generator/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-generator/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-mybatis/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-mybatis/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-neo4j/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-neo4j/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-pay/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-pay/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-quartz/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-quartz/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-redis/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-redis/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-security/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-security/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-websocket/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/qknow-websocket/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-framework/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-app/qknow-module-app-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-app/qknow-module-app-api/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-app/qknow-module-app-biz/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-app/qknow-module-app-biz/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-app/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-app/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-dm/qknow-module-dm-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-dm/qknow-module-dm-api/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-dm/qknow-module-dm-biz/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-dm/qknow-module-dm-biz/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-dm/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-dm/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-example/qknow-module-example-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-example/qknow-module-example-api/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-example/qknow-module-example-biz/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-example/qknow-module-example-biz/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-example/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-example/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-api/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-ext/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-ext/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-api/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-kmc/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-kmc/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-system/qknow-module-system-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-system/qknow-module-system-api/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-system/qknow-module-system-biz/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-system/qknow-module-system-biz/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-system/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-module-system/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/qknow-server/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>
