@@ -173,7 +173,7 @@
             <dict-tag :options="ext_data_check" :value="scope.row.validateType"/>
           </template>
         </el-table-column>
-        <el-table-column label="校验规则" align="center" prop="id">
+        <el-table-column label="校验规则" align="center" prop="id" v-if="getColumnVisibility(10)">
           <template #default="scope">
             <span v-if="scope.row.validateType === 0">不可重复</span>
             <span v-else-if="scope.row.validateType === 2">
@@ -286,9 +286,7 @@
           <el-col :span="12">
             <el-form-item label="校验方式" prop="validateType">
               <el-select v-model="form.validateType" placeholder="请选择数据类型" clearable>
-                <el-option label="唯一性校验" :value="0"></el-option>
-                <el-option label="长度校验" :value="1"></el-option>
-                <el-option label="区间校验" :value="2"></el-option>
+                <el-option :label="dict.label" :value="parseInt(dict.value)" v-for="dict in ext_data_check"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -484,19 +482,13 @@ const attributeList = ref([]);
 
 // 列显隐信息
 const columns = ref([
-  {key: 1, label: "工作区id", visible: true},
-  {key: 2, label: "概念id", visible: true},
-  {key: 3, label: "概念名称", visible: true},
-  {key: 4, label: "属性名称（中文）", visible: true },
-  { key: 5, label: "属性名称（英文）", visible: true },
+  {key: 4, label: "属性名", visible: true },
+  { key: 5, label: "属性代码", visible: true },
   { key: 6, label: "是否必填", visible: true },
   { key: 7, label: "数据类型", visible: true },
   { key: 8, label: "单/多值", visible: true },
   { key: 9, label: "校验方式", visible: true },
-  { key: 10, label: "最小值（用于区间校验）", visible: true },
-  { key: 11, label: "最大值（用于区间校验）", visible: true },
-  { key: 14, label: "创建人", visible: true },
-  { key: 16, label: "创建时间", visible: true },
+  { key: 10, label: "校验规则", visible: true },
   { key: 20, label: "备注", visible: true }
 ]);
 
