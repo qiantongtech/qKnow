@@ -70,7 +70,7 @@ public class DeepkeExtractionServiceImpl implements DeepkeExtractionService {
             int exitCode = process.waitFor();
             if (exitCode == 0){
                 return AjaxResult.success("抽取成功", result);
-            }else {
+            } else {
                 return AjaxResult.error("抽取错误" + exitCode);
             }
 
