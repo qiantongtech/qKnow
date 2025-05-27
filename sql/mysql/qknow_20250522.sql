@@ -157,9 +157,9 @@ create table system_menu (
 -- 初始化-菜单信息表数据
 -- ----------------------------
 -- 一级菜单
-insert into system_menu values('1', '系统管理', '0', '5', 'system',           null, '', '', 1, 0, 'M', '0', '0', '', 'system',   'admin', sysdate(), '', null, '系统管理目录');
-insert into system_menu values('2', '系统监控', '0', '6', 'monitor',          null, '', '', 1, 0, 'M', '0', '0', '', 'monitor',  'admin', sysdate(), '', null, '系统监控目录');
-insert into system_menu values('3', '系统工具', '0', '7', 'tool',             null, '', '', 1, 0, 'M', '0', '0', '', 'tool',     'admin', sysdate(), '', null, '系统工具目录');
+insert into system_menu values('1', '系统管理', '0', '5', 'system',           null, '', '', 1, 0, 'M', '0', '0', '', '系统设置',   'admin', sysdate(), '', null, '系统管理目录');
+insert into system_menu values('2', '系统监控', '0', '6', 'monitor',          null, '', '', 1, 0, 'M', '0', '0', '', '系统监控',  'admin', sysdate(), '', null, '系统监控目录');
+insert into system_menu values('3', '系统工具', '0', '7', 'tool',             null, '', '', 1, 0, 'M', '0', '0', '', '系统工具',     'admin', sysdate(), '', null, '系统工具目录');
 -- 二级菜单
 insert into system_menu values('100',  '用户管理', '1',   '1', 'user',       'system/system/user/index',        '', '', 1, 0, 'C', '0', '0', 'system:user:list',        'user',          'admin', sysdate(), '', null, '用户管理菜单');
 insert into system_menu values('101',  '角色管理', '1',   '2', 'role',       'system/system/role/index',        '', '', 1, 0, 'C', '0', '0', 'system:role:list',        'peoples',       'admin', sysdate(), '', null, '角色管理菜单');
@@ -328,7 +328,7 @@ INSERT INTO `system_menu`  VALUES (2044, '知识应用', 0, 3, 'app', NULL, NULL
 INSERT INTO `system_menu`  VALUES (2045, '图谱探索', 2044, 0, 'graphExploration', 'app/graphExploration/index', NULL, NULL, 1, 0, 'C', '0', '0', NULL, '#', 'admin', '2025-02-24 13:56:10', '', NULL, '');
 
 -- 【目录】数据管理
-INSERT INTO `system_menu`  VALUES (2046, '数据管理', 0, 4, 'dm', NULL, NULL, NULL, 1, 0, 'M', '0', '0', '', 'component', 'admin', '2025-02-19 15:15:49', 'admin', '2025-03-26 14:00:25', '');
+INSERT INTO `system_menu`  VALUES (2046, '数据管理', 0, 4, 'dm', NULL, NULL, NULL, 1, 0, 'M', '0', '0', '', '数据管理', 'admin', '2025-02-19 15:15:49', 'admin', '2025-03-26 14:00:25', '');
 
 -- 数据源
 INSERT INTO `system_menu`  VALUES (2047, '数据源', 2046, 4, 'dmDatasource', 'dm/dmDatasource/index', NULL, NULL, 1, 0, 'C', '0', '0', 'dm:datasource:datasource:list', '#', 'admin', '2025-03-12 09:33:51', 'admin', '2025-03-18 17:56:57', '');
