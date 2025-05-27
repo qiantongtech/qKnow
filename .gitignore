@@ -58,4 +58,4 @@ storybook-static/
 .DS_Store
 
 # 忽略 upload 目录下的所有内容
-#/upload/
+/upload/
