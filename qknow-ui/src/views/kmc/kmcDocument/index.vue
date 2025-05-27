@@ -98,7 +98,7 @@
                 {{ scope.row.name || '-' }}
               </template>
             </el-table-column>
-            <el-table-column v-if="getColumnVisibility(6)" label="文件描述" align="center" prop="description">
+            <el-table-column v-if="getColumnVisibility(6)" label="文件描述" align="left" prop="description">
               <template #default="scope">
                 {{ scope.row.description || '-' }}
               </template>
@@ -249,7 +249,6 @@ import {
   updateDocument,
   getPdfPreview, updateDownloadCount, updatePreviewCount, selectList
 } from "@/api/kmc/kmcDocument/kmcDocument.js";
-import {addKmcDocumentLog} from "@/api/kmc/kmcDocumentLog/kmcDocumentLog.js";
 import {getToken} from "@/utils/auth.js";
 import {ref} from "vue";
 import {kmcCategoryTree} from "@/api/kmc/kmcCategory/kmcCategory.js";
@@ -683,36 +682,21 @@ function handleDownload(row) {
   if (row.path === '') {
     proxy.$modal.msgError("没有文件");
   } else {
-    let path = '';
-    if ( env === 'production' ) {
-      path = 'http://10.32.80.211:8090/prod-api/profile' + row.path
-    } else {
-      path = row.path
-      // path = 'http://localhost:9035/profile' + row.path
-    }
+    let path = 'http://127.0.0.1:8090/profile' + row.path;
     fetch(path) // 使用 fetch 获取文件数据
         .then(response => response.blob()) // 将文件数据转换为 Blob
         .then(blob => {
-          Promise.all([
-            addKmcDocumentLog({ documentId: row.id, documentName: row.name, type: 1 }),
-            updateDownloadCount(row.id)
-          ])
-              .then(() => {
-                const link = document.createElement("a");
-                const url = URL.createObjectURL(blob); // 创建 Blob URL
-                link.href = url;
-                link.setAttribute("download", row.name || "下载文件"); // 设置文件名
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url); // 释放 Blob URL
-              })
-              .catch(() => {
-                this.$modal.msgError('操作失败');
-              });
+          const link = document.createElement("a");
+          const url = URL.createObjectURL(blob); // 创建 Blob URL
+          link.href = url;
+          link.setAttribute("download", row.name || "下载文件"); // 设置文件名
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url); // 释放 Blob URL
         })
         .catch(() => {
-          this.$modal.msgError('文件下载失败');
+          proxy.$modal.msgError('文件下载失败');
         });
   }
 };
@@ -722,13 +706,7 @@ function previewRefactoring(row) {
   let fileExt = fileName.split('.').pop().toLowerCase();
   fileExt = fileExt.trim();
   const allowedExtensions = ['pdf','docx', 'xls','xlsx','csv'];
-  let path = '';
-  if ( env === 'production' ) {
-    path = 'http://10.32.80.211:8090/prod-api/profile' + row.path
-  } else {
-    path = row.path
-    // path = 'http://localhost:9035/profile' + row.path
-  }
+  let path = 'http://127.0.0.1:8090/profile' + row.path;
   if (!allowedExtensions.includes(fileExt)) {
     const supportedFormats = allowedExtensions.join('、');
     proxy.$modal.msgWarning(`当前仅支持以下格式文件预览：${supportedFormats}`);
