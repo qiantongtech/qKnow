@@ -76,7 +76,7 @@ public class Neo4jBuildWrapper<T> {
                     valueString = "null";
                 } else {
                     // 对于其他类型，调用 toString() 获取其字符串表示
-                    valueString = value.toString();
+                    valueString = "'" + value + "'";;
                 }
                 // 为每个属性对生成格式化的 key: 'value' 字符串，并加入到 attributes 中
                 if (attributes.length() > 0) {
