@@ -340,13 +340,10 @@ const relationList = ref([]);
 
 // 列显隐信息
 const columns = ref([
-  { key: 1, label: "工作区id", visible: true },
-  { key: 2, label: "起点概念id", visible: true },
+  { key: 2, label: "起点", visible: true },
   { key: 3, label: "关系", visible: true },
-  { key: 4, label: "终点概念id", visible: true },
+  { key: 4, label: "终点", visible: true },
   { key: 5, label: "是否可逆", visible: true },
-  { key: 8, label: "创建人", visible: true },
-  { key: 10, label: "创建时间", visible: true },
   { key: 14, label: "备注", visible: true }
 ]);
 
