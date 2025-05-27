@@ -30,7 +30,7 @@ public class DbQueryProperty implements Serializable {
      */
     public void viald() {
         if (StringUtils.isEmpty(dbType) || StringUtils.isEmpty(host) ||
-                StringUtils.isEmpty(username) || StringUtils.isEmpty(password) ||
+                StringUtils.isEmpty(username) ||
                 StringUtils.isEmpty(port)) {
             throw new DataQueryException("参数不完整");
         }
@@ -74,8 +74,8 @@ public class DbQueryProperty implements Serializable {
         this.sid = configJson.getString("sid");
         this.dbName = configJson.getString("dbname");
 
-        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password) ) {
-            throw new DataQueryException("数据源配置中必须包含 username、password");
+        if (StringUtils.isEmpty(username)) {
+            throw new DataQueryException("数据源配置中必须包含 username");
         }
     }
 

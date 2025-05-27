@@ -262,82 +262,82 @@ insert into system_menu values('1060', '生成代码', '116', '6', '#', '', '', 
 -- ----------------------------
 
 -- 【目录】知识中心
-INSERT INTO `system_menu`  VALUES (2000, '知识中心', 0, 1, 'kmc', NULL, NULL, NULL, 1, 0, 'M', '0', '0', '', '知识中心', 'admin', '2025-02-10 17:21:49', 'admin', '2025-03-20 17:22:26', '');
+insert into system_menu  values (2000, '知识中心', 0, 1, 'kmc', NULL, NULL, NULL, 1, 0, 'M', '0', '0', '', '知识中心', 'admin', '2025-02-10 17:21:49', 'admin', '2025-03-20 17:22:26', '');
 
 -- 知识分类
-INSERT INTO `system_menu`  VALUES (2001, '知识分类', 2000, 0, 'kmcCategory', 'kmc/kmcCategory/index', '', NULL, 1, 0, 'C', '0', '0', 'kmc:kmcCategory:kmcCategory:list', '#', 'admin', '2025-02-10 17:27:23', 'admin', '2025-02-18 17:16:52', '');
-INSERT INTO `system_menu`  VALUES (2002, '知识分类导出', 2001, 1, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmc:kmcCategory:kmcCategory:export', '#', 'admin', '2025-02-17 10:21:27', 'admin', '2025-02-18 17:21:11', '');
-INSERT INTO `system_menu`  VALUES (2003, '知识分类导入', 2001, 2, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmc:kmcCategory:kmcCategory:import', '#', 'admin', '2025-02-17 10:21:39', 'admin', '2025-02-18 17:20:46', '');
-INSERT INTO `system_menu`  VALUES (2004, '知识分类详情', 2001, 3, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmc:kmcCategory:kmcCategory:query', '#', 'admin', '2025-02-17 10:21:52', 'admin', '2025-02-18 17:20:54', '');
-INSERT INTO `system_menu`  VALUES (2005, '知识分类新增', 2001, 4, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmc:kmcCategory:kmcCategory:add', '#', 'admin', '2025-02-17 10:22:03', 'admin', '2025-02-18 17:20:59', '');
-INSERT INTO `system_menu`  VALUES (2006, '知识分类修改', 2001, 5, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmc:kmcCategory:kmcCategory:edit', '#', 'admin', '2025-02-17 10:22:12', 'admin', '2025-02-18 17:21:03', '');
-INSERT INTO `system_menu`  VALUES (2007, '知识分类删除', 2001, 6, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmc:kmcCategory:kmcCategory:remove', '#', 'admin', '2025-02-17 10:22:24', 'admin', '2025-02-18 17:21:07', '');
+insert into system_menu  values (2001, '知识分类', 2000, 0, 'kmcCategory', 'kmc/kmcCategory/index', '', NULL, 1, 0, 'C', '0', '0', 'kmc:kmcCategory:kmcCategory:list', '#', 'admin', '2025-02-10 17:27:23', 'admin', '2025-02-18 17:16:52', '');
+insert into system_menu  values (2002, '知识分类导出', 2001, 1, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmc:kmcCategory:kmcCategory:export', '#', 'admin', '2025-02-17 10:21:27', 'admin', '2025-02-18 17:21:11', '');
+insert into system_menu  values (2003, '知识分类导入', 2001, 2, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmc:kmcCategory:kmcCategory:import', '#', 'admin', '2025-02-17 10:21:39', 'admin', '2025-02-18 17:20:46', '');
+insert into system_menu  values (2004, '知识分类详情', 2001, 3, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmc:kmcCategory:kmcCategory:query', '#', 'admin', '2025-02-17 10:21:52', 'admin', '2025-02-18 17:20:54', '');
+insert into system_menu  values (2005, '知识分类新增', 2001, 4, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmc:kmcCategory:kmcCategory:add', '#', 'admin', '2025-02-17 10:22:03', 'admin', '2025-02-18 17:20:59', '');
+insert into system_menu  values (2006, '知识分类修改', 2001, 5, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmc:kmcCategory:kmcCategory:edit', '#', 'admin', '2025-02-17 10:22:12', 'admin', '2025-02-18 17:21:03', '');
+insert into system_menu  values (2007, '知识分类删除', 2001, 6, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmc:kmcCategory:kmcCategory:remove', '#', 'admin', '2025-02-17 10:22:24', 'admin', '2025-02-18 17:21:07', '');
 
 -- 文件管理
-INSERT INTO `system_menu`  VALUES (2008, '文件管理', 2000, 1, 'kmcDocument', 'kmc/kmcDocument/index', '', NULL, 1, 0, 'C', '0', '0', 'kmcDocument:kmcDocument:document:list', '#', 'admin', '2025-02-10 17:27:09', 'admin', '2025-02-18 17:17:11', '');
-INSERT INTO `system_menu`  VALUES (2009, '知识文件导出', 2008, 1, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmcDocument:kmcDocument:document:export', '#', 'admin', '2025-02-17 10:27:10', 'admin', '2025-02-18 17:17:27', '');
-INSERT INTO `system_menu`  VALUES (2010, '知识文件导入', 2008, 2, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmcDocument:kmcDocument:document:import', '#', 'admin', '2025-02-17 10:27:21', 'admin', '2025-02-18 17:17:32', '');
-INSERT INTO `system_menu`  VALUES (2011, '知识文件详情', 2008, 3, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmcDocument:kmcDocument:document:query', '#', 'admin', '2025-02-17 10:27:30', 'admin', '2025-02-18 17:17:42', '');
-INSERT INTO `system_menu`  VALUES (2012, '知识文件新增', 2008, 4, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmcDocument:kmcDocument:document:add', '#', 'admin', '2025-02-17 10:27:40', 'admin', '2025-02-18 17:17:47', '');
-INSERT INTO `system_menu`  VALUES (2013, '知识文件修改', 2008, 5, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmcDocument:kmcDocument:document:edit', '#', 'admin', '2025-02-17 10:27:53', 'admin', '2025-02-18 17:17:52', '');
-INSERT INTO `system_menu`  VALUES (2014, '知识文件删除', 2008, 6, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmcDocument:kmcDocument:document:remove', '#', 'admin', '2025-02-17 10:28:08', 'admin', '2025-02-18 17:17:57', '');
+insert into system_menu  values (2008, '文件管理', 2000, 1, 'kmcDocument', 'kmc/kmcDocument/index', '', NULL, 1, 0, 'C', '0', '0', 'kmcDocument:kmcDocument:document:list', '#', 'admin', '2025-02-10 17:27:09', 'admin', '2025-02-18 17:17:11', '');
+insert into system_menu  values (2009, '知识文件导出', 2008, 1, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmcDocument:kmcDocument:document:export', '#', 'admin', '2025-02-17 10:27:10', 'admin', '2025-02-18 17:17:27', '');
+insert into system_menu  values (2010, '知识文件导入', 2008, 2, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmcDocument:kmcDocument:document:import', '#', 'admin', '2025-02-17 10:27:21', 'admin', '2025-02-18 17:17:32', '');
+insert into system_menu  values (2011, '知识文件详情', 2008, 3, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmcDocument:kmcDocument:document:query', '#', 'admin', '2025-02-17 10:27:30', 'admin', '2025-02-18 17:17:42', '');
+insert into system_menu  values (2012, '知识文件新增', 2008, 4, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmcDocument:kmcDocument:document:add', '#', 'admin', '2025-02-17 10:27:40', 'admin', '2025-02-18 17:17:47', '');
+insert into system_menu  values (2013, '知识文件修改', 2008, 5, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmcDocument:kmcDocument:document:edit', '#', 'admin', '2025-02-17 10:27:53', 'admin', '2025-02-18 17:17:52', '');
+insert into system_menu  values (2014, '知识文件删除', 2008, 6, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmcDocument:kmcDocument:document:remove', '#', 'admin', '2025-02-17 10:28:08', 'admin', '2025-02-18 17:17:57', '');
 
 -- 【目录】知识抽取
-INSERT INTO `system_menu`  VALUES (2015, '知识抽取', 0, 2, 'ext', NULL, NULL, NULL, 1, 0, 'M', '0', '0', '', '知识抽取', 'admin', '2025-02-13 10:39:17', 'admin', '2025-03-20 17:25:23', '');
+insert into system_menu  values (2015, '知识抽取', 0, 2, 'ext', NULL, NULL, NULL, 1, 0, 'M', '0', '0', '', '知识抽取', 'admin', '2025-02-13 10:39:17', 'admin', '2025-03-20 17:25:23', '');
 
 -- 概念配置
-INSERT INTO `system_menu`  VALUES (2016, '概念配置', 2015, 1, 'schema', 'ext/extSchema/index', NULL, NULL, 1, 0, 'C', '0', '0', 'ext:extSchema:schema:list', '#', 'admin', '2025-02-17 16:03:40', 'admin', '2025-04-02 11:16:26', '');
-INSERT INTO `system_menu`  VALUES (2017, '概念配置查询', 2016, 1, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchema:schema:query', '#', 'admin', '2025-02-18 17:24:07', 'admin', '2025-02-18 17:25:42', '');
-INSERT INTO `system_menu`  VALUES (2018, '概念配置新增', 2016, 2, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchema:schema:add', '#', 'admin', '2025-02-18 17:24:24', 'admin', '2025-02-18 17:25:58', '');
-INSERT INTO `system_menu`  VALUES (2019, '概念配置修改', 2016, 3, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchema:schema:edit', '#', 'admin', '2025-02-18 17:24:38', 'admin', '2025-02-18 17:26:03', '');
-INSERT INTO `system_menu`  VALUES (2020, '概念配置删除', 2016, 4, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchema:schema:remove', '#', 'admin', '2025-02-18 17:25:01', 'admin', '2025-02-18 17:26:06', '');
-INSERT INTO `system_menu`  VALUES (2021, '概念配置导出', 2016, 5, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchema:schema:export', '#', 'admin', '2025-02-18 17:25:16', 'admin', '2025-02-18 17:26:10', '');
-INSERT INTO `system_menu`  VALUES (2022, '概念配置导入', 2016, 6, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchema:schema:import', '#', 'admin', '2025-02-18 17:25:30', 'admin', '2025-02-18 17:26:14', '');
+insert into system_menu  values (2016, '概念配置', 2015, 1, 'schema', 'ext/extSchema/index', NULL, NULL, 1, 0, 'C', '0', '0', 'ext:extSchema:schema:list', '#', 'admin', '2025-02-17 16:03:40', 'admin', '2025-04-02 11:16:26', '');
+insert into system_menu  values (2017, '概念配置查询', 2016, 1, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchema:schema:query', '#', 'admin', '2025-02-18 17:24:07', 'admin', '2025-02-18 17:25:42', '');
+insert into system_menu  values (2018, '概念配置新增', 2016, 2, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchema:schema:add', '#', 'admin', '2025-02-18 17:24:24', 'admin', '2025-02-18 17:25:58', '');
+insert into system_menu  values (2019, '概念配置修改', 2016, 3, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchema:schema:edit', '#', 'admin', '2025-02-18 17:24:38', 'admin', '2025-02-18 17:26:03', '');
+insert into system_menu  values (2020, '概念配置删除', 2016, 4, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchema:schema:remove', '#', 'admin', '2025-02-18 17:25:01', 'admin', '2025-02-18 17:26:06', '');
+insert into system_menu  values (2021, '概念配置导出', 2016, 5, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchema:schema:export', '#', 'admin', '2025-02-18 17:25:16', 'admin', '2025-02-18 17:26:10', '');
+insert into system_menu  values (2022, '概念配置导入', 2016, 6, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchema:schema:import', '#', 'admin', '2025-02-18 17:25:30', 'admin', '2025-02-18 17:26:14', '');
 
 -- 关系配置
-INSERT INTO `system_menu`  VALUES (2023, '关系配置', 2015, 2, 'relation', 'ext/extSchemaRelation/index', NULL, NULL, 1, 0, 'C', '0', '0', 'ext:extSchemaRelation:relation:list', '#', 'admin', '2025-02-18 17:30:54', 'admin', '2025-04-02 11:16:31', '关系配置菜单');
-INSERT INTO `system_menu`  VALUES (2024, '关系配置查询', 2023, 1, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchemaRelation:relation:query', '#', 'admin', '2025-02-18 17:30:54', '', NULL, '');
-INSERT INTO `system_menu`  VALUES (2025, '关系配置新增', 2023, 2, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchemaRelation:relation:add', '#', 'admin', '2025-02-18 17:30:54', '', NULL, '');
-INSERT INTO `system_menu`  VALUES (2026, '关系配置修改', 2023, 3, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchemaRelation:relation:edit', '#', 'admin', '2025-02-18 17:30:54', '', NULL, '');
-INSERT INTO `system_menu`  VALUES (2027, '关系配置删除', 2023, 4, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchemaRelation:relation:remove', '#', 'admin', '2025-02-18 17:30:54', '', NULL, '');
-INSERT INTO `system_menu`  VALUES (2028, '关系配置导出', 2023, 5, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchemaRelation:relation:export', '#', 'admin', '2025-02-18 17:30:54', '', NULL, '');
-INSERT INTO `system_menu`  VALUES (2029, '关系配置导入', 2023, 6, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchemaRelation:relation:import', '#', 'admin', '2025-02-18 17:30:54', '', NULL, '');
+insert into system_menu  values (2023, '关系配置', 2015, 2, 'relation', 'ext/extSchemaRelation/index', NULL, NULL, 1, 0, 'C', '0', '0', 'ext:extSchemaRelation:relation:list', '#', 'admin', '2025-02-18 17:30:54', 'admin', '2025-04-02 11:16:31', '关系配置菜单');
+insert into system_menu  values (2024, '关系配置查询', 2023, 1, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchemaRelation:relation:query', '#', 'admin', '2025-02-18 17:30:54', '', NULL, '');
+insert into system_menu  values (2025, '关系配置新增', 2023, 2, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchemaRelation:relation:add', '#', 'admin', '2025-02-18 17:30:54', '', NULL, '');
+insert into system_menu  values (2026, '关系配置修改', 2023, 3, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchemaRelation:relation:edit', '#', 'admin', '2025-02-18 17:30:54', '', NULL, '');
+insert into system_menu  values (2027, '关系配置删除', 2023, 4, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchemaRelation:relation:remove', '#', 'admin', '2025-02-18 17:30:54', '', NULL, '');
+insert into system_menu  values (2028, '关系配置导出', 2023, 5, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchemaRelation:relation:export', '#', 'admin', '2025-02-18 17:30:54', '', NULL, '');
+insert into system_menu  values (2029, '关系配置导入', 2023, 6, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extSchemaRelation:relation:import', '#', 'admin', '2025-02-18 17:30:54', '', NULL, '');
 
 -- 非结构化抽取
-INSERT INTO `system_menu`  VALUES (2030, '非结构化抽取', 2015, 3, 'unstructTask', 'ext/extUnstructTask/index', NULL, NULL, 1, 0, 'C', '0', '0', 'ext:extUnstructTask:unstructtask:list', '#', 'admin', '2025-02-18 16:49:34', 'admin', '2025-04-02 11:16:40', '非结构化抽取任务菜单');
-INSERT INTO `system_menu`  VALUES (2031, '非结构化抽取任务查询', 2030, 1, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extUnstructTask:unstructtask:query', '#', 'admin', '2025-02-18 16:49:34', '', NULL, '');
-INSERT INTO `system_menu`  VALUES (2032, '非结构化抽取任务新增', 2030, 2, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extUnstructTask:unstructtask:add', '#', 'admin', '2025-02-18 16:49:34', '', NULL, '');
-INSERT INTO `system_menu`  VALUES (2033, '非结构化抽取任务修改', 2030, 3, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extUnstructTask:unstructtask:edit', '#', 'admin', '2025-02-18 16:49:34', '', NULL, '');
-INSERT INTO `system_menu`  VALUES (2034, '非结构化抽取任务删除', 2030, 4, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extUnstructTask:unstructtask:remove', '#', 'admin', '2025-02-18 16:49:34', '', NULL, '');
-INSERT INTO `system_menu`  VALUES (2035, '非结构化抽取任务导出', 2030, 5, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extUnstructTask:unstructtask:export', '#', 'admin', '2025-02-18 16:49:34', '', NULL, '');
-INSERT INTO `system_menu`  VALUES (2036, '非结构化抽取任务导入', 2030, 6, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extUnstructTask:unstructtask:import', '#', 'admin', '2025-02-18 16:49:34', '', NULL, '');
+insert into system_menu  values (2030, '非结构化抽取', 2015, 3, 'unstructTask', 'ext/extUnstructTask/index', NULL, NULL, 1, 0, 'C', '0', '0', 'ext:extUnstructTask:unstructtask:list', '#', 'admin', '2025-02-18 16:49:34', 'admin', '2025-04-02 11:16:40', '非结构化抽取任务菜单');
+insert into system_menu  values (2031, '非结构化抽取任务查询', 2030, 1, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extUnstructTask:unstructtask:query', '#', 'admin', '2025-02-18 16:49:34', '', NULL, '');
+insert into system_menu  values (2032, '非结构化抽取任务新增', 2030, 2, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extUnstructTask:unstructtask:add', '#', 'admin', '2025-02-18 16:49:34', '', NULL, '');
+insert into system_menu  values (2033, '非结构化抽取任务修改', 2030, 3, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extUnstructTask:unstructtask:edit', '#', 'admin', '2025-02-18 16:49:34', '', NULL, '');
+insert into system_menu  values (2034, '非结构化抽取任务删除', 2030, 4, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extUnstructTask:unstructtask:remove', '#', 'admin', '2025-02-18 16:49:34', '', NULL, '');
+insert into system_menu  values (2035, '非结构化抽取任务导出', 2030, 5, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extUnstructTask:unstructtask:export', '#', 'admin', '2025-02-18 16:49:34', '', NULL, '');
+insert into system_menu  values (2036, '非结构化抽取任务导入', 2030, 6, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extUnstructTask:unstructtask:import', '#', 'admin', '2025-02-18 16:49:34', '', NULL, '');
 
 -- 结构化抽取
-INSERT INTO `system_menu`  VALUES (2037, '结构化抽取', 2015, 4, 'extStructTask', 'ext/extStructTask/index', NULL, NULL, 1, 0, 'C', '0', '0', 'ext:extStructTask:struct:list', '#', 'admin', '2025-02-25 14:13:57', 'admin', '2025-04-02 11:16:44', '结构化抽取任务菜单');
-INSERT INTO `system_menu`  VALUES (2038, '结构化抽取任务查询', 2037, 1, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extStructTask:struct:query', '#', 'admin', '2025-02-25 14:13:57', '', NULL, '');
-INSERT INTO `system_menu`  VALUES (2039, '结构化抽取任务新增', 2037, 2, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extStructTask:struct:add', '#', 'admin', '2025-02-25 14:13:57', '', NULL, '');
-INSERT INTO `system_menu`  VALUES (2040, '结构化抽取任务修改', 2037, 3, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extStructTask:struct:edit', '#', 'admin', '2025-02-25 14:13:57', '', NULL, '');
-INSERT INTO `system_menu`  VALUES (2041, '结构化抽取任务删除', 2037, 4, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extStructTask:struct:remove', '#', 'admin', '2025-02-25 14:13:57', '', NULL, '');
-INSERT INTO `system_menu`  VALUES (2042, '结构化抽取任务导出', 2037, 5, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extStructTask:struct:export', '#', 'admin', '2025-02-25 14:13:57', '', NULL, '');
-INSERT INTO `system_menu`  VALUES (2043, '结构化抽取任务导入', 2037, 6, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extStructTask:struct:import', '#', 'admin', '2025-02-25 14:13:57', '', NULL, '');
+insert into system_menu  values (2037, '结构化抽取', 2015, 4, 'extStructTask', 'ext/extStructTask/index', NULL, NULL, 1, 0, 'C', '0', '0', 'ext:extStructTask:struct:list', '#', 'admin', '2025-02-25 14:13:57', 'admin', '2025-04-02 11:16:44', '结构化抽取任务菜单');
+insert into system_menu  values (2038, '结构化抽取任务查询', 2037, 1, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extStructTask:struct:query', '#', 'admin', '2025-02-25 14:13:57', '', NULL, '');
+insert into system_menu  values (2039, '结构化抽取任务新增', 2037, 2, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extStructTask:struct:add', '#', 'admin', '2025-02-25 14:13:57', '', NULL, '');
+insert into system_menu  values (2040, '结构化抽取任务修改', 2037, 3, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extStructTask:struct:edit', '#', 'admin', '2025-02-25 14:13:57', '', NULL, '');
+insert into system_menu  values (2041, '结构化抽取任务删除', 2037, 4, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extStructTask:struct:remove', '#', 'admin', '2025-02-25 14:13:57', '', NULL, '');
+insert into system_menu  values (2042, '结构化抽取任务导出', 2037, 5, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extStructTask:struct:export', '#', 'admin', '2025-02-25 14:13:57', '', NULL, '');
+insert into system_menu  values (2043, '结构化抽取任务导入', 2037, 6, '#', '', NULL, NULL, 1, 0, 'F', '0', '0', 'ext:extStructTask:struct:import', '#', 'admin', '2025-02-25 14:13:57', '', NULL, '');
 
 -- 【目录】知识应用
-INSERT INTO `system_menu`  VALUES (2044, '知识应用', 0, 3, 'app', NULL, NULL, NULL, 1, 0, 'M', '0', '0', '', '知识应用', 'admin', '2025-02-17 16:25:46', 'admin', '2025-04-02 10:50:06', '');
+insert into system_menu  values (2044, '知识应用', 0, 3, 'app', NULL, NULL, NULL, 1, 0, 'M', '0', '0', '', '知识应用', 'admin', '2025-02-17 16:25:46', 'admin', '2025-04-02 10:50:06', '');
 
 -- 图谱探索
-INSERT INTO `system_menu`  VALUES (2045, '图谱探索', 2044, 0, 'graphExploration', 'app/graphExploration/index', NULL, NULL, 1, 0, 'C', '0', '0', NULL, '#', 'admin', '2025-02-24 13:56:10', '', NULL, '');
+insert into system_menu  values (2045, '图谱探索', 2044, 0, 'graphExploration', 'app/graphExploration/index', NULL, NULL, 1, 0, 'C', '0', '0', NULL, '#', 'admin', '2025-02-24 13:56:10', '', NULL, '');
 
 -- 【目录】数据管理
-INSERT INTO `system_menu`  VALUES (2046, '数据管理', 0, 4, 'dm', NULL, NULL, NULL, 1, 0, 'M', '0', '0', '', '数据管理', 'admin', '2025-02-19 15:15:49', 'admin', '2025-03-26 14:00:25', '');
+insert into system_menu  values (2046, '数据管理', 0, 4, 'dm', NULL, NULL, NULL, 1, 0, 'M', '0', '0', '', '数据管理', 'admin', '2025-02-19 15:15:49', 'admin', '2025-03-26 14:00:25', '');
 
 -- 数据源
-INSERT INTO `system_menu`  VALUES (2047, '数据源', 2046, 4, 'dmDatasource', 'dm/dmDatasource/index', NULL, NULL, 1, 0, 'C', '0', '0', 'dm:datasource:datasource:list', '#', 'admin', '2025-03-12 09:33:51', 'admin', '2025-03-18 17:56:57', '');
-INSERT INTO `system_menu`  VALUES (2048, '数据源查询', 2047, 1, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'dm:datasource:datasource:query', '#', 'admin', '2025-03-18 17:18:11', '', NULL, '');
-INSERT INTO `system_menu`  VALUES (2049, '数据源新增', 2047, 2, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'dm:datasource:datasource:add', '#', 'admin', '2025-03-18 17:18:25', '', NULL, '');
-INSERT INTO `system_menu`  VALUES (2050, '数据源修改', 2047, 3, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'dm:datasource:datasource:edit', '#', 'admin', '2025-03-18 17:18:37', '', NULL, '');
-INSERT INTO `system_menu`  VALUES (2051, '数据源删除', 2047, 4, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'dm:datasource:datasource:remove', '#', 'admin', '2025-03-18 17:18:57', '', NULL, '');
-INSERT INTO `system_menu`  VALUES (2052, '数据源导出', 2047, 5, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'dm:datasource:datasource:export', '#', 'admin', '2025-03-18 17:19:11', '', NULL, '');
-INSERT INTO `system_menu`  VALUES (2053, '数据源导入', 2047, 6, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'dm:datasource:datasource:import', '#', 'admin', '2025-03-18 17:19:23', '', NULL, '');
+insert into system_menu  values (2047, '数据源', 2046, 4, 'dmDatasource', 'dm/dmDatasource/index', NULL, NULL, 1, 0, 'C', '0', '0', 'dm:datasource:datasource:list', '#', 'admin', '2025-03-12 09:33:51', 'admin', '2025-03-18 17:56:57', '');
+insert into system_menu  values (2048, '数据源查询', 2047, 1, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'dm:datasource:datasource:query', '#', 'admin', '2025-03-18 17:18:11', '', NULL, '');
+insert into system_menu  values (2049, '数据源新增', 2047, 2, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'dm:datasource:datasource:add', '#', 'admin', '2025-03-18 17:18:25', '', NULL, '');
+insert into system_menu  values (2050, '数据源修改', 2047, 3, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'dm:datasource:datasource:edit', '#', 'admin', '2025-03-18 17:18:37', '', NULL, '');
+insert into system_menu  values (2051, '数据源删除', 2047, 4, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'dm:datasource:datasource:remove', '#', 'admin', '2025-03-18 17:18:57', '', NULL, '');
+insert into system_menu  values (2052, '数据源导出', 2047, 5, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'dm:datasource:datasource:export', '#', 'admin', '2025-03-18 17:19:11', '', NULL, '');
+insert into system_menu  values (2053, '数据源导入', 2047, 6, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'dm:datasource:datasource:import', '#', 'admin', '2025-03-18 17:19:23', '', NULL, '');
 
 -- ----------------------------
 -- 6、用户和角色关联表  用户N-1角色
@@ -450,11 +450,11 @@ insert into system_dict_type values(8,  '通知状态', 'sys_notice_status',   '
 insert into system_dict_type values(9,  '操作类型', 'sys_oper_type',       '0', 'admin', sysdate(), '', null, '操作类型列表');
 insert into system_dict_type values(10, '系统状态', 'sys_common_status',   '0', 'admin', sysdate(), '', null, '登录状态列表');
 
-INSERT INTO system_dict_type values(11, '数据类型', 'ext_data_type', '0', 'admin', sysdate(), '', NULL, NULL);
-INSERT INTO system_dict_type values(12, '数据校验', 'ext_data_check', '0', 'admin', sysdate(), '', NULL, NULL);
-INSERT INTO system_dict_type values(13, '发布状态', 'publish_status', '0', 'admin', sysdate(), '', NULL, NULL);
-INSERT INTO system_dict_type values(14, '任务执行状态', 'ext_task_status', '0', 'admin', sysdate(), '', NULL, NULL);
-INSERT INTO system_dict_type values(15, '数据源类型', 'datasource_type', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_type values(11, '数据类型', 'ext_data_type', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_type values(12, '数据校验', 'ext_data_check', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_type values(13, '发布状态', 'publish_status', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_type values(14, '任务执行状态', 'ext_task_status', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_type values(15, '数据源类型', 'datasource_type', '0', 'admin', sysdate(), '', NULL, NULL);
 
 -- ----------------------------
 -- 12、字典数据表
@@ -509,26 +509,26 @@ insert into system_dict_data values(27, 9,  '清空数据', '9',       'sys_oper
 insert into system_dict_data values(28, 1,  '成功',     '0',       'sys_common_status',   '',   'primary', 'N', '0', 'admin', sysdate(), '', null, '正常状态');
 insert into system_dict_data values(29, 2,  '失败',     '1',       'sys_common_status',   '',   'danger',  'N', '0', 'admin', sysdate(), '', null, '停用状态');
 
-INSERT INTO system_dict_data values(30, 0, '文本', '0', 'ext_data_type', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
-INSERT INTO system_dict_data values(31, 1, '整数', '1', 'ext_data_type', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
-INSERT INTO system_dict_data values(32, 2, '小数', '2', 'ext_data_type', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
-INSERT INTO system_dict_data values(33, 3, '时间', '3', 'ext_data_type', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
-INSERT INTO system_dict_data values(34, 4, '字节类型', '4', 'ext_data_type', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
-INSERT INTO system_dict_data values(35, 5, '布尔值', '5', 'ext_data_type', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
-INSERT INTO system_dict_data values(36, 0, '唯一性校验', '0', 'ext_data_check', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
-INSERT INTO system_dict_data values(37, 1, '长度校验', '1', 'ext_data_check', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
-INSERT INTO system_dict_data values(38, 2, '区间校验', '2', 'ext_data_check', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
-INSERT INTO system_dict_data values(39, 0, '未发布', '0', 'publish_status', NULL, 'warning', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
-INSERT INTO system_dict_data values(40, 1, '已发布', '1', 'publish_status', NULL, 'success', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
-INSERT INTO system_dict_data values(41, 0, '未执行', '0', 'ext_task_status', NULL, 'primary', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
-INSERT INTO system_dict_data values(42, 1, '进行中', '1', 'ext_task_status', NULL, 'warning', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
-INSERT INTO system_dict_data values(43, 2, '已完成', '2', 'ext_task_status', NULL, 'success', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
-INSERT INTO system_dict_data values(44, 3, '执行失败', '3', 'ext_task_status', NULL, 'danger', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
-INSERT INTO system_dict_data values (45, 1, 'MySql', 'MySql', 'datasource_type', NULL, 'primary', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
-INSERT INTO system_dict_data values (46, 2, 'DM8', 'DM8', 'datasource_type', NULL, 'primary', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
-INSERT INTO system_dict_data values (47, 3, 'Oracle', 'Oracle', 'datasource_type', NULL, 'primary', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
-INSERT INTO system_dict_data values (48, 4, 'Oracle11', 'Oracle11', 'datasource_type', NULL, 'primary', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
-INSERT INTO system_dict_data values (49, 5, 'Kingbase8', 'Kingbase8', 'datasource_type', NULL, 'primary', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_data values(30, 0, '文本', '0', 'ext_data_type', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_data values(31, 1, '整数', '1', 'ext_data_type', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_data values(32, 2, '小数', '2', 'ext_data_type', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_data values(33, 3, '时间', '3', 'ext_data_type', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_data values(34, 4, '字节类型', '4', 'ext_data_type', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_data values(35, 5, '布尔值', '5', 'ext_data_type', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_data values(36, 0, '唯一性校验', '0', 'ext_data_check', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_data values(37, 1, '长度校验', '1', 'ext_data_check', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_data values(38, 2, '区间校验', '2', 'ext_data_check', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_data values(39, 0, '未发布', '0', 'publish_status', NULL, 'warning', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_data values(40, 1, '已发布', '1', 'publish_status', NULL, 'success', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_data values(41, 0, '未执行', '0', 'ext_task_status', NULL, 'primary', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_data values(42, 1, '进行中', '1', 'ext_task_status', NULL, 'warning', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_data values(43, 2, '已完成', '2', 'ext_task_status', NULL, 'success', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_data values(44, 3, '执行失败', '3', 'ext_task_status', NULL, 'danger', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_data values (45, 1, 'MySql', 'MySql', 'datasource_type', NULL, 'primary', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_data values (46, 2, 'DM8', 'DM8', 'datasource_type', NULL, 'primary', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_data values (47, 3, 'Oracle', 'Oracle', 'datasource_type', NULL, 'primary', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_data values (48, 4, 'Oracle11', 'Oracle11', 'datasource_type', NULL, 'primary', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+insert into system_dict_data values (49, 5, 'Kingbase8', 'Kingbase8', 'datasource_type', NULL, 'primary', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
 
 -- ----------------------------
 -- 13、参数配置表
@@ -600,7 +600,7 @@ create table system_job (
 insert into system_job values(1, '系统默认（无参）', 'DEFAULT', 'ryTask.ryNoParams',        '0/10 * * * * ?', '3', '1', '1', 'admin', sysdate(), '', null, '');
 insert into system_job values(2, '系统默认（有参）', 'DEFAULT', 'ryTask.ryParams(\'ry\')',  '0/15 * * * * ?', '3', '1', '1', 'admin', sysdate(), '', null, '');
 insert into system_job values(3, '系统默认（多参）', 'DEFAULT', 'ryTask.ryMultipleParams(\'ry\', true, 2000L, 316.50D, 100)',  '0/20 * * * * ?', '3', '1', '1', 'admin', sysdate(), '', null, '');
-
+insert into system_job values (100, '非结构化任务抽取', 'DEFAULT', 'extUnstructTaskServiceImpl.consumeQueue()', '0 0/5 * * * ?', '1', '1', '1', 'admin', sysdate(), '', NULL, '');
 
 -- ----------------------------
 -- 16、定时任务调度日志表
@@ -637,9 +637,6 @@ create table system_notice (
                             primary key (notice_id)
 ) engine=innodb auto_increment=100 comment = '通知公告表';
 
--- ----------------------------
--- 初始化-公告信息表数据
--- ----------------------------
 insert into system_notice values('1', '温馨提醒：2025-05-20 千知平台新版本发布啦', '2', '新版本内容', '0', 'admin', sysdate(), '', null, '管理员');
 insert into system_notice values('2', '维护通知：2025-05-22 千知平台凌晨维护', '1', '维护内容',   '0', 'admin', sysdate(), '', null, '管理员');
 
@@ -709,64 +706,527 @@ create table gen_table_column (
 -- -------------------------------------------------------------------------------------------------------------
 
 -- ----------------------------
--- Table structure for system_content
+-- 20、系统内容配置
 -- ----------------------------
-DROP TABLE IF EXISTS `system_content`;
-CREATE TABLE `system_content` (
-                                  `id` int(16) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-                                  `sys_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '系统名称',
-                                  `logo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '系统logo',
-                                  `login_logo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '登录页面logo',
-                                  `carousel_image` varchar(512) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '轮播图',
-                                  `contact_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '联系电话',
-                                  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '电子邮箱',
-                                  `copyright` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '版权方',
-                                  `record_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '备案号',
-                                  `del_flag` int(2) DEFAULT NULL COMMENT '删除标记',
-                                  `status` int(2) DEFAULT NULL COMMENT '状态',
-                                  `create_by` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '创建人',
-                                  `creator_id` int(16) DEFAULT NULL COMMENT '创建人id',
-                                  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-                                  `update_by` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '修改人',
-                                  `updater_id` int(16) DEFAULT NULL COMMENT '修改人id',
-                                  `update_time` datetime DEFAULT NULL COMMENT '修改时间',
-                                  `remark` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '备注',
-                                  PRIMARY KEY (`id`)
+drop table if exists system_content;
+create table system_content (
+                                  id int(16) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+                                  sys_name varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '系统名称',
+                                  logo varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '系统logo',
+                                  login_logo varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '登录页面logo',
+                                  carousel_image varchar(512) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '轮播图',
+                                  contact_number varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '联系电话',
+                                  email varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '电子邮箱',
+                                  copyright varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '版权方',
+                                  record_number varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '备案号',
+                                  del_flag int(2) DEFAULT NULL COMMENT '删除标记',
+                                  status int(2) DEFAULT NULL COMMENT '状态',
+                                  create_by varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '创建人',
+                                  creator_id int(16) DEFAULT NULL COMMENT '创建人id',
+                                  create_time datetime DEFAULT NULL COMMENT '创建时间',
+                                  update_by varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '修改人',
+                                  updater_id int(16) DEFAULT NULL COMMENT '修改人id',
+                                  update_time datetime DEFAULT NULL COMMENT '修改时间',
+                                  remark varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '备注',
+                                  PRIMARY KEY (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ----------------------------
--- Records of system_content
--- ----------------------------
-BEGIN;
-INSERT INTO `system_content` (`id`, `sys_name`, `logo`, `login_logo`, `carousel_image`, `contact_number`, `email`, `copyright`, `record_number`, `del_flag`, `status`, `create_by`, `creator_id`, `create_time`, `update_by`, `updater_id`, `update_time`, `remark`) VALUES (1, NULL, '', '', '', '400-660-8208', 'support@qiantong.tech', 'Copyright© 2025 江苏千桐科技有限公司 版权所有', '苏ICP备2022008519号-3', 0, NULL, NULL, NULL, NULL, 'admin', 1, '2025-01-13 13:18:06', NULL);
-COMMIT;
+insert into system_content values (1, NULL, '', '', '', '400-660-8208', 'support@qiantong.tech', 'Copyright© 2025 江苏千桐科技有限公司 版权所有', '苏ICP备2022008519号-3', 0, NULL, NULL, NULL, NULL, 'admin', 1, '2025-01-13 13:18:06', NULL);
+
 
 -- ----------------------------
--- Table structure for message
+-- 21、消息通知
 -- ----------------------------
-DROP TABLE IF EXISTS `message`;
-CREATE TABLE `message` (
-                           `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-                           `sender_id` bigint(20) DEFAULT NULL COMMENT '发送人',
-                           `receiver_id` bigint(20) DEFAULT NULL COMMENT '接收人',
-                           `title` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '消息标题',
-                           `content` varchar(3072) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '消息模板内容',
-                           `category` tinyint(4) unsigned NOT NULL COMMENT '消息类别',
-                           `msg_level` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '消息等级',
-                           `module` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '消息模块',
-                           `entity_type` tinyint(4) unsigned DEFAULT NULL COMMENT '实体类型',
-                           `entity_id` bigint(20) DEFAULT NULL COMMENT '实体id',
-                           `entity_url` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '消息链接',
-                           `has_read` tinyint(1) DEFAULT '0' COMMENT '是否已读',
-                           `has_retraction` tinyint(1) DEFAULT '0' COMMENT '是否撤回',
-                           `valid_flag` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效;0：无效，1：有效',
-                           `del_flag` tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除标志;1：已删除，0：未删除',
-                           `create_by` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '创建人',
-                           `creator_id` bigint(20) DEFAULT NULL COMMENT '创建人id',
-                           `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                           `update_by` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '更新人',
-                           `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-                           `updater_id` bigint(20) DEFAULT NULL COMMENT '更新人id',
-                           `remark` varchar(512) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '备注',
-                           PRIMARY KEY (`id`) USING BTREE
+drop table if exists message;
+create table message (
+                           id int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+                           sender_id bigint(20) DEFAULT NULL COMMENT '发送人',
+                           receiver_id bigint(20) DEFAULT NULL COMMENT '接收人',
+                           title varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '消息标题',
+                           content varchar(3072) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '消息模板内容',
+                           category tinyint(4) unsigned NOT NULL COMMENT '消息类别',
+                           msg_level tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '消息等级',
+                           module tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '消息模块',
+                           entity_type tinyint(4) unsigned DEFAULT NULL COMMENT '实体类型',
+                           entity_id bigint(20) DEFAULT NULL COMMENT '实体id',
+                           entity_url varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '消息链接',
+                           has_read tinyint(1) DEFAULT '0' COMMENT '是否已读',
+                           has_retraction tinyint(1) DEFAULT '0' COMMENT '是否撤回',
+                           valid_flag tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效;0：无效，1：有效',
+                           del_flag tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除标志;1：已删除，0：未删除',
+                           create_by varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '创建人',
+                           creator_id bigint(20) DEFAULT NULL COMMENT '创建人id',
+                           create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                           update_by varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '更新人',
+                           update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+                           updater_id bigint(20) DEFAULT NULL COMMENT '更新人id',
+                           remark varchar(512) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '备注',
+                           PRIMARY KEY (id) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='消息';
+
+-- ----------------------------
+-- 22、数据源
+-- ----------------------------
+drop table if exists dm_datasource;
+create table dm_datasource (
+                                 id bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+                                 datasource_name varchar(128) NOT NULL COMMENT '数据源名称',
+                                 datasource_type varchar(32) NOT NULL DEFAULT '0' COMMENT '数据源类型',
+                                 datasource_config varchar(1024) DEFAULT NULL COMMENT '数据源配置(json字符串)',
+                                 ip varchar(32) NOT NULL COMMENT 'IP地址',
+                                 port int NOT NULL COMMENT '端口号',
+                                 list_count int DEFAULT NULL COMMENT '数据库表数（预留）',
+                                 sync_count int DEFAULT NULL COMMENT '同步记录数（预留）',
+                                 data_size int DEFAULT NULL COMMENT '同步数据量大小（预留）',
+                                 description varchar(1024) DEFAULT NULL COMMENT '描述',
+                                 valid_flag tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效;0：无效，1：有效',
+                                 del_flag tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除标志;1：已删除，0：未删除',
+                                 create_by varchar(32) DEFAULT NULL COMMENT '创建人',
+                                 creator_id bigint DEFAULT NULL COMMENT '创建人id',
+                                 create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                 update_by varchar(32) DEFAULT NULL COMMENT '更新人',
+                                 updater_id bigint DEFAULT NULL COMMENT '更新人id',
+                                 update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+                                 remark varchar(512) DEFAULT NULL COMMENT '备注',
+                                 PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3 COMMENT='数据源';
+
+insert into dm_datasource values (1, '本地数据库', 'MySql', '{\"username\":\"root\",\"password\":\"admin123\",\"dbname\":\"qknow_dev\"}', '127.0.0.1', 3306, NULL, NULL, NULL, NULL, 1, 0, '千知', 1, '2025-05-27 11:59:22', '千知', 1, '2025-05-27 14:42:31', NULL);
+
+
+-- ----------------------------
+-- 23、属性映射
+-- ----------------------------
+drop table if exists ext_attribute_mapping;
+create table ext_attribute_mapping (
+                                         id bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+                                         workspace_id bigint NOT NULL COMMENT '工作区id',
+                                         task_id bigint NOT NULL COMMENT '任务id',
+                                         table_name varchar(128) NOT NULL COMMENT '表名',
+                                         table_comment varchar(128) DEFAULT NULL COMMENT '表显示名称',
+                                         field_name varchar(128) NOT NULL COMMENT '字段名',
+                                         field_comment varchar(256) DEFAULT NULL COMMENT '字段显示名称',
+                                         attribute_id bigint DEFAULT NULL COMMENT '属性id',
+                                         attribute_name varchar(128) DEFAULT NULL COMMENT '属性名称',
+                                         valid_flag tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效;0：无效，1：有效',
+                                         del_flag tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除标志;1：已删除，0：未删除',
+                                         create_by varchar(32) DEFAULT NULL COMMENT '创建人',
+                                         creator_id bigint DEFAULT NULL COMMENT '创建人id',
+                                         create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                         update_by varchar(32) DEFAULT NULL COMMENT '更新人',
+                                         updater_id bigint DEFAULT NULL COMMENT '更新人id',
+                                         update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+                                         remark varchar(512) DEFAULT NULL COMMENT '备注',
+                                         PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3 COMMENT='属性映射';
+
+insert into ext_attribute_mapping values (1, 1001, 1, 'system_role', '角色信息表', 'role_id', '角色ID', 6, '角色id', 0, 0, '千知', 1, '2025-05-27 14:46:55', '千知', 1, '2025-05-27 14:46:55', NULL);
+insert into ext_attribute_mapping values (2, 1001, 1, 'system_role', '角色信息表', 'role_name', '角色名称', 7, '角色名称', 0, 0, '千知', 1, '2025-05-27 14:46:55', '千知', 1, '2025-05-27 14:46:55', NULL);
+insert into ext_attribute_mapping values (3, 1001, 1, 'system_user', '用户信息表', 'user_id', '用户ID', 3, '用户id', 0, 0, '千知', 1, '2025-05-27 14:46:55', '千知', 1, '2025-05-27 14:46:55', NULL);
+insert into ext_attribute_mapping values (4, 1001, 1, 'system_user', '用户信息表', 'user_name', '用户账号', 4, '用户名称', 0, 0, '千知', 1, '2025-05-27 14:46:55', '千知', 1, '2025-05-27 14:46:55', NULL);
+insert into ext_attribute_mapping values (5, 1001, 1, 'system_user', '用户信息表', 'phonenumber', '手机号码', 5, '手机号码', 0, 0, '千知', 1, '2025-05-27 14:46:55', '千知', 1, '2025-05-27 14:46:55', NULL);
+insert into ext_attribute_mapping values (6, 1001, 2, 'system_role', '角色信息表', 'role_id', '角色ID', 6, '角色id', 0, 0, '千知', 1, '2025-05-27 15:12:37', '千知', 1, '2025-05-27 15:12:37', NULL);
+insert into ext_attribute_mapping values (7, 1001, 2, 'system_role', '角色信息表', 'role_name', '角色名称', 7, '角色名称', 0, 0, '千知', 1, '2025-05-27 15:12:37', '千知', 1, '2025-05-27 15:12:37', NULL);
+insert into ext_attribute_mapping values (8, 1001, 2, 'system_user', '用户信息表', 'user_id', '用户ID', 3, '用户id', 0, 0, '千知', 1, '2025-05-27 15:12:37', '千知', 1, '2025-05-27 15:12:37', NULL);
+insert into ext_attribute_mapping values (9, 1001, 2, 'system_user', '用户信息表', 'user_name', '用户账号', 4, '用户名称', 0, 0, '千知', 1, '2025-05-27 15:12:37', '千知', 1, '2025-05-27 15:12:37', NULL);
+insert into ext_attribute_mapping values (10, 1001, 2, 'system_user', '用户信息表', 'nick_name', '用户昵称', 4, '用户名称', 0, 0, '千知', 1, '2025-05-27 15:12:37', '千知', 1, '2025-05-27 15:12:37', NULL);
+insert into ext_attribute_mapping values (11, 1001, 2, 'system_user', '用户信息表', 'phonenumber', '手机号码', 5, '手机号码', 0, 0, '千知', 1, '2025-05-27 15:12:37', '千知', 1, '2025-05-27 15:12:37', NULL);
+insert into ext_attribute_mapping values (12, 1001, 3, 'system_role', '角色信息表', 'id', '角色ID', 6, '角色id', 0, 0, '千知', 1, '2025-05-27 15:28:05', '千知', 1, '2025-05-27 15:28:05', NULL);
+insert into ext_attribute_mapping values (13, 1001, 3, 'system_role', '角色信息表', 'role_name', '角色名称', 7, '角色名称', 0, 0, '千知', 1, '2025-05-27 15:28:05', '千知', 1, '2025-05-27 15:28:05', NULL);
+insert into ext_attribute_mapping values (14, 1001, 3, 'system_user', '用户信息表', 'id', '用户ID', 3, '用户id', 0, 0, '千知', 1, '2025-05-27 15:28:05', '千知', 1, '2025-05-27 15:28:05', NULL);
+insert into ext_attribute_mapping values (15, 1001, 3, 'system_user', '用户信息表', 'user_name', '用户账号', 4, '用户名称', 0, 0, '千知', 1, '2025-05-27 15:28:05', '千知', 1, '2025-05-27 15:28:05', NULL);
+insert into ext_attribute_mapping values (16, 1001, 3, 'system_user', '用户信息表', 'phonenumber', '手机号码', 5, '手机号码', 0, 0, '千知', 1, '2025-05-27 15:28:05', '千知', 1, '2025-05-27 15:28:05', NULL);
+insert into ext_attribute_mapping values (17, 1001, 4, 'system_role', '角色信息表', 'id', '角色ID', 6, '角色id', 0, 0, '千知', 1, '2025-05-27 16:26:38', '千知', 1, '2025-05-27 16:26:38', NULL);
+insert into ext_attribute_mapping values (18, 1001, 4, 'system_role', '角色信息表', 'role_name', '角色名称', 7, '角色名称', 0, 0, '千知', 1, '2025-05-27 16:26:38', '千知', 1, '2025-05-27 16:26:38', NULL);
+insert into ext_attribute_mapping values (19, 1001, 4, 'system_user', '用户信息表', 'id', '用户ID', 3, '用户id', 0, 0, '千知', 1, '2025-05-27 16:26:38', '千知', 1, '2025-05-27 16:26:38', NULL);
+insert into ext_attribute_mapping values (20, 1001, 4, 'system_user', '用户信息表', 'user_name', '用户账号', 4, '用户名称', 0, 0, '千知', 1, '2025-05-27 16:26:38', '千知', 1, '2025-05-27 16:26:38', NULL);
+
+
+-- ----------------------------
+-- 24、关系映射
+-- ----------------------------
+drop table if exists ext_relation_mapping;
+create table ext_relation_mapping (
+                                        id bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+                                        workspace_id bigint NOT NULL COMMENT '工作区id',
+                                        task_id bigint NOT NULL COMMENT '任务id',
+                                        table_name varchar(128) NOT NULL COMMENT '表名',
+                                        table_comment varchar(128) DEFAULT NULL COMMENT '表显示名称',
+                                        field_name varchar(128) NOT NULL COMMENT '字段名',
+                                        field_comment varchar(256) DEFAULT NULL COMMENT '字段显示名称',
+                                        relation varchar(128) NOT NULL COMMENT '关系',
+                                        relation_table varchar(256) DEFAULT NULL COMMENT '关联表',
+                                        relation_table_name varchar(128) DEFAULT NULL COMMENT '关联表名称',
+                                        relation_field varchar(128) DEFAULT NULL COMMENT '关联表字段',
+                                        relation_name_field varchar(128) DEFAULT NULL COMMENT '关联表实体字段',
+                                        valid_flag tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效;0：无效，1：有效',
+                                        del_flag tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除标志;1：已删除，0：未删除',
+                                        create_by varchar(32) DEFAULT NULL COMMENT '创建人',
+                                        creator_id bigint DEFAULT NULL COMMENT '创建人id',
+                                        create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                        update_by varchar(32) DEFAULT NULL COMMENT '更新人',
+                                        updater_id bigint DEFAULT NULL COMMENT '更新人id',
+                                        update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+                                        remark varchar(512) DEFAULT NULL COMMENT '备注',
+                                        PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3 COMMENT='关系映射';
+
+insert into ext_relation_mapping values (1, 1001, 1, 'system_user', '用户信息表', 'role_id', '', '角色', 'system_role', '角色信息表', 'role_id', 'role_name', 0, 0, '千知', 1, '2025-05-27 14:46:55', '千知', 1, '2025-05-27 14:46:55', NULL);
+insert into ext_relation_mapping values (2, 1001, 2, 'system_user', '用户信息表', 'role_id', '', '角色', 'system_role', '角色信息表', 'role_id', 'role_name', 0, 0, '千知', 1, '2025-05-27 15:12:37', '千知', 1, '2025-05-27 15:12:37', NULL);
+insert into ext_relation_mapping values (3, 1001, 3, 'system_user', '用户信息表', 'role_id', '', '角色', 'system_role', '角色信息表', 'id', 'role_name', 0, 0, '千知', 1, '2025-05-27 15:28:05', '千知', 1, '2025-05-27 15:28:05', NULL);
+insert into ext_relation_mapping values (4, 1001, 4, 'system_user', '用户信息表', 'role_id', '', '角色', 'system_role', '角色信息表', 'id', 'role_name', 0, 0, '千知', 1, '2025-05-27 16:26:38', '千知', 1, '2025-05-27 16:26:38', NULL);
+
+
+-- ----------------------------
+-- 25、概念配置
+-- ----------------------------
+drop table if exists ext_schema;
+create table ext_schema (
+                              id bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+                              workspace_id bigint NOT NULL COMMENT '工作区id',
+                              name varchar(128) NOT NULL COMMENT '概念名称',
+                              description varchar(1024) DEFAULT NULL COMMENT '概念描述',
+                              color varchar(32) DEFAULT NULL COMMENT '概念颜色',
+                              valid_flag tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效;0：无效，1：有效',
+                              del_flag tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除标志;1：已删除，0：未删除',
+                              create_by varchar(32) DEFAULT NULL COMMENT '创建人',
+                              creator_id bigint DEFAULT NULL COMMENT '创建人id',
+                              create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                              update_by varchar(32) DEFAULT NULL COMMENT '更新人',
+                              updater_id bigint DEFAULT NULL COMMENT '更新人id',
+                              update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+                              remark varchar(512) DEFAULT NULL COMMENT '备注',
+                              PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3 COMMENT='概念配置';
+
+insert into ext_schema values (1, 1001, '人物', NULL, '#006EFE', 1, 0, '千知', 1, '2025-05-26 15:20:38', '千知', NULL, '2025-05-26 15:20:38', NULL);
+insert into ext_schema values (2, 1001, '歌曲', NULL, '#A109FF', 1, 0, '千知', 1, '2025-05-26 15:20:53', '千知', NULL, '2025-05-26 15:21:02', NULL);
+insert into ext_schema values (3, 1001, '国家', NULL, '#FD0E02', 1, 0, '千知', 1, '2025-05-26 15:22:40', '千知', NULL, '2025-05-26 15:22:40', NULL);
+insert into ext_schema values (4, 1001, '城市', NULL, '#FDB202', 1, 0, '千知', 1, '2025-05-26 15:24:07', '千知', NULL, '2025-05-26 15:24:07', NULL);
+insert into ext_schema values (5, 1001, '企业', NULL, '#FF0FDF', 1, 0, '千知', 1, '2025-05-26 15:25:23', '千知', NULL, '2025-05-26 15:25:23', NULL);
+insert into ext_schema values (7, 1001, '用户', NULL, '#0026FF', 1, 0, '千知', 1, '2025-05-27 13:56:46', '千知', NULL, '2025-05-27 13:56:46', NULL);
+insert into ext_schema values (8, 1001, '角色', NULL, '#33FF00', 1, 0, '千知', 1, '2025-05-27 14:19:42', '千知', NULL, '2025-05-27 14:19:42', NULL);
+
+
+-- ----------------------------
+-- 26、概念属性
+-- ----------------------------
+drop table if exists ext_schema_attribute;
+create table ext_schema_attribute (
+                                        id bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+                                        workspace_id bigint NOT NULL COMMENT '工作区id',
+                                        schema_id bigint NOT NULL COMMENT '概念id',
+                                        schema_name varchar(128) NOT NULL COMMENT '概念名称',
+                                        name varchar(128) NOT NULL COMMENT '属性名称',
+                                        name_code varchar(128) NOT NULL COMMENT '属性名称代码',
+                                        require_flag tinyint(1) NOT NULL COMMENT '是否必填',
+                                        data_type tinyint unsigned NOT NULL DEFAULT '0' COMMENT '数据类型;0：文本，1：整数，2：小数，3：时间，4：字节类型，5：布尔值',
+                                        multiple_flag tinyint unsigned NOT NULL DEFAULT '0' COMMENT '单/多值;0：单值，1：多值',
+                                        validate_type tinyint unsigned DEFAULT NULL COMMENT '校验方式;0：唯一性校验，1：长度校验，2：区间校验',
+                                        min_value decimal(10,0) DEFAULT NULL COMMENT '最小值（用于区间校验）',
+                                        max_value decimal(10,0) DEFAULT NULL COMMENT '最大值（用于区间校验）',
+                                        valid_flag tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效;0：无效，1：有效',
+                                        del_flag tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除标志;1：已删除，0：未删除',
+                                        create_by varchar(32) DEFAULT NULL COMMENT '创建人',
+                                        creator_id bigint DEFAULT NULL COMMENT '创建人id',
+                                        create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                        update_by varchar(32) DEFAULT NULL COMMENT '更新人',
+                                        updater_id bigint DEFAULT NULL COMMENT '更新人id',
+                                        update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+                                        remark varchar(512) DEFAULT NULL COMMENT '备注',
+                                        PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3 COMMENT='概念属性';
+
+insert into ext_schema_attribute values (1, 1001, 6, '123', '11', '11', 0, 0, 0, 0, NULL, NULL, 1, 1, '千知', 1, '2025-05-27 09:34:50', '千知', 1, '2025-05-27 09:42:20', NULL);
+insert into ext_schema_attribute values (2, 1001, 6, '123', '2', '2', 1, 0, 0, 1, NULL, 123, 1, 1, '千知', 1, '2025-05-27 09:35:10', '千知', NULL, '2025-05-27 09:35:10', NULL);
+insert into ext_schema_attribute values (3, 1001, 7, '用户', '用户id', 'id', 1, 1, 0, 0, NULL, NULL, 1, 0, '千知', 1, '2025-05-27 14:00:09', '千知', 1, '2025-05-27 15:26:33', NULL);
+insert into ext_schema_attribute values (4, 1001, 7, '用户', '用户名称', 'user_name', 1, 0, 0, 1, NULL, 256, 1, 0, '千知', 1, '2025-05-27 14:00:36', '千知', NULL, '2025-05-27 14:00:36', NULL);
+insert into ext_schema_attribute values (5, 1001, 7, '用户', '手机号码', 'phonenumber', 0, 0, 0, 1, NULL, 11, 1, 0, '千知', 1, '2025-05-27 14:01:21', '千知', NULL, '2025-05-27 14:01:21', NULL);
+insert into ext_schema_attribute values (6, 1001, 8, '角色', '角色id', 'id', 1, 1, 0, NULL, NULL, NULL, 1, 0, '千知', 1, '2025-05-27 14:20:10', '千知', 1, '2025-05-27 15:26:46', NULL);
+insert into ext_schema_attribute values (7, 1001, 8, '角色', '角色名称', 'role_name', 0, 0, 0, NULL, NULL, NULL, 1, 0, '千知', 1, '2025-05-27 14:20:35', '千知', NULL, '2025-05-27 14:20:35', NULL);
+
+
+-- ----------------------------
+-- 27、概念映射
+-- ----------------------------
+drop table if exists ext_schema_mapping;
+create table ext_schema_mapping (
+                                      id bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+                                      workspace_id bigint NOT NULL COMMENT '工作区id',
+                                      task_id bigint NOT NULL COMMENT '任务id',
+                                      table_name varchar(128) NOT NULL COMMENT '表名',
+                                      table_comment varchar(128) DEFAULT NULL COMMENT '表显示名称',
+                                      entity_name_field varchar(32) DEFAULT NULL COMMENT '实体名称列',
+                                      schema_id bigint DEFAULT NULL COMMENT '概念id',
+                                      schema_name varchar(128) DEFAULT NULL COMMENT '概念名称',
+                                      valid_flag tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效;0：无效，1：有效',
+                                      del_flag tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除标志;1：已删除，0：未删除',
+                                      create_by varchar(32) DEFAULT NULL COMMENT '创建人',
+                                      creator_id bigint DEFAULT NULL COMMENT '创建人id',
+                                      create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                      update_by varchar(32) DEFAULT NULL COMMENT '更新人',
+                                      updater_id bigint DEFAULT NULL COMMENT '更新人id',
+                                      update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+                                      remark varchar(512) DEFAULT NULL COMMENT '备注',
+                                      PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3 COMMENT='概念映射';
+
+insert into ext_schema_mapping values (1, 1001, 1, 'system_role', '角色信息表', 'role_name', 8, '角色', 0, 0, '千知', 1, '2025-05-27 14:46:55', '千知', 1, '2025-05-27 14:46:55', NULL);
+insert into ext_schema_mapping values (2, 1001, 1, 'system_user', '用户信息表', 'user_name', 7, '用户', 0, 0, '千知', 1, '2025-05-27 14:46:55', '千知', 1, '2025-05-27 14:46:55', NULL);
+insert into ext_schema_mapping values (3, 1001, 2, 'system_role', '角色信息表', 'role_name', 8, '角色', 0, 0, '千知', 1, '2025-05-27 15:12:37', '千知', 1, '2025-05-27 15:12:37', NULL);
+insert into ext_schema_mapping values (4, 1001, 2, 'system_user', '用户信息表', 'user_name', 7, '用户', 0, 0, '千知', 1, '2025-05-27 15:12:37', '千知', 1, '2025-05-27 15:12:37', NULL);
+insert into ext_schema_mapping values (5, 1001, 3, 'system_role', '角色信息表', 'role_name', 8, '角色', 0, 0, '千知', 1, '2025-05-27 15:28:05', '千知', 1, '2025-05-27 15:28:05', NULL);
+insert into ext_schema_mapping values (6, 1001, 3, 'system_user', '用户信息表', 'user_name', 7, '用户', 0, 0, '千知', 1, '2025-05-27 15:28:05', '千知', 1, '2025-05-27 15:28:05', NULL);
+insert into ext_schema_mapping values (7, 1001, 4, 'system_role', '角色信息表', 'role_name', 8, '角色', 0, 0, '千知', 1, '2025-05-27 16:26:38', '千知', 1, '2025-05-27 16:26:38', NULL);
+insert into ext_schema_mapping values (8, 1001, 4, 'system_user', '用户信息表', 'user_name', 7, '用户', 0, 0, '千知', 1, '2025-05-27 16:26:38', '千知', 1, '2025-05-27 16:26:38', NULL);
+
+
+-- ----------------------------
+-- 28、关系配置
+-- ----------------------------
+drop table if exists ext_schema_relation;
+create table ext_schema_relation (
+                                       id bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+                                       workspace_id bigint NOT NULL COMMENT '工作区id',
+                                       start_schema_id bigint NOT NULL COMMENT '起点概念id',
+                                       relation varchar(128) NOT NULL COMMENT '关系',
+                                       end_schema_id bigint NOT NULL COMMENT '终点概念id',
+                                       inverse_flag tinyint(1) NOT NULL COMMENT '是否可逆',
+                                       valid_flag tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效;0：无效，1：有效',
+                                       del_flag tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除标志;1：已删除，0：未删除',
+                                       create_by varchar(32) DEFAULT NULL COMMENT '创建人',
+                                       creator_id bigint DEFAULT NULL COMMENT '创建人id',
+                                       create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                       update_by varchar(32) DEFAULT NULL COMMENT '更新人',
+                                       updater_id bigint DEFAULT NULL COMMENT '更新人id',
+                                       update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+                                       remark varchar(512) DEFAULT NULL COMMENT '备注',
+                                       PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3 COMMENT='关系配置';
+
+insert into ext_schema_relation values (1, 1001, 1, '创作', 2, 0, 1, 0, '千知', 1, '2025-05-26 15:24:19', '千知', NULL, '2025-05-26 15:24:19', NULL);
+insert into ext_schema_relation values (2, 1001, 1, '所属', 3, 0, 1, 0, '千知', 1, '2025-05-26 15:24:28', '千知', 1, '2025-05-26 15:26:04', NULL);
+insert into ext_schema_relation values (3, 1001, 4, '所属', 3, 0, 1, 0, '千知', 1, '2025-05-26 15:24:48', '千知', 1, '2025-05-26 15:25:57', NULL);
+insert into ext_schema_relation values (4, 1001, 5, '所属', 4, 0, 1, 0, '千知', 1, '2025-05-26 15:25:46', '千知', NULL, '2025-05-26 15:25:46', NULL);
+
+
+-- ----------------------------
+-- 29、结构化抽取任务
+-- ----------------------------
+drop table if exists ext_struct_task;
+create table ext_struct_task (
+                                   id bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+                                   workspace_id bigint NOT NULL COMMENT '工作区id',
+                                   name varchar(128) NOT NULL COMMENT '任务名称',
+                                   status tinyint unsigned NOT NULL DEFAULT '0' COMMENT '任务状态;0：未执行，1：进行中：2：已完成',
+                                   publish_status tinyint unsigned NOT NULL DEFAULT '0' COMMENT '发布状态;0：未发布，1：已发布',
+                                   publish_time datetime NOT NULL COMMENT '发布时间',
+                                   publisher_id bigint NOT NULL COMMENT '发布人id',
+                                   publish_by varchar(128) DEFAULT NULL COMMENT '发布人',
+                                   datasource_id bigint NOT NULL COMMENT '数据源id',
+                                   datasource_name varchar(128) NOT NULL COMMENT '数据源名称',
+                                   valid_flag tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效;0：无效，1：有效',
+                                   del_flag tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除标志;1：已删除，0：未删除',
+                                   create_by varchar(32) DEFAULT NULL COMMENT '创建人',
+                                   creator_id bigint DEFAULT NULL COMMENT '创建人id',
+                                   create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                   update_by varchar(32) DEFAULT NULL COMMENT '更新人',
+                                   updater_id bigint DEFAULT NULL COMMENT '更新人id',
+                                   update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+                                   remark varchar(512) DEFAULT NULL COMMENT '备注',
+                                   PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3 COMMENT='结构化抽取任务';
+
+insert into ext_struct_task values (4, 1001, '用户信息抽取', 2, 1, '2025-05-27 17:18:21', 1, '千知', 1, '本地数据库', 0, 0, '千知', 1, '2025-05-27 16:26:38', '千知', 1, '2025-05-27 17:18:21', NULL);
+
+
+-- ----------------------------
+-- 30、非结构化抽取任务
+-- ----------------------------
+drop table if exists ext_unstruct_task;
+create table ext_unstruct_task (
+                                     id bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+                                     workspace_id bigint NOT NULL COMMENT '工作区id',
+                                     name varchar(128) NOT NULL COMMENT '任务名称',
+                                     status tinyint unsigned NOT NULL DEFAULT '0' COMMENT '任务状态;0：未执行，1：进行中：2：已完成',
+                                     publish_status tinyint unsigned NOT NULL DEFAULT '0' COMMENT '发布状态;0：未发布，1：已发布',
+                                     publish_time datetime DEFAULT CURRENT_TIMESTAMP COMMENT '发布时间',
+                                     publisher_id bigint DEFAULT NULL COMMENT '发布人id',
+                                     publish_by varchar(128) DEFAULT NULL COMMENT '发布人',
+                                     valid_flag tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效;0：无效，1：有效',
+                                     del_flag tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除标志;1：已删除，0：未删除',
+                                     create_by varchar(32) DEFAULT NULL COMMENT '创建人',
+                                     creator_id bigint DEFAULT NULL COMMENT '创建人id',
+                                     create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                     update_by varchar(32) DEFAULT NULL COMMENT '更新人',
+                                     updater_id bigint DEFAULT NULL COMMENT '更新人id',
+                                     update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+                                     remark varchar(512) DEFAULT NULL COMMENT '备注',
+                                     PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3 COMMENT='非结构化抽取任务';
+
+insert into ext_unstruct_task values (1, 1001, '流行文化抽取', 2, 0, '2025-05-27 11:34:27', NULL, NULL, 1, 0, '千知', 1, '2025-05-27 11:34:28', '千知', NULL, '2025-05-27 11:34:31', NULL);
+insert into ext_unstruct_task values (2, 1001, '科技创新抽取', 2, 1, '2025-05-27 14:09:01', 1, '千知', 1, 0, '千知', 1, '2025-05-27 13:15:51', '千知', NULL, '2025-05-27 14:09:01', NULL);
+
+
+-- ----------------------------
+-- 31、任务文件关联表
+-- ----------------------------
+drop table if exists ext_unstruct_task_doc_rel;
+create table ext_unstruct_task_doc_rel (
+                                             id bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+                                             workspace_id bigint NOT NULL COMMENT '工作区id',
+                                             task_id bigint NOT NULL COMMENT '任务id',
+                                             doc_id bigint NOT NULL COMMENT '文件id',
+                                             doc_name varchar(128) NOT NULL COMMENT '文件名',
+                                             valid_flag tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效;0：无效，1：有效',
+                                             del_flag tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除标志;1：已删除，0：未删除',
+                                             create_by varchar(32) DEFAULT NULL COMMENT '创建人',
+                                             creator_id bigint DEFAULT NULL COMMENT '创建人id',
+                                             create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                             update_by varchar(32) DEFAULT NULL COMMENT '更新人',
+                                             updater_id bigint DEFAULT NULL COMMENT '更新人id',
+                                             update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+                                             remark varchar(512) DEFAULT NULL COMMENT '备注',
+                                             PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3 COMMENT='任务文件关联表';
+
+insert into ext_unstruct_task_doc_rel values (1, 1001, 1, 1, '全球流行文化的交汇点.docx', 1, 0, '千知', 1, '2025-05-27 11:34:28', '千知', 1, '2025-05-27 11:34:28', NULL);
+insert into ext_unstruct_task_doc_rel values (2, 1001, 2, 2, '硅谷的创新者与全球技术变革.docx', 1, 0, '千知', 1, '2025-05-27 13:15:51', '千知', 1, '2025-05-27 13:15:51', NULL);
+
+
+-- ----------------------------
+-- 32、任务关系关联表
+-- ----------------------------
+drop table if exists ext_unstruct_task_relation;
+create table ext_unstruct_task_relation (
+                                              id bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+                                              workspace_id bigint NOT NULL COMMENT '工作区id',
+                                              task_id bigint NOT NULL COMMENT '任务id',
+                                              relation_id bigint NOT NULL COMMENT '文件id',
+                                              valid_flag tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效;0：无效，1：有效',
+                                              del_flag tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除标志;1：已删除，0：未删除',
+                                              create_by varchar(32) DEFAULT NULL COMMENT '创建人',
+                                              creator_id bigint DEFAULT NULL COMMENT '创建人id',
+                                              create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                              update_by varchar(32) DEFAULT NULL COMMENT '更新人',
+                                              updater_id bigint DEFAULT NULL COMMENT '更新人id',
+                                              update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+                                              remark varchar(512) DEFAULT NULL COMMENT '备注',
+                                              PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3 COMMENT='任务关系关联表';
+
+insert into ext_unstruct_task_relation values (1, 1001, 1, 1, 1, 0, '千知', 1, '2025-05-27 11:34:28', '千知', NULL, '2025-05-27 11:34:28', NULL);
+insert into ext_unstruct_task_relation values (2, 1001, 1, 2, 1, 0, '千知', 1, '2025-05-27 11:34:28', '千知', NULL, '2025-05-27 11:34:28', NULL);
+insert into ext_unstruct_task_relation values (3, 1001, 1, 3, 1, 0, '千知', 1, '2025-05-27 11:34:28', '千知', NULL, '2025-05-27 11:34:28', NULL);
+insert into ext_unstruct_task_relation values (4, 1001, 1, 4, 1, 0, '千知', 1, '2025-05-27 11:34:28', '千知', NULL, '2025-05-27 11:34:28', NULL);
+insert into ext_unstruct_task_relation values (5, 1001, 2, 1, 1, 0, '千知', 1, '2025-05-27 13:15:51', '千知', NULL, '2025-05-27 13:15:51', NULL);
+insert into ext_unstruct_task_relation values (6, 1001, 2, 2, 1, 0, '千知', 1, '2025-05-27 13:15:51', '千知', NULL, '2025-05-27 13:15:51', NULL);
+insert into ext_unstruct_task_relation values (7, 1001, 2, 3, 1, 0, '千知', 1, '2025-05-27 13:15:51', '千知', NULL, '2025-05-27 13:15:51', NULL);
+insert into ext_unstruct_task_relation values (8, 1001, 2, 4, 1, 0, '千知', 1, '2025-05-27 13:15:51', '千知', NULL, '2025-05-27 13:15:51', NULL);
+
+
+-- ----------------------------
+-- 33、任务文件段落关联表
+-- ----------------------------
+drop table if exists ext_unstruct_task_text;
+create table ext_unstruct_task_text (
+                                          id bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+                                          workspace_id bigint NOT NULL COMMENT '工作区id',
+                                          task_id bigint NOT NULL COMMENT '任务id',
+                                          doc_id bigint NOT NULL COMMENT '文件id',
+                                          paragraph_index bigint NOT NULL COMMENT '段落标识',
+                                          text text NOT NULL COMMENT '文字内容',
+                                          valid_flag tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效;0：无效，1：有效',
+                                          del_flag tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除标志;1：已删除，0：未删除',
+                                          create_by varchar(32) DEFAULT NULL COMMENT '创建人',
+                                          creator_id bigint DEFAULT NULL COMMENT '创建人id',
+                                          create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                          update_by varchar(32) DEFAULT NULL COMMENT '更新人',
+                                          updater_id bigint DEFAULT NULL COMMENT '更新人id',
+                                          update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+                                          remark varchar(512) DEFAULT NULL COMMENT '备注',
+                                          PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3 COMMENT='任务文件段落关联表';
+
+insert into ext_unstruct_task_text values (1, 1001, 1, 1, 1, '歌手周杰伦创作了多首经典歌曲，如《稻香》，这首歌深受中国各地听众的喜爱。', 0, 0, '千知', NULL, '2025-05-27 11:37:45', '千知', NULL, '2025-05-27 11:37:45', NULL);
+insert into ext_unstruct_task_text values (2, 1001, 1, 1, 2, '在北京举办的华语乐坛盛事——第30届金曲奖颁奖典礼上，歌手邓紫棋凭借其歌曲《句号》获得了最佳女歌手奖。', 0, 0, '千知', NULL, '2025-05-27 11:40:45', '千知', NULL, '2025-05-27 11:40:45', NULL);
+insert into ext_unstruct_task_text values (3, 1001, 1, 1, 3, '上海是中国电影产业的重要基地之一，这里诞生了许多优秀的作品，比如由导演徐峥执导的电影《我不是药神》。', 0, 0, '千知', NULL, '2025-05-27 11:43:55', '千知', NULL, '2025-05-27 11:43:55', NULL);
+insert into ext_unstruct_task_text values (4, 1001, 2, 2, 1, '斯坦福大学位于美国加利福尼亚州硅谷，是一所世界领先的学府，培养了包括埃隆·马斯克在内的多位科技界领军人物。', 0, 0, '千知', NULL, '2025-05-27 13:19:18', '千知', NULL, '2025-05-27 13:19:18', NULL);
+insert into ext_unstruct_task_text values (5, 1001, 2, 2, 2, '谷歌DeepMind总部设在旧金山湾区，该公司由英国伦敦的研究团队创建，并因开发出击败围棋冠军的AI程序《AlphaGo》而闻名。', 0, 0, '千知', NULL, '2025-05-27 13:22:26', '千知', NULL, '2025-05-27 13:22:26', NULL);
+insert into ext_unstruct_task_text values (6, 1001, 2, 2, 3, '演员兼程序员梅丽莎·劳奇毕业于加州大学洛杉矶分校（UCLA），她曾在电视剧《生活大爆炸》中饰演科学家角色。', 0, 0, '千知', NULL, '2025-05-27 13:25:52', '千知', NULL, '2025-05-27 13:25:52', NULL);
+insert into ext_unstruct_task_text values (7, 1001, 2, 2, 4, '东京属于温带季风气候，同时也孕育了许多面向全球市场的人工智能初创公司，如总部位于该市的Preferred Networks。', 0, 0, '千知', NULL, '2025-05-27 13:28:58', '千知', NULL, '2025-05-27 13:28:58', NULL);
+insert into ext_unstruct_task_text values (8, 1001, 2, 2, 5, '日本歌手椎名林檎创作的歌曲《歌舞伎町女王》流行于东京都，同时她也为一部讲述人工智能伦理问题的日本电视综艺《未来人类》演唱过主题曲。', 0, 0, '千知', NULL, '2025-05-27 13:32:00', '千知', NULL, '2025-05-27 13:32:00', NULL);
+insert into ext_unstruct_task_text values (9, 1001, 2, 2, 6, '中国杭州是互联网企业阿里巴巴集团的所在地，这座城市还以全年温和湿润的亚热带季风气候著称。', 0, 0, '千知', NULL, '2025-05-27 13:35:02', '千知', NULL, '2025-05-27 13:35:02', NULL);
+insert into ext_unstruct_task_text values (10, 1001, 2, 2, 10, '加拿大歌手格莱姆斯曾发布歌曲《We Appreciate Power》，探讨人工智能对社会的影响，并与埃隆·马斯克共同关注脑机接口技术的发展。', 0, 0, '千知', NULL, '2025-05-27 13:46:39', '千知', NULL, '2025-05-27 13:46:39', NULL);
+
+
+-- ----------------------------
+-- 34、知识分类
+-- ----------------------------
+drop table if exists kmc_category;
+create table kmc_category (
+                                id bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+                                workspace_id bigint NOT NULL COMMENT '工作区id',
+                                parent_id bigint NOT NULL COMMENT '父级id',
+                                name varchar(128) NOT NULL COMMENT '分类名称',
+                                order_num int DEFAULT NULL COMMENT '显示顺序',
+                                ancestors varchar(128) DEFAULT NULL COMMENT '祖级列表',
+                                valid_flag tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效;0：无效，1：有效',
+                                del_flag tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除标志;1：已删除，0：未删除',
+                                create_by varchar(32) DEFAULT NULL COMMENT '创建人',
+                                creator_id bigint DEFAULT NULL COMMENT '创建人id',
+                                create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                update_by varchar(32) DEFAULT NULL COMMENT '更新人',
+                                updater_id bigint DEFAULT NULL COMMENT '更新人id',
+                                update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+                                remark varchar(512) DEFAULT NULL COMMENT '备注',
+                                PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3 COMMENT='知识分类';
+
+insert into kmc_category values (1, 1001, 0, '文化与艺术', 1, '0', 1, 0, '千知', 1, '2025-05-26 14:30:16', '千知', 1, '2025-05-26 14:31:52', NULL);
+insert into kmc_category values (2, 1001, 0, '历史事件与人物', 2, '0', 1, 0, '千知', 1, '2025-05-26 14:30:27', '千知', 1, '2025-05-26 14:31:57', NULL);
+insert into kmc_category values (3, 1001, 0, '体育与娱乐', 3, '0', 1, 0, '千知', 1, '2025-05-26 14:30:36', '千知', 1, '2025-05-26 14:32:00', NULL);
+insert into kmc_category values (4, 1001, 0, '自然环境与生态保护', 4, '0', 1, 0, '千知', 1, '2025-05-26 14:30:43', '千知', 1, '2025-05-26 14:32:03', NULL);
+insert into kmc_category values (5, 1001, 0, '经济与发展', 5, '0', 1, 0, '千知', 1, '2025-05-26 14:30:50', '千知', 1, '2025-05-26 14:32:06', NULL);
+insert into kmc_category values (6, 1001, 0, '健康与医疗', 6, '0', 1, 0, '千知', 1, '2025-05-26 14:30:57', '千知', 1, '2025-05-26 14:32:09', NULL);
+insert into kmc_category values (7, 1001, 0, '科技创新与应用', 7, '0', 1, 0, '千知', 1, '2025-05-26 14:31:10', '千知', 1, '2025-05-26 14:32:12', NULL);
+insert into kmc_category values (8, 1001, 1, '文学', 1, '0,1', 1, 0, '千知', 1, '2025-05-26 14:31:45', '千知', 1, '2025-05-26 14:32:19', NULL);
+insert into kmc_category values (9, 1001, 1, '音乐与影视作品', 2, '0,1', 1, 0, '千知', 1, '2025-05-26 14:32:33', '千知', 1, '2025-05-26 14:42:39', NULL);
+insert into kmc_category values (10, 1001, 1, '视觉艺术', 3, '0,1', 1, 0, '千知', 1, '2025-05-26 14:32:45', NULL, NULL, '2025-05-26 14:32:44', NULL);
+insert into kmc_category values (11, 1001, 1, '表演艺术', 4, '0,1', 1, 0, '千知', 1, '2025-05-26 14:32:53', NULL, NULL, '2025-05-26 14:32:52', NULL);
+insert into kmc_category values (12, 1001, 2, '古代文明', 1, '0,2', 1, 0, '千知', 1, '2025-05-26 14:33:02', '千知', 1, '2025-05-26 14:33:09', NULL);
+insert into kmc_category values (13, 1001, 2, '近代历史', 2, '0,2', 1, 0, '千知', 1, '2025-05-26 14:33:18', NULL, NULL, '2025-05-26 14:33:17', NULL);
+insert into kmc_category values (14, 1001, 2, '现代史', 3, '0,2', 1, 0, '千知', 1, '2025-05-26 14:33:30', NULL, NULL, '2025-05-26 14:33:30', NULL);
+insert into kmc_category values (15, 1001, 3, '体育赛事', 1, '0,3', 1, 0, '千知', 1, '2025-05-26 14:33:42', NULL, NULL, '2025-05-26 14:33:41', NULL);
+insert into kmc_category values (16, 1001, 3, '影视娱乐', 2, '0,3', 1, 0, '千知', 1, '2025-05-26 14:33:53', NULL, NULL, '2025-05-26 14:33:52', NULL);
+insert into kmc_category values (17, 1001, 3, '游戏产业', 3, '0,3', 1, 0, '千知', 1, '2025-05-26 14:34:02', NULL, NULL, '2025-05-26 14:34:01', NULL);
+
+
+-- ----------------------------
+-- 35、知识文件表
+-- ----------------------------
+drop table if exists kmc_document;
+create table kmc_document (
+                                id bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+                                workspace_id bigint NOT NULL COMMENT '工作区id',
+                                category_id bigint NOT NULL COMMENT '知识分类id',
+                                category_name varchar(128) DEFAULT NULL COMMENT '知识分类名称',
+                                name varchar(256) NOT NULL COMMENT '文件名称',
+                                path varchar(1024) NOT NULL COMMENT '文件路径',
+                                description varchar(1024) DEFAULT NULL COMMENT '文件描述',
+                                valid_flag tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效;0：无效，1：有效',
+                                del_flag tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除标志;1：已删除，0：未删除',
+                                create_by varchar(32) DEFAULT NULL COMMENT '创建人',
+                                creator_id bigint DEFAULT NULL COMMENT '创建人id',
+                                create_time datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                update_by varchar(32) DEFAULT NULL COMMENT '更新人',
+                                updater_id bigint DEFAULT NULL COMMENT '更新人id',
+                                update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+                                remark varchar(512) DEFAULT NULL COMMENT '备注',
+                                PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3 COMMENT='知识文件表';
+
+insert into kmc_document values (1, 1001, 9, '音乐与影视作品', '全球流行文化的交汇点.docx', '/2025/05/27/683517a88fceebcb4928de44.docx', '用于测试非结构化抽取文件', 1, 0, '千知', 1, '2025-05-27 09:38:54', '千知', 1, '2025-05-27 12:34:44', NULL);
+insert into kmc_document values (2, 1001, 7, '科技创新与应用', '硅谷的创新者与全球技术变革.docx', '/2025/05/27/683540a58fce4f307dbf6f0a.docx', '用于测试非结构化抽取文件', 1, 0, '千知', 1, '2025-05-27 12:33:45', '千知', 1, '2025-05-27 12:34:47', NULL);
+
