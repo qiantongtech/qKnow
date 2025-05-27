@@ -121,7 +121,7 @@ function handleLogin() {
 
 function showCopyright() {
   const currentYear = moment(new Date()).format("yyyy");
-  return 'Copyright© ' + currentYear + ' 江苏干桐科技有限公司 版权所有';
+  return 'Copyright© ' + currentYear + ' 江苏千桐科技有限公司 版权所有';
 }
 
 function getCookie() {

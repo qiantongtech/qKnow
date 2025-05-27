@@ -187,7 +187,7 @@
         </div>
         <div class="bottom-info">
           <div class="copy-right">
-            Copyright© 2024 江苏干桐科技有限公司 版权所有
+            Copyright© 2024 江苏千桐科技有限公司 版权所有
           </div>
           <div class="record" @click="goKtPage()">
             <img src="@/assets/system/images/sso_login/an.png" alt="" />

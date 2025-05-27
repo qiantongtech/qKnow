@@ -197,8 +197,8 @@
         </div>
         <div class="bottom-info">
           <div class="copy-right" @click="goPage()">
-            <!--            Copyright© 2023 江苏干桐科技有限公司 版权所有-->
-            {{ contentDetail && contentDetail.copyright ? contentDetail.copyright : `Copyright© ${parseTime(new Date(), "{y}")} 江苏干桐科技有限公司 版权所有` }}
+            <!--            Copyright© 2023 江苏千桐科技有限公司 版权所有-->
+            {{ contentDetail && contentDetail.copyright ? contentDetail.copyright : `Copyright© ${parseTime(new Date(), "{y}")} 江苏千桐科技有限公司 版权所有` }}
           </div>
           <div class="record" @click="goKtPage()">
             <img src="https://www.asktempo.com/statics/images/an.png" alt=""/>
