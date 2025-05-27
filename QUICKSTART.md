@@ -73,58 +73,58 @@ server:
     context-path: /应用路径  # 应用访问路径，默认为空
 ```
 
-### 5. 配置文件上传路径
-
-路径一：`qKnow/qknow-server/src/main/resources/application.yml`
-
-```yaml
-# 项目相关配置
-qknow:
-  # 名称
-  name: qKnow
-  # 版本
-  version: 3.8.8
-  # 版权年份
-  copyrightYear: 2025
-  # 文件路径 示例（ Windows配置D:/qknow/uploadPath，Linux配置 /home/qknow/uploadPath） -- 需要和 file 模块保持一致
-  profile: 文件路径
-```
-
-路径二：`qKnow/qknow-framework/qknow-file/src/main/resources/application-file-dev.yml`
-
-```yaml
-# 文件上传配置
-dromara:
-  x-file-storage: #文件存储配置
-    default-platform: local #默认使用的存储平台
-    thumbnail-suffix: ".min.jpg" #缩略图后缀，例如【.min.jpg】【.png】
-    #对应平台的配置写在这里，注意缩进要对齐
-    local-plus:
-      - platform: local # 存储平台标识
-        enable-storage: true  #启用存储
-        enable-access: false #启用访问（线上请使用 Nginx 配置，效率更高）
-        domain: "" # 访问域名，例如：“http://127.0.0.1:8081/file/”，注意后面要和 path-patterns 保持一致，“/”结尾，本地存储建议使用相对路径，方便后期更换域名
-        path-patterns: /** # 访问路径
-        base-path: / # 基础路径
-        storage-path: 文件路径 # 存储路径
-```
-
-> **注意**: 以上两个配置文件中的文件路径务必保持一致，否则可能会导致文件无法上传和访问。
-
 ---
 
 ## 四、知识抽取工具配置（DeepKE）<small>（深度学习模型配置）</small>
 
 当前开源版本采用 [**开源中文知识图谱抽取框架开箱即用特别版DeepKE-cnSchema**](https://github.com/zjunlp/DeepKE/blob/main/README_CNSCHEMA_CN.md) 作为知识抽取工具。请参考官方文档进行安装，推荐使用 Docker 安装。
 
-#### <span style="color:#4CAF50">修改 DeepKE 执行脚本</span>
+#### <span style="color:#4CAF50">1、根据需要修改抽取实体类型配置（需进入docker容器内修改） </span>
+配置文件路径：`DeepKE/example/ner/standard/conf/train.yaml`
+
+```yaml
+adam_epsilon: 1e-8
+data_dir: "data"
+do_eval: True
+do_train: True
+eval_batch_size: 8
+eval_on: "dev"
+gpu_id: 0
+gradient_accumulation_steps: 1
+learning_rate: 1e-3            # tips：set 2e-5 for BERT with recommended datasets
+num_train_epochs: 3            # the number of training epochs
+output_dir: "checkpoints"
+seed: 42
+train_batch_size: 128
+use_gpu: True                # use gpu or not
+warmup_proportion: 0.1
+weight_decay: 0.01
+
+# For StepLR Optimizer
+lr_step : 5
+lr_gamma : 0.8
+beta1: 0.9
+beta2: 0.999
+
+# 此处可修改抽取的实体类型
+labels: ['LOC','ORG','PER']
+# labels: ['YAS','TOJ', 'NGS', 'QCV', 'OKB', 'BQF', 'CAR', 'ZFM', 'EMT', 'UER', 'QEE', 'UFT', 'GJS', 'SVA', 'ANO', 'KEJ', 'ZDI', 'CAT', 'GCK', 'FQK', 'BAK', 'RET', 'QZP', 'QAQ', 'ZRE', 'TDZ', 'CVC', 'PMN']
+
+use_multi_gpu: False
+```
+
+> **注意**: 实体类型配置请参考以下DeepKE官网文档提供的类型，若需抽取其他类型，需重新训练模型。训练方式请参考 [DeepKE 官方文档](https://github.com/zjunlp/DeepKE/blob/main/README_CNSCHEMA_CN.md#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9E%8B)。
+
+![extEntityType.png](.gitee/extEntityType.png)
+
+#### <span style="color:#4CAF50">2、修改 DeepKE 执行脚本中的 **docker容器id** </span>
 
 路径：`qKnow/bin/DeepKE/start.sh`
 
 ```bash
-#!/bin/bash                    
+#!/bin/bash
 # DeepKE.sh
- 
+
 if [ $# -lt 1 ]; then
     echo "Usage: $0 <text>"
     exit 1
@@ -133,19 +133,14 @@ fi
 TEXT="$1"
 
 # 注意：此处请换成你的docker容器id
-docker exec afd0ee75f9e1 python -u predict.py text='\"$TEXT\"'
+# 注意：建议在本地命令行中运行以下测试命令，保证能够成功执行到predict.py文件。
+# 测试命令：docker exec dabea2a436b6 python -u predict.py "text='歌手周杰伦创作了多首经典歌曲，如《稻香》，这首歌深受中国各地听众的喜爱。'"
+docker exec dabea2a436b6 python -u predict.py "text='$TEXT'"
 ```
 
-#### <span style="color:#4CAF50">修改配置文件</span>
-
-路径：`qKnow/qknow-module-ext/qknow-module-ext-biz/src/main/resources/application-ext-dev.yml`
-
-```yaml
-# deepke抽取脚本路径
-deepke:
-  startShPath: /Users/shaun/workspace/OpenSource/qKnow/bin/DeepKE/start.sh
-```
-
+---
+#### <span style="color:#4CAF50">友情提示：</span>
+> DeepKE抽取依赖电脑CPU、GPU性能，建议抽取的文件不宜过大，否则抽取时间会很长。测试抽取文件示例路径如下：qKnow/doc/*)。
 ---
 
 ## 五、后端运行 <small>（启动服务器）</small>
@@ -153,6 +148,17 @@ deepke:
 1. 使用 IntelliJ IDEA 或 Eclipse 导入项目。
 2. IDE 将自动加载 Maven 依赖，初次加载可能较慢。
 3. 运行 `tech.qiantong.qknow.server.QKnowApplication.java`。启动成功后，可通过 `http://localhost:8090` 访问后端服务。
+4. 出现以下提示，表示后端服务启动成功：
+
+```
+(♥◠‿◠)ﾉﾞ  千知平台启动成功   ლ(´ڡ`ლ)ﾞ  
+        _  __                    
+   __ _| |/ /_ __   _____      __
+  / _` | ' /| '_ \ / _ \ \ /\ / /
+ | (_| | . \| | | | (_) \ V  V / 
+  \__, |_|\_\_| |_|\___/ \_/\_/  
+     |_|                         
+```
 
 > **注意**: 仅启动后端服务不会显示静态页面，请继续部署前端服务。
 

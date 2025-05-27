@@ -55,6 +55,7 @@ public class ExtNeo4jServiceImpl implements ExtNeo4jService {
      * @param extractionList
      * @return
      */
+    @Override
     public AjaxResult insertExtractionList(List<ExtExtractionDO> extractionList) {
         for (ExtExtractionDO extractionDO : extractionList) {
             try {
@@ -62,23 +63,23 @@ public class ExtNeo4jServiceImpl implements ExtNeo4jService {
                 ExtUnstruckExtractionMergeDO.Node startMerge = new ExtUnstruckExtractionMergeDO.Node();
                 startMerge.setName(extractionDO.getHead());
                 startMerge.setTask_id(extractionDO.getTaskId());
-                startMerge.setDoc_id(Integer.valueOf(extractionDO.getDocId()));
-                startMerge.setParagraphIndex(Integer.valueOf(extractionDO.getParagraphIndex()));
+                startMerge.setDoc_id(extractionDO.getDocId());
+                startMerge.setParagraphIndex(extractionDO.getParagraphIndex());
                 startMerge.setEntity_type(ExtractType.UNSTRUCTURED.getValue());
                 ConcurrentHashMap<String, Object> startMergeMap = new ObjectMapper().readValue(JSONObject.toJSONString(startMerge), ConcurrentHashMap.class);
 
                 ExtUnstruckExtractionMergeDO.Node endMerge = new ExtUnstruckExtractionMergeDO.Node();
                 endMerge.setName(extractionDO.getTail());
                 endMerge.setTask_id(extractionDO.getTaskId());
-                endMerge.setDoc_id(Integer.valueOf(extractionDO.getDocId()));
-                endMerge.setParagraphIndex(Integer.valueOf(extractionDO.getParagraphIndex()));
+                endMerge.setDoc_id(extractionDO.getDocId());
+                endMerge.setParagraphIndex(extractionDO.getParagraphIndex());
                 endMerge.setEntity_type(ExtractType.UNSTRUCTURED.getValue());
                 ConcurrentHashMap<String, Object> endMergeMap = new ObjectMapper().readValue(JSONObject.toJSONString(endMerge), ConcurrentHashMap.class);
 
                 ConcurrentHashMap<String, Object> propertiesMap = new ConcurrentHashMap<>();
                 propertiesMap.put("task_id", extractionDO.getTaskId());
-                propertiesMap.put("entity_type", ExtractType.UNSTRUCTURED.getValue());//1: 结构化  2:非结构化
-                propertiesMap.put("release_status", ExtReleaseStatus.UNPUBLISHED.getStatus());//0未发布 1已发布
+                propertiesMap.put("entity_type", ExtractType.UNSTRUCTURED.getValue());
+                propertiesMap.put("release_status", ExtReleaseStatus.UNPUBLISHED.getStatus());
                 propertiesMap.put("doc_id", extractionDO.getDocId());
                 propertiesMap.put("paragraph_index", extractionDO.getParagraphIndex());
                 propertiesMap.put("confidence", extractionDO.getConfidence());
@@ -137,6 +138,7 @@ public class ExtNeo4jServiceImpl implements ExtNeo4jService {
      * @param attributeKey
      * @return
      */
+    @Override
     public AjaxResult deleteNodeAttribute(Long taskId, Integer extractType, String tableName, Integer dataId, String attributeKey) {
         String nodeQuery = "MATCH (n:ExtExtraction) " +
                 "WHERE n.task_id = $task_id AND n.entity_type = $extract_type AND n.table_name = $table_name AND n.data_id = $data_id " +
@@ -159,6 +161,7 @@ public class ExtNeo4jServiceImpl implements ExtNeo4jService {
      * @param relationshipId
      * @return
      */
+    @Override
     public AjaxResult deleteRelationship(Long relationshipId) {
         faultRepository.deleteRelationshipById(relationshipId);
         return AjaxResult.success("操作成功");
@@ -167,10 +170,11 @@ public class ExtNeo4jServiceImpl implements ExtNeo4jService {
     /**
      * 修改关系
      *
-     * @param relationshiName
-     * @param relationshipId
+     * @param
+     * @param
      * @return
      */
+    @Override
     public AjaxResult updateRelationship(ExtNeo4j.UpdateRelationship updateRelationship) {
         String deleteQuery = "MATCH ()-[r]->() " +
                 "WHERE ID(r) = " + updateRelationship.getRelationshipId() + " " +
@@ -223,6 +227,7 @@ public class ExtNeo4jServiceImpl implements ExtNeo4jService {
      * @param attributeValue
      * @return
      */
+    @Override
     public AjaxResult updateNodeAttribute(Long taskId, String tableName, Integer dataId, String attributeKey, String attributeValue) {
         ConcurrentHashMap<String, Object> paramMap = new ConcurrentHashMap<>();
         paramMap.put("task_id", taskId);
@@ -243,6 +248,7 @@ public class ExtNeo4jServiceImpl implements ExtNeo4jService {
      * @param releaseStatus
      * @return
      */
+    @Override
     public AjaxResult updateByTaskIdAndExtractType(Long taskId, Integer extractType, Integer releaseStatus) {
         ConcurrentHashMap<String, Object> paramMap = new ConcurrentHashMap<>();
         paramMap.put("task_id", taskId.toString());
@@ -267,6 +273,7 @@ public class ExtNeo4jServiceImpl implements ExtNeo4jService {
      * @param taskId
      * @return
      */
+    @Override
     public AjaxResult selectByTaskId(Long taskId, Integer extractType) {
         Neo4jQueryWrapper<DynamicEntity> build = new Neo4jQueryWrapper<>(DynamicEntity.class);
         build.eq("task_id", taskId.toString());
@@ -289,6 +296,7 @@ public class ExtNeo4jServiceImpl implements ExtNeo4jService {
      * @param extExtractionDO
      * @return
      */
+    @Override
     public AjaxResult getExtExtraction(ExtExtractionDO extExtractionDO) {
         Long taskId = Long.valueOf(extExtractionDO.getTaskId());
         //获取实体
@@ -310,6 +318,7 @@ public class ExtNeo4jServiceImpl implements ExtNeo4jService {
      *
      * @return
      */
+    @Override
     public AjaxResult deleteNode(Long id) {
         faultRepository.deleteNodeById(id);
         return AjaxResult.success();
@@ -321,6 +330,7 @@ public class ExtNeo4jServiceImpl implements ExtNeo4jService {
      * @param extExtractionDO
      * @return
      */
+    @Override
     public AjaxResult deleteExtUnStruck(ExtExtractionDO extExtractionDO) {
         repository.deleteExtUnStruck(extExtractionDO.getTaskId());
         return AjaxResult.success("删除成功");
@@ -331,6 +341,7 @@ public class ExtNeo4jServiceImpl implements ExtNeo4jService {
      * @param extExtractionDO
      * @return
      */
+    @Override
     public AjaxResult deleteExtStruck(ExtExtractionDO extExtractionDO) {
         repository.deleteExtStruck(extExtractionDO.getTaskId());
         return AjaxResult.success("删除成功");
@@ -341,6 +352,7 @@ public class ExtNeo4jServiceImpl implements ExtNeo4jService {
      *
      * @return
      */
+    @Override
     public AjaxResult getExtractionAllData() {
         Neo4jQueryWrapper<DynamicEntity> build = new Neo4jQueryWrapper<>(DynamicEntity.class);
         build.eq("release_status", ReleaseStatus.PUBLISHED.getValue().toString()); //发布状态

@@ -7,5 +7,5 @@ import tech.qiantong.qknow.common.core.domain.AjaxResult;
  * 知识抽取
  */
 public interface DeepkeExtractionService {
-    AjaxResult deepkeExtraction(String text);
+    AjaxResult deepkeExtraction(String text) throws Exception;
 }

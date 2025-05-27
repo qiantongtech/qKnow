@@ -45,7 +45,7 @@ public interface ExtNeo4jService {
      * 修改节点的某个属性
      *
      * @param taskId
-     * @param extractType
+     * @param
      * @param tableName
      * @param dataId
      * @param attributeKey

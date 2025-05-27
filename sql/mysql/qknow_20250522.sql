@@ -454,6 +454,7 @@ INSERT INTO system_dict_type values(11, '数据类型', 'ext_data_type', '0', 'a
 INSERT INTO system_dict_type values(12, '数据校验', 'ext_data_check', '0', 'admin', sysdate(), '', NULL, NULL);
 INSERT INTO system_dict_type values(13, '发布状态', 'publish_status', '0', 'admin', sysdate(), '', NULL, NULL);
 INSERT INTO system_dict_type values(14, '任务执行状态', 'ext_task_status', '0', 'admin', sysdate(), '', NULL, NULL);
+INSERT INTO system_dict_type values(15, '数据源类型', 'datasource_type', '0', 'admin', sysdate(), '', NULL, NULL);
 
 -- ----------------------------
 -- 12、字典数据表
@@ -523,6 +524,11 @@ INSERT INTO system_dict_data values(41, 0, '未执行', '0', 'ext_task_status', 
 INSERT INTO system_dict_data values(42, 1, '进行中', '1', 'ext_task_status', NULL, 'warning', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
 INSERT INTO system_dict_data values(43, 2, '已完成', '2', 'ext_task_status', NULL, 'success', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
 INSERT INTO system_dict_data values(44, 3, '执行失败', '3', 'ext_task_status', NULL, 'danger', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+INSERT INTO system_dict_data values (45, 1, 'MySql', 'MySql', 'datasource_type', NULL, 'primary', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+INSERT INTO system_dict_data values (46, 2, 'DM8', 'DM8', 'datasource_type', NULL, 'primary', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+INSERT INTO system_dict_data values (47, 3, 'Oracle', 'Oracle', 'datasource_type', NULL, 'primary', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+INSERT INTO system_dict_data values (48, 4, 'Oracle11', 'Oracle11', 'datasource_type', NULL, 'primary', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+INSERT INTO system_dict_data values (49, 5, 'Kingbase8', 'Kingbase8', 'datasource_type', NULL, 'primary', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
 
 -- ----------------------------
 -- 13、参数配置表
