@@ -5,12 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="322ddf82-6903-4669-979a-406aaa8be08e" name="Changes" comment="账号密码更改+电子邮箱更改+登录页按钮跳转官网+后端启动名称改为qknow">
-      <change beforePath="$PROJECT_DIR$/bin/DeepKE/start.sh" beforeDir="false" afterPath="$PROJECT_DIR$/bin/DeepKE/start.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/QUICKSTART.md" beforeDir="false" afterPath="$PROJECT_DIR$/QUICKSTART.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/deepke/DeepkeExtractionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/deepke/DeepkeExtractionService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/deepke/impl/DeepkeExtractionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/deepke/impl/DeepkeExtractionServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/extUnstructTask/IExtUnstructTaskService.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/extUnstructTask/IExtUnstructTaskService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/extUnstructTask/impl/ExtUnstructTaskServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/extUnstructTask/impl/ExtUnstructTaskServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-ui/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-ui/src/router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/neo4j/service/ExtNeo4jService.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/neo4j/service/ExtNeo4jService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/neo4j/service/impl/ExtNeo4jServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/neo4j/service/impl/ExtNeo4jServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/resources/application-ext-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/resources/application-ext-prod.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-ui/src/views/app/graphExploration/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-ui/src/views/app/graphExploration/index.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qknow-ui/src/views/kmc/kmcDocument/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-ui/src/views/kmc/kmcDocument/index.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sql/mysql/qknow_20250522.sql" beforeDir="false" afterPath="$PROJECT_DIR$/sql/mysql/qknow_20250522.sql" afterDir="false" />
     </list>
@@ -56,7 +59,7 @@
     <property name="RequestMappingsPanelWidth0" value="75" />
     <property name="RequestMappingsPanelWidth1" value="75" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.gitee/system" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.2137998" />
@@ -73,11 +76,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/.gitee/system" />
+      <recent name="$PROJECT_DIR$/.gitee" />
+      <recent name="$PROJECT_DIR$/doc" />
       <recent name="$PROJECT_DIR$/qknow-ui/src/assets/system/images/login" />
       <recent name="$PROJECT_DIR$/qknow-ui/src/api" />
-      <recent name="$PROJECT_DIR$/qknow-ui/src/components" />
-      <recent name="$PROJECT_DIR$/qknow-ui/src/assets/iconfont" />
-      <recent name="$PROJECT_DIR$/qknow-ui/src/assets/system/images/layout" />
     </key>
   </component>
   <component name="RunManager">
@@ -173,7 +176,7 @@
       <workItem from="1747963739431" duration="19772000" />
       <workItem from="1748228499147" duration="8471000" />
       <workItem from="1748251228928" duration="106000" />
-      <workItem from="1748251390052" duration="12476000" />
+      <workItem from="1748251390052" duration="27745000" />
     </task>
     <task id="LOCAL-00001" summary="若依标识去除">
       <option name="closed" value="true" />

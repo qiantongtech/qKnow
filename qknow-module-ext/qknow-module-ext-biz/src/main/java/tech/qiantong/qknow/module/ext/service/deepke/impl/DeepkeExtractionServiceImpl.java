@@ -29,54 +29,48 @@ public class DeepkeExtractionServiceImpl implements DeepkeExtractionService {
      * @return
      */
     @Override
-    public AjaxResult deepkeExtraction(String text) {
+    public AjaxResult deepkeExtraction(String text) throws Exception {
         if (StringUtils.isBlank(text)) {
             return AjaxResult.error();
         }
 
-        try {
-            ProcessBuilder processBuilder;
+        ProcessBuilder processBuilder;
 
-            // 获取当前工作目录（即项目根目录）
-            String projectRoot = new File("").getCanonicalPath();
-            // 构建 bin/start.sh 路径
-            String startShPath = new File(projectRoot, "bin/DeepKE/start.sh").getCanonicalPath();
+        // 获取当前工作目录（即项目根目录）
+        String projectRoot = new File("").getCanonicalPath();
+        // 构建 bin/start.sh 路径
+        String startShPath = new File(projectRoot, "bin/DeepKE/start.sh").getCanonicalPath();
 
-            // 根据当前运行环境判断脚本执行命令
-            String osName = System.getProperty("os.name").toLowerCase();
-            if (osName.contains("windows")) {
-                // Windows 环境下使用 WSL
-                processBuilder = new ProcessBuilder("wsl", startShPath, text);
-            } else {
-                // 假设为 Linux 或其他类 Unix 系统
-                processBuilder = new ProcessBuilder("bash", startShPath, text);
+        // 根据当前运行环境判断脚本执行命令
+        String osName = System.getProperty("os.name").toLowerCase();
+        if (osName.contains("windows")) {
+            // Windows 环境下使用 WSL
+            processBuilder = new ProcessBuilder("wsl", startShPath, text);
+        } else {
+            // 假设为 Linux 或其他类 Unix 系统
+            processBuilder = new ProcessBuilder("bash", startShPath, text);
+        }
+
+        // 合并标准错误流到标准输出流
+        processBuilder.redirectErrorStream(true);
+        Process process = processBuilder.start();
+
+        // 读取输出流
+        InputStream inputStream = process.getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        String result = "";
+        String line;
+        while ((line = reader.readLine()) != null) {
+            if(line.contains("抽取到的三元组") || line.contains("抽取到的实体")){
+                result += line;
             }
-
-            // 合并标准错误流到标准输出流
-            processBuilder.redirectErrorStream(true);
-            Process process = processBuilder.start();
-
-            // 读取输出流
-            InputStream inputStream = process.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            String result = "";
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if(line.contains("抽取到的三元组") || line.contains("抽取到的实体")){
-                    result += line;
-                }
-            }
-            // 等待进程结束并获取退出码
-            int exitCode = process.waitFor();
-            if (exitCode == 0){
-                return AjaxResult.success("抽取成功", result);
-            } else {
-                return AjaxResult.error("抽取错误" + exitCode);
-            }
-
-        } catch (Exception e) {
-            log.info("抽取异常:{}", e);
-            return AjaxResult.error("抽取异常" + e.getMessage());
+        }
+        // 等待进程结束并获取退出码
+        int exitCode = process.waitFor();
+        if (exitCode == 0){
+            return AjaxResult.success("抽取成功", result);
+        } else {
+            return AjaxResult.error("抽取错误" + exitCode);
         }
     }
 }
