@@ -1,3 +1,3 @@
-# 非结构化抽取方式选择：deepke或者model
+# 非结构化抽取方式选择：deepke或者model。注：type参数请选择deepke，开源版本暂未支持大模型抽取，如有需要请咨询相关管理人员
 unstruct:
   type: deepke

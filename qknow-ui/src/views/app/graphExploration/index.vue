@@ -155,7 +155,8 @@
                     </template>
                     <div class="collapse-con1">
                       <div v-for="(item, index) in textList" :key="index">
-                        <span v-if="currentNodeData.textIds && currentNodeData.textIds.split(',').includes(item.id.toString())">{{ item.text }}</span>
+<!--                        <span v-if="currentNodeData.textIds && currentNodeData.textIds.split(',').includes(item.id.toString())">{{ item.text }}</span>-->
+                        <span v-if="currentNodeData.paragraphIndex && currentNodeData.paragraphIndex === item.paragraphIndex">{{ item.text }}</span>
                       </div>
                     </div>
                   </el-collapse-item>

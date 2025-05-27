@@ -141,141 +141,138 @@ public class ExtUnstructTaskServiceImpl extends ServiceImpl<ExtUnstructTaskMappe
         // 开始抽取
         log.info("----------------非结构化抽取任务开始-----------------------taskId:{}", taskId);
 
+        // 获取抽取任务
+        ExtUnstructTaskDO unstructTaskDO = extUnstructTaskMapper.selectById(taskId);
+
+        // 获取任务关联的文件
+        ExtUnstructTaskDocRelPageReqVO docRelPageReqVO = new ExtUnstructTaskDocRelPageReqVO();
+        docRelPageReqVO.setTaskId(Long.valueOf(taskId));
+        PageResult<ExtUnstructTaskDocRelDO> docRelPage = extUnstructTaskDocRelService.getExtUnstructTaskDocRelPage(docRelPageReqVO);
+        List<ExtUnstructTaskDocRelDO> taskDocRelDOList = BeanUtils.toBean(docRelPage.getRows(), ExtUnstructTaskDocRelDO.class);
+
         try {
-            // 获取抽取任务
-            ExtUnstructTaskDO unstructTaskDO = extUnstructTaskMapper.selectById(taskId);
-
-            // 获取任务关联的文件
-            ExtUnstructTaskDocRelPageReqVO docRelPageReqVO = new ExtUnstructTaskDocRelPageReqVO();
-            docRelPageReqVO.setTaskId(Long.valueOf(taskId));
-            PageResult<ExtUnstructTaskDocRelDO> docRelPage = extUnstructTaskDocRelService.getExtUnstructTaskDocRelPage(docRelPageReqVO);
-            List<ExtUnstructTaskDocRelDO> taskDocRelDOList = BeanUtils.toBean(docRelPage.getRows(), ExtUnstructTaskDocRelDO.class);
-
             // 根据配置文件判断使用哪种方式进行抽取
             if (UnstructTypeEnums.MODEL.eq(unstructType)) {
                 // TODO 使用大模型抽取，开源版本暂未支持，如有需要请咨询相关管理人员
                 log.warn("大模型抽取暂未支持～");
             } else {
                 // 使用DeepKE进行抽取
-                // 创建新线程执行任务
-                CompletableFuture<Void> future = this.getStringCompletableFuture(unstructTaskDO, taskDocRelDOList)
-                        .thenRun(() -> {
-                            // 处理任务完成后的状态更新
-                            unstructTaskDO.setStatus(ExtTaskStatus.EXECUTED.getValue());
-                            extUnstructTaskMapper.updateExtUnstructTask(unstructTaskDO);
-                        })
-                        .exceptionally(exception -> {
-                            // 处理异常情况
-                            log.error("抽取线程执行异常: {}", exception.getMessage());
-                            unstructTaskDO.setStatus(ExtTaskStatus.ERROR.getValue());
-                            extUnstructTaskMapper.updateExtUnstructTask(unstructTaskDO);
-                            return null;  // 这里返回 null 表示异常已处理
-                        });
-                // 等待当前任务完成再进行下一个任务
-                future.join(); // 这里调用 join() 确保当前任务完成后才进行下一次循环
+                this.execExtTask(unstructTaskDO, taskDocRelDOList);
             }
+
             log.info("----------------非结构化抽取任务结束-----------------------taskId:{}", taskId);
+
+            // 处理任务完成后的状态更新
+            unstructTaskDO.setStatus(ExtTaskStatus.EXECUTED.getValue());
+            extUnstructTaskMapper.updateExtUnstructTask(unstructTaskDO);
         } catch (Exception e) {
             e.printStackTrace();
             // 捕获异常并打印日志
             log.error("非结构化任务抽取处理失败: {}", e.getMessage());
+            unstructTaskDO.setStatus(ExtTaskStatus.ERROR.getValue());
+            extUnstructTaskMapper.updateExtUnstructTask(unstructTaskDO);
         }
     }
 
     /**
-     * 启动单独的线程来执行抽取任务
-     *
+     * 执行抽取任务
+     * @author shaun
+     * @date 2025/05/27 10:22
+     * @param unstructTaskDO
      * @param taskDocRelDOList
-     * @return
+     * @return void
      */
-    private CompletableFuture<String> getStringCompletableFuture(ExtUnstructTaskDO unstructTaskDO, List<ExtUnstructTaskDocRelDO> taskDocRelDOList) {
-        return CompletableFuture.supplyAsync(() -> {
-            for (ExtUnstructTaskDocRelDO extUnstructTaskDocRelDO : taskDocRelDOList) {
-                KmcDocumentDO byId = kmcDocumentService.getById(extUnstructTaskDocRelDO.getDocId());
+    private void execExtTask(ExtUnstructTaskDO unstructTaskDO, List<ExtUnstructTaskDocRelDO> taskDocRelDOList) throws Exception {
+        // 获取所有的文件，存放至map中
+        Map<Long, KmcDocumentDO> documentMap = kmcDocumentService.getKmcDocumentMap();
 
-                // 拼接文件地址
-                String fileUrl = "http://127.0.0.1:8090/profile" + byId.getPath();
-                try {
-                    // 删除neo4j中之前抽取相关的数据, 如果有的话
-                    ExtExtractionDO extractionDO = new ExtExtractionDO();
-                    extractionDO.setTaskId(unstructTaskDO.getId());
-                    extNeo4jService.deleteExtUnStruck(extractionDO);
-                    // 删除mysql中之前抽取的段落相关的数据, 如果有的话
-                    extUnstructTaskTextMapper.deleteByTaskId(unstructTaskDO.getId());
+        // 遍历任务关联的文件
+        for (ExtUnstructTaskDocRelDO extUnstructTaskDocRelDO : taskDocRelDOList) {
+            KmcDocumentDO kmcDocument = documentMap.get(extUnstructTaskDocRelDO.getDocId());
 
-                    // 创建 URL 对象
-                    URL url = new URL(fileUrl);
-                    // 打开连接
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    // 设置请求方法
-                    connection.setRequestMethod("GET");
-                    // 获取输入流
-                    InputStream inputStream = connection.getInputStream();
-                    // 使用 XWPFDocument 解析 docx 文件
-                    XWPFDocument document = new XWPFDocument(inputStream);
-                    // 获取文档中的段落
-                    List<XWPFParagraph> paragraphs = document.getParagraphs();
+            // 拼接文件地址
+            String fileUrl = "http://127.0.0.1:8090/profile" + kmcDocument.getPath();
 
-                    int i = 0;
-                    // 输出每个段落的文本内容
-                    for (XWPFParagraph paragraph : paragraphs) {
-                        i++;
-                        String text = paragraph.getText();
-                        if (StringUtils.isBlank(text)) {
-                            continue;
+            // 删除neo4j中之前抽取相关的数据, 如果有的话
+            ExtExtractionDO extractionDO = new ExtExtractionDO();
+            extractionDO.setTaskId(unstructTaskDO.getId());
+            extNeo4jService.deleteExtUnStruck(extractionDO);
+            // 删除mysql中之前抽取的段落相关的数据, 如果有的话
+            extUnstructTaskTextMapper.deleteByTaskId(unstructTaskDO.getId());
+
+            // 创建 URL 对象
+            URL url = new URL(fileUrl);
+            // 打开连接
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            // 设置请求方法
+            connection.setRequestMethod("GET");
+            // 获取输入流
+            InputStream inputStream = connection.getInputStream();
+            // 使用 XWPFDocument 解析 docx 文件
+            XWPFDocument document = new XWPFDocument(inputStream);
+            // 获取文档中的段落
+            List<XWPFParagraph> paragraphs = document.getParagraphs();
+
+            int i = 0;
+            // 输出每个段落的文本内容
+            for (XWPFParagraph paragraph : paragraphs) {
+                i++;
+                String text = paragraph.getText();
+                if (StringUtils.isBlank(text)) {
+                    continue;
+                }
+                log.info("============>抽取文本: {}", text);
+
+                log.info("============调用DeepKE工具开始抽取============");
+                AjaxResult ajaxResult = deepkeExtractionService.deepkeExtraction(text);
+                log.info("============调用DeepKE工具完成============");
+
+                if (ajaxResult.isSuccess()) {
+                    log.info("============>抽取文本成功：{}", text);
+                    String result = (String) ajaxResult.get("data");
+                    String entity = result.substring(result.indexOf("抽取到的实体====>") + 11, result.indexOf("<====抽取到的实体"));
+                    entity = entity.replace("'", "\"");
+                    log.info("============>抽取到的实体：{}", entity);
+                    String triplet = result.substring(result.indexOf("抽取到的三元组====>") + 12, result.indexOf("<====抽取到的三元组"));
+                    triplet = triplet.replace("'", "\"");
+                    log.info("============>抽取到的三元组：{}", JSONArray.parseArray(triplet));
+                    List<ExtExtractionDO> extractionList = JSON.parseArray(triplet, ExtExtractionDO.class);
+                    if (extractionList.size() > 0) {
+                        for (ExtExtractionDO e : extractionList) {
+                            e.setTaskId(unstructTaskDO.getId());
+                            e.setDocId(extUnstructTaskDocRelDO.getDocId().intValue());
+                            e.setParagraphIndex(i);
                         }
 
-                        // 调用deepke, 知识抽取
-                        AjaxResult ajaxResult = deepkeExtractionService.deepkeExtraction(text);
+                        //把抽取出来的数据存储到neo4j数据库
+                        extNeo4jService.insertExtractionList(extractionList);
 
-                        if (ajaxResult.isSuccess()) {
-                            String result = (String) ajaxResult.get("data");
-                            String entity = result.substring(result.indexOf("抽取到的实体====>") + 11, result.indexOf("<====抽取到的实体"));
-                            entity = entity.replace("'", "\"");
-                            log.info("抽取到的实体:{}", entity);
-                            String triplet = result.substring(result.indexOf("抽取到的三元组====>") + 12, result.indexOf("<====抽取到的三元组"));
-                            triplet = triplet.replace("'", "\"");
-                            log.info("抽取三元组成功====jsonArray====> {}", JSONArray.parseArray(triplet));
-                            List<ExtExtractionDO> extractionList = JSON.parseArray(triplet, ExtExtractionDO.class);
-                            if (extractionList.size() > 0) {
-                                for (ExtExtractionDO e : extractionList) {
-                                    e.setTaskId(unstructTaskDO.getId());
-                                    e.setDocId(extUnstructTaskDocRelDO.getDocId().intValue());
-                                    e.setParagraphIndex(i);
-                                }
-                                //把抽取出来的数据存储到neo4j数据库
-                                extNeo4jService.insertExtractionList(extractionList);
-
-                                //把文字信息存储到数据库
-                                ExtUnstructTaskTextDO taskTextDO = new ExtUnstructTaskTextDO();
-                                taskTextDO.setValidFlag(false);
-                                taskTextDO.setDelFlag(false);
-                                taskTextDO.setWorkspaceId(unstructTaskDO.getWorkspaceId());
-                                taskTextDO.setDocId(extUnstructTaskDocRelDO.getDocId());
-                                taskTextDO.setTaskId(unstructTaskDO.getId());
-                                taskTextDO.setParagraphIndex(i);
-                                taskTextDO.setText(text);
-                                taskTextDO.setCreateBy(unstructTaskDO.getUpdateBy());
-                                taskTextDO.setUpdateBy(unstructTaskDO.getUpdateBy());
-                                taskTextDO.setCreatorId(unstructTaskDO.getUpdaterId());
-                                taskTextDO.setUpdaterId(unstructTaskDO.getUpdaterId());
-                                taskTextDO.setCreateTime(new Date());
-                                taskTextDO.setUpdateTime(new Date());
-                                log.info("----把段落数据添加到数据库:{}", JSONObject.toJSONString(taskTextDO));
-                                extUnstructTaskTextMapper.insert(taskTextDO);
-                            }
-                        }
-
+                        //把文字信息存储到数据库
+                        ExtUnstructTaskTextDO taskTextDO = new ExtUnstructTaskTextDO();
+                        taskTextDO.setValidFlag(false);
+                        taskTextDO.setDelFlag(false);
+                        taskTextDO.setWorkspaceId(unstructTaskDO.getWorkspaceId());
+                        taskTextDO.setDocId(extUnstructTaskDocRelDO.getDocId());
+                        taskTextDO.setTaskId(unstructTaskDO.getId());
+                        taskTextDO.setParagraphIndex(i);
+                        taskTextDO.setText(text);
+                        taskTextDO.setCreateBy(unstructTaskDO.getUpdateBy());
+                        taskTextDO.setUpdateBy(unstructTaskDO.getUpdateBy());
+                        taskTextDO.setCreatorId(unstructTaskDO.getUpdaterId());
+                        taskTextDO.setUpdaterId(unstructTaskDO.getUpdaterId());
+                        taskTextDO.setCreateTime(new Date());
+                        taskTextDO.setUpdateTime(new Date());
+                        log.info("============>把段落数据添加到数据库:{}", JSONObject.toJSONString(taskTextDO));
+                        extUnstructTaskTextMapper.insert(taskTextDO);
                     }
-                    // 关闭输入流
-                    inputStream.close();
-
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
+                } else {
+                    log.error("============>抽取任务失败: {}", ajaxResult);
+                    unstructTaskDO.setStatus(ExtTaskStatus.ERROR.getValue());
+                    extUnstructTaskMapper.updateExtUnstructTask(unstructTaskDO);
                 }
             }
-            return "---------- 执行抽取任务结束 -------------";
-        });
+        }
+        log.info("---------- 执行抽取任务结束 -------------");
     }
 
     @Override
@@ -306,7 +303,7 @@ public class ExtUnstructTaskServiceImpl extends ServiceImpl<ExtUnstructTaskMappe
         saveUnstructDocRel(createReqVO, docIds);
 
         String relationIds = (String) params.get("relationIds");
-       this.saveExtUnstructTaskRelation(dictType, relationIds);
+        this.saveExtUnstructTaskRelation(dictType, relationIds);
         return dictType.getId();
     }
 
@@ -351,7 +348,6 @@ public class ExtUnstructTaskServiceImpl extends ServiceImpl<ExtUnstructTaskMappe
         // 更新非结构化抽取任务
         ExtUnstructTaskDO updateObj = BeanUtils.toBean(updateReqVO, ExtUnstructTaskDO.class);
 
-
         Map<String, Object> params = updateReqVO.getParams();
         //删除之前关联的任务文件信息
         String oldDocRelIds = (String) params.get("oldDocRelIds");
@@ -359,7 +355,7 @@ public class ExtUnstructTaskServiceImpl extends ServiceImpl<ExtUnstructTaskMappe
             String[] split = oldDocRelIds.split(",");
             // 转换为 long 类型的数组
             Long[] longArray = Arrays.stream(split)
-                    .map(Long::parseLong)  // 将每个字符串解析为 Long 类型
+                    .map(Long::parseLong)
                     .toArray(Long[]::new);
             List<Long> longs = Arrays.asList(longArray);
             extUnstructTaskDocRelService.removeByIds(longs);
