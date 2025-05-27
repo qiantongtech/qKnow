@@ -5,29 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="322ddf82-6903-4669-979a-406aaa8be08e" name="Changes" comment="账号密码更改+电子邮箱更改+登录页按钮跳转官网+后端启动名称改为qknow">
-      <change beforePath="$PROJECT_DIR$/.gitee/framework.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QUICKSTART.md" beforeDir="false" afterPath="$PROJECT_DIR$/QUICKSTART.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/controller/admin/extSchemaAttribute/ExtSchemaAttributeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/controller/admin/extSchemaAttribute/ExtSchemaAttributeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/extEnum/ExtTaskStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/extEnum/ExtTaskStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/DeepKE/start.sh" beforeDir="false" afterPath="$PROJECT_DIR$/bin/DeepKE/start.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/deepke/impl/DeepkeExtractionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/deepke/impl/DeepkeExtractionServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/extSchema/impl/ExtSchemaServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/extSchema/impl/ExtSchemaServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/extSchemaRelation/impl/ExtSchemaRelationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/extSchemaRelation/impl/ExtSchemaRelationServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/extUnstructTask/IExtUnstructTaskService.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/extUnstructTask/IExtUnstructTaskService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/extUnstructTask/impl/ExtUnstructTaskServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/service/extUnstructTask/impl/ExtUnstructTaskServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/test/DeepkeTestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/test/DeepkeTestController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/test/TestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/java/tech/qiantong/qknow/module/ext/test/TestController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/resources/application-ext-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/resources/application-ext-dev.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/resources/application-ext-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/resources/application-ext-prod.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-module-ext/qknow-module-ext-biz/src/main/resources/application-ext-stage.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/controller/admin/kmcDocument/KmcDocumentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/controller/admin/kmcDocument/KmcDocumentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/controller/admin/kmcDocument/vo/KmcDocumentPageReqVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/controller/admin/kmcDocument/vo/KmcDocumentPageReqVO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/controller/admin/kmcDocument/vo/KmcDocumentRespVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/controller/admin/kmcDocument/vo/KmcDocumentRespVO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/controller/admin/kmcDocument/vo/KmcDocumentSaveReqVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/controller/admin/kmcDocument/vo/KmcDocumentSaveReqVO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/dal/dataobject/document/KmcDocumentDO.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/dal/dataobject/document/KmcDocumentDO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/service/kmcDocument/impl/KmcDocumentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-module-kmc/qknow-module-kmc-biz/src/main/java/tech/qiantong/qknow/module/kmc/service/kmcDocument/impl/KmcDocumentServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qknow-server/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-server/src/main/resources/application-dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qknow-ui/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-ui/src/router/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qknow-ui/src/views/kmc/kmcDocument/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/qknow-ui/src/views/kmc/kmcDocument/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql/pdman/qknow.pdma.json" beforeDir="false" afterPath="$PROJECT_DIR$/sql/pdman/qknow.pdma.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sql/mysql/qknow_20250522.sql" beforeDir="false" afterPath="$PROJECT_DIR$/sql/mysql/qknow_20250522.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,10 +114,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="AniviaApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <configuration name="QKnowApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
       <module name="qknow-server" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="tech.qiantong.qknow.server.AniviaApplication" />
-      <option name="ALTERNATIVE_JRE_PATH" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="tech.qiantong.qknow.server.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="tech.qiantong.qknow.server.QKnowApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -155,6 +145,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Spring Boot.QKnowApplication" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -178,7 +173,7 @@
       <workItem from="1747963739431" duration="19772000" />
       <workItem from="1748228499147" duration="8471000" />
       <workItem from="1748251228928" duration="106000" />
-      <workItem from="1748251390052" duration="329000" />
+      <workItem from="1748251390052" duration="12476000" />
     </task>
     <task id="LOCAL-00001" summary="若依标识去除">
       <option name="closed" value="true" />

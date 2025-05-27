@@ -9,4 +9,4 @@ fi
 TEXT="$1"
 
 # 注意：此处请换成你的docker容器id
-docker exec dabea2a436b6 python -u predict.py text='\"$TEXT\"'
+docker exec dabea2a436b6 python -u predict.py "text='$TEXT'"
