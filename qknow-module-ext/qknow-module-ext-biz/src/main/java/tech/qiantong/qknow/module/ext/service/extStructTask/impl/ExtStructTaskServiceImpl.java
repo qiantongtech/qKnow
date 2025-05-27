@@ -21,8 +21,6 @@ import tech.qiantong.qknow.module.dm.api.datasource.dto.DmDatasourceRespDTO;
 import tech.qiantong.qknow.module.dm.api.service.asset.IDmDatasourceApiService;
 import tech.qiantong.qknow.module.ext.controller.admin.extAttributeMapping.vo.ExtAttributeMappingPageReqVO;
 import tech.qiantong.qknow.module.ext.controller.admin.extAttributeMapping.vo.ExtAttributeMappingRespVO;
-import tech.qiantong.qknow.module.ext.controller.admin.extCustomMapping.vo.ExtCustomMappingPageReqVO;
-import tech.qiantong.qknow.module.ext.controller.admin.extCustomMapping.vo.ExtCustomMappingRespVO;
 import tech.qiantong.qknow.module.ext.controller.admin.extRelationMapping.vo.ExtRelationMappingPageReqVO;
 import tech.qiantong.qknow.module.ext.controller.admin.extRelationMapping.vo.ExtRelationMappingRespVO;
 import tech.qiantong.qknow.module.ext.controller.admin.extSchemaMapping.vo.ExtSchemaMappingPageReqVO;
@@ -31,7 +29,6 @@ import tech.qiantong.qknow.module.ext.controller.admin.extStructTask.vo.ExtStruc
 import tech.qiantong.qknow.module.ext.controller.admin.extStructTask.vo.ExtStructTaskRespVO;
 import tech.qiantong.qknow.module.ext.controller.admin.extStructTask.vo.ExtStructTaskSaveReqVO;
 import tech.qiantong.qknow.module.ext.dal.dataobject.extAttributeMapping.ExtAttributeMappingDO;
-import tech.qiantong.qknow.module.ext.dal.dataobject.extCustomMapping.ExtCustomMappingDO;
 import tech.qiantong.qknow.module.ext.dal.dataobject.extDatasource.ExtDataSourceTable;
 import tech.qiantong.qknow.module.ext.dal.dataobject.extExtraction.ExtExtractionMergeDO;
 import tech.qiantong.qknow.module.ext.dal.dataobject.extRelationMapping.ExtRelationMappingDO;
@@ -40,7 +37,6 @@ import tech.qiantong.qknow.module.ext.dal.dataobject.extSchemaMapping.ExtSchemaM
 import tech.qiantong.qknow.module.ext.dal.dataobject.extStructTask.ExtStructTask;
 import tech.qiantong.qknow.module.ext.dal.dataobject.extStructTask.ExtStructTaskDO;
 import tech.qiantong.qknow.module.ext.dal.mapper.extAttributeMapping.ExtAttributeMappingMapper;
-import tech.qiantong.qknow.module.ext.dal.mapper.extCustomMapping.ExtCustomMappingMapper;
 import tech.qiantong.qknow.module.ext.dal.mapper.extRelationMapping.ExtRelationMappingMapper;
 import tech.qiantong.qknow.module.ext.dal.mapper.extSchemaAttribute.ExtSchemaAttributeMapper;
 import tech.qiantong.qknow.module.ext.dal.mapper.extSchemaMapping.ExtSchemaMappingMapper;
@@ -82,8 +78,6 @@ public class ExtStructTaskServiceImpl extends ServiceImpl<ExtStructTaskMapper, E
     private ExtAttributeMappingMapper extAttributeMappingMapper;
     @Resource
     private ExtRelationMappingMapper extRelationMappingMapper;
-    @Resource
-    private ExtCustomMappingMapper extCustomMappingMapper;
     @Resource
     private ExtDatasourceQueryService extDatasourceQueryService;
     @Resource
@@ -249,7 +243,6 @@ public class ExtStructTaskServiceImpl extends ServiceImpl<ExtStructTaskMapper, E
     /**
      * 结构化抽取 异步抽取
      *
-     * @param extStructTask
      * @return
      */
     private CompletableFuture<AjaxResult> getCompletableFuture(Long id) {
@@ -292,31 +285,6 @@ public class ExtStructTaskServiceImpl extends ServiceImpl<ExtStructTaskMapper, E
                     PageResult<ExtAttributeMappingDO> attributeMappingDOPageResult = extAttributeMappingMapper.selectPage(attributeMappingPageReqVO);
                     List<ExtAttributeMappingDO> attributeMappingDOS = BeanUtils.toBean(attributeMappingDOPageResult.getRows(), ExtAttributeMappingDO.class);
 
-                    ExtCustomMappingPageReqVO customMappingPageReqVO = new ExtCustomMappingPageReqVO();
-                    customMappingPageReqVO.setTaskId(extStructTaskDO.getId());
-                    customMappingPageReqVO.setTableName(tableName);
-                    PageResult<ExtCustomMappingDO> customMappingDOPageResult = extCustomMappingMapper.selectPage(customMappingPageReqVO);
-                    List<ExtCustomMappingDO> customMappingDOS = BeanUtils.toBean(customMappingDOPageResult.getRows(), ExtCustomMappingDO.class);
-
-                    //自定义映射
-                    HashMap<String, List<ConcurrentHashMap<String, Object>>> listHashMap = new HashMap<>();
-                    for (ExtCustomMappingDO customMappingDO : customMappingDOS) {
-                        ExtDataSourceTable.GetTableData getTableData0 = BeanUtils.toBean(getTableData, ExtDataSourceTable.GetTableData.class);
-                        // 内连接连表, 查询自定义属性映射
-//                    String query0 = "SELECT a.*,b.* FROM " + tableName + " a INNER JOIN " + relationTable + " b ON a." + fieldName + " = b." + relationField + ";";
-                        String query0 = customMappingDO.getSqlStatement();
-//                        String query0 = "SELECT a.id,b.name FROM test_aa a INNER JOIN test_bb b ON a.id = b.id;";
-                        log.info("查询sql:{}", query0);
-                        getTableData0.setQuery(query0);
-                        getTableData0.setAfieldNum(1);
-                        try {
-                            List<ConcurrentHashMap<String, Object>> mapList0 = extDatasourceQueryService.getTableData2(getTableData0);
-                            listHashMap.put(customMappingDO.getFieldName(), mapList0);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
                     //将属性和表字段对应上, 存成一个数组
                     ArrayList<ConcurrentHashMap<String, Object>> maps = new ArrayList<>();
                     for (ConcurrentHashMap<String, Object> objectMap : mapList1) {
@@ -344,21 +312,6 @@ public class ExtStructTaskServiceImpl extends ServiceImpl<ExtStructTaskMapper, E
                             for (ExtAttributeMappingDO attributeMappingDO : attributeMappingDOS) {
                                 //如果这个字段映射过属性, 就把属性放到节点map中
                                 if (attributeMappingDO.getAttributeId() != null && columnName.equals(attributeMappingDO.getFieldName())) {
-                                    //TODO 如果这个字段有自定义过属性
-                                    for (Map.Entry<String, List<ConcurrentHashMap<String, Object>>> stringListEntry : listHashMap.entrySet()) {
-                                        String key = stringListEntry.getKey();
-                                        if (key.equals(columnName)) {
-                                            List<ConcurrentHashMap<String, Object>> value = stringListEntry.getValue();
-                                            for (ConcurrentHashMap<String, Object> concurrentHashMap : value) {
-                                                for (Map.Entry<String, Object> objectEntry : concurrentHashMap.entrySet()) {
-                                                    String key1 = objectEntry.getKey();
-                                                    if (key1.contains("b_")) {
-                                                        columnValue = objectEntry.getValue();
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
                                     //把所有添加属性映射的区分出来, 方便展示
                                     nodes.put("attribute_id_" + attributeMappingDO.getAttributeId().toString(), columnValue);
                                 }
@@ -464,7 +417,7 @@ public class ExtStructTaskServiceImpl extends ServiceImpl<ExtStructTaskMapper, E
                                     endMap.remove("id");
                                     Neo4jBuildWrapper<DynamicEntity> build = new Neo4jBuildWrapper<>(DynamicEntity.class);
                                     ExtExtractionMergeDO.Node extractionMergeDO = new ExtExtractionMergeDO.Node();
-                                    extractionMergeDO.setName(endMap.get("name").toString());
+                                    extractionMergeDO.setName(endMap.get(relationMappingDO.getRelationNameField()).toString());
                                     extractionMergeDO.setTask_id(Long.valueOf(extStructTaskDO.getId().toString()));
                                     extractionMergeDO.setTable_name(relationTable);
                                     extractionMergeDO.setData_id(Long.valueOf(endMap.get("data_id").toString()));
@@ -531,7 +484,6 @@ public class ExtStructTaskServiceImpl extends ServiceImpl<ExtStructTaskMapper, E
         extSchemaMappingMapper.delete("task_id", taskId.toString());//概念
         extAttributeMappingMapper.delete("task_id", taskId.toString());//属性
         extRelationMappingMapper.delete("task_id", taskId.toString());//关系
-        extCustomMappingMapper.delete("task_id", taskId.toString());//自定义
         return addMapping(extStructTask, extStructTaskDO);
     }
 
@@ -679,37 +631,6 @@ public class ExtStructTaskServiceImpl extends ServiceImpl<ExtStructTaskMapper, E
                 if (relationMappingDOS.size() > 0) {
                     extRelationMappingMapper.insertBatch(relationMappingDOS);
                 }
-
-                ArrayList<ExtCustomMappingDO> customMappingDOS = new ArrayList<>();
-                //自定义映射
-                List<ExtStructTask.Custom> customList = mappingData.getCustomList();
-                customList = customList.stream()
-                        .filter(e -> StringUtils.isNotBlank(e.getField())
-                                && StringUtils.isNotBlank(e.getCustomSQL())
-                        ).collect(Collectors.toList());
-                customList.forEach(e -> {
-                    ExtCustomMappingDO customMappingDO = new ExtCustomMappingDO();
-                    customMappingDO.setWorkspaceId(extStructTask.getWorkspaceId());
-                    customMappingDO.setTaskId(extStructTaskDO.getId());
-                    customMappingDO.setTableName(ext.getTableName());
-                    customMappingDO.setTableComment(ext.getTableComment());
-                    //TODO fieldComment 这个值暂时没有
-                    customMappingDO.setFieldComment("");
-                    customMappingDO.setFieldName(e.getField());
-                    customMappingDO.setSqlStatement(e.getCustomSQL());
-                    customMappingDO.setValidFlag(false);
-                    customMappingDO.setDelFlag(false);
-                    customMappingDO.setCreateBy(extStructTask.getUpdateBy());
-                    customMappingDO.setUpdateBy(extStructTask.getUpdateBy());
-                    customMappingDO.setCreatorId(extStructTask.getUpdaterId());
-                    customMappingDO.setUpdaterId(extStructTask.getUpdaterId());
-                    customMappingDO.setCreateTime(new Date());
-                    customMappingDO.setUpdateTime(new Date());
-                    customMappingDOS.add(customMappingDO);
-                });
-                if (customMappingDOS.size() > 0) {
-                    extCustomMappingMapper.insertBatch(customMappingDOS);
-                }
             });
             return AjaxResult.success();
         } catch (Exception e) {
@@ -773,12 +694,6 @@ public class ExtStructTaskServiceImpl extends ServiceImpl<ExtStructTaskMapper, E
         PageResult<ExtRelationMappingDO> relationMappingDOPageResult = extRelationMappingMapper.selectPage(relationMappingPageReqVO);
         List<ExtRelationMappingRespVO> relationMappingList = BeanUtils.toBean(relationMappingDOPageResult.getRows(), ExtRelationMappingRespVO.class);
 
-        //获取关联的自定义映射
-        ExtCustomMappingPageReqVO customMappingPageReqVO = new ExtCustomMappingPageReqVO();
-        customMappingPageReqVO.setTaskId(id);
-        PageResult<ExtCustomMappingDO> customMappingDOPageResult = extCustomMappingMapper.selectPage(customMappingPageReqVO);
-        List<ExtCustomMappingRespVO> customMappingList = BeanUtils.toBean(customMappingDOPageResult.getRows(), ExtCustomMappingRespVO.class);
-
         //获取导入的表
         List<String> stringList = Stream.concat(
                 schemaMappingList.stream().map(ExtSchemaMappingRespVO::getTableName).filter(Objects::nonNull),
@@ -828,7 +743,6 @@ public class ExtStructTaskServiceImpl extends ServiceImpl<ExtStructTaskMapper, E
         hashMap.put("schemaMappingList", schemaMappingList);//概念
         hashMap.put("attributeMappingList", attributeMappingList);//属性
         hashMap.put("relationMappingList", relationMappingList);//关系
-        hashMap.put("customMappingList", customMappingList);//自定义
         return AjaxResult.success("", hashMap);
     }
 

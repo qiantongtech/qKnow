@@ -101,18 +101,26 @@ public class ExtDatasourceQueryService {
                 ResultSet resultSet = statement.executeQuery(query)
         ) {
             int columnNum = 0;
+            // 获取结果集的元数据（字段信息）
+            ResultSetMetaData metaData = resultSet.getMetaData();
+
             if (getTableData.getAfieldNum() == null) {
                 //先查询一下a表有多少列
-                ResultSet resultSetNum = connection.getMetaData().getColumns(null, null, getTableData.getTableA(), null);
-                // 计算列的数量
-                while (resultSetNum.next()) {
-                    columnNum++;
+                //ResultSet resultSetNum = connection.getMetaData().getColumns(null, null, getTableData.getTableA(), null);
+                //// 计算列的数量
+                //while (resultSetNum.next()) {
+                //    columnNum++;
+                //}
+
+                for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                    String tableName = metaData.getTableName(i); // 获取该字段对应的表名
+                    if (getTableData.getTableA().equals(tableName)) {
+                        columnNum++;
+                    }
                 }
             } else {
                 columnNum = getTableData.getAfieldNum();
             }
-            // 获取结果集的元数据（字段信息）
-            ResultSetMetaData metaData = resultSet.getMetaData();
             int columnCount = metaData.getColumnCount();
 
             // 遍历结果集并将每一行的数据存入 resultList
