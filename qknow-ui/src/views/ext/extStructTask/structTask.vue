@@ -279,17 +279,6 @@
                 })
                 mappingData.relationshipList = relList
 
-                //自定义映射
-                let cusList = []
-                let customMapping = customMappingList.filter(item => e.tableName == item.tableName)
-                customMapping.forEach(e => {
-                    cusList.push({
-                        field: e.fieldName,
-                        customSQL: e.sqlStatement
-                    })
-                })
-                mappingData.customList = cusList
-
                 console.log('---data-----mappingData----', mappingData)
                 e.mappingData = mappingData
             })
