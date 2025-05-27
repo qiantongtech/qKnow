@@ -58,7 +58,4 @@ storybook-static/
 .DS_Store
 
 # 忽略 upload 目录下的所有内容
-/upload/
-
-# 白名单：不忽略 /upload/2025/05/27/ 目录，该目录为项目运行基础数据需要
-!/upload/2025/05/27/
+#/upload/
