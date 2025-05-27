@@ -6,7 +6,7 @@ import systemPublicRouter from './system/public/index.js'
 /* 系统模块动态路由 */
 import systemDynamicRouter from './system/dynamic/index.js'
 /* 知识抽取模块 */
-import ExtPublicRouter from './ext/public/index.js'
+import extPublicRouter from './ext/public/index.js'
 
 /**
  * Note: 路由配置项
@@ -33,7 +33,7 @@ import ExtPublicRouter from './ext/public/index.js'
 // 公共路由
 export const constantRoutes = [
     ...systemPublicRouter,
-    ...ExtPublicRouter
+    ...extPublicRouter
 ]
 
 // 动态路由，基于用户权限动态去加载

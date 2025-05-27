@@ -5,8 +5,6 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -15,10 +13,8 @@ import org.springframework.stereotype.Service;
 import tech.qiantong.qknow.common.core.domain.AjaxResult;
 import tech.qiantong.qknow.common.core.page.PageResult;
 import tech.qiantong.qknow.common.exception.ServiceException;
-import tech.qiantong.qknow.common.utils.DateUtils;
 import tech.qiantong.qknow.common.utils.StringUtils;
 import tech.qiantong.qknow.common.utils.object.BeanUtils;
-import tech.qiantong.qknow.module.app.api.ExtractionResult.ExtractionResult;
 import tech.qiantong.qknow.module.app.enums.ReleaseStatus;
 import tech.qiantong.qknow.module.ext.controller.admin.extUnstructTask.vo.ExtUnstructTaskPageReqVO;
 import tech.qiantong.qknow.module.ext.controller.admin.extUnstructTask.vo.ExtUnstructTaskRespVO;
@@ -29,7 +25,6 @@ import tech.qiantong.qknow.module.ext.dal.dataobject.extUnstructTask.ExtUnstruct
 import tech.qiantong.qknow.module.ext.dal.dataobject.extUnstructTaskDocRel.ExtUnstructTaskDocRelDO;
 import tech.qiantong.qknow.module.ext.dal.dataobject.extUnstructTaskText.ExtUnstructTaskTextDO;
 import tech.qiantong.qknow.module.ext.dal.dataobject.extraction.ExtExtractionDO;
-import tech.qiantong.qknow.module.ext.dal.dataobject.extraction.ExtNeo4jEntity;
 import tech.qiantong.qknow.module.ext.dal.dataobject.unstructTaskRelation.ExtUnstructTaskRelationDO;
 import tech.qiantong.qknow.module.ext.dal.mapper.extUnstructTask.ExtUnstructTaskMapper;
 import tech.qiantong.qknow.module.ext.dal.mapper.extUnstructTaskText.ExtUnstructTaskTextMapper;
@@ -44,9 +39,6 @@ import tech.qiantong.qknow.module.ext.service.unstructTaskRelation.IExtUnstructT
 import tech.qiantong.qknow.module.kmc.api.service.IKmcApiService;
 import tech.qiantong.qknow.module.kmc.dal.dataobject.document.KmcDocumentDO;
 import tech.qiantong.qknow.module.kmc.service.kmcDocument.IKmcDocumentService;
-import tech.qiantong.qknow.neo4j.domain.DynamicEntity;
-import tech.qiantong.qknow.neo4j.domain.relationship.DynamicEntityRelationship;
-import tech.qiantong.qknow.neo4j.enums.Neo4jLabelEnum;
 import tech.qiantong.qknow.redis.service.IRedisService;
 
 import javax.annotation.Resource;
@@ -200,14 +192,15 @@ public class ExtUnstructTaskServiceImpl extends ServiceImpl<ExtUnstructTaskMappe
         return CompletableFuture.supplyAsync(() -> {
             for (ExtUnstructTaskDocRelDO extUnstructTaskDocRelDO : taskDocRelDOList) {
                 KmcDocumentDO byId = kmcDocumentService.getById(extUnstructTaskDocRelDO.getDocId());
-                //获取文件地址
-                String fileUrl = byId.getPath();
+
+                // 拼接文件地址
+                String fileUrl = "http://127.0.0.1:8090/profile" + byId.getPath();
                 try {
-                    //删除neo4j中之前抽取相关的数据, 如果有的话
+                    // 删除neo4j中之前抽取相关的数据, 如果有的话
                     ExtExtractionDO extractionDO = new ExtExtractionDO();
                     extractionDO.setTaskId(unstructTaskDO.getId());
                     extNeo4jService.deleteExtUnStruck(extractionDO);
-                    //删除mysql中之前抽取的段落相关的数据, 如果有的话
+                    // 删除mysql中之前抽取的段落相关的数据, 如果有的话
                     extUnstructTaskTextMapper.deleteByTaskId(unstructTaskDO.getId());
 
                     // 创建 URL 对象
@@ -417,23 +410,6 @@ public class ExtUnstructTaskServiceImpl extends ServiceImpl<ExtUnstructTaskMappe
         extUnstructTaskMapper.updateById(unstructTaskDO);
         extNeo4jService.updateByTaskIdAndExtractType(unstructTaskDO.getId(), ExtractType.UNSTRUCTURED.getValue(), ReleaseStatus.UNPUBLISHED.getValue());
         return AjaxResult.success("取消发布成功");
-    }
-
-    @Override
-    public List<ExtUnstructTaskDO> getExtUnstructTaskList() {
-        return extUnstructTaskMapper.selectList();
-    }
-
-    @Override
-    public Map<Long, ExtUnstructTaskDO> getExtUnstructTaskMap() {
-        List<ExtUnstructTaskDO> extUnstructTaskList = extUnstructTaskMapper.selectList();
-        return extUnstructTaskList.stream()
-                .collect(Collectors.toMap(
-                        ExtUnstructTaskDO::getId,
-                        extUnstructTaskDO -> extUnstructTaskDO,
-                        // 保留已存在的值
-                        (existing, replacement) -> existing
-                ));
     }
 
 

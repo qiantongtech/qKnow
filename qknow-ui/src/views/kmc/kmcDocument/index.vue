@@ -168,7 +168,7 @@
                   :data="KcOptions"
                   :props="{ value: 'id', label: 'label', children: 'children' }"
                   value-key="id"
-                  placeholder="请选择归属部门"
+                  placeholder="请选择文件分类"
                   check-strictly
                   @change="handleTypeChange"
               />
