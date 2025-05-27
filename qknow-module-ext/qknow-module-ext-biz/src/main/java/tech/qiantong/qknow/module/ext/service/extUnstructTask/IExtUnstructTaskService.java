@@ -68,7 +68,7 @@ public interface IExtUnstructTaskService extends IService<ExtUnstructTaskDO> {
     /**
      * 发布
      *
-     * @param structTaskDO
+     * @param
      * @return
      */
     public AjaxResult releaseByTaskId(ExtUnstructTaskDO unstructTaskDO);
@@ -76,25 +76,10 @@ public interface IExtUnstructTaskService extends IService<ExtUnstructTaskDO> {
     /**
      * 取消发布
      *
-     * @param structTaskDO
+     * @param
      * @return
      */
     public AjaxResult cancelReleaseByTaskId(ExtUnstructTaskDO unstructTaskDO);
-
-    /**
-     * 获得全部非结构化抽取任务列表
-     *
-     * @return 非结构化抽取任务列表
-     */
-    List<ExtUnstructTaskDO> getExtUnstructTaskList();
-
-    /**
-     * 获得全部非结构化抽取任务 Map
-     *
-     * @return 非结构化抽取任务 Map
-     */
-    Map<Long, ExtUnstructTaskDO> getExtUnstructTaskMap();
-
 
     /**
      * 导入非结构化抽取任务数据

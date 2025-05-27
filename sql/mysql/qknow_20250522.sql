@@ -450,6 +450,10 @@ insert into system_dict_type values(8,  '通知状态', 'sys_notice_status',   '
 insert into system_dict_type values(9,  '操作类型', 'sys_oper_type',       '0', 'admin', sysdate(), '', null, '操作类型列表');
 insert into system_dict_type values(10, '系统状态', 'sys_common_status',   '0', 'admin', sysdate(), '', null, '登录状态列表');
 
+INSERT INTO system_dict_type values(11, '数据类型', 'ext_data_type', '0', 'admin', sysdate(), '', NULL, NULL);
+INSERT INTO system_dict_type values(12, '数据校验', 'ext_data_check', '0', 'admin', sysdate(), '', NULL, NULL);
+INSERT INTO system_dict_type values(13, '发布状态', 'publish_status', '0', 'admin', sysdate(), '', NULL, NULL);
+INSERT INTO system_dict_type values(14, '任务执行状态', 'ext_task_status', '0', 'admin', sysdate(), '', NULL, NULL);
 
 -- ----------------------------
 -- 12、字典数据表
@@ -504,6 +508,21 @@ insert into system_dict_data values(27, 9,  '清空数据', '9',       'sys_oper
 insert into system_dict_data values(28, 1,  '成功',     '0',       'sys_common_status',   '',   'primary', 'N', '0', 'admin', sysdate(), '', null, '正常状态');
 insert into system_dict_data values(29, 2,  '失败',     '1',       'sys_common_status',   '',   'danger',  'N', '0', 'admin', sysdate(), '', null, '停用状态');
 
+INSERT INTO system_dict_data values(30, 0, '文本', '0', 'ext_data_type', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+INSERT INTO system_dict_data values(31, 1, '整数', '1', 'ext_data_type', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+INSERT INTO system_dict_data values(32, 2, '小数', '2', 'ext_data_type', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+INSERT INTO system_dict_data values(33, 3, '时间', '3', 'ext_data_type', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+INSERT INTO system_dict_data values(34, 4, '字节类型', '4', 'ext_data_type', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+INSERT INTO system_dict_data values(35, 5, '布尔值', '5', 'ext_data_type', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+INSERT INTO system_dict_data values(36, 0, '唯一性校验', '0', 'ext_data_check', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+INSERT INTO system_dict_data values(37, 1, '长度校验', '1', 'ext_data_check', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+INSERT INTO system_dict_data values(38, 2, '区间校验', '2', 'ext_data_check', NULL, 'default', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+INSERT INTO system_dict_data values(39, 0, '未发布', '0', 'publish_status', NULL, 'warning', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+INSERT INTO system_dict_data values(40, 1, '已发布', '1', 'publish_status', NULL, 'success', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+INSERT INTO system_dict_data values(41, 0, '未执行', '0', 'ext_task_status', NULL, 'primary', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+INSERT INTO system_dict_data values(42, 1, '进行中', '1', 'ext_task_status', NULL, 'warning', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+INSERT INTO system_dict_data values(43, 2, '已完成', '2', 'ext_task_status', NULL, 'success', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
+INSERT INTO system_dict_data values(44, 3, '执行失败', '3', 'ext_task_status', NULL, 'danger', 'N', '0', 'admin', sysdate(), '', NULL, NULL);
 
 -- ----------------------------
 -- 13、参数配置表
