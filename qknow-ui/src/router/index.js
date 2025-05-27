@@ -5,6 +5,8 @@ import { clearCancelTokens } from '@/utils/request'  // 确保导入路径正确
 import systemPublicRouter from './system/public/index.js'
 /* 系统模块动态路由 */
 import systemDynamicRouter from './system/dynamic/index.js'
+/* 知识抽取模块 */
+import ExtPublicRouter from './ext/public/index.js'
 
 /**
  * Note: 路由配置项
@@ -30,7 +32,8 @@ import systemDynamicRouter from './system/dynamic/index.js'
 
 // 公共路由
 export const constantRoutes = [
-    ...systemPublicRouter
+    ...systemPublicRouter,
+    ...ExtPublicRouter
 ]
 
 // 动态路由，基于用户权限动态去加载
