@@ -738,7 +738,7 @@ CREATE TABLE `system_content` (
 -- Records of system_content
 -- ----------------------------
 BEGIN;
-INSERT INTO `system_content` (`id`, `sys_name`, `logo`, `login_logo`, `carousel_image`, `contact_number`, `email`, `copyright`, `record_number`, `del_flag`, `status`, `create_by`, `creator_id`, `create_time`, `update_by`, `updater_id`, `update_time`, `remark`) VALUES (1, NULL, '', '', '', '400-660-8208', 'support@qiantong.tech', 'Copyright© 2025 江苏干桐科技有限公司 版权所有', '苏ICP备2022008519号-3', 0, NULL, NULL, NULL, NULL, 'admin', 1, '2025-01-13 13:18:06', NULL);
+INSERT INTO `system_content` (`id`, `sys_name`, `logo`, `login_logo`, `carousel_image`, `contact_number`, `email`, `copyright`, `record_number`, `del_flag`, `status`, `create_by`, `creator_id`, `create_time`, `update_by`, `updater_id`, `update_time`, `remark`) VALUES (1, NULL, '', '', '', '400-660-8208', 'support@qiantong.tech', 'Copyright© 2025 江苏千桐科技有限公司 版权所有', '苏ICP备2022008519号-3', 0, NULL, NULL, NULL, NULL, 'admin', 1, '2025-01-13 13:18:06', NULL);
 COMMIT;
 
 -- ----------------------------
