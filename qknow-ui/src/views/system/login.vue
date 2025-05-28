@@ -10,7 +10,7 @@
           <!--            </el-carousel-item>-->
           <!--          </el-carousel>-->
 
-          <el-carousel style="width:100%;height:100%;" arrow="never" autoplay>
+          <el-carousel style="width:100%;height:100%;" arrow="never" autoplay indicator-position="none">
             <el-carousel-item v-for="(item, index) in loginimglist" :key="index">
               <div
                   class="swiper-slide"
