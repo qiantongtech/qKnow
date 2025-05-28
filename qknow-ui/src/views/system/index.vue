@@ -118,7 +118,8 @@
                        @click="routeTo(item.path, item.query)">
                     <div class="image">
                       <div class="icon-background" :class="item.color">
-                        <i class="icon iconfont">&#xe6d6;</i>
+                        <svg-icon :icon-class="item.icon" class="icon"/>
+<!--                        <i class="icon iconfont">&#xe6d6;</i>-->
                       </div>
                     </div>
                     <div class="name">{{ item.name }}</div>
@@ -188,12 +189,14 @@ const entranceList = [
     path: '/kmc/kmcDocument',
     query: {},
     perm: ['kmcDocument:kmcDocument:document:list'],
+    icon: '知识中心',
     color: 'color-primary'
   },
   {
     name: '非结构化抽取',
     path: '/ext/unstructTask',
     query: {},
+    icon: '知识抽取',
     perm: ['ext:extUnstructTask:unstructtask:list'],
     color: 'color-pale-blue'
   },
@@ -201,6 +204,7 @@ const entranceList = [
     name: '结构化抽取',
     path: '/ext/extStructTask',
     query: {},
+    icon: '知识推理',
     perm: ['ext:extStructTask:struct:list'],
     color: 'color-orange'
   },
@@ -208,6 +212,7 @@ const entranceList = [
     name: '图谱探索',
     path: '/app/graphExploration',
     query: {},
+    icon: '知识应用',
     perm: [''],
     color: 'color-pink'
   }
@@ -276,7 +281,7 @@ async function routeTo(link, query = {}) {
       try {
         await router.push({ path: link, query });
         // 跳转成功后再刷新
-        window.location.reload();
+        // window.location.reload();
       } catch (err) {
         console.error('路由跳转失败:', err);
       }
@@ -1270,7 +1275,7 @@ onMounted(() => {
 
     .all-entrance {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
 
       .entrance-item {
         padding: 7px;
@@ -1292,6 +1297,9 @@ onMounted(() => {
             height: 40px;
             border-radius: 6px;
             position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
           }
 
           // 图标
