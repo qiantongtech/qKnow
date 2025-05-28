@@ -7,7 +7,7 @@ logging:
   level:
     org:
       neo4j:
-#        driver: DEBUG
+      #        driver: DEBUG
       springframework:
         data:
           neo4j: DEBUG
