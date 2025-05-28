@@ -682,7 +682,7 @@ function handleDownload(row) {
   if (row.path === '') {
     proxy.$modal.msgError("没有文件");
   } else {
-    let path = 'http://127.0.0.1:8090/profile' + row.path;
+    let path = import.meta.env.VITE_APP_BASE_API + '/profile' + row.path;
     fetch(path) // 使用 fetch 获取文件数据
         .then(response => response.blob()) // 将文件数据转换为 Blob
         .then(blob => {
@@ -706,7 +706,7 @@ function previewRefactoring(row) {
   let fileExt = fileName.split('.').pop().toLowerCase();
   fileExt = fileExt.trim();
   const allowedExtensions = ['pdf','docx', 'xls','xlsx','csv'];
-  let path = 'http://127.0.0.1:8090/profile' + row.path;
+  let path = import.meta.env.VITE_APP_BASE_API + '/profile' + row.path;
   if (!allowedExtensions.includes(fileExt)) {
     const supportedFormats = allowedExtensions.join('、');
     proxy.$modal.msgWarning(`当前仅支持以下格式文件预览：${supportedFormats}`);
