@@ -1390,7 +1390,7 @@ function previewRefactoring(row) {
     .gragh-container {
       width: 100%;
       height: 100%;
-      background: #fff url("@/assets/ke/images/bg.jpg") no-repeat;
+      background: #fff url("@/assets/ke/images/bg1.png") no-repeat;
       background-size: 100% 100%;
       transition: width 0.3s;
       &.detailShow {

@@ -196,13 +196,13 @@
           </a>
         </div>
         <div class="bottom-info">
-          <div class="copy-right" @click="goPage()">
-            <!--            Copyright© 2023 江苏千桐科技有限公司 版权所有-->
-            {{ contentDetail && contentDetail.copyright ? contentDetail.copyright : `Copyright© ${parseTime(new Date(), "{y}")} 江苏千桐科技有限公司 版权所有` }}
-          </div>
-          <div class="record" @click="goKtPage()">
-            <img src="https://www.asktempo.com/statics/images/an.png" alt=""/>
-            <!--            &nbsp;&nbsp; 苏ICP备2022008519号-3-->
+          <div class="copy-right">
+                        Copyright© 2025 <a href="https://qiantong.tech" target="_blank">江苏千桐科技有限公司</a> 版权所有
+            <!-- {{ contentDetail && contentDetail.copyright ? contentDetail.copyright : `Copyright© ${parseTime(new Date(), "{y}")} 江苏千桐科技有限公司 版权所有` }}-->
+           </div>
+           <div class="record" @click="goKtPage()">
+             <img src="https://www.asktempo.com/statics/images/an.png" alt=""/>
+             <!--            &nbsp;&nbsp; 苏ICP备2022008519号-3-->
             &nbsp;&nbsp;
             {{ contentDetail && contentDetail.recordNumber ? contentDetail.recordNumber : '苏ICP备2022008519号-3' }}
           </div>
@@ -317,7 +317,7 @@ const fpForm = ref({
 // ])
 const defaltImglist = ref([
   {id: 1, image: new URL('@/assets/system/images/login/banner.png', import.meta.url).href},
-  {id: 4, image: new URL('@/assets/system/images/login/banner-sl.png', import.meta.url).href}
+  // {id: 4, image: new URL('@/assets/system/images/login/banner-sl.png', import.meta.url).href}
 ])
 const loginimglist = ref([]);
 
