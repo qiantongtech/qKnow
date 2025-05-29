@@ -6,14 +6,14 @@
 
 在运行系统之前，请确保您已安装以下环境：
 
-|                                                         软件/工具                                                         |   版本要求   | 推荐版本  |
-|:---------------------------------------------------------------------------------------------------------------------:|:--------:|:-----:|
-|              <img src="https://img.icons8.com/color/48/000000/java-coffee-cup-logo.png" width="24"/> JDK              |  >= 1.8  |  1.8  |
-|                  <img src="https://img.icons8.com/color/48/000000/mysql-logo.png" width="24"/> MySQL                  | >= 5.7.0 |  5.7  |
-| <img src="https://dist.neo4j.com/wp-content/uploads/20230926084108/Logo_FullColor_RGB_TransBG.svg" width="24"/> Neo4j | >= 3.4.5 | 3.4.5 |
-|                    <img src="https://img.icons8.com/color/48/000000/redis.png" width="24"/> Redis                     |  >= 3.0  |  3.0  |
-|               <img src="https://img.icons8.com/?size=100&id=jfjmkTUFX5Vf&format=png" width="24"/> Maven               |  >= 3.0  |  3.0  |
-|                   <img src="https://img.icons8.com/color/48/000000/nodejs.png" width="24"/> Node.js                   |  >= 12   |  12   |
+|                                                         软件/工具                                                         |   版本要求   |  推荐版本  |
+|:---------------------------------------------------------------------------------------------------------------------:|:--------:|:------:|
+|              <img src="https://img.icons8.com/color/48/000000/java-coffee-cup-logo.png" width="24"/> JDK              |  >= 1.8  |  1.8   |
+|                  <img src="https://img.icons8.com/color/48/000000/mysql-logo.png" width="24"/> MySQL                  | >= 5.7.0 |  5.7   |
+| <img src="https://dist.neo4j.com/wp-content/uploads/20230926084108/Logo_FullColor_RGB_TransBG.svg" width="24"/> Neo4j |    4.x   | 4.4.40 |
+|                    <img src="https://img.icons8.com/color/48/000000/redis.png" width="24"/> Redis                     |  >= 5.0  |  5.0   |
+|               <img src="https://img.icons8.com/?size=100&id=jfjmkTUFX5Vf&format=png" width="24"/> Maven               |  >= 3.6  |  3.6   |
+|                   <img src="https://img.icons8.com/color/48/000000/nodejs.png" width="24"/> Node.js                   |  >= 16   |   16   |
 
 > **提示**: 前端安装完 `Node.js` 后，建议设置淘宝镜像源以提升依赖包下载速度。不推荐使用 `cnpm`，可能会引入一些不可预知的问题。
 >
