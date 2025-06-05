@@ -54,7 +54,7 @@ export default defineConfig(({ mode, command }) => {
           rewrite: (p) => p.replace(/^\/dev-api/, ""),
         },
         "/v3/api-docs": {
-          target: "http://localhost:8080",
+          target: "http://localhost:8090",
           changeOrigin: true,
           rewrite: (p) => p.replace("", ""),
         },
