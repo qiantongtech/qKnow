@@ -3,7 +3,7 @@
  <img src="https://img.shields.io/badge/JDK-1.8+-brightgreen.svg" alt="JDK">
  <img src="https://img.shields.io/badge/Spring%20Boot-2.5.15-blue.svg" alt="Downloads">
  <img src="https://img.shields.io/badge/Vue-3.4.31-blue.svg" alt="Downloads">
- <img src="https://img.shields.io/github/license/qiantongtech/qKnow" alt=""/>
+ <img src="https://img.shields.io/badge/license-Apache--2.0-green"/>
  <img src="https://img.shields.io/badge/qKnow-v1.0.0-blue.svg" alt=""/>
  <img src="https://gitee.com/qiantongtech/qKnow/badge/star.svg" alt=""/>
  <img src="https://img.shields.io/github/stars/qiantongtech/qKnow?label=Github%20Stars" alt=""/>
