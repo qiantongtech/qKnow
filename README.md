@@ -19,6 +19,8 @@
 
 ✨✨✨**演示地址**✨✨✨ <a href="https://qknow-demo.qiantong.tech" target="_blank">点击跳转</a> ，账号：qKnow 密码：qKnow123
 
+✨✨✨**演示视频**✨✨✨ <a href="https://www.bilibili.com/video/BV1s6TszmEnF" target="_blank">https://www.bilibili.com/video/BV1s6TszmEnF</a> 
+
 ## 🍱 使用场景
 - 企业内部知识管理：技术文档库、员工手册、项目文档等。
 - 客户服务支持：在线客服、帮助中心、FAQ等。
