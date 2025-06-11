@@ -238,6 +238,13 @@ docker exec dabea2a436b6 python -u predict.py "text='$TEXT'"
 
 > **注意**: 仅启动后端服务不会显示静态页面，请继续部署前端服务。
 
+> **Tips**: 如果提示缺少依赖包aspose-words-java、aspose-cells-java时，需要将项目根目录下lib文件夹中的两个jar包引入，在项目根目录下运行如下两行代码：
+ 
+```
+mvn install:install-file -Dfile=lib/aspose-cells-21.8.cracked.jar  -DgroupId=com.aspose-cells  -DartifactId=aspose-cells-java -Dversion=21.8 -Dpackaging=jar
+mvn install:install-file -Dfile=lib/aspose-words-15.8.0-jdk16.jar  -DgroupId=com.aspose-words  -DartifactId=aspose-words-java -Dversion=15.8.0 -Dpackaging=jar
+```
+
 ---
 
 ## 七、前端运行 <small>（启动前端服务）</small>
