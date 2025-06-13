@@ -155,45 +155,105 @@ server:
 
 当前开源版本采用 [**开源中文知识图谱抽取框架开箱即用特别版DeepKE-cnSchema**](https://github.com/zjunlp/DeepKE/blob/main/README_CNSCHEMA_CN.md) 作为知识抽取工具。请参考官方文档进行安装，推荐使用 Docker 安装。
 
-#### <span style="color:#4CAF50">1、根据需要修改抽取实体类型配置（需进入docker容器内修改） </span>
-配置文件路径：`DeepKE/example/ner/standard/conf/train.yaml`
+> **Tips**：我们基于DeepKE源码做了一些二开。如果你不想修改DeepKE源码，直接跳过当前步骤，可以到我们的交流群里，群文件中有已经修改好的镜像。下载后解压缩，直接使用docker命令加载镜像：`docker load -i deepke.tar` 
+
+#### <span style="color:#4CAF50">1、进入docker容器，替换容器内predict.py文件</span>
+docker容器内路径：`DeepKE/example/triple/cnschema/predict.py`
+替换文件：`qKnow/bin/DeepKE/predict.py`
+
+#### <span style="color:#4CAF50">2、进入docker容器，替换容器内predict.yaml文件，并修改其中配置</span>
+docker容器内路径：`DeepKE/example/triple/cnschema/conf/predict.yaml`
+替换文件：`qKnow/bin/DeepKE/predict.yaml`
 
 ```yaml
-adam_epsilon: 1e-8
-data_dir: "data"
-do_eval: True
-do_train: True
-eval_batch_size: 8
-eval_on: "dev"
-gpu_id: 0
-gradient_accumulation_steps: 1
-learning_rate: 1e-3            # tips：set 2e-5 for BERT with recommended datasets
-num_train_epochs: 3            # the number of training epochs
-output_dir: "checkpoints"
-seed: 42
-train_batch_size: 128
-use_gpu: True                # use gpu or not
-warmup_proportion: 0.1
-weight_decay: 0.01
+text: 歌曲《人生长路》出自刘德华国语专辑《男人的爱》，由李泉作词作曲，2001年出行发版。
+nerfp: 你的NER模型地址
+refp: 你的RE模型地址
 
-# For StepLR Optimizer
-lr_step : 5
-lr_gamma : 0.8
-beta1: 0.9
-beta2: 0.999
-
-# 此处可修改抽取的实体类型
-labels: ['LOC','ORG','PER']
-# labels: ['YAS','TOJ', 'NGS', 'QCV', 'OKB', 'BQF', 'CAR', 'ZFM', 'EMT', 'UER', 'QEE', 'UFT', 'GJS', 'SVA', 'ANO', 'KEJ', 'ZDI', 'CAT', 'GCK', 'FQK', 'BAK', 'RET', 'QZP', 'QAQ', 'ZRE', 'TDZ', 'CVC', 'PMN']
-
-use_multi_gpu: False
+lm_file: 你的NER模型地址
+num_hidden_layers: 1
+type_rnn: LSTM
+input_size: 768
+hidden_size: 100
+num_layers: 1
+dropout: 0.3
+bidirectional: true
+last_layer_hn: true
 ```
 
-> **注意**: 实体类型配置请参考以下DeepKE官网文档提供的类型，若需抽取其他类型，需重新训练模型。训练方式请参考 [DeepKE 官方文档](https://github.com/zjunlp/DeepKE/blob/main/README_CNSCHEMA_CN.md#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9E%8B)。
+> 其中NER模型地址、RE模型地址，可在DeepKE提供的链接中进行下载。
+> - [**NER模型下载**](https://drive.google.com/drive/folders/1zA8Ichx9nzU3GD92ptdyR_nmARB_7ovg)
+> - [**RE模型下载**](https://drive.google.com/drive/folders/1wb_QIZduKDwrHeri0s5byibsSQrrJTEv)
+
+[//]: # (#### <span style="color:#4CAF50">3、根据需要修改抽取实体类型配置（需进入docker容器内修改） </span>)
+
+[//]: # (配置文件路径：`DeepKE/example/ner/standard/conf/train.yaml`)
+
+[//]: # ()
+[//]: # (```yaml)
+
+[//]: # (adam_epsilon: 1e-8)
+
+[//]: # (data_dir: "data")
+
+[//]: # (do_eval: True)
+
+[//]: # (do_train: True)
+
+[//]: # (eval_batch_size: 8)
+
+[//]: # (eval_on: "dev")
+
+[//]: # (gpu_id: 0)
+
+[//]: # (gradient_accumulation_steps: 1)
+
+[//]: # (learning_rate: 1e-3            # tips：set 2e-5 for BERT with recommended datasets)
+
+[//]: # (num_train_epochs: 3            # the number of training epochs)
+
+[//]: # (output_dir: "checkpoints")
+
+[//]: # (seed: 42)
+
+[//]: # (train_batch_size: 128)
+
+[//]: # (use_gpu: True                # use gpu or not)
+
+[//]: # (warmup_proportion: 0.1)
+
+[//]: # (weight_decay: 0.01)
+
+[//]: # ()
+[//]: # (# For StepLR Optimizer)
+
+[//]: # (lr_step : 5)
+
+[//]: # (lr_gamma : 0.8)
+
+[//]: # (beta1: 0.9)
+
+[//]: # (beta2: 0.999)
+
+[//]: # ()
+[//]: # (# 此处可修改抽取的实体类型)
+
+[//]: # (labels: ['LOC','ORG','PER'])
+
+[//]: # (# labels: ['YAS','TOJ', 'NGS', 'QCV', 'OKB', 'BQF', 'CAR', 'ZFM', 'EMT', 'UER', 'QEE', 'UFT', 'GJS', 'SVA', 'ANO', 'KEJ', 'ZDI', 'CAT', 'GCK', 'FQK', 'BAK', 'RET', 'QZP', 'QAQ', 'ZRE', 'TDZ', 'CVC', 'PMN'])
+
+[//]: # ()
+[//]: # (use_multi_gpu: False)
+
+[//]: # (```)
+
+
+> **注意**：实体类型配置请参考以下DeepKE官网文档提供的类型，若需抽取其他类型，需重新训练模型。训练方式请参考 [DeepKE 官方文档](https://github.com/zjunlp/DeepKE/blob/main/README_CNSCHEMA_CN.md#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9E%8B)。
+
 
 ![extEntityType.png](.gitee/extEntityType.png)
 
-#### <span style="color:#4CAF50">2、修改 DeepKE 执行脚本中的 **docker容器id** </span>
+#### <span style="color:#4CAF50">3、修改 DeepKE 执行脚本中的 **docker容器id** </span>
 
 路径：`qKnow/bin/DeepKE/start.sh`
 
