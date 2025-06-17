@@ -1,13 +1,16 @@
 <template>
-  <div class="sidebar-logo-container" :class="{ 'collapse': collapse }" :style="{ backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground }">
+  <div class="sidebar-logo-container" :class="{ 'collapse': collapse }"
+    :style="{ backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground }">
     <transition name="sidebarLogoFade">
       <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
-<!--        <img v-if="logo" :src="simpLogo" class="sidebar-logo" />-->
+        <!--        <img v-if="logo" :src="simpLogo" class="sidebar-logo" />-->
         <img v-if="logo" :src="refSimpLogo" class="sidebar-logo" />
-        <h1 v-else class="sidebar-title" :style="{ color: sideTheme === 'theme-dark' ? variables.logoTitleColor : variables.logoLightTitleColor }">{{ title }}</h1>
+        <h1 v-else class="sidebar-title"
+          :style="{ color: sideTheme === 'theme-dark' ? variables.logoTitleColor : variables.logoLightTitleColor }">{{
+            title }}</h1>
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-<!--        <img v-if="logo" :src="logo" class="sidebar-logo" />-->
+        <!--        <img v-if="logo" :src="logo" class="sidebar-logo" />-->
         <img v-if="logo" :src="refLogo" class="sidebar-logo" />
       </router-link>
     </transition>
@@ -17,7 +20,7 @@
 <script setup>
 import variables from '@/assets/system/styles/variables.module.scss'
 import logo from '@/assets/system/logo/logo.png'
-import  simpLogo from '@/assets/system/logo/simpLogo.png'
+import simpLogo from '@/assets/system/logo/simpLogo.png'
 import useSettingsStore from '@/store/system/settings'
 import { getContent } from "@/api/system/system/content";
 
@@ -39,7 +42,7 @@ const fetchContent = async () => {
   try {
     // 调用你从 API 导入的 getContent 方法
     const res = await getContent(1);  // 假设请求的是 id 为 1 的数据
-    if(res.code == 200){
+    if (res.code == 200) {
       const data = res.data
       const sysLogo = data.logo
       refLogo.value = sysLogo ? sysLogo : logo;
@@ -82,10 +85,11 @@ const sideTheme = computed(() => settingsStore.sideTheme);
     width: 100%;
 
     & .sidebar-logo {
-      height: 60px;
-      margin-top: 4px;
+      height: 48px;
+      margin-top: 8px;
       vertical-align: middle;
-      margin-right: 12px;
+      transform: scale(0.58);
+      margin-left: -32px;
     }
 
     & .sidebar-title {
@@ -103,8 +107,9 @@ const sideTheme = computed(() => settingsStore.sideTheme);
   &.collapse {
     .sidebar-logo {
       height: 40px;
-      margin-top: 10px;
+      margin-top: 0px;
       margin-right: 0px;
+      margin-left: -4px;
     }
   }
 }

@@ -1,7 +1,7 @@
 {
   "name": "qknow",
   "version": "3.8.8",
-  "description": "千知平台",
+  "description": "qKnow开源知识平台",
   "author": "qknow",
   "license": "MIT",
   "type": "module",
