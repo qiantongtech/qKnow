@@ -12,10 +12,7 @@
 
           <el-carousel style="width:100%;height:100%;" arrow="never" autoplay indicator-position="none">
             <el-carousel-item v-for="(item, index) in loginimglist" :key="index">
-              <div
-                  class="swiper-slide"
-                  :style="getBackgroundStyle(item)"
-              ></div>
+              <div class="swiper-slide" :style="getBackgroundStyle(item)"></div>
             </el-carousel-item>
           </el-carousel>
         </div>
@@ -24,7 +21,7 @@
     </div>
     <div class="right-content">
       <div class="logo">
-        <img :src="logo"/>
+        <img :src="logo" />
       </div>
       <div>
         <div class="greeting">
@@ -34,63 +31,41 @@
           </div>
         </div>
         <div class="login-panel">
-          <el-form
-              ref="loginRef" :model="loginForm" :rules="loginRules"
-          >
+          <el-form ref="loginRef" :model="loginForm" :rules="loginRules">
             <p class="titles">
               <el-text type="primary" class="titles">账号登录</el-text>
             </p>
 
             <div class="titles-bar"></div>
             <el-form-item prop="username">
-              <el-input
-                  v-model="loginForm.username"
-                  type="text"
-                  auto-complete="off"
-                  placeholder="账号"
-              >
+              <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号">
                 <template #prefix>
                   <i class="iconfont">&#xeb44;</i>
                 </template>
               </el-input>
             </el-form-item>
             <el-form-item prop="password">
-              <el-input
-                  v-model="loginForm.password"
-                  type="password"
-                  auto-complete="off"
-                  placeholder="密码"
-                  @keyup.enter="handleLogin"
-              >
+              <el-input v-model="loginForm.password" type="password" auto-complete="off" placeholder="密码"
+                @keyup.enter="handleLogin">
                 <template #prefix>
                   <i class="iconfont">&#xeb6f;</i>
                 </template>
               </el-input>
             </el-form-item>
             <el-form-item prop="code" v-if="captchaEnabled">
-              <el-input
-                  v-model="loginForm.code"
-                  auto-complete="off"
-                  placeholder="验证码"
-                  class="code-class"
-                  @keyup.enter.native="handleLogin"
-              >
+              <el-input v-model="loginForm.code" auto-complete="off" placeholder="验证码" class="code-class"
+                @keyup.enter.native="handleLogin">
                 <template #prefix>
                   <i class="iconfont">&#xeb4a;</i>
                 </template>
               </el-input>
               <div class="login-code">
-                <img :src="codeUrl" @click="getCode" class="login-code-img"/>
+                <img :src="codeUrl" @click="getCode" class="login-code-img" />
               </div>
             </el-form-item>
 
             <el-form-item style="width: 100%">
-              <el-button
-                  :loading="loading"
-                  type="primary"
-                  style="width: 100%"
-                  @click.native.prevent="handleLogin"
-              >
+              <el-button :loading="loading" type="primary" style="width: 100%" @click.native.prevent="handleLogin">
                 <span v-if="!loading">登 录</span>
                 <span v-else>登 录 中...</span>
               </el-button>
@@ -106,7 +81,7 @@
       <div>
         <div class="description">
           <div class="contact" style="float: left">
-<!--            <img src="@/assets/system/images/login/phone.png"/>-->
+            <!--            <img src="@/assets/system/images/login/phone.png"/>-->
             <div class="contact-img">
               <i class="iconfont icon-dianhua-xianxing"></i>
             </div>
@@ -117,7 +92,7 @@
             </div>
           </div>
           <div class="contact" style="padding-left: 24px">
-<!--            <img src="@/assets/system/images/login/email.png"/>-->
+            <!--            <img src="@/assets/system/images/login/email.png"/>-->
             <div class="contact-img">
               <i class="iconfont icon-youjian-xianxing"></i>
             </div>
@@ -129,80 +104,56 @@
           </div>
         </div>
         <div class="chrome-wrap">
-          <img
-              src="@/assets/system/images/login/goge-icon.png"
-              style="height: 20px"
-          />
-          <span
-              style="
+          <img src="@/assets/system/images/login/goge-icon.png" style="height: 20px" />
+          <span style="
               color: #888;
               font-size: 12px;
               line-height: 0;
               margin-left: 10px;
-            "
-          >为保证最佳浏览效果，请使用</span>
+            ">为保证最佳浏览效果，请使用</span>
           <span style="color: #ee2223; font-size: 12px; line-height: 0">Chrome</span>
           <span style="color: #888; font-size: 12px; line-height: 0">浏览器，点击下载安装</span>
-          <a
-              href="https://www.google.cn/chrome/"
-              target="_blank"
-          >
-            <div
-                style="
+          <a href="https://www.google.cn/chrome/" target="_blank">
+            <div style="
                 margin-left: 15px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-              "
-            >
-              <img
-                  id="window_img"
-                  src="@/assets/system/images/login/window-icon.svg"
-                  style="height: 25px"
-              />
-              <span
-                  style="
+              ">
+              <img id="window_img" src="@/assets/system/images/login/window-icon.svg" style="height: 25px" />
+              <span style="
                   color: #888;
                   font-size: 12px;
                   line-height: 0;
                   margin-top: 7px;
-                "
-              >Window</span>
+                ">Window</span>
             </div>
           </a>
           <a href="https://www.google.cn/chrome/" target="_blank">
-            <div
-                style="
+            <div style="
                 margin-left: 15px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-              "
-            >
-              <img
-                  id="mac_img"
-                  src="@/assets/system/images/login/mac-icon.svg"
-                  style="height: 25px"
-              />
-              <span
-                  style="
+              ">
+              <img id="mac_img" src="@/assets/system/images/login/mac-icon.svg" style="height: 25px" />
+              <span style="
                   color: #888;
                   font-size: 12px;
                   line-height: 0;
                   margin-top: 7px;
-                "
-              >Mac</span>
+                ">Mac</span>
             </div>
           </a>
         </div>
         <div class="bottom-info">
           <div class="copy-right">
-                        Copyright© 2025 <a href="https://qiantong.tech" target="_blank">江苏千桐科技有限公司</a> 版权所有
+            Copyright© 2025 <a href="https://qiantong.tech" target="_blank">江苏千桐科技有限公司</a> 版权所有
             <!-- {{ contentDetail && contentDetail.copyright ? contentDetail.copyright : `Copyright© ${parseTime(new Date(), "{y}")} 江苏千桐科技有限公司 版权所有` }}-->
-           </div>
-           <div class="record" @click="goKtPage()">
-             <img src="https://www.asktempo.com/statics/images/an.png" alt=""/>
-             <!--            &nbsp;&nbsp; 苏ICP备2022008519号-3-->
+          </div>
+          <div class="record" @click="goKtPage()">
+            <img src="https://www.asktempo.com/statics/images/an.png" alt="" />
+            <!--            &nbsp;&nbsp; 苏ICP备2022008519号-3-->
             &nbsp;&nbsp;
             {{ contentDetail && contentDetail.recordNumber ? contentDetail.recordNumber : '苏ICP备2022008519号-3' }}
           </div>
@@ -211,26 +162,19 @@
     </div>
   </div>
 
-  <el-dialog
-      v-model="dialogVisible"
-      title="忘记密码"
-      class="fp-form-dialog"
-      width="650px"
-      :append-to="$refs['app-container']"
-      draggable
-      destroy-on-close
-  >
+  <el-dialog v-model="dialogVisible" title="忘记密码" class="fp-form-dialog" width="650px"
+    :append-to="$refs['app-container']" draggable destroy-on-close>
     <el-form :model="fpForm" label-width="auto" style="padding: 10px 60px 0;">
       <el-row :gutter="20">
         <el-col :span="24">
           <el-form-item label="用户名">
-            <el-input v-model="fpForm.name" placeholder="请输入手机号或用户名"/>
+            <el-input v-model="fpForm.name" placeholder="请输入手机号或用户名" />
           </el-form-item>
         </el-col>
         <el-col :span="24">
           <el-form-item label="验证码">
             <div class="wrapper">
-              <el-input v-model="fpForm.code" placeholder="请输入验证码"/>
+              <el-input v-model="fpForm.code" placeholder="请输入验证码" />
               <el-button type="primary" :disabled="codeFlag" style="margin-left: 10px;" @click="handleFPCodeClick">
                 {{ codeFlag ? `${codeTime}s` : '获取验证码' }}
               </el-button>
@@ -239,12 +183,12 @@
         </el-col>
         <el-col :span="24">
           <el-form-item label="新密码">
-            <el-input v-model="fpForm.password" placeholder="请输入新密码"/>
+            <el-input v-model="fpForm.password" placeholder="请输入新密码" />
           </el-form-item>
         </el-col>
         <el-col :span="24">
           <el-form-item label="确认密码">
-            <el-input v-model="fpForm.password2" placeholder="请输入确认密码"/>
+            <el-input v-model="fpForm.password2" placeholder="请输入确认密码" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -261,14 +205,14 @@
 </template>
 
 <script setup>
-import {ref} from "vue";
-import {getCodeImg} from "@/api/system/login";
+import { ref } from "vue";
+import { getCodeImg } from "@/api/system/login";
 import Cookies from "js-cookie";
-import {encrypt, decrypt} from "@/utils/jsencrypt";
+import { encrypt, decrypt } from "@/utils/jsencrypt";
 import Swiper from "swiper";
 import "swiper/swiper-bundle.min.css";
 import useUserStore from '@/store/system/user.js'
-import {getContent} from "@/api/system/system/content";
+import { getContent } from "@/api/system/system/content";
 import defaultLogo from '@/assets/system/images/login/logo.png';
 // 使用 import 直接引入图片路径
 import banner1 from '@/assets/system/images/login/banner.png';
@@ -278,7 +222,7 @@ import banner4 from '@/assets/system/images/login/banner-sl.png';
 
 const userStore = useUserStore();
 const dialogVisible = ref(false);
-const {proxy} = getCurrentInstance();
+const { proxy } = getCurrentInstance();
 const loading = ref(false);
 const codeUrl = ref("");
 const greetingsTitle = ref("");
@@ -316,7 +260,7 @@ const fpForm = ref({
 //   }
 // ])
 const defaltImglist = ref([
-  {id: 1, image: new URL('@/assets/system/images/login/banner.png', import.meta.url).href},
+  { id: 1, image: new URL('@/assets/system/images/login/banner.png', import.meta.url).href },
   // {id: 4, image: new URL('@/assets/system/images/login/banner-sl.png', import.meta.url).href}
 ])
 const loginimglist = ref([]);
@@ -332,9 +276,9 @@ const getAssetsFile = (url) => {
 }
 
 const loginRules = {
-  username: [{required: true, trigger: "blur", message: "请输入您的账号"}],
-  password: [{required: true, trigger: "blur", message: "请输入您的密码"}],
-  code: [{required: true, trigger: "change", message: "请输入验证码"}]
+  username: [{ required: true, trigger: "blur", message: "请输入您的账号" }],
+  password: [{ required: true, trigger: "blur", message: "请输入您的密码" }],
+  code: [{ required: true, trigger: "change", message: "请输入验证码" }]
 };
 
 const logo = ref(null)
@@ -432,9 +376,9 @@ function handleLogin() {
       loading.value = true;
       // 勾选了需要记住密码设置在 cookie 中设置记住用户名和密码
       if (loginForm.value.rememberMe) {
-        Cookies.set("username", loginForm.value.username, {expires: 30});
-        Cookies.set("password", encrypt(loginForm.value.password), {expires: 30});
-        Cookies.set("rememberMe", loginForm.value.rememberMe, {expires: 30});
+        Cookies.set("username", loginForm.value.username, { expires: 30 });
+        Cookies.set("password", encrypt(loginForm.value.password), { expires: 30 });
+        Cookies.set("rememberMe", loginForm.value.rememberMe, { expires: 30 });
       } else {
         // 否则移除
         Cookies.remove("username");
@@ -521,6 +465,8 @@ function goKtPage() {
       height: 100%;
     }
   }
+
+  .swiper-slide {}
 
   /*  .swiper-slide-1{
       background: url(@/assets/system/images/login/banner.png) center center / cover no-repeat;
@@ -667,8 +613,8 @@ function goKtPage() {
     justify-content: space-between;
 
     .logo {
-      width: 300px;
-      height: 75px;
+      width: 100px;
+      height: 33px;
       margin-left: 20%;
 
       img {
@@ -701,7 +647,7 @@ function goKtPage() {
       width: 400px;
       height: 400px;
       box-shadow: -22px -22px 44px 0px rgba(255, 255, 255, 1),
-      22px 22px 44px 0px rgba(217, 217, 217, 1);
+        22px 22px 44px 0px rgba(217, 217, 217, 1);
       border-radius: 8px;
       padding: 0 38px;
       position: relative;
@@ -758,6 +704,7 @@ function goKtPage() {
           height: 32px;
           margin-right: 16px;
         }
+
         p {
           height: 20px;
           line-height: 20px;
@@ -774,6 +721,7 @@ function goKtPage() {
         }
       }
     }
+
     .contact-img {
       margin-right: 16px;
       display: flex;
@@ -785,6 +733,7 @@ function goKtPage() {
       color: #ffffff;
       background-color: var(--el-color-primary);
     }
+
     .chrome-wrap {
       display: flex;
       margin-left: 15%;
@@ -815,14 +764,11 @@ function goKtPage() {
 }
 </style>
 <style lang="scss" scoped>
-@media screen and (max-width: 1280px) {
-}
+@media screen and (max-width: 1280px) {}
 
-@media screen and (max-width: 992px) {
-}
+@media screen and (max-width: 992px) {}
 
-@media screen and (max-width: 768px) {
-}
+@media screen and (max-width: 768px) {}
 
 @media screen and (max-width: 576px) {
   .login-two {

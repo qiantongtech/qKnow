@@ -1,6 +1,7 @@
 <template>
   <!-- 页面内容 -->
-  <el-watermark style="position: ''" v-if="watermarkText" :font="config.font" :content="watermarkText" :gap="[200, 150]" :width="120" :height="80">
+  <el-watermark style="position: ''" v-if="watermarkText" :font="config.font" :content="watermarkText" :gap="[200, 150]"
+    :width="120" :height="80">
     <router-view />
   </el-watermark>
   <router-view v-else />
@@ -45,7 +46,7 @@ const createIco = () => {
   let link = document.querySelector("link[rel*='icon']") || document.createElement("link");
   link.type = "image/x-icon";
   link.rel = "shortcut icon";
-  link.href = '/sso-favicon.ico';
+  link.href = '/sso-favicon.png';
   document.getElementsByTagName("head")[0].appendChild(link);
 };
 </script>
