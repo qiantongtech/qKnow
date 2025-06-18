@@ -147,10 +147,10 @@ public class ExtUnstructTaskController extends BaseController {
         structTaskDO.setPublishStatus(1);
         structTaskDO.setPublishTime(new Date());
         structTaskDO.setPublisherId(getUserId());
-        structTaskDO.setPublishBy(getUsername());
+        structTaskDO.setPublishBy(getNickName());
         structTaskDO.setUpdateTime(new Date());
         structTaskDO.setUpdaterId(getUserId());
-        structTaskDO.setUpdateBy(getUsername());
+        structTaskDO.setUpdateBy(getNickName());
         return extUnstructTaskService.releaseByTaskId(structTaskDO);
     }
 
@@ -167,10 +167,10 @@ public class ExtUnstructTaskController extends BaseController {
         unstructTaskById.setPublishStatus(0);
         unstructTaskById.setPublishTime(new Date());
         unstructTaskById.setPublisherId(getUserId());
-        unstructTaskById.setPublishBy(getUsername());
+        unstructTaskById.setPublishBy(getNickName());
         unstructTaskById.setUpdateTime(new Date());
         unstructTaskById.setUpdaterId(getUserId());
-        unstructTaskById.setUpdateBy(getUsername());
+        unstructTaskById.setUpdateBy(getNickName());
         return extUnstructTaskService.cancelReleaseByTaskId(unstructTaskById);
     }
 

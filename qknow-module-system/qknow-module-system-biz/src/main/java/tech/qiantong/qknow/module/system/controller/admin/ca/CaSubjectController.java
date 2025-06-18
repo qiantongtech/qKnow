@@ -111,7 +111,7 @@ public class CaSubjectController extends BaseController
         caSubject.setCertificate(Constants.RESOURCE_PREFIX + "/" + cert.getPath() + cert.getFilename());
         caSubject.setPrivateKey(Constants.RESOURCE_PREFIX + "/" + privateKey.getPath() + privateKey.getFilename());
         caSubject.setCreatorId(getUserId());
-        caSubject.setCreateBy(getUsername());
+        caSubject.setCreateBy(getNickName());
         return toAjax(caSubjectService.insertCaSubject(caSubject));
     }
 
