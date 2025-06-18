@@ -116,10 +116,10 @@ public class ExtStructTaskController extends BaseController {
 //        structTaskDO.setPublishStatus(1);
 //        structTaskDO.setPublishTime(new Date());
 //        structTaskDO.setPublisherId(getUserId());
-//        structTaskDO.setPublishBy(getUsername());
+//        structTaskDO.setPublishBy(getNickName());
 //        structTaskDO.setUpdateTime(new Date());
 //        structTaskDO.setUpdaterId(getUserId());
-//        structTaskDO.setUpdateBy(getUsername());
+//        structTaskDO.setUpdateBy(getNickName());
 //        return extStructTaskService.releaseByTaskId(structTaskDO);
 //    }
 //
@@ -136,10 +136,10 @@ public class ExtStructTaskController extends BaseController {
 //        structTaskDO.setPublishStatus(0);
 //        structTaskDO.setPublishTime(new Date());
 //        structTaskDO.setPublisherId(getUserId());
-//        structTaskDO.setPublishBy(getUsername());
+//        structTaskDO.setPublishBy(getNickName());
 //        structTaskDO.setUpdateTime(new Date());
 //        structTaskDO.setUpdaterId(getUserId());
-//        structTaskDO.setUpdateBy(getUsername());
+//        structTaskDO.setUpdateBy(getNickName());
 //        return extStructTaskService.cancelReleaseByTaskId(structTaskDO);
 //    }
 //

@@ -85,7 +85,7 @@ public class SysNoticeController extends BaseController
         messagePageReqVO.setEntityType(Integer.valueOf(notice.getNoticeType()));
         messagePageReqVO.setCreateTime(new Date());
         webSocketMessageServer.broadcastMessage(messagePageReqVO);
-        notice.setCreateBy(getUsername());
+        notice.setCreateBy(getNickName());
 
         return toAjax(noticeService.insertNotice(notice));
     }
@@ -98,7 +98,7 @@ public class SysNoticeController extends BaseController
     @PutMapping
     public AjaxResult edit(@Validated @RequestBody SysNotice notice)
     {
-        notice.setUpdateBy(getUsername());
+        notice.setUpdateBy(getNickName());
         MessagePageReqVO messagePageReqVO = new MessagePageReqVO();
         messagePageReqVO.setContent(notice.getNoticeContent());
         messagePageReqVO.setTitle(notice.getNoticeTitle());

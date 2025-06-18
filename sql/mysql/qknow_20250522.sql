@@ -248,12 +248,12 @@ insert into system_menu values('1052', '任务删除', '110', '4', '#', '', '', 
 insert into system_menu values('1053', '状态修改', '110', '5', '#', '', '', '', 1, 0, 'F', '0', '0', 'monitor:job:changeStatus',   '#', '小桐', sysdate(), '', null, '');
 insert into system_menu values('1054', '任务导出', '110', '6', '#', '', '', '', 1, 0, 'F', '0', '0', 'monitor:job:export',         '#', '小桐', sysdate(), '', null, '');
 -- 代码生成按钮
-insert into system_menu values('1055', '生成查询', '116', '1', '#', '', '', '', 1, 0, 'F', '0', '0', 'tool:gen:query',             '#', '小桐', sysdate(), '', null, '');
-insert into system_menu values('1056', '生成修改', '116', '2', '#', '', '', '', 1, 0, 'F', '0', '0', 'tool:gen:edit',              '#', '小桐', sysdate(), '', null, '');
-insert into system_menu values('1057', '生成删除', '116', '3', '#', '', '', '', 1, 0, 'F', '0', '0', 'tool:gen:remove',            '#', '小桐', sysdate(), '', null, '');
-insert into system_menu values('1058', '导入代码', '116', '4', '#', '', '', '', 1, 0, 'F', '0', '0', 'tool:gen:import',            '#', '小桐', sysdate(), '', null, '');
-insert into system_menu values('1059', '预览代码', '116', '5', '#', '', '', '', 1, 0, 'F', '0', '0', 'tool:gen:preview',           '#', '小桐', sysdate(), '', null, '');
-insert into system_menu values('1060', '生成代码', '116', '6', '#', '', '', '', 1, 0, 'F', '0', '0', 'tool:gen:code',              '#', '小桐', sysdate(), '', null, '');
+insert into system_menu values('1055', '生成查询', '114', '1', '#', '', '', '', 1, 0, 'F', '0', '0', 'tool:gen:query',             '#', '小桐', sysdate(), '', null, '');
+insert into system_menu values('1056', '生成修改', '114', '2', '#', '', '', '', 1, 0, 'F', '0', '0', 'tool:gen:edit',              '#', '小桐', sysdate(), '', null, '');
+insert into system_menu values('1057', '生成删除', '114', '3', '#', '', '', '', 1, 0, 'F', '0', '0', 'tool:gen:remove',            '#', '小桐', sysdate(), '', null, '');
+insert into system_menu values('1058', '导入代码', '114', '4', '#', '', '', '', 1, 0, 'F', '0', '0', 'tool:gen:import',            '#', '小桐', sysdate(), '', null, '');
+insert into system_menu values('1059', '预览代码', '114', '5', '#', '', '', '', 1, 0, 'F', '0', '0', 'tool:gen:preview',           '#', '小桐', sysdate(), '', null, '');
+insert into system_menu values('1060', '生成代码', '114', '6', '#', '', '', '', 1, 0, 'F', '0', '0', 'tool:gen:code',              '#', '小桐', sysdate(), '', null, '');
 
 -- ----------------------------
 -- 业务数据

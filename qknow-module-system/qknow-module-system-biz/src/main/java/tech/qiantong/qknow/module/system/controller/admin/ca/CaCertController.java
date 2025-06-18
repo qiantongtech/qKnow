@@ -122,7 +122,7 @@ public class CaCertController extends BaseController
         caCert.setCertificate(Constants.RESOURCE_PREFIX + "/" + cert.getPath() + cert.getFilename());
         caCert.setPrivateKey(Constants.RESOURCE_PREFIX + "/" + privateKey.getPath() + privateKey.getFilename());
         caCert.setCreatorId(getUserId());
-        caCert.setCreateBy(getUsername());
+        caCert.setCreateBy(getNickName());
         return toAjax(caCertService.insertCaCert(caCert));
     }
 
