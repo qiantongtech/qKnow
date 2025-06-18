@@ -3,6 +3,7 @@ package tech.qiantong.qknow.module.ext.service.extStructTask.impl;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.neo4j.core.Neo4jClient;
@@ -91,107 +92,279 @@ public class ExtStructTaskServiceImpl extends ServiceImpl<ExtStructTaskMapper, E
     @Resource
     private IRedisService redisService;
 
-    // 消费队列任务, 执行任务抽取
-    public void consumeQueue() {
-        while (true) {
-            String taskId = redisService.leftPop("ext_struck");
-            // 如果任务ID为空，休眠 1000 毫秒后再继续轮询
-            if (taskId == null || taskId.isEmpty()) {
-                try {
-                    Thread.sleep(1000);  // 每次轮询之间休眠1000ms，减少CPU占用
-                } catch (InterruptedException e) {
-                    log.error("Sleep interrupted: {}", e.getMessage());
-                    Thread.currentThread().interrupt();
-                }
-                continue;
-            }
-
-            ExtStructTaskDO extStructTaskDO = null;
-            Long id = Long.valueOf(taskId);
-            try {
-                extStructTaskDO = getExtStructTaskById(id);
-            } catch (Exception e) {
-                redisService.leftPush("ext_struck", taskId);
-                log.info("连接数据库异常:{}", e.getMessage());
-                continue;
-            }
-
-            CompletableFuture<Void> future = null;
-            log.info("----------------结构化抽取任务开始-----------------------taskId:{}", taskId);
-            try {
-                //异步执行抽取任务
-                ExtStructTaskDO finalExtStructTaskDO = extStructTaskDO;
-                future = this.getCompletableFuture(id)
-                        .thenRun(() -> {
-                            // 处理任务完成后的状态更新
-                            finalExtStructTaskDO.setStatus(2);
-                            extStructTaskMapper.updateById(finalExtStructTaskDO);
-                        })
-                        .exceptionally(exception -> {
-                            // 处理异常情况
-                            log.error("抽取线程执行异常: {}", exception.getMessage());
-                            finalExtStructTaskDO.setStatus(3);
-                            extStructTaskMapper.updateById(finalExtStructTaskDO);
-                            return null;  // 这里返回 null 表示异常已处理
-                        });
-                // 等待当前任务完成再进行下一个任务
-                future.join(); // 这里调用 join() 确保当前任务完成后才进行下一次循环
-                log.info("----------------结构化抽取任务结束-----------------------taskId:{}", taskId);
-            } catch (Exception e) {
-                extStructTaskDO.setStatus(3);
-                extStructTaskMapper.updateById(extStructTaskDO);
-                // 捕获异常并打印日志
-                log.error("非结构化任务抽取处理失败: {}", e.getMessage());
-            }
-        }
-    }
-
     /**
      * 执行抽取
-     *
+     * @author shaun
+     * @date 2025/06/18 18:04
      * @param extStructTask
-     * @return
+     * @return tech.qiantong.qknow.common.core.domain.AjaxResult
      */
+    @Override
     public AjaxResult executeExtraction(ExtStructTaskPageReqVO extStructTask) {
         ExtStructTaskDO extStructTaskDO = extStructTaskMapper.selectById(extStructTask.getId());
         if (ReleaseStatus.PUBLISHED.getValue().equals(extStructTaskDO.getPublishStatus())) {
             throw new RuntimeException("已发布状态不能重新执行抽取");
         }
-//        if (ExtTaskStatus.INPROGRESS.getValue().equals(extStructTaskDO.getStatus())) {
-//            throw new RuntimeException("执行中不能重新执行抽取");
-//        }
         extStructTaskDO.setStatus(ExtTaskStatus.INPROGRESS.getValue());
         extStructTaskMapper.updateById(extStructTaskDO);
 
         //放入redis队列中, 按顺序 一个一个执行
         redisService.leftPush("ext_struck", String.valueOf(extStructTask.getId()));
-        return AjaxResult.success("操作成功,执行中");
 
-//        CompletableFuture<AjaxResult> future = null;
-//        try {
-//            //异步执行抽取任务
-//            future = this.getCompletableFuture(extStructTask.getId());
-//        } finally {
-//            // 获取抽取任务执行的结果
-//            future.whenComplete((result, exception) -> {
-//                if (exception != null) {
-//                    log.info("结构化抽取--抽取线程执行异常: {}", exception.getMessage());
-//                } else {
-//                    AjaxResult ajaxResult = result;
-//                    if (ajaxResult.isSuccess()) {
-//                        extStructTaskDO.setStatus(2);
-//                        extStructTaskMapper.updateById(extStructTaskDO);
-//                        return;
-//                    }
-//                    log.info("结构化抽取--抽取线程执行成功: {}", result);  // 处理结果
-//                }
-//                extStructTaskDO.setStatus(3);
-//                extStructTaskMapper.updateById(extStructTaskDO);
-//            });
-//        }
-//        return AjaxResult.success("操作成功,执行中");
+        return AjaxResult.success("操作成功,执行中");
     }
 
+    /**
+     * 定时任务，执行抽取
+     * @author shaun
+     * @date 2025/06/18 18:07
+     * @return void
+     */
+    public void consumeQueue() {
+        // 取出队列中的任务id
+        String taskId = redisService.leftPop("ext_struck");
+        // 判断队列是否为空
+        if (StringUtils.isEmpty(taskId)) {
+            log.info("队列中没有等待抽取的任务");
+            return;
+        }
+
+        // 开始抽取
+        log.info("----------------结构化抽取任务开始-----------------------taskId:{}", taskId);
+
+        ExtStructTaskDO extStructTaskDO = getExtStructTaskById(Long.valueOf(taskId));
+
+        try {
+            this.execStructTask(taskId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 捕获异常并打印日志
+            log.error("结构化任务抽取处理失败: {}", e.getMessage());
+
+            extStructTaskDO.setStatus(ExtTaskStatus.ERROR.getValue());
+            extStructTaskMapper.updateById(extStructTaskDO);
+        }
+    }
+
+    private void execStructTask(String taskId) throws Exception {
+        ExtStructTaskDO extStructTaskDO = extStructTaskMapper.selectById(Long.valueOf(taskId));
+
+        //删除neo4j中之前抽取相关的数据, 如果有的话
+        ExtExtractionDO extractionDO = new ExtExtractionDO();
+        extractionDO.setTaskId(extStructTaskDO.getId());
+        extNeo4jService.deleteExtStruck(extractionDO);
+
+        //数据源信息
+        DmDatasourceRespDTO datasource = daDatasourceApiService.getDatasourceById(extStructTaskDO.getDatasourceId());
+        JSONObject jsonObject = JSONObject.parseObject(datasource.getDatasourceConfig());
+
+        //根据任务id获取概念
+        ExtSchemaMappingPageReqVO mappingPageReqVO = new ExtSchemaMappingPageReqVO();
+        mappingPageReqVO.setTaskId(extStructTaskDO.getId());
+        PageResult<ExtSchemaMappingDO> schemaMappingResult = extSchemaMappingMapper.selectPage(mappingPageReqVO);
+        List<ExtSchemaMappingDO> schemaMappingList = BeanUtils.toBean(schemaMappingResult.getRows(), ExtSchemaMappingDO.class);
+
+        //根据每个映射的概念抽取对应内容
+        for (ExtSchemaMappingDO schemaMappingDO : schemaMappingList) {
+            //先获取表
+            String tableName = schemaMappingDO.getTableName();
+
+            //查询此表所有数据
+            ExtDataSourceTable.GetTableData getTableData = new ExtDataSourceTable.GetTableData();
+            getTableData.setDbType(datasource.getDatasourceType());
+            //数据库名称
+            getTableData.setUrl("jdbc:mysql://" + datasource.getIp() + ": "
+                    + datasource.getPort() + "/" + jsonObject.getString("dbname"));
+            getTableData.setUsername(jsonObject.getString("username"));
+            getTableData.setPassword(jsonObject.getString("password"));
+
+            ExtDataSourceTable.GetTableData getTableData1 = BeanUtils.toBean(getTableData, ExtDataSourceTable.GetTableData.class);
+            getTableData1.setQuery("SELECT * FROM " + tableName);
+            List<ConcurrentHashMap<String, Object>> mapList1 = extDatasourceQueryService.getTableData(getTableData1);
+
+            //查询所有相关属性映射
+            ExtAttributeMappingPageReqVO attributeMappingPageReqVO = new ExtAttributeMappingPageReqVO();
+            attributeMappingPageReqVO.setTaskId(extStructTaskDO.getId());
+            attributeMappingPageReqVO.setTableName(tableName);
+            PageResult<ExtAttributeMappingDO> extAttributeMappingResult = extAttributeMappingMapper.selectPage(attributeMappingPageReqVO);
+            List<ExtAttributeMappingDO> attributeMappingList = BeanUtils.toBean(extAttributeMappingResult.getRows(), ExtAttributeMappingDO.class);
+
+            //将属性和表字段对应上, 存成一个数组
+            ArrayList<ConcurrentHashMap<String, Object>> maps = new ArrayList<>();
+            for (ConcurrentHashMap<String, Object> objectMap : mapList1) {
+                //创建属性map  以属性id为key,字段值为value
+                ConcurrentHashMap<String, Object> nodes = new ConcurrentHashMap<>();
+                nodes.put("task_id", extStructTaskDO.getId());
+                nodes.put("database_id", datasource.getId());
+                nodes.put("table_name", tableName);
+                nodes.put("schema_id", schemaMappingDO.getSchemaId());
+                nodes.put("schema_nmae", schemaMappingDO.getSchemaName());
+                nodes.put("entity_type", ExtractType.STRUCTURED.getValue());
+                nodes.put("release_status", ExtReleaseStatus.UNPUBLISHED.getStatus());
+                nodes.put("workspace_id", extStructTaskDO.getWorkspaceId());
+                for (ConcurrentHashMap.Entry<String, Object> entry : objectMap.entrySet()) {
+                    // 获取字段名
+                    String columnName = entry.getKey();
+                    // 获取字段值
+                    Object columnValue = entry.getValue();
+                    //如果这个字段是实体名称, 这个字段在前端选择
+                    if (columnName.equals(schemaMappingDO.getEntityNameField())) {
+                        nodes.put("name", columnValue);
+                    }
+                    //每个表必须要有id字段
+                    if ("id".equals(columnName)) {
+                        nodes.put("data_id", columnValue);
+                    }
+                    for (ExtAttributeMappingDO attributeMappingDO : attributeMappingList) {
+                        //如果这个字段映射过属性, 就把属性放到节点map中
+                        if (attributeMappingDO.getAttributeId() != null && columnName.equals(attributeMappingDO.getFieldName())) {
+                            //把所有添加属性映射的区分出来, 方便展示
+                            nodes.put("attribute_id_" + attributeMappingDO.getAttributeId().toString(), columnValue);
+                        }
+                    }
+                }
+                maps.add(nodes);
+            }
+            log.info("-----节点maps---:{}", maps);
+
+            //存储所有抽取出来的节点
+            for (ConcurrentHashMap<String, Object> map : maps) {
+                // 创建头部节点并动态添加属性
+                Neo4jBuildWrapper<DynamicEntity> wrapper = new Neo4jBuildWrapper<>(DynamicEntity.class);
+                ExtExtractionMergeDO.Node extractionMergeDO = new ExtExtractionMergeDO.Node();
+                extractionMergeDO.setName(map.get("name").toString());
+                extractionMergeDO.setTask_id(extStructTaskDO.getId());
+                extractionMergeDO.setTable_name(tableName);
+                extractionMergeDO.setData_id(Long.valueOf(map.get("data_id").toString()));
+                extractionMergeDO.setEntity_type(ExtractType.STRUCTURED.getType());
+                extractionMergeDO.setDatabase_id(Long.valueOf(datasource.getId().toString()));
+                ConcurrentHashMap<String, Object> mergeMap = new ObjectMapper().readValue(JSONObject.toJSONString(extractionMergeDO), ConcurrentHashMap.class);
+                String label = Neo4jLabelEnum.DYNAMICENTITY.getLabel() + ":" + Neo4jLabelEnum.STRUCTURED.getLabel();
+                dynamicRepository.mergeCreateNode(label, wrapper, mergeMap, map);
+            }
+
+            //查询映射过的关系
+            ExtRelationMappingPageReqVO relationMappingPageReqVO = new ExtRelationMappingPageReqVO();
+            relationMappingPageReqVO.setTaskId(extStructTaskDO.getId());
+            relationMappingPageReqVO.setTableName(tableName);
+            PageResult<ExtRelationMappingDO> extRelationMappingResult = extRelationMappingMapper.selectPage(relationMappingPageReqVO);
+            List<ExtRelationMappingDO> relationMappingList = BeanUtils.toBean(extRelationMappingResult.getRows(), ExtRelationMappingDO.class);
+
+            //循环映射的关系
+            for (ExtRelationMappingDO relationMappingDO : relationMappingList) {
+                //字段名
+                String fieldName = relationMappingDO.getFieldName();
+                //关联表
+                String relationTable = relationMappingDO.getRelationTable();
+                //关联表字段
+                String relationField = relationMappingDO.getRelationField();
+
+                ExtDataSourceTable.GetTableData getTableData2 = BeanUtils.toBean(getTableData, ExtDataSourceTable.GetTableData.class);
+                // 内连接连表, 查询关系映射
+                String query2 = "SELECT a.*,b.* FROM " + tableName + " a INNER JOIN " + relationTable + " b ON a." + fieldName + " = b." + relationField + ";";
+                log.info("查询sql:{}", query2);
+                getTableData2.setQuery(query2);
+                getTableData2.setTableA(tableName);
+                getTableData2.setTableB(relationTable);
+                List<ConcurrentHashMap<String, Object>> mapList2 = extDatasourceQueryService.getTableData2(getTableData2);
+                log.info("----关系-------:{}", mapList2);
+
+                //存储节点和关系, 没有关系的节点也存储到neo4j
+                for (ConcurrentHashMap<String, Object> map : maps) {
+                    // 创建头部节点并动态添加属性
+
+                    List<ConcurrentHashMap<String, Object>> filteredList = mapList2.stream()
+                            .filter(m -> m.containsKey("a_id") && m.get("a_id").equals(map.get("data_id")))
+                            .collect(Collectors.toList());
+                    for (ConcurrentHashMap<String, Object> relMap : filteredList) {
+                        boolean status = false;
+
+                        //实体的属性 循环匹配是否有对应的关系 //尾部实体
+                        ConcurrentHashMap<String, Object> endMap = new ConcurrentHashMap<>();
+
+                        Iterator<ConcurrentHashMap.Entry<String, Object>> iterator = relMap.entrySet().iterator();
+                        while (iterator.hasNext()) {
+                            ConcurrentHashMap.Entry<String, Object> relEntry = iterator.next();
+                            // 修改或者删除元素
+                            if (relEntry.getKey().startsWith("a_")) {
+                                iterator.remove();  // 使用 iterator 的 remove() 方法
+                            }
+                            //如果是实体id字段, 匹配节点map中的值, 判断是否是同一个, 如果是同一个的话, 判断是否映射的有关系
+                            //根据节点map中的节点data_id和关系映射中的a_id匹配
+                            if ("a_id".equals(relEntry.getKey())) {
+                                //如果是同一个实体 并且b_表的数据不为空, 说明有对应关系存在, 需要存储关系
+                                if (map.get("data_id").equals(relEntry.getValue())) {
+                                    relMap.keySet().removeIf(key -> key.startsWith("a_"));
+                                    // 修改以 "b_" 开头的键，去掉 "b_" 前缀
+                                    Set<String> keysToModify = new HashSet<>();
+                                    for (String key : relMap.keySet()) {
+                                        if (key.startsWith("b_")) {
+                                            keysToModify.add(key);
+                                        }
+                                    }
+                                    // 更新键，去掉 "b_" 前缀
+                                    for (String key : keysToModify) {
+                                        Object value = relMap.remove(key);
+                                        // 去掉 "b_" 前缀
+                                        relMap.put(key.substring(2), value);
+                                    }
+                                    endMap = relMap;
+                                    status = true;
+                                }
+                            }
+                        }
+
+                        //如果有映射的关系, 添加尾部节点和关系
+                        if (status) {
+                            // 创建尾部节点并动态添加属性
+                            endMap.put("task_id", extStructTaskDO.getId());
+                            endMap.put("table_name", relationTable);
+                            endMap.put("data_id", endMap.get("id"));
+                            endMap.put("database_id", datasource.getId());
+                            endMap.put("entity_type", ExtractType.STRUCTURED.getValue());
+                            endMap.put("release_status", ReleaseStatus.UNPUBLISHED.getValue());
+                            endMap.remove("id");
+                            Neo4jBuildWrapper<DynamicEntity> build = new Neo4jBuildWrapper<>(DynamicEntity.class);
+                            ExtExtractionMergeDO.Node extractionMergeDO = new ExtExtractionMergeDO.Node();
+                            extractionMergeDO.setName(endMap.get(relationMappingDO.getRelationNameField()).toString());
+                            extractionMergeDO.setTask_id(Long.valueOf(extStructTaskDO.getId().toString()));
+                            extractionMergeDO.setTable_name(relationTable);
+                            extractionMergeDO.setData_id(Long.valueOf(endMap.get("data_id").toString()));
+                            extractionMergeDO.setEntity_type(ExtractType.STRUCTURED.getValue());
+                            extractionMergeDO.setDatabase_id(Long.valueOf(datasource.getId().toString()));
+                            ConcurrentHashMap<String, Object> endMergeMap = new ObjectMapper().readValue(JSONObject.toJSONString(extractionMergeDO), ConcurrentHashMap.class);
+                            String label = Neo4jLabelEnum.DYNAMICENTITY.getLabel() + ":" + Neo4jLabelEnum.STRUCTURED.getLabel();
+                            dynamicRepository.mergeCreateNode(label, build, endMergeMap, endMap);
+
+                            //创建关系
+                            //起点
+                            ExtExtractionMergeDO.CreateRelationshipNode startNode = new ExtExtractionMergeDO.CreateRelationshipNode();
+                            startNode.setData_id(Long.valueOf(map.get("data_id").toString()));
+                            startNode.setTask_id(Long.valueOf(extStructTaskDO.getId().toString()));
+                            startNode.setTable_name(tableName);
+                            ConcurrentHashMap<String, Object> startNodeMap = new ObjectMapper().readValue(JSONObject.toJSONString(startNode), ConcurrentHashMap.class);
+
+                            //结点
+                            ExtExtractionMergeDO.CreateRelationshipNode endNode = new ExtExtractionMergeDO.CreateRelationshipNode();
+                            endNode.setData_id(Long.valueOf(endMap.get("data_id").toString()));
+                            endNode.setTask_id(Long.valueOf(extStructTaskDO.getId().toString()));
+                            endNode.setTable_name(relationTable);
+                            ConcurrentHashMap<String, Object> endNodeMap = new ObjectMapper().readValue(JSONObject.toJSONString(endNode), ConcurrentHashMap.class);
+                            String rel = relationMappingDO.getRelation();
+
+                            //关系
+                            ConcurrentHashMap<String, Object> relMa = new ConcurrentHashMap<>();
+                            relMa.put("task_id", extStructTaskDO.getId());
+                            relMa.put("entity_type", ExtractType.STRUCTURED.getValue());
+                            dynamicRepository.mergeRelationship(Neo4jLabelEnum.STRUCTURED.getLabel(), build, startNodeMap, endNodeMap, rel, relMa);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
     public AjaxResult getAttributeInformation(List<String> list) {
         List<ExtSchemaAttributeDO> attributeDOS = extSchemaAttributeMapper.selectList("id", list);
         log.info("------{}", attributeDOS);
@@ -205,6 +378,7 @@ public class ExtStructTaskServiceImpl extends ServiceImpl<ExtStructTaskMapper, E
      * @param extractType
      * @return
      */
+    @Override
     public AjaxResult selectByTaskId(Long taskId, Integer extractType) {
         ExtStructTaskDO taskDO = extStructTaskMapper.selectById(taskId);
         AjaxResult ajaxResult = extNeo4jService.selectByTaskId(taskId, ExtractType.STRUCTURED.getValue());
@@ -222,6 +396,7 @@ public class ExtStructTaskServiceImpl extends ServiceImpl<ExtStructTaskMapper, E
      * @param structTaskDO
      * @return
      */
+    @Override
     public AjaxResult releaseByTaskId(ExtStructTaskDO structTaskDO) {
         extStructTaskMapper.updateById(structTaskDO);
         extNeo4jService.updateByTaskIdAndExtractType(structTaskDO.getId(), ExtractType.STRUCTURED.getValue(), ReleaseStatus.PUBLISHED.getValue());
@@ -234,229 +409,11 @@ public class ExtStructTaskServiceImpl extends ServiceImpl<ExtStructTaskMapper, E
      * @param structTaskDO
      * @return
      */
+    @Override
     public AjaxResult cancelReleaseByTaskId(ExtStructTaskDO structTaskDO) {
         extStructTaskMapper.updateById(structTaskDO);
         extNeo4jService.updateByTaskIdAndExtractType(structTaskDO.getId(), ExtractType.STRUCTURED.getValue(), ReleaseStatus.UNPUBLISHED.getValue());
         return AjaxResult.success("取消发布成功");
-    }
-
-    /**
-     * 结构化抽取 异步抽取
-     *
-     * @return
-     */
-    private CompletableFuture<AjaxResult> getCompletableFuture(Long id) {
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                ExtStructTaskDO extStructTaskDO = extStructTaskMapper.selectById(id);
-                //删除neo4j中之前抽取相关的数据, 如果有的话
-                ExtExtractionDO extractionDO = new ExtExtractionDO();
-                extractionDO.setTaskId(extStructTaskDO.getId());
-                extNeo4jService.deleteExtStruck(extractionDO);
-                //数据源信息
-                DmDatasourceRespDTO datasource = daDatasourceApiService.getDatasourceById(extStructTaskDO.getDatasourceId());
-                JSONObject jsonObject = JSONObject.parseObject(datasource.getDatasourceConfig());
-                //根据任务id获取概念
-                ExtSchemaMappingPageReqVO mappingPageReqVO = new ExtSchemaMappingPageReqVO();
-                mappingPageReqVO.setTaskId(extStructTaskDO.getId());
-                PageResult<ExtSchemaMappingDO> schemaMappingDOPageResult = extSchemaMappingMapper.selectPage(mappingPageReqVO);
-                List<ExtSchemaMappingDO> schemaMappingDOS = BeanUtils.toBean(schemaMappingDOPageResult.getRows(), ExtSchemaMappingDO.class);
-                //根据每个映射的概念抽取对应内容
-                for (ExtSchemaMappingDO schemaMappingDO : schemaMappingDOS) {
-                    //先获取表
-                    String tableName = schemaMappingDO.getTableName();
-
-                    //查询此表所有数据
-                    ExtDataSourceTable.GetTableData getTableData = new ExtDataSourceTable.GetTableData();
-                    getTableData.setDbType(datasource.getDatasourceType());
-                    getTableData.setUrl("jdbc:mysql://" + datasource.getIp() + ": "
-                            + datasource.getPort() + "/" + jsonObject.getString("dbname"));//数据库名称
-                    getTableData.setUsername(jsonObject.getString("username"));
-                    getTableData.setPassword(jsonObject.getString("password"));
-
-                    ExtDataSourceTable.GetTableData getTableData1 = BeanUtils.toBean(getTableData, ExtDataSourceTable.GetTableData.class);
-                    getTableData1.setQuery("SELECT * FROM " + tableName);
-                    List<ConcurrentHashMap<String, Object>> mapList1 = extDatasourceQueryService.getTableData(getTableData1);
-
-                    //查询所有相关属性映射
-                    ExtAttributeMappingPageReqVO attributeMappingPageReqVO = new ExtAttributeMappingPageReqVO();
-                    attributeMappingPageReqVO.setTaskId(extStructTaskDO.getId());
-                    attributeMappingPageReqVO.setTableName(tableName);
-                    PageResult<ExtAttributeMappingDO> attributeMappingDOPageResult = extAttributeMappingMapper.selectPage(attributeMappingPageReqVO);
-                    List<ExtAttributeMappingDO> attributeMappingDOS = BeanUtils.toBean(attributeMappingDOPageResult.getRows(), ExtAttributeMappingDO.class);
-
-                    //将属性和表字段对应上, 存成一个数组
-                    ArrayList<ConcurrentHashMap<String, Object>> maps = new ArrayList<>();
-                    for (ConcurrentHashMap<String, Object> objectMap : mapList1) {
-                        //创建属性map  以属性id为key,字段值为value
-                        ConcurrentHashMap<String, Object> nodes = new ConcurrentHashMap<>();
-                        nodes.put("task_id", extStructTaskDO.getId());
-                        nodes.put("database_id", datasource.getId());
-                        nodes.put("table_name", tableName);
-                        nodes.put("schema_id", schemaMappingDO.getSchemaId());
-                        nodes.put("schema_nmae", schemaMappingDO.getSchemaName());
-                        nodes.put("entity_type", ExtractType.STRUCTURED.getValue());//1: 结构化  2:非结构化
-                        nodes.put("release_status", ExtReleaseStatus.UNPUBLISHED.getStatus());//0未发布 1已发布
-                        nodes.put("workspace_id", extStructTaskDO.getWorkspaceId());
-                        for (ConcurrentHashMap.Entry<String, Object> entry : objectMap.entrySet()) {
-                            String columnName = entry.getKey();   // 获取字段名
-                            Object columnValue = entry.getValue(); // 获取字段值
-                            //如果这个字段是实体名称, 这个字段在前端选择
-                            if (columnName.equals(schemaMappingDO.getEntityNameField())) {
-                                nodes.put("name", columnValue);
-                            }
-                            //每个表必须要有id字段
-                            if ("id".equals(columnName)) {
-                                nodes.put("data_id", columnValue);
-                            }
-                            for (ExtAttributeMappingDO attributeMappingDO : attributeMappingDOS) {
-                                //如果这个字段映射过属性, 就把属性放到节点map中
-                                if (attributeMappingDO.getAttributeId() != null && columnName.equals(attributeMappingDO.getFieldName())) {
-                                    //把所有添加属性映射的区分出来, 方便展示
-                                    nodes.put("attribute_id_" + attributeMappingDO.getAttributeId().toString(), columnValue);
-                                }
-                            }
-                        }
-                        maps.add(nodes);
-                    }
-                    log.info("-----节点maps---:{}", maps);
-
-                    //存储所有抽取出来的节点
-                    for (ConcurrentHashMap<String, Object> map : maps) {
-                        // 创建头部节点并动态添加属性
-                        ConcurrentHashMap<String, Object> startMap = map;
-                        Neo4jBuildWrapper<DynamicEntity> wrapper = new Neo4jBuildWrapper<>(DynamicEntity.class);
-                        ExtExtractionMergeDO.Node extractionMergeDO = new ExtExtractionMergeDO.Node();
-                        extractionMergeDO.setName(startMap.get("name").toString());
-                        extractionMergeDO.setTask_id(extStructTaskDO.getId());
-                        extractionMergeDO.setTable_name(tableName);
-                        extractionMergeDO.setData_id(Long.valueOf(startMap.get("data_id").toString()));
-                        extractionMergeDO.setEntity_type(ExtractType.STRUCTURED.getType());
-                        extractionMergeDO.setDatabase_id(Long.valueOf(datasource.getId().toString()));
-                        ConcurrentHashMap<String, Object> mergeMap = new ObjectMapper().readValue(JSONObject.toJSONString(extractionMergeDO), ConcurrentHashMap.class);
-                        String label = Neo4jLabelEnum.DYNAMICENTITY.getLabel() + ":" + Neo4jLabelEnum.STRUCTURED.getLabel();
-                        dynamicRepository.mergeCreateNode(label, wrapper, mergeMap, startMap);
-                    }
-
-                    //查询映射过的关系
-                    ExtRelationMappingPageReqVO relationMappingPageReqVO = new ExtRelationMappingPageReqVO();
-                    relationMappingPageReqVO.setTaskId(extStructTaskDO.getId());
-                    relationMappingPageReqVO.setTableName(tableName);
-                    PageResult<ExtRelationMappingDO> mappingDOPageResult = extRelationMappingMapper.selectPage(relationMappingPageReqVO);
-                    List<ExtRelationMappingDO> relationMappingDOS = BeanUtils.toBean(mappingDOPageResult.getRows(), ExtRelationMappingDO.class);
-                    //循环映射的关系
-                    for (ExtRelationMappingDO relationMappingDO : relationMappingDOS) {
-                        String fieldName = relationMappingDO.getFieldName();//字段名
-                        String relationTable = relationMappingDO.getRelationTable();//关联表
-                        String relationField = relationMappingDO.getRelationField();//关联表字段
-
-                        ExtDataSourceTable.GetTableData getTableData2 = BeanUtils.toBean(getTableData, ExtDataSourceTable.GetTableData.class);
-                        // 内连接连表, 查询关系映射
-                        String query2 = "SELECT a.*,b.* FROM " + tableName + " a INNER JOIN " + relationTable + " b ON a." + fieldName + " = b." + relationField + ";";
-                        log.info("查询sql:{}", query2);
-                        getTableData2.setQuery(query2);
-                        getTableData2.setTableA(tableName);
-                        getTableData2.setTableB(relationTable);
-                        List<ConcurrentHashMap<String, Object>> mapList2 = extDatasourceQueryService.getTableData2(getTableData2);
-                        log.info("----关系-------:{}", mapList2);
-
-                        //存储节点和关系, 没有关系的节点也存储到neo4j
-                        for (ConcurrentHashMap<String, Object> map : maps) {
-                            // 创建头部节点并动态添加属性
-                            ConcurrentHashMap<String, Object> startMap = map;
-
-                            List<ConcurrentHashMap<String, Object>> filteredList = mapList2.stream()
-                                    .filter(m -> m.containsKey("a_id") && m.get("a_id").equals(map.get("data_id")))
-                                    .collect(Collectors.toList());
-                            for (ConcurrentHashMap<String, Object> relMap : filteredList) {
-                                boolean status = false;
-
-                                //实体的属性 循环匹配是否有对应的关系 //尾部实体
-                                ConcurrentHashMap<String, Object> endMap = new ConcurrentHashMap<>();
-
-                                Iterator<ConcurrentHashMap.Entry<String, Object>> iterator = relMap.entrySet().iterator();
-                                while (iterator.hasNext()) {
-                                    ConcurrentHashMap.Entry<String, Object> relEntry = iterator.next();
-                                    // 修改或者删除元素
-                                    if (relEntry.getKey().startsWith("a_")) {
-                                        iterator.remove();  // 使用 iterator 的 remove() 方法
-                                    }
-                                    //如果是实体id字段, 匹配节点map中的值, 判断是否是同一个, 如果是同一个的话, 判断是否映射的有关系
-                                    //根据节点map中的节点data_id和关系映射中的a_id匹配
-                                    if ("a_id".equals(relEntry.getKey())) {
-                                        //如果是同一个实体 并且b_表的数据不为空, 说明有对应关系存在, 需要存储关系
-                                        if (map.get("data_id").equals(relEntry.getValue())) {
-                                            relMap.keySet().removeIf(key -> key.startsWith("a_"));
-                                            // 修改以 "b_" 开头的键，去掉 "b_" 前缀
-                                            Set<String> keysToModify = new HashSet<>();
-                                            for (String key : relMap.keySet()) {
-                                                if (key.startsWith("b_")) {
-                                                    keysToModify.add(key);
-                                                }
-                                            }
-                                            // 更新键，去掉 "b_" 前缀
-                                            for (String key : keysToModify) {
-                                                Object value = relMap.remove(key);
-                                                relMap.put(key.substring(2), value);  // 去掉 "b_" 前缀
-                                            }
-                                            endMap = relMap;
-                                            status = true;
-                                        }
-                                    }
-                                }
-
-                                //如果有映射的关系, 添加尾部节点和关系
-                                if (status) {
-                                    // 创建尾部节点并动态添加属性
-                                    endMap.put("task_id", extStructTaskDO.getId());
-                                    endMap.put("table_name", relationTable);
-                                    endMap.put("data_id", endMap.get("id"));
-                                    endMap.put("database_id", datasource.getId());
-                                    endMap.put("entity_type", ExtractType.STRUCTURED.getValue());//1: 结构化  2:非结构化
-                                    endMap.put("release_status", ReleaseStatus.UNPUBLISHED.getValue());//0未发布 1已发布
-                                    endMap.remove("id");
-                                    Neo4jBuildWrapper<DynamicEntity> build = new Neo4jBuildWrapper<>(DynamicEntity.class);
-                                    ExtExtractionMergeDO.Node extractionMergeDO = new ExtExtractionMergeDO.Node();
-                                    extractionMergeDO.setName(endMap.get(relationMappingDO.getRelationNameField()).toString());
-                                    extractionMergeDO.setTask_id(Long.valueOf(extStructTaskDO.getId().toString()));
-                                    extractionMergeDO.setTable_name(relationTable);
-                                    extractionMergeDO.setData_id(Long.valueOf(endMap.get("data_id").toString()));
-                                    extractionMergeDO.setEntity_type(ExtractType.STRUCTURED.getValue());
-                                    extractionMergeDO.setDatabase_id(Long.valueOf(datasource.getId().toString()));
-                                    ConcurrentHashMap<String, Object> endMergeMap = new ObjectMapper().readValue(JSONObject.toJSONString(extractionMergeDO), ConcurrentHashMap.class);
-                                    String label = Neo4jLabelEnum.DYNAMICENTITY.getLabel() + ":" + Neo4jLabelEnum.STRUCTURED.getLabel();//TODO 用枚举
-                                    dynamicRepository.mergeCreateNode(label, build, endMergeMap, endMap);
-
-                                    //创建关系
-                                    //起点
-                                    ExtExtractionMergeDO.CreateRelationshipNode startNode = new ExtExtractionMergeDO.CreateRelationshipNode();
-                                    startNode.setData_id(Long.valueOf(startMap.get("data_id").toString()));
-                                    startNode.setTask_id(Long.valueOf(extStructTaskDO.getId().toString()));
-                                    startNode.setTable_name(tableName);
-                                    ConcurrentHashMap<String, Object> startNodeMap = new ObjectMapper().readValue(JSONObject.toJSONString(startNode), ConcurrentHashMap.class);
-                                    //结点
-                                    ExtExtractionMergeDO.CreateRelationshipNode endNode = new ExtExtractionMergeDO.CreateRelationshipNode();
-                                    endNode.setData_id(Long.valueOf(endMap.get("data_id").toString()));
-                                    endNode.setTask_id(Long.valueOf(extStructTaskDO.getId().toString()));
-                                    endNode.setTable_name(relationTable);
-                                    ConcurrentHashMap<String, Object> endNodeMap = new ObjectMapper().readValue(JSONObject.toJSONString(endNode), ConcurrentHashMap.class);
-                                    String rel = relationMappingDO.getRelation();
-                                    //关系
-                                    ConcurrentHashMap<String, Object> relMa = new ConcurrentHashMap<>();
-                                    relMa.put("task_id", extStructTaskDO.getId());
-                                    relMa.put("entity_type", ExtractType.STRUCTURED.getValue());
-                                    dynamicRepository.mergeRelationship(Neo4jLabelEnum.STRUCTURED.getLabel(), build, startNodeMap, endNodeMap, rel, relMa);
-                                }
-                            }
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return AjaxResult.error("执行异常");
-            }
-            return AjaxResult.success("执行成功");
-        });
     }
 
     /**
@@ -466,6 +423,7 @@ public class ExtStructTaskServiceImpl extends ServiceImpl<ExtStructTaskMapper, E
      * @return
      */
     @Transactional
+    @Override
     public AjaxResult updateDataMapping(ExtStructTask extStructTask) {
         Long taskId = extStructTask.getTaskId();
         //修改任务数据
@@ -494,6 +452,7 @@ public class ExtStructTaskServiceImpl extends ServiceImpl<ExtStructTaskMapper, E
      * @return
      */
     @Transactional
+    @Override
     public AjaxResult addDataMapping(ExtStructTask extStructTask) {
         DmDatasourceRespDTO datasource = daDatasourceApiService.getDatasourceById(extStructTask.getDataSourceId());
         // 存储结构化抽取任务
@@ -696,9 +655,9 @@ public class ExtStructTaskServiceImpl extends ServiceImpl<ExtStructTaskMapper, E
 
         //获取导入的表
         List<String> stringList = Stream.concat(
-                schemaMappingList.stream().map(ExtSchemaMappingRespVO::getTableName).filter(Objects::nonNull),
-                relationMappingList.stream().map(ExtRelationMappingRespVO::getRelationTable).filter(Objects::nonNull)
-        )
+                        schemaMappingList.stream().map(ExtSchemaMappingRespVO::getTableName).filter(Objects::nonNull),
+                        relationMappingList.stream().map(ExtRelationMappingRespVO::getRelationTable).filter(Objects::nonNull)
+                )
                 .distinct()  // 去重
                 .collect(Collectors.toList());  // 收集成 List
 
