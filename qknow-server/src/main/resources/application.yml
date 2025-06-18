@@ -170,6 +170,18 @@ springdoc:
     - group: 'system'
       paths-to-match: '/**'
       packages-to-scan: tech.qiantong.qknow.module.system.controller
+    - group: 'app'
+      paths-to-match: '/**'
+      packages-to-scan: tech.qiantong.qknow.module.app.controller
+    - group: 'dm'
+      paths-to-match: '/**'
+      packages-to-scan: tech.qiantong.qknow.module.dm.controller
+    - group: 'ext'
+      paths-to-match: '/**'
+      packages-to-scan: tech.qiantong.qknow.module.ext.controller
+    - group: 'kmc'
+      paths-to-match: '/**'
+      packages-to-scan: tech.qiantong.qknow.module.kmc.controller
 # Swagger 增强配置
 knife4j:
   enable: true
