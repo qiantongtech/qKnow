@@ -523,10 +523,10 @@ insert into system_dict_data values(42, 1, '进行中', '1', 'ext_task_status', 
 insert into system_dict_data values(43, 2, '已完成', '2', 'ext_task_status', '', 'success', 'N', '0', '小桐', sysdate(), '', NULL, '已完成状态');
 insert into system_dict_data values(44, 3, '执行失败', '3', 'ext_task_status', '', 'danger', 'N', '0', '小桐', sysdate(), '', NULL, '执行失败状态');
 insert into system_dict_data values (45, 1, 'MySql', 'MySql', 'datasource_type', '', 'primary', 'N', '0', '小桐', sysdate(), '', NULL, 'MySql数据库');
-insert into system_dict_data values (46, 2, 'DM8', 'DM8', 'datasource_type', '', 'primary', 'N', '0', '小桐', sysdate(), '', NULL, '达梦8数据库');
-insert into system_dict_data values (47, 3, 'Oracle', 'Oracle', 'datasource_type', '', 'primary', 'N', '0', '小桐', sysdate(), '', NULL, 'Oracle数据库');
-insert into system_dict_data values (48, 4, 'Oracle11', 'Oracle11', 'datasource_type', '', 'primary', 'N', '0', '小桐', sysdate(), '', NULL, 'Oracle11数据库');
-insert into system_dict_data values (49, 5, 'Kingbase8', 'Kingbase8', 'datasource_type', '', 'primary', 'N', '0', '小桐', sysdate(), '', NULL, '人大金仓8数据库');
+insert into system_dict_data values (46, 2, 'DM8', 'DM8', 'datasource_type', '', 'primary', 'N', '1', '小桐', sysdate(), '', NULL, '达梦8数据库');
+insert into system_dict_data values (47, 3, 'Oracle', 'Oracle', 'datasource_type', '', 'primary', 'N', '1', '小桐', sysdate(), '', NULL, 'Oracle数据库');
+insert into system_dict_data values (48, 4, 'Oracle11', 'Oracle11', 'datasource_type', '', 'primary', 'N', '1', '小桐', sysdate(), '', NULL, 'Oracle11数据库');
+insert into system_dict_data values (49, 5, 'Kingbase8', 'Kingbase8', 'datasource_type', '', 'primary', 'N', '1', '小桐', sysdate(), '', NULL, '人大金仓8数据库');
 
 -- ----------------------------
 -- 13、参数配置表
@@ -598,7 +598,8 @@ create table system_job (
 insert into system_job values(1, '系统默认（无参）', 'DEFAULT', 'ryTask.ryNoParams',        '0/10 * * * * ?', '3', '1', '1', '小桐', sysdate(), '', null, '');
 insert into system_job values(2, '系统默认（有参）', 'DEFAULT', 'ryTask.ryParams(\'ry\')',  '0/15 * * * * ?', '3', '1', '1', '小桐', sysdate(), '', null, '');
 insert into system_job values(3, '系统默认（多参）', 'DEFAULT', 'ryTask.ryMultipleParams(\'ry\', true, 2000L, 316.50D, 100)',  '0/20 * * * * ?', '3', '1', '1', '小桐', sysdate(), '', null, '');
-insert into system_job values (100, '非结构化任务抽取', 'DEFAULT', 'extUnstructTaskServiceImpl.consumeQueue()', '0 0/5 * * * ?', '1', '1', '1', '小桐', sysdate(), '', NULL, '');
+insert into system_job values (100, '结构化任务抽取', 'DEFAULT', 'extStructTaskServiceImpl.consumeQueue()', '0 0/1 * * * ?', '1', '1', '1', '小桐', sysdate(), '', NULL, '');
+insert into system_job values (101, '非结构化任务抽取', 'DEFAULT', 'extUnstructTaskServiceImpl.consumeQueue()', '0 0/5 * * * ?', '1', '1', '1', '小桐', sysdate(), '', NULL, '');
 
 -- ----------------------------
 -- 16、定时任务调度日志表

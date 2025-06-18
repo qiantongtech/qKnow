@@ -23,7 +23,6 @@ import tech.qiantong.qknow.module.ext.dal.dataobject.extStructTask.ExtStructTask
  * @date 2025-02-25
  */
 public interface IExtStructTaskService extends IService<ExtStructTaskDO> {
-    public void consumeQueue();
     /**
      * 执行抽取
      *
