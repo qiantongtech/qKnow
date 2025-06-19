@@ -154,7 +154,7 @@
 ## 👥 QQ交流群
 欢迎加入 千知平台（qKnow） 官方 QQ 交流群，获取最新动态、技术支持与使用交流。
 
-[![加入QQ群](https://img.shields.io/badge/QQ群-277328475-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=XwhV8deuZXt__yteR1clNanVSXzA-ugq&authKey=ezgwKqEZPdP%2FgC9I03OBkJb%2Biii8yvVfwrcQuu0%2FL6ILXcRdHYDBFKCXeoeBT0E6&noverify=0&group_code=277328475)
+[![加入QQ群](https://img.shields.io/badge/QQ群-277328475-blue.svg)](https://qm.qq.com/q/pr4xkk3dXq)
 
 ## 🖼️ 系统配图
 <table>
