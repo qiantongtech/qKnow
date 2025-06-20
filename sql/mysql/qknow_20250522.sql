@@ -1107,7 +1107,7 @@ create table ext_unstruct_task_text (
                                           workspace_id bigint NOT NULL COMMENT '工作区id',
                                           task_id bigint NOT NULL COMMENT '任务id',
                                           doc_id bigint NOT NULL COMMENT '文件id',
-                                          paragraph_index bigint NOT NULL COMMENT '段落标识',
+                                          paragraph_index bigint COMMENT '段落标识',
                                           text text NOT NULL COMMENT '文字内容',
                                           valid_flag tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效;0：无效，1：有效',
                                           del_flag tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除标志;1：已删除，0：未删除',
