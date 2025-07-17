@@ -19,11 +19,11 @@
 
 平台为**智能问答**、**语义检索**和**智能体构建**提供坚实基础，是企业迈向智能化知识管理与AI融合应用的重要支撑平台。
 
+✨✨✨**在线文档**✨✨✨ <a href="https://qknow.qiantong.tech" target="_blank">https://qknow.qiantong.tech</a>
+
 ✨✨✨**开源版演示地址**✨✨✨ <a href="https://qknow-demo.qiantong.tech" target="_blank">点击跳转</a> ，账号：qKnow 密码：qKnow123
 
 ✨✨✨**商业版演示地址**✨✨✨ <a href="https://qknow-pro.qiantong.tech" target="_blank">点击跳转</a> ，演示账号请联系客服获取
-
-✨✨✨**演示视频**✨✨✨ <a href="https://www.bilibili.com/video/BV1s6TszmEnF" target="_blank">https://www.bilibili.com/video/BV1s6TszmEnF</a> 
 
 ## 🍱 使用场景
 ### 1、智慧水利场景
