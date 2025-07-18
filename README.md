@@ -118,7 +118,7 @@
 
 ## 🧩 架构图
 
-![framework.png](.gitee/framework.jpg)
+![framework.png](.gitee/framework.png)
 
 ## 🛠️ 技术栈
 千知平台（qKnow）采用前后端分离架构，后端基于 Spring Boot，前端基于 Vue 3，整合常用中间件与数据工具，构建一站式数据中台解决方案。
