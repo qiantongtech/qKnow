@@ -1,0 +1,13 @@
+neo4j:
+  uri: bolt://127.0.0.1:7687
+  user: neo4j
+  password: 123456
+# neo4j日志
+logging:
+  level:
+    org:
+      neo4j:
+      #        driver: DEBUG
+      springframework:
+        data:
+          neo4j: DEBUG

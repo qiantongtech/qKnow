@@ -1,0 +1,7 @@
+# 统一认证中心
+oauth2:
+  redis-prefix:
+  clientId:
+  clientSecret:
+  serverUrl: http://127.0.0.1:8899
+  redirect401Url: http://127.0.0.1/401
