@@ -1,0 +1,13 @@
+text: 歌曲《人生长路》出自刘德华国语专辑《男人的爱》，由李泉作词作曲，2001年出行发版。
+nerfp: 你的NER模型地址
+refp: 你的RE模型地址
+
+lm_file: 你的NER模型地址
+num_hidden_layers: 1
+type_rnn: LSTM
+input_size: 768
+hidden_size: 100
+num_layers: 1
+dropout: 0.3
+bidirectional: true
+last_layer_hn: true

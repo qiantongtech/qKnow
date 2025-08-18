@@ -1,0 +1,77 @@
+package tech.qiantong.qknow.auth.domain;
+
+import lombok.Data;
+import tech.qiantong.qknow.common.annotation.Excel;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableName;
+import tech.qiantong.qknow.common.core.domain.BaseEntity;
+
+/**
+ * 应用管理对象 auth_client
+ *
+ * @author qknow
+ * @date 2024-08-31
+ */
+@Data
+@TableName(value = "auth_client")
+public class AuthClient extends BaseEntity {
+
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
+
+    /** 应用ID */
+    @TableId(type = IdType.AUTO)
+    private Long id;
+
+    /** 应用秘钥 */
+    @Excel(name = "应用秘钥")
+    private String secretKey;
+
+    /** 应用名称 */
+    @Excel(name = "应用名称")
+    private String name;
+
+    /** 应用类型;0：Web，1：App，2：小程序 */
+    @Excel(name = "应用类型;0：Web，1：App，2：小程序")
+    private Integer type;
+
+    /** 应用图标 */
+    @Excel(name = "应用图标")
+    private String icon;
+
+    /** 应用首页 */
+    @Excel(name = "应用首页")
+    private String homeUrl;
+
+    /** 同步地址 */
+    @Excel(name = "同步地址")
+    private String syncUrl;
+
+    /** 允许授权的url */
+    @Excel(name = "允许授权的url")
+    private String redirectUrl;
+
+    /** 是否公开 */
+    @Excel(name = "是否公开")
+    private Integer publicFlag;
+
+    /** 是否有效;0：无效，1：有效 */
+    @Excel(name = "是否有效;0：无效，1：有效")
+    private Integer validFlag;
+
+    /** 删除标志;1：已删除，0：未删除 */
+    @TableLogic
+    private Integer delFlag;
+    /** 创建人id;创建者的sys_user_id */
+    @Excel(name = "创建人id;创建者的sys_user_id")
+    private Long creatorId;
+
+    /** 更新人id;更新者的sys_user_id */
+    @Excel(name = "更新人id;更新者的sys_user_id")
+    private Long updatorId;
+
+
+}
