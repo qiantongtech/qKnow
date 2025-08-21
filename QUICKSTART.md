@@ -128,6 +128,8 @@ mysql:
 
 - 进入Neo4j安装目录，在conf目录下，找到`neo4j.conf`文件，修改数据库名称:`dbms.default_database=您的数据库名称`
 
+> Tips：若使用docker运行neo4j，发生停止主进程自动退出容器现象，可以修改容器启动方式，例如：通过使用 --init 参数，让主进程停止，容器不会立即退出。具体操作方式请自行百度或AI。
+
 #### 步骤 3: 启动Neo4j服务
 - 进入Neo4j安装目录，在bin目录下，执行`./neo4j start`启动服务
 
