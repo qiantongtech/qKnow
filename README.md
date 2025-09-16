@@ -184,13 +184,14 @@ qKnow 提供 **商业版** 与 **开源版** 两种形态，满足不同规模�
 
 👉 点击下方按钮，查看完整的安装与部署指南：
 
-[🧭 查看快速开始文档](QUICKSTART.md)
+[🧭 查看快速开始文档](https://qknow.qiantong.tech/docs/start/quick-start.html)
 
 ## 👥 QQ交流群
 
 欢迎加入 qKnow 官方 QQ 交流群，以便获取平台最新动态及进行用户间的交流。
 
 [![加入QQ群](https://img.shields.io/badge/QQ群-277328475-blue.svg)](https://qm.qq.com/q/pr4xkk3dXq)
+[![加入QQ群](https://img.shields.io/badge/QQ群-961142613-blue.svg)](https://qm.qq.com/q/L2TFO5dlGo)
 
 ## 🖼️ 系统配图
 <table>
