@@ -182,9 +182,12 @@ qKnow 提供 **商业版** 与 **开源版** 两种形态，满足不同规模�
 
 ## 🚀 快速开始
 
-👉 点击下方按钮，查看完整的安装与部署指南：
+| 部署方式                                                                     | 说明                                                                           | 适用场景                   |
+|--------------------------------------------------------------------------|------------------------------------------------------------------------------|------------------------|
+| [Docker Compose 部署](https://qknow.qiantong.tech/docs/deploy/docker.html) | 所有组件（DeepKE、Neo4j、Mysql、Nginx、Redis 等）以及 qKnow 知识平台源码都通过 Docker Compose 一键启动 | **初学者快速上手**、功能演示、测试环境  |
+| [自主部署（纯手工安装）](https://qknow.qiantong.tech/docs/deploy/system.html)       | 所有依赖组件及 qKnow 知识平台服务均需手工安装和配置                                                | **生产环境**、大规模部署、个性化定制场景 |
 
-[🧭 查看快速开始文档](https://qknow.qiantong.tech/docs/start/quick-start.html)
+👉 查看完整的安装与部署指南：<a href="https://qknow.qiantong.tech/docs/deploy/system.html">🧭 点击查看详细部署步骤</a>
 
 ## 👥 QQ交流群
 
