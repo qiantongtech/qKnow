@@ -1,0 +1,28 @@
+version: "1.0.0"
+
+services:
+  # qknow 后端服务
+  qknow-api:
+    image: qiantong/qknow:${QKNOW_VERSION}
+    container_name: qknow-api
+    restart: always
+    profiles: [ "all" ]
+    env_file: .env
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - "8090:8090"
+    mac_address: 28-C5-D2-B7-FC-F5
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./qknow-server/logs:/usr/app/jar/logs
+      - ./qknow-server/upload:/usr/app/jar/upload
+      - ./qknow-server/application-prod.yml:/usr/app/jar/application-prod.yml
+      - ./qknow-server/application-prod.yml:/usr/app/jar/application-prod.yml
+    depends_on:
+      redis:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+    networks:
+      - qknownet
