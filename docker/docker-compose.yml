@@ -1,0 +1,21 @@
+include:
+  - path: ./docker-compose-base.yml
+  - path: ./docker-compose-qknow.yml
+  - path: ./docker-compose-demo.yml
+
+version: "1.0.0"
+
+networks:
+  qknownet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+volumes:
+  dolphinscheduler-postgresql:
+  dolphinscheduler-zookeeper:
+  dolphinscheduler-worker-data:
+#  dolphinscheduler-logs:
+#  dolphinscheduler-shared-local:
+#  dolphinscheduler-resource-local:

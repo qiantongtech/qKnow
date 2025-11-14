@@ -1,0 +1,19 @@
+version: "1.0.0"
+
+services:
+  mysql8:
+    image: mysql:8.0
+    profiles: [ "demo", "mysql" ]
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "lJ7gP0cA5dD2dA1hA3bJ"
+      TZ: "Asia/Shanghai"
+#    ports:
+#      - "3306:3306"
+    volumes:
+      - ./demo/mysql/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf:ro
+      - ./demo/mysql/init:/docker-entrypoint-initdb.d:ro
+    networks:
+      qknownet:
+        ipv4_address: 172.28.10.1
