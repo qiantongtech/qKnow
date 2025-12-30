@@ -51,6 +51,16 @@ public class ExtSchemaMappingRespVO implements Serializable {
     @Schema(description = "实体字段名称", example = "")
     private String entityNameField;
 
+
+    @Excel(name = "实体字段时间")
+    @Schema(description = "实体字段时间", example = "")
+    private String entityTimeField;
+
+    @Excel(name = "主键")
+    @Schema(description = "主键", example = "")
+    private String primaryKey;
+
+
     @Excel(name = "是否有效")
     @Schema(description = "是否有效", example = "")
     private Boolean validFlag;

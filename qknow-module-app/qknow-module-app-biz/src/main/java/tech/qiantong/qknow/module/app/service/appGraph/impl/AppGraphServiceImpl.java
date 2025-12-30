@@ -17,6 +17,7 @@ import tech.qiantong.qknow.module.app.enums.ReleaseStatus;
 import tech.qiantong.qknow.module.app.service.appGraph.AppGraphService;
 import tech.qiantong.qknow.neo4j.domain.DynamicEntity;
 import tech.qiantong.qknow.neo4j.domain.relationship.DynamicEntityRelationship;
+import tech.qiantong.qknow.neo4j.enums.GraphLabelEnum;
 import tech.qiantong.qknow.neo4j.enums.Neo4jLabelEnum;
 import tech.qiantong.qknow.neo4j.repository.DynamicRepository;
 import tech.qiantong.qknow.neo4j.utils.Convert;
@@ -115,37 +116,49 @@ public class AppGraphServiceImpl implements AppGraphService {
      *
      * @return
      */
+    @Override
     public Boolean addNode(JSONArray jsonArray) {
         Set<Long> idSet = jsonArray.stream()
                 .map(obj -> (JSONObject) obj)
                 .filter(jsonObject -> jsonObject.containsKey("id") && jsonObject.get("id") != null)
                 .map(jsonObject -> jsonObject.getLong("id"))
                 .collect(Collectors.toSet());
-        List<DynamicEntity> entityList = dynamicRepository.findAllById(idSet);
-        Map<Long, DynamicEntity> entityMap = entityList.stream()
+        List<DynamicEntity> graphEntityList = dynamicRepository.findAllById(idSet);
+        Map<Long, DynamicEntity> entityMap = graphEntityList.stream()
                 .collect(Collectors.toMap(DynamicEntity::getId, entity -> entity));
-        List<DynamicEntity> dynamicEntityList = Lists.newArrayList();
+        List<DynamicEntity> entityList = Lists.newArrayList();
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
-            Long id = jsonObject.getLong("id");
-            DynamicEntity dynamicEntity;
+            String id = jsonObject.getString("id");
+            DynamicEntity graphEntity;
             if (id != null) {
-                dynamicEntity = entityMap.get(id);
+                graphEntity = entityMap.get(id);
             } else {
-                dynamicEntity = new DynamicEntity();
-                dynamicEntity.putDynamicProperties("release_status", ReleaseStatus.UNPUBLISHED.getValue());
+                graphEntity = new DynamicEntity();
+                graphEntity.setReleaseStatus(ReleaseStatus.UNPUBLISHED.getValue());
+                graphEntity.setCreatorId(jsonObject.getLong("creatorId"));
+                graphEntity.setCreateTime(jsonObject.getDate("createTime"));
+                graphEntity.setCreateBy(jsonObject.getString("createBy"));
+                jsonObject.remove("creatorId");
+                jsonObject.remove("createTime");
+                jsonObject.remove("createBy");
             }
             // 标签
-            dynamicEntity.addLabels(Neo4jLabelEnum.get(jsonObject.getInteger("entityType")).getLabel());
+            graphEntity.addLabels(GraphLabelEnum.get(jsonObject.getInteger("entityType")).getLabel());
+            // 固定字段
+            graphEntity.setName(jsonObject.getString("name"));
+            jsonObject.remove("name");
+            jsonObject.remove("graphId");
+
             // 动态属性
             for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
                 if (!"id".equals(entry.getKey())) {
-                    dynamicEntity.putDynamicProperties(Convert.camelToSnake(entry.getKey()), entry.getValue());
+                    graphEntity.putDynamicProperties(Convert.camelToSnake(entry.getKey()), entry.getValue());
                 }
             }
-            dynamicEntityList.add(dynamicEntity);
+            entityList.add(graphEntity);
         }
-        dynamicRepository.saveAll(dynamicEntityList);
+        dynamicRepository.saveAll(entityList);
         return true;
     }
 
@@ -156,6 +169,7 @@ public class AppGraphServiceImpl implements AppGraphService {
      * @param graphRelationshipSaveReqVOList
      * @return
      */
+    @Override
     public Boolean addTripletRel(List<AppGraphRelationshipSaveReqVO> graphRelationshipSaveReqVOList) {
         // 取出所有的实体id
         Set<Long> idSet = graphRelationshipSaveReqVOList.stream()
@@ -169,8 +183,10 @@ public class AppGraphServiceImpl implements AppGraphService {
                 .map(AppGraphRelationshipSaveReqVO::getId)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
-        // 删除关系
-        dynamicRepository.deleteRelationshipsByIds(relationshipIds);
+        if (!relationshipIds.isEmpty()) {
+            // 删除关系
+            dynamicRepository.deleteNodeByIds(relationshipIds);
+        }
         // 新增/更新关系
         graphRelationshipSaveReqVOList.forEach(appGraphRelationshipSaveReqVO -> {
             DynamicEntity graphEntity1 = graphEntityMap.get(appGraphRelationshipSaveReqVO.getEntityId1());

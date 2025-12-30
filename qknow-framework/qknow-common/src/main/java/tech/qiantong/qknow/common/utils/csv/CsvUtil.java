@@ -13,25 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CsvUtil {
-    @Data
-    public static class CsvData{
-        private Long id;
-        private String name;
-        private String desc;
-    }
-
-    //测试
-    public static void main(String[] args) {
-        List<CsvData> csvDataList = new ArrayList<>();
-        CsvData csvData = new CsvData();
-        csvData.setId(Long.valueOf(1));
-        csvData.setName("aaaa");
-        csvData.setDesc("bbbb");
-        csvDataList.add(csvData);
-        createCsv(csvDataList,"D:/newfile.csv");
-    }
-
-    // 泛型方法，支持任何类型的 CSV 数据
+    /**
+     * 泛型方法，支持任何类型的 CSV 数据
+     * @author shaun
+     * @date 2025/06/13 16:01
+     * @param dataList
+     * @param createPath
+     * @return void
+     */
     public static <T> void createCsv(List<T> dataList, String createPath) {
         try {
             // 生成 CSV 文件内容
@@ -43,9 +32,11 @@ public class CsvUtil {
                 String[] title = new String[fields.length];
 
                 for (int i = 0; i < fields.length; i++) {
-                    title[i] = fields[i].getName();  // 使用字段名作为列标题
+                    // 使用字段名作为列标题
+                    title[i] = fields[i].getName();
                 }
-                rows.add(title);  // 添加标题行
+                // 添加标题行
+                rows.add(title);
             }
 
             // 遍历数据并生成每一行
@@ -53,27 +44,32 @@ public class CsvUtil {
                 Field[] fields = data.getClass().getDeclaredFields();
                 String[] row = new String[fields.length];
                 for (int i = 0; i < fields.length; i++) {
-                    fields[i].setAccessible(true);  // 允许访问私有字段
-                    Object value = fields[i].get(data);  // 获取字段值
-                    row[i] = value != null ? value.toString() : "";  // 处理 null 值
+                    // 允许访问私有字段
+                    fields[i].setAccessible(true);
+                    // 获取字段值
+                    Object value = fields[i].get(data);
+                    // 处理 null 值
+                    row[i] = value != null ? value.toString() : "";
                 }
-                rows.add(row);  // 添加数据行
+                // 添加数据行
+                rows.add(row);
             }
 
-            // 确保文件夹存在
-            Path path = Paths.get(createPath).getParent();  // 获取文件的父文件夹路径
+            // 获取文件的父文件夹路径，确保文件夹存在
+            Path path = Paths.get(createPath).getParent();
             if (!Files.exists(path)) {
-                Files.createDirectories(path);  // 如果文件夹不存在，则创建
+                // 如果文件夹不存在，则创建
+                Files.createDirectories(path);
             }
 
             // 创建 CSVWriter 对象并写入数据，不使用双引号
             try (CSVWriter csvWriter = new CSVWriter(new FileWriter(createPath),
                     CSVWriter.DEFAULT_SEPARATOR,
-                    CSVWriter.NO_QUOTE_CHARACTER,  // 禁用双引号
+                    CSVWriter.NO_QUOTE_CHARACTER,
                     CSVWriter.DEFAULT_ESCAPE_CHARACTER,
                     CSVWriter.DEFAULT_LINE_END)) {
-                // 这里的 rows 是你的数据数组
-                csvWriter.writeAll(rows);  // 将数据写入 CSV 文件
+                // 这里的 rows 是你的数据数组，将数据写入 CSV 文件
+                csvWriter.writeAll(rows);
             }
         } catch (IOException | IllegalAccessException e) {
             throw new RuntimeException("生成 CSV 文件异常: " + e.getMessage());

@@ -51,7 +51,7 @@ export default [
     children: [
       {
         path: "",
-        component: () => import("@/views/ext/extStructTask/addStructTask.vue"),
+        component: () => import("@/views/ext/extStructTask/add/index.vue"),
         name: "addStructTaskIndex",
         meta: { title: "添加结构化抽取", activeMenu: "/ext/extStructTask" },
       },
@@ -65,7 +65,7 @@ export default [
     children: [
       {
         path: "",
-        component: () => import("@/views/ext/extStructTask/editStructTask.vue"),
+        component: () => import("@/views/ext/extStructTask/add/index.vue"),
         name: "editStructTaskIndex",
         meta: { title: "修改结构化抽取", activeMenu: "/ext/extStructTask" },
       },

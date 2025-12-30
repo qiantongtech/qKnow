@@ -1,10 +1,14 @@
 package tech.qiantong.qknow.common.database;
 
-import org.springframework.jdbc.core.RowMapper;
+import com.alibaba.fastjson2.JSONObject;
 import tech.qiantong.qknow.common.database.constants.DbQueryProperty;
 import tech.qiantong.qknow.common.database.core.DbColumn;
+import tech.qiantong.qknow.common.database.core.DbName;
 import tech.qiantong.qknow.common.database.core.DbTable;
+import org.springframework.jdbc.core.RowMapper;
 
+import javax.sql.DataSource;
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.Map;
 
@@ -28,10 +32,16 @@ public interface DbDialect {
      * @return
      */
     String columns(String dbName, String tableName);
+
     String columns(DbQueryProperty dbQueryProperty, String tableName);
 
+    String getPkColumnNames(DbQueryProperty dbQueryProperty, String tableName);
+
     String generateCheckTableExistsSQL(DbQueryProperty dbQueryProperty, String tableName);
+
     List<String> someInternalSqlGenerator(DbQueryProperty dbQueryProperty, String tableName, String tableComment, List<DbColumn> dbColumnList);
+
+    List<String> someInternalSqlDorisGenerator(DbQueryProperty dbQueryProperty, String tableName, String tableComment, List<DbColumn> dbColumnList, String partitionRule, String bucketRule, Integer replica);
 
     /**
      * 校验表及列信息是否符合 DM8 的规范要求.
@@ -50,10 +60,21 @@ public interface DbDialect {
      * @return
      */
     String tables(String dbName);
+
     String tables(DbQueryProperty dbQueryProperty);
 
     /**
+     * 暂时hive专属
      *
+     * @param dbQueryProperty
+     * @param tableName
+     * @return
+     */
+    String tablesComment(DbQueryProperty dbQueryProperty, String tableName);
+
+    String buildTableNameByDbType(DbQueryProperty dbQueryProperty, String tableName);
+
+    /**
      * @param columns
      * @param tableName
      * @param dbQueryProperty
@@ -79,7 +100,7 @@ public interface DbDialect {
      */
     String count(String sql);
 
-    String countNew(String sql, Map<String, Object> params);
+    String countNew(String tableName, Map<String, Object> params);
 
     /**
      * oracl 读取long 类型会流关闭，是oracle的bug，需要特殊处理
@@ -104,4 +125,49 @@ public interface DbDialect {
      * @return
      */
     String getDbName();
+
+    /**
+     * 获取数据库名或模式名
+     * @param dbName
+     * @return
+     */
+    String getDbName(DbName dbName);
+
+    /**
+     * 首次层级 RowMapper：
+     * 把 DBNAME/TOTALLEVELS 映射到 DbName
+     *
+     */
+    default RowMapper<DbName> firstLevelMapper(int level) {
+        return (ResultSet rs, int rowNum) -> DbName.builder()
+                .dbName(rs.getString("DBNAME"))
+                .level(level)
+                .totalLevels(rs.getInt("TOTALLEVELS"))
+                .children(null)
+                .build();
+    }
+
+
+
+//    String getDatabasePhysicalInfo(DbName dbName);
+
+
+    /**
+     * 验证连接
+     *
+     * @param dataSource
+     * @param dbQueryProperty
+     * @return
+     */
+    Boolean validConnection(DataSource dataSource, DbQueryProperty dbQueryProperty);
+
+    String getInsertOrUpdateSql(String tableName, String where, String tableFieldName, String tableFieldValue, String setValue);
+
+    String getFlinkSQL(DbQueryProperty property, String flinkTableName, String tableName, String tableFieldName);
+
+    String getFlinkCDCSQL(DbQueryProperty property, String flinkTableName, String tableName, String tableFieldName);
+
+    String getTableName(DbQueryProperty property, String tableName);
+
+    String getFlinkSinkSQL(DbQueryProperty dbQueryProperty, JSONObject config, String flinkTableName, String tableName, String tableFieldName);
 }

@@ -14,35 +14,48 @@ import java.util.Set;
 
 /**
  * 动态实体
+ * @author wang
  */
 @Data
-@EqualsAndHashCode(exclude = {"relationshipEntityMap"}) // 排除 relationshipEntityMap 字段
+@EqualsAndHashCode(exclude = {"relationshipEntityMap"}, callSuper = false) // 排除 relationshipEntityMap 字段
 @Node
-public class DynamicEntity {
+public class DynamicEntity extends BaseNeo4jEntity {
     @Id
     @GeneratedValue
-    Long id;
+    private Long id;
 
     @Property(name = "name")
     private String name;
 
+    @Property(name = "release_status")
+    private Integer releaseStatus;
+
+    @Property(name = "graph_id")
+    private Long graphId;
+
     // 动态节点
     @DynamicLabels
-    private Set<String> labels = Sets.newHashSet();
+    private Set<String> labels;
 
     // 动态属性
-    @CompositeProperty(prefix = "", delimiter = "_")
-    private Map<String, Object> dynamicProperties = Maps.newHashMap();
+    @CompositeProperty(prefix = "dynamic_properties", delimiter = "_")
+    private Map<String, Object> dynamicProperties;
 
     // 建立关系
     @Relationship(direction = Relationship.Direction.OUTGOING)
     private Map<String, List<DynamicEntityRelationship>> relationshipEntityMap;
 
     public void addLabels(String label) {
+        if (this.labels == null) {
+            this.labels = Sets.newHashSet(); // 初始化 labels
+        }
         this.labels.add(label);
     }
 
     public void putDynamicProperties(String key, Object value) {
+        if (this.dynamicProperties == null) {
+            this.dynamicProperties = Maps.newHashMap();
+        }
         this.dynamicProperties.put(key, value);
     }
 
@@ -73,4 +86,7 @@ public class DynamicEntity {
             relationshipEntityMap.computeIfAbsent(key, k -> Lists.newArrayList()).addAll(value);
         }
     }
+
+
+
 }

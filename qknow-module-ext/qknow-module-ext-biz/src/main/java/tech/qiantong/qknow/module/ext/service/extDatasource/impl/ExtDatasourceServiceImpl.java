@@ -12,8 +12,14 @@ import lombok.extern.slf4j.Slf4j;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import tech.qiantong.qknow.common.core.domain.AjaxResult;
 import tech.qiantong.qknow.common.core.page.PageResult;
+import tech.qiantong.qknow.common.database.DataSourceFactory;
+import tech.qiantong.qknow.common.database.DbQuery;
+import tech.qiantong.qknow.common.database.constants.DbQueryProperty;
+import tech.qiantong.qknow.common.database.core.DbColumn;
+import tech.qiantong.qknow.common.database.exception.DataQueryException;
 import tech.qiantong.qknow.common.utils.DictUtils;
 import tech.qiantong.qknow.common.utils.object.BeanUtils;
 import tech.qiantong.qknow.common.utils.StringUtils;
@@ -52,6 +58,9 @@ public class ExtDatasourceServiceImpl extends ServiceImpl<ExtDatasourceMapper, E
     @Resource
     private IDmDatasourceApiService daDatasourceApiService;
 
+    @Autowired
+    private DataSourceFactory dataSourceFactory;
+
     /**
      * 根据数据源id, 数据id和表名获取行数据
      *
@@ -61,49 +70,54 @@ public class ExtDatasourceServiceImpl extends ServiceImpl<ExtDatasourceMapper, E
     public AjaxResult getTableDataByDataId(ExtDataSourceTable sourceTable) {
         DmDatasourceRespDTO datasource = daDatasourceApiService.getDatasourceById(sourceTable.getId());
         JSONObject jsonObject = JSONObject.parseObject(datasource.getDatasourceConfig());
-
-        //查询行数据
-        ExtDataSourceTable.GetTableData getTableData = new ExtDataSourceTable.GetTableData();
-        getTableData.setDbType(datasource.getDatasourceType());
-        getTableData.setUrl("jdbc:mysql://" + datasource.getIp() + ": "
-                + datasource.getPort() + "/" + jsonObject.getString("dbname"));//数据库名称
-        getTableData.setUsername(jsonObject.getString("username"));
-        getTableData.setPassword(jsonObject.getString("password"));
-        getTableData.setQuery("SELECT * FROM " + sourceTable.getTableName() + " WHERE ID = " + sourceTable.getDataId());
-        List<ConcurrentHashMap<String, Object>> tableData = dynamicDatabaseQuery.getTableData(getTableData);
-
-        //查询表中每个字段是什么意思
-        AjaxResult queryTableData = dynamicDatabaseQuery.getTableData(datasource.getDatasourceType(),
-                jsonObject.getString("dbname"),
-                getTableData.getUrl(),
-                getTableData.getUsername(),
-                getTableData.getPassword(),
-                sourceTable.getTableName());
-        JSONArray data = null;
-        if (queryTableData.isSuccess()) {
-            data = JSONArray.parseArray(queryTableData.get("data").toString());
+        if (datasource == null) {
+            throw new DataQueryException("未查到数据源信息");
         }
+        DbQueryProperty dbQueryProperty = new DbQueryProperty(
+                datasource.getDatasourceType(),
+                datasource.getIp(),
+                datasource.getPort(),
+                datasource.getDatasourceConfig());
+        DbQuery dbQuery = dataSourceFactory.createDbQuery(dbQueryProperty);
+        if (!dbQuery.valid()) {
+            dbQuery.close();
+            throw new DataQueryException("数据库连接失败");
+        }
+        String sql = "SELECT * FROM " + sourceTable.getTableName() + " WHERE " + sourceTable.getPrimaryKey() + " = '" + sourceTable.getPrimaryKeyData().toString() + "'";
+        //执行数据表数据查询
+        //定义返回结果
+        List<Map<String, Object>> tableDataList =  dbQuery.queryList(sql);
+        List<ConcurrentHashMap<String, Object>> tableData = tableDataList.stream()
+                .map(map -> {
+                    map.entrySet().removeIf(entry -> entry.getKey() == null || entry.getValue() == null);
+                    return new ConcurrentHashMap<>(map);
+                })
+                .collect(Collectors.toList());
+//        //处理关联数据表名
+//        String tableName =  dbQuery.buildTableNameByDbType(sourceTable.getTableName());
 
+        List<DbColumn> dbColumnList =  dbQuery.getTableColumns(dbQueryProperty,sourceTable.getTableName());
         ArrayList<HashMap<String, Object>> arrayList = new ArrayList<>();
 
-        ConcurrentHashMap<String, Object> concurrentHashMap = tableData.get(0);
-        for (Map.Entry<String, Object> objectEntry : concurrentHashMap.entrySet()) {
-            String key = objectEntry.getKey();
-            for (Object datum : data) {
-                JSONObject parseObject = JSONObject.parseObject(datum.toString());
-                if (parseObject.getString("columnName").equals(key)) {
-                    HashMap<String, Object> hashMap = new HashMap<>();
-                    hashMap.put("key", key);
-                    hashMap.put("value", objectEntry.getValue());
-                    hashMap.put("description", parseObject.getString("description"));
-                    hashMap.put("field", key + "(" + parseObject.getString("description") + ")");
-                    arrayList.add(hashMap);
+        if (!tableData.isEmpty()) {
+            ConcurrentHashMap<String, Object> concurrentHashMap = tableData.get(0);
+            for (Map.Entry<String, Object> objectEntry : concurrentHashMap.entrySet()) {
+                String key = objectEntry.getKey();
+                for (DbColumn datum : dbColumnList) {
+                    if (datum.getColName().equals(key)) {
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("key", key);
+                        hashMap.put("value", objectEntry.getValue());
+                        hashMap.put("description", datum.getColComment());
+                        hashMap.put("field", key + "(" + datum.getColComment() + ")");
+                        arrayList.add(hashMap);
+                    }
                 }
             }
         }
 
         HashMap<String, Object> map = new HashMap<>();
-        map.put("type", getTableData.getDbType());
+        map.put("type", datasource.getDatasourceType());
         map.put("host", datasource.getIp());
         map.put("databaseName", jsonObject.getString("dbname"));
         map.put("tableName", sourceTable.getTableName());

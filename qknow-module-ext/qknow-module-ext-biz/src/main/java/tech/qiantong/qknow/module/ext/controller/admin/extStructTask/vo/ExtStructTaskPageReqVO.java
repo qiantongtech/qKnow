@@ -1,10 +1,11 @@
 package tech.qiantong.qknow.module.ext.controller.admin.extStructTask.vo;
 
-import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import tech.qiantong.qknow.common.annotation.Excel;
 import tech.qiantong.qknow.common.core.page.PageParam;
+
+import java.util.Date;
 
 /**
  * 结构化抽取任务 Request VO 对象 ext_struct_task
@@ -21,6 +22,9 @@ public class ExtStructTaskPageReqVO extends PageParam {
     private Long id;
     @Schema(description = "工作区id", example = "")
     private Long workspaceId;
+
+    @Schema(description = "所属图谱", example = "")
+    private Long graphId;
 
     @Schema(description = "任务名称", example = "")
     private String name;
@@ -39,6 +43,15 @@ public class ExtStructTaskPageReqVO extends PageParam {
 
     @Schema(description = "发布人", example = "")
     private String publishBy;
+
+    @Schema(description = "更新类型", example = "")
+    private Integer updateType;
+
+    @Schema(description = "更新频率", example = "")
+    private String updateFrequency;
+
+    @Schema(description = "定时更新状态", example = "")
+    private Integer updateStatus;
 
     @Schema(description = "数据源id", example = "")
     private Long datasourceId;

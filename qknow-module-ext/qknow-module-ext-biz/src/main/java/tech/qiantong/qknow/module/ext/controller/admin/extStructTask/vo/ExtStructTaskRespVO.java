@@ -1,13 +1,12 @@
 package tech.qiantong.qknow.module.ext.controller.admin.extStructTask.vo;
 
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 import tech.qiantong.qknow.common.annotation.Excel;
-import java.util.Date;
+
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 结构化抽取任务 Response VO 对象 ext_struct_task
@@ -28,6 +27,9 @@ public class ExtStructTaskRespVO implements Serializable {
     @Excel(name = "工作区id")
     @Schema(description = "工作区id", example = "")
     private Long workspaceId;
+
+    @Schema(description = "所属图谱", example = "")
+    private Long graphId;
 
     @Excel(name = "任务名称")
     @Schema(description = "任务名称", example = "")
@@ -53,6 +55,18 @@ public class ExtStructTaskRespVO implements Serializable {
     @Excel(name = "发布人")
     @Schema(description = "发布人", example = "")
     private String publishBy;
+
+    @Excel(name = "更新类型")
+    @Schema(description = "更新类型", example = "")
+    private Integer updateType;
+
+    @Excel(name = "更新频率")
+    @Schema(description = "更新频率", example = "")
+    private String updateFrequency;
+
+    @Excel(name = "定时更新状态")
+    @Schema(description = "定时更新状态", example = "")
+    private Integer updateStatus;
 
     @Excel(name = "数据源id")
     @Schema(description = "数据源id", example = "")

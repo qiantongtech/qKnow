@@ -1,12 +1,14 @@
 package tech.qiantong.qknow.common.utils;
 
-import java.util.Collection;
-import java.util.List;
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import tech.qiantong.qknow.common.constant.CacheConstants;
 import tech.qiantong.qknow.common.core.domain.entity.SysDictData;
 import tech.qiantong.qknow.common.core.redis.RedisCache;
 import tech.qiantong.qknow.common.utils.spring.SpringUtils;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 字典工具类
@@ -39,12 +41,36 @@ public class DictUtils
      */
     public static List<SysDictData> getDictCache(String key)
     {
-        JSONArray arrayCache = SpringUtils.getBean(RedisCache.class).getCacheObject(getCacheKey(key));
-        if (StringUtils.isNotNull(arrayCache))
-        {
-            return arrayCache.toList(SysDictData.class);
+        Object obj = SpringUtils.getBean(RedisCache.class).getCacheObject(getCacheKey(key));
+
+        if (obj == null) {
+            return null;
         }
-        return null;
+
+        try {
+            // 情况1：已经是 JSONArray
+            if (obj instanceof JSONArray) {
+                return ((JSONArray) obj).toList(SysDictData.class);
+            }
+            // 情况2：是 JSON 字符串
+            else if (obj instanceof String) {
+                String jsonStr = (String) obj;
+                if (jsonStr.trim().startsWith("[")) {
+                    return JSON.parseArray(jsonStr, SysDictData.class);
+                } else {
+                    throw new RuntimeException("Expected JSON array string, but got: " + jsonStr);
+                }
+            }
+            // 情况3：是 List<Map> 等结构（如 JDK 序列化或 Jackson 反序列化结果）
+            else if (obj instanceof List) {
+                return JSON.parseArray(JSON.toJSONString(obj), SysDictData.class);
+            }
+            else {
+                throw new ClassCastException("Cannot convert " + obj.getClass() + " to JSONArray");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to parse dict cache for key: " + key, e);
+        }
     }
 
     /**

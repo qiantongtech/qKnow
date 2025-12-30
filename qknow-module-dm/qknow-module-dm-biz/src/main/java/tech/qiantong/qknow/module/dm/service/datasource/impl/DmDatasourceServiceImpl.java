@@ -324,16 +324,16 @@ public class DmDatasourceServiceImpl extends ServiceImpl<DmDatasourceMapper, DmD
         List<DbColumn> columnList = this.getDbTableColumns(Long.valueOf(jsonObject.getStr("id")), jsonObject.getStr("tableName"));
         List<DmModelColumnReqDTO> columnReqDTOList = new ArrayList<>();
         for (DbColumn column : columnList) {
-            String dataType = column.getDataType();
-            switch (jsonObject.getStr("type")) {
-                case "DM8":
-                case "MYSQL":
-                    column.setDataType(MySqlColumnTypeEnum.convertToDmType(dataType));
-                    break;
-                case "Kingbase8":
-                    column.setDataType(KingbaseColumnTypeEnum.convertToDmType(dataType));
-                    break;
-            }
+//            String dataType = column.getDataType();
+//            switch (jsonObject.getStr("type")) {
+//                case "DM8":
+//                case "MYSQL":
+//                    column.setDataType(MySqlColumnTypeEnum.convertToDmType(dataType));
+//                    break;
+//                case "Kingbase8":
+//                    column.setDataType(KingbaseColumnTypeEnum.convertToDmType(dataType));
+//                    break;
+//            }
             DmModelColumnReqDTO dpModelColumnReqDTO = new DmModelColumnReqDTO(column);
             columnReqDTOList.add(dpModelColumnReqDTO);
         }

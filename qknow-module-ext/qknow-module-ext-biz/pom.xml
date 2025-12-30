@@ -44,13 +44,6 @@
             <version>3.8.8</version>
         </dependency>
 
-        <!-- 知识中心模块 -->
-        <dependency>
-            <groupId>tech.qiantong</groupId>
-            <artifactId>qknow-module-kmc-api</artifactId>
-            <version>3.8.8</version>
-        </dependency>
-
         <!-- 系统模块 redis -->
         <dependency>
             <groupId>tech.qiantong</groupId>
@@ -68,6 +61,13 @@
         <dependency>
             <groupId>tech.qiantong</groupId>
             <artifactId>qknow-file</artifactId>
+            <version>3.8.8</version>
+        </dependency>
+
+        <!-- 定时任务-->
+        <dependency>
+            <groupId>tech.qiantong</groupId>
+            <artifactId>qknow-quartz</artifactId>
             <version>3.8.8</version>
         </dependency>
 
@@ -110,19 +110,18 @@
             <artifactId>pdfbox</artifactId>
             <version>2.0.27</version> <!-- 请检查最新版本 -->
         </dependency>
-        <dependency>
-            <groupId>tech.qiantong</groupId>
-            <artifactId>qknow-neo4j</artifactId>
-            <version>3.8.8</version>
-            <scope>compile</scope>
-        </dependency>
-
 
         <dependency>
             <groupId>tech.qiantong</groupId>
             <artifactId>qknow-module-app-api</artifactId>
             <version>3.8.8</version>
         </dependency>
+        <dependency>
+            <groupId>tech.qiantong</groupId>
+            <artifactId>qknow-module-ext-api</artifactId>
+            <version>3.8.8</version>
+        </dependency>
+
     </dependencies>
 
 </project>

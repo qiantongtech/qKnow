@@ -1,6 +1,7 @@
 package tech.qiantong.qknow.common.database;
 
 
+import org.springframework.stereotype.Component;
 import tech.qiantong.qknow.common.database.constants.DbQueryProperty;
 
 public interface DataSourceFactory {

@@ -50,6 +50,9 @@ public class ExtSchemaAttributeDO extends BaseEntity {
     /** 数据类型 */
     private Integer dataType;
 
+    /** 关联字典类型id */
+    private Long dictTypeId;
+
     /** 单/多值 */
     private Integer multipleFlag;
 

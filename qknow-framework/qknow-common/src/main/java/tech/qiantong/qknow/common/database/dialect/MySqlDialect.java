@@ -1,9 +1,11 @@
 package tech.qiantong.qknow.common.database.dialect;
 
+import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.RowMapper;
 import tech.qiantong.qknow.common.database.constants.DbQueryProperty;
 import tech.qiantong.qknow.common.database.core.DbColumn;
+import tech.qiantong.qknow.common.database.core.DbName;
 import tech.qiantong.qknow.common.database.core.DbTable;
 import tech.qiantong.qknow.common.database.utils.MD5Util;
 
@@ -61,6 +63,9 @@ public class MySqlDialect extends AbstractDbDialect {
             entity.setDataType(rs.getString("DATATYPE"));
             entity.setDataLength(rs.getString("DATALENGTH"));
             entity.setDataPrecision(rs.getString("DATAPRECISION"));
+            if (rs.getString("DATAPRECISION") != null) {
+                entity.setDataLength(rs.getString("DATAPRECISION"));
+            }
             entity.setDataScale(rs.getString("DATASCALE"));
             entity.setColKey("PRI".equals(rs.getString("COLKEY")));
             entity.setNullable("YES".equals(rs.getString("NULLABLE")));
@@ -81,6 +86,15 @@ public class MySqlDialect extends AbstractDbDialect {
     @Override
     public String generateCheckTableExistsSQL(DbQueryProperty dbQueryProperty, String tableName) {
         return "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '" + dbQueryProperty.getDbName() + "' AND table_name = '" + tableName + "';";
+    }
+
+    @Override
+    public String buildTableNameByDbType(DbQueryProperty dbQueryProperty, String tableName) {
+        if(StringUtils.isNotEmpty(dbQueryProperty.getDbName())){
+            return dbQueryProperty.getDbName() + "." + tableName;
+        }
+
+        return tableName;
     }
 
     @Override
@@ -135,6 +149,8 @@ public class MySqlDialect extends AbstractDbDialect {
                     case "TINYINT":
                         sql.append("TINYINT");
                         break;
+                    case "NUMERIC":
+                    case "NUMBER":
                     case "decimal":
                     case "DECIMAL":
                         sql.append(generateColumnSQLMySql("DECIMAL", column.getDataLength(), column.getDataScale(), 65, 30));
@@ -151,13 +167,11 @@ public class MySqlDialect extends AbstractDbDialect {
                     case "DATE":
                         sql.append("DATE");
                         break;
+                    case "timestamp":
+                    case "TIMESTAMP":
                     case "datetime":
                     case "DATETIME":
                         sql.append("DATETIME");
-                        break;
-                    case "timestamp":
-                    case "TIMESTAMP":
-                        sql.append("TIMESTAMP");
                         break;
                     case "time":
                     case "TIME":
@@ -179,11 +193,14 @@ public class MySqlDialect extends AbstractDbDialect {
 
                 // 默认值处理
                 if (StringUtils.isNotEmpty(column.getDataDefault())) {
-                    if (columnType.equals("VARCHAR") || columnType.equals("CHAR") || columnType.equals("TEXT")) {
-                        sql.append(" DEFAULT '").append(column.getDataDefault()).append("'");
-                    } else {
-                        sql.append(" DEFAULT ").append(column.getDataDefault());
-                    }
+                    sql.append(" DEFAULT ").append(column.getDataDefault());
+//                    if (columnType.equals("VARCHAR") || columnType.equals("CHAR") || columnType.equals("TEXT")) {
+//                        sql.append(" DEFAULT '").append(column.getDataDefault()).append("'");
+//                    } else {
+//                        sql.append(" DEFAULT ").append(column.getDataDefault());
+//                    }
+                } else if (column.getNullable() && !column.getColKey()) {//不存在默认值并且允许为NULL
+                    sql.append(" DEFAULT NULL");
                 }
 
                 // 添加字段备注（COMMENT）
@@ -218,8 +235,8 @@ public class MySqlDialect extends AbstractDbDialect {
             // 添加表备注
             if (StringUtils.isNotEmpty(tableComment)) {
                 sql.append("COMMENT='").append(MD5Util.escapeSingleQuotes(tableComment));
+                sql.append("'\n");
             }
-            sql.append("'\n");
             sqlList.add(sql.toString());
         }
 
@@ -292,7 +309,7 @@ public class MySqlDialect extends AbstractDbDialect {
                 .collect(Collectors.joining(", "));
 
         // 构造最终的 SQL 查询语句
-        return "SELECT " + fields + " FROM " +dbQueryProperty.getDbName()+"."+ tableName;
+        return "SELECT " + fields + " FROM " + dbQueryProperty.getDbName() + "." + tableName;
     }
 
     @Override
@@ -303,6 +320,135 @@ public class MySqlDialect extends AbstractDbDialect {
     @Override
     public String getDbName() {
         return "SELECT DATABASE() AS \"databaseName\"";
+    }
+
+    @Override
+    public String getDbName(DbName dbName) {
+        int level =  dbName == null ? 1 : dbName.getLevel()+1;
+        // 只有一个层级：数据库（库）
+        if (level == 1) {
+            return "SELECT schema_name AS DBNAME, 1 AS TOTALLEVELS \n" +
+                    "FROM information_schema.schemata\n" +
+                    "WHERE schema_name NOT IN ('information_schema','mysql','performance_schema','sys')";
+        }
+        // 没有第二层
+        throw new UnsupportedOperationException("MySQL only has one level");
+    }
+
+
+    /**
+     * 功能说明：统计 MySQL 中各数据库（Schema）的物理空间使用信息。
+     * 数据来源：information_schema.tables。
+     *
+     * 查询结果字段说明：
+     * -------------------------------------------------------------------------
+     * dbName          : 数据库名称（Schema 名）。
+     * tableCount      : 数据库中表的数量（仅统计 BASE TABLE 类型，不含视图）。
+     * viewCount       : 数据库中视图的数量（仅统计 VIEW 类型）。
+     * dataSizeMB      : 数据文件总大小（单位 MB），即所有表 data_length 之和。
+     * indexSizeMB     : 索引文件总大小（单位 MB），即所有表 index_length 之和。
+     * totalSizeMB     : 数据 + 索引的总占用空间（单位 MB）。
+     * rowCountApprox  : 各表记录数的近似总和（InnoDB 为估算值）。
+     * collectedAt     : 数据采集时间（执行查询的时间戳）。
+     * -------------------------------------------------------------------------
+     */
+//    @Override
+//    public String getDatabasePhysicalInfo(DbName dbName) {
+//        return "\n" +
+//                "SELECT\n" +
+//                "    table_schema AS dbName,\n" +
+//                "    COUNT(CASE WHEN table_type = 'BASE TABLE' THEN 1 END) AS tableCount,\n" +
+//                "    COUNT(CASE WHEN table_type = 'VIEW' THEN 1 END) AS viewCount,\n" +
+//                "    ROUND(SUM(data_length) / 1024 / 1024, 2) AS dataSizeMB,\n" +
+//                "    ROUND(SUM(index_length) / 1024 / 1024, 2) AS indexSizeMB,\n" +
+//                "    ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS totalSizeMB,\n" +
+//                "    SUM(table_rows) AS rowCountApprox,\n" +
+//                "    NOW() AS collectedAt\n" +
+//                "FROM information_schema.tables\n" +
+//                "WHERE table_schema NOT IN ('information_schema', 'mysql', 'performance_schema', 'sys')\n" +
+//                "GROUP BY table_schema\n" +
+//                "ORDER BY totalSizeMB DESC;\n";
+//    }
+
+    @Override
+    public String getInsertOrUpdateSql(String tableName, String where, String tableFieldName, String tableFieldValue, String setValue) {
+        String sql = "INSERT INTO {tableName} ({tableFieldName}) values({tableFieldValue}) ON DUPLICATE KEY UPDATE {setValue}";
+        sql = StringUtils
+                .replace(sql, "{tableName}", tableName)
+                .replace("{tableFieldName}", tableFieldName)
+                .replace("{tableFieldValue}", tableFieldValue)
+                .replace("{setValue}", setValue);
+        return sql;
+    }
+
+    @Override
+    public String getFlinkSQL(DbQueryProperty property, String flinkTableName, String tableName, String tableFieldName) {
+        String sql = "CREATE TABLE ${flinkTableName} (${tableFieldName}) " +
+                "WITH ( 'connector' = 'jdbc'," +
+                "'url' = 'jdbc:mysql://${host}:${port}/${dbName}?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=Asia/Shanghai'," +
+                "'table-name' = '${tableName}'," +
+                "'username' = '${username}'," +
+                "'password' = '${password}')";
+        sql = StringUtils
+                .replace(sql, "${flinkTableName}", flinkTableName)
+                .replace("${tableName}", tableName)
+                .replace("${host}", property.getHost())
+                .replace("${tableFieldName}", tableFieldName)
+                .replace("${port}", String.valueOf(property.getPort()))
+                .replace("${dbName}", property.getDbName())
+                .replace("${username}", property.getUsername())
+                .replace("${password}", property.getPassword());
+        return sql;
+    }
+
+    @Override
+    public String getFlinkCDCSQL(DbQueryProperty property, String flinkTableName, String tableName, String tableFieldName) {
+        String sql = "CREATE TABLE ${flinkTableName} (${tableFieldName}) " +
+                "WITH ( 'connector' = 'mysql-cdc'," +
+                " 'hostname' = '${host}' ," +
+                "'port' = '${port}' ," +
+                "'username' = '${username}' ," +
+                "'password' = '${password}'," +
+                "'database-name' = '${dbName}' ," +
+                "'table-name' = '${tableName}' ," +
+                "'server-time-zone' = 'Asia/Shanghai'," +
+                "'scan.incremental.snapshot.enabled' = 'true'," +
+                "'debezium.snapshot.mode'='initial'" +
+                ")";
+        sql = StringUtils
+                .replace(sql, "${flinkTableName}", flinkTableName)
+                .replace("${tableName}", tableName)
+                .replace("${host}", property.getHost())
+                .replace("${tableFieldName}", tableFieldName)
+                .replace("${port}", String.valueOf(property.getPort()))
+                .replace("${dbName}", property.getDbName())
+                .replace("${username}", property.getUsername())
+                .replace("${password}", property.getPassword());
+        return sql;
+    }
+
+    @Override
+    public String getFlinkSinkSQL(DbQueryProperty property, JSONObject config, String flinkTableName, String tableName, String tableFieldName) {
+        String sql = "CREATE TABLE ${flinkTableName} (${tableFieldName}) " +
+                "WITH ( 'connector' = 'jdbc'," +
+                "'url' = 'jdbc:mysql://${host}:${port}/${dbName}?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=Asia/Shanghai'," +
+                "'table-name' = '${tableName}'," +
+                "'username' = '${username}'," +
+                "'password' = '${password}'," +
+                "'sink.buffer-flush.max-rows' = '${batchSize}'," +
+                "'sink.buffer-flush.interval' = '1s'" +
+                ")";
+        sql = StringUtils
+                .replace(sql, "${flinkTableName}", flinkTableName)
+                .replace("${tableName}", tableName)
+                .replace("${host}", property.getHost())
+                .replace("${tableFieldName}", tableFieldName)
+                .replace("${port}", String.valueOf(property.getPort()))
+                .replace("${dbName}", property.getDbName())
+                .replace("${username}", property.getUsername())
+                .replace("${password}", property.getPassword())
+                .replace("${batchSize}", String.valueOf(config.getIntValue("batchSize",100)));
+        return sql;
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONObject;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.quartz.SchedulerException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -264,7 +265,7 @@ public class ExtStructTaskController extends BaseController {
     @PreAuthorize("@ss.hasPermi('ext:extStructTask:struct:edit')")
     @Log(title = "结构化抽取任务", businessType = BusinessType.UPDATE)
     @PutMapping
-    public CommonResult<Integer> edit(@Valid @RequestBody ExtStructTaskSaveReqVO extStructTask) {
+    public CommonResult<Integer> edit(@Valid @RequestBody ExtStructTaskSaveReqVO extStructTask)  throws SchedulerException {
         return CommonResult.toAjax(extStructTaskService.updateExtStructTask(extStructTask));
     }
 
@@ -311,7 +312,7 @@ public class ExtStructTaskController extends BaseController {
     @PreAuthorize("@ss.hasPermi('ext:extStructTask:struct:remove')")
     @Log(title = "结构化抽取任务", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public CommonResult<Integer> remove(@PathVariable Long[] ids) {
+    public CommonResult<Integer> remove(@PathVariable Long[] ids)  throws SchedulerException {
         for (Long id : ids) {
             ExtStructTaskDO structTaskById = extStructTaskService.getExtStructTaskById(id);
             //删除neo4j中之前抽取相关的数据, 如果有的话
@@ -320,6 +321,21 @@ public class ExtStructTaskController extends BaseController {
             extNeo4jService.deleteExtStruck(extractionDO);
         }
         return CommonResult.toAjax(extStructTaskService.removeExtStructTask(Arrays.asList(ids)));
+    }
+
+    /**
+     * 定时任务立即执行一次
+     */
+    @Log(title = "定时任务", businessType = BusinessType.UPDATE)
+    @PutMapping("/runStructTask")
+    public AjaxResult runStructTask(@RequestBody ExtStructTask extStructTask)  throws Exception {
+        try {
+            extStructTaskService.runStructTask(extStructTask);
+            return AjaxResult.success("任务执行成功");
+        } catch (Exception e) {
+            // 捕获异常并返回失败
+            return AjaxResult.error("任务执行失败: " + e.getMessage());
+        }
     }
 
 }

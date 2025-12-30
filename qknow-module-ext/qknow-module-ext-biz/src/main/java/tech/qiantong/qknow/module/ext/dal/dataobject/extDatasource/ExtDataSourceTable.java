@@ -6,6 +6,8 @@ import lombok.Data;
 public class ExtDataSourceTable {
     private Long id;
     private Long dataId;
+    private String primaryKey;
+    private Object primaryKeyData;
     private String tableName;
     private String databaseName;
 

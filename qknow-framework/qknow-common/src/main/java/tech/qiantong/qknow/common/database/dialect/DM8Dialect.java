@@ -1,18 +1,25 @@
 package tech.qiantong.qknow.common.database.dialect;
 
 
+import com.alibaba.fastjson2.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.RowMapper;
 import tech.qiantong.qknow.common.database.constants.DbQueryProperty;
 import tech.qiantong.qknow.common.database.constants.fieldtypes.DM8FieldType;
 import tech.qiantong.qknow.common.database.core.DbColumn;
+import tech.qiantong.qknow.common.database.core.DbName;
 import tech.qiantong.qknow.common.database.core.DbTable;
+import tech.qiantong.qknow.common.database.exception.DataQueryException;
 import tech.qiantong.qknow.common.database.utils.MD5Util;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.SQLException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -23,6 +30,7 @@ import java.util.stream.Collectors;
  * @author: FXB
  * @create: 2024-08-07 10:28
  **/
+@Slf4j
 public class DM8Dialect extends AbstractDbDialect {
 
     @Override
@@ -111,14 +119,23 @@ public class DM8Dialect extends AbstractDbDialect {
     }
 
     @Override
+    public String buildTableNameByDbType(DbQueryProperty dbQueryProperty, String tableName) {
+        if(StringUtils.isNotEmpty(dbQueryProperty.getDbName())){
+            return dbQueryProperty.getDbName() + "." + tableName;
+        }
+
+        return tableName;
+    }
+
+    @Override
     public List<String> someInternalSqlGenerator(DbQueryProperty dbQueryProperty, String tableName, String tableComment, List<DbColumn> dbColumnList) {
         String dbName = dbQueryProperty.getDbName();
 
-        if(StringUtils.isNotEmpty(dbName)){
+        if (StringUtils.isNotEmpty(dbName)) {
             tableName = dbName + "." + tableName;
         }
 
-        List<String> sqlList =  generateDmCreateSql(tableName,tableComment,dbColumnList);
+        List<String> sqlList = generateDmCreateSql(tableName, tableComment, dbColumnList);
 
         return sqlList;
     }
@@ -134,16 +151,18 @@ public class DM8Dialect extends AbstractDbDialect {
             createSql.append("\n  ").append(col.getColName()).append(" ");
             createSql.append(mapDmColumnType(col));
 
+            // N false 不能为空  Y true 可以为空
             if (!col.getNullable()) {
                 createSql.append(" NOT NULL");
             }
             if (StringUtils.isNotEmpty(col.getDataDefault())) {
-                String columnType = col.getDataType();
-                if (isStringTypeSwitchDEFAULT(columnType)) {
-                    createSql.append(" DEFAULT '").append(MD5Util.escapeSingleQuotes(col.getDataDefault())).append("'");
-                } else {
-                    createSql.append(" DEFAULT ").append(col.getDataDefault());
-                }
+                createSql.append(" DEFAULT ").append(col.getDataDefault());
+//                String columnType = col.getDataType();
+//                if (isStringTypeSwitchDEFAULT(columnType)) {
+//                    createSql.append(" DEFAULT '").append(MD5Util.escapeSingleQuotes(col.getDataDefault())).append("'");
+//                } else {
+//                    createSql.append(" DEFAULT ").append(col.getDataDefault());
+//                }
             }
             if (col.getColKey()) {
                 pkList.add(col.getColName());
@@ -190,6 +209,7 @@ public class DM8Dialect extends AbstractDbDialect {
                 return false;
         }
     }
+
     private static String mapDmColumnType(DbColumn col) {
         // 类似 Oracle
         String type = col.getDataType();
@@ -197,6 +217,8 @@ public class DM8Dialect extends AbstractDbDialect {
         Long scale = MD5Util.getStringToLong(col.getDataScale());
 
         switch (type) {
+            case "varchar":
+            case "varchar2":
             case "VARCHAR":
             case "VARCHAR2":
                 return "VARCHAR2(" + (length != null ? length : 255) + ")";
@@ -209,6 +231,10 @@ public class DM8Dialect extends AbstractDbDialect {
                 return "BIGINT";
             case "DECIMAL":
                 return "DECIMAL(" + (length != null ? length : 10) + "," + (scale != null ? scale : 0) + ")";
+            case "NUMERIC":
+                return "NUMERIC(" + (length != null ? length : 10) + "," + (scale != null ? scale : 0) + ")";
+            case "NUMBER":
+                return "NUMBER(" + (length != null ? length : 10) + "," + (scale != null ? scale : 0) + ")";
             case "DATE":
             case "DATETIME":
                 return "TIMESTAMP";
@@ -235,6 +261,7 @@ public class DM8Dialect extends AbstractDbDialect {
                 "LEFT JOIN ALL_TAB_COMMENTS atc ON atc.TABLE_NAME = at.TABLE_NAME AND atc.OWNER = at.OWNER " +
                 "WHERE at.OWNER = '" + dbQueryProperty.getDbName() + "' ";
     }
+
     @Override
     public String buildQuerySqlFields(List<DbColumn> columns, String tableName, DbQueryProperty dbQueryProperty) {
         // 如果没有传入字段，则默认使用 * 查询所有字段
@@ -248,7 +275,7 @@ public class DM8Dialect extends AbstractDbDialect {
                 .collect(Collectors.joining(", "));
 
         // 构造最终的 SQL 查询语句
-        return "SELECT " + fields + " FROM " +dbQueryProperty.getDbName()+"."+ tableName;
+        return "SELECT " + fields + " FROM " + dbQueryProperty.getDbName() + "." + tableName;
     }
 
     @Override
@@ -261,6 +288,20 @@ public class DM8Dialect extends AbstractDbDialect {
         return "SELECT SYS_CONTEXT('USERENV', 'CURRENT_SCHEMA') AS \"databaseName\" FROM DUAL";
     }
 
+    @Override
+    public String getDbName(DbName dbName) {
+        int level =  dbName == null ? 1 : dbName.getLevel()+1;
+        if (level == 1) {
+            return "SELECT USERNAME AS DBNAME, 1 AS TOTALLEVELS\n" +
+                    "FROM ALL_USERS\n" +
+                    "WHERE USERNAME NOT IN ('SYSDBA','SYSAUDITOR','SYS','PUBLIC','OUTLN','DBSNMP','MDDATA',\n" +
+                    "                       'SYSSSO','SYSSSO_AUDIT')\n" +
+                    "ORDER BY DBNAME;";
+        }
+        throw new UnsupportedOperationException("DM8 only supports one-level namespace (schema=user)");
+
+    }
+
 
     @Override
     public RowMapper<DbColumn> columnMapper() {
@@ -270,6 +311,9 @@ public class DM8Dialect extends AbstractDbDialect {
             entity.setDataType(rs.getString("DATATYPE"));
             entity.setDataLength(rs.getString("DATALENGTH"));
             entity.setDataPrecision(rs.getString("DATAPRECISION"));
+            if (rs.getString("DATAPRECISION") != null) {
+                entity.setDataLength(rs.getString("DATAPRECISION"));
+            }
             entity.setDataScale(rs.getString("DATASCALE"));
             entity.setColKey("1".equals(rs.getString("COLKEY")));
             entity.setNullable("Y".equals(rs.getString("NULLABLE")));
@@ -292,7 +336,32 @@ public class DM8Dialect extends AbstractDbDialect {
 
     @Override
     public List<String> validateSpecification(String tableName, String tableComment, List<DbColumn> columns) {
-        return this.validateDm8Specification(tableName,tableComment,columns);
+        return this.validateDm8Specification(tableName, tableComment, columns);
+    }
+
+
+    @Override
+    public Boolean validConnection(DataSource dataSource, DbQueryProperty dbQueryProperty) {
+        String jdbcUrl = trainToJdbcUrl(dbQueryProperty);
+        try (Connection conn = DriverManager.getConnection(jdbcUrl, dbQueryProperty.getUsername(),
+                dbQueryProperty.getPassword())) {
+            return conn.isValid(0);
+        } catch (SQLException e) {
+            log.error("数据库连接失败", e);
+            throw new DataQueryException("数据库连接失败,稍后重试");
+        }
+    }
+
+    @Override
+    public String getInsertOrUpdateSql(String tableName, String where, String tableFieldName, String tableFieldValue, String setValue) {
+        String sql = "MERGE INTO {tableName} USING (SELECT COUNT(1) count FROM {tableName}  WHERE {where}) c ON (c.count > 0) WHEN MATCHED THEN UPDATE SET {setValue} WHERE {where} WHEN NOT MATCHED THEN INSERT ({tableFieldName}) VALUES ({tableFieldValue})";
+        sql = StringUtils
+                .replace(sql, "{tableName}", tableName)
+                .replace("{where}", where)
+                .replace("{tableFieldName}", tableFieldName)
+                .replace("{tableFieldValue}", tableFieldValue)
+                .replace("{setValue}", setValue);
+        return sql;
     }
 
     /**
@@ -331,7 +400,7 @@ public class DM8Dialect extends AbstractDbDialect {
         } else {
             for (DbColumn column : columns) {
                 List<String> strings = DM8FieldType.validateColumn(column);
-                if(CollectionUtils.isNotEmpty(strings)){
+                if (CollectionUtils.isNotEmpty(strings)) {
                     errors.addAll(strings);
                 }
             }
@@ -339,4 +408,76 @@ public class DM8Dialect extends AbstractDbDialect {
         return errors;
     }
 
+    @Override
+    public String getFlinkCDCSQL(DbQueryProperty property, String flinkTableName, String tableName, String tableFieldName) {
+        String sql = "CREATE TABLE ${flinkTableName} (${tableFieldName}) " +
+                "WITH ( 'connector' = 'dm-cdc'," +
+                "'hostname' = '${host}' ," +
+                "'port' = '${port}' ," +
+                "'username' = '${username}' ," +
+                "'password' = '${password}'," +
+                "'database-name' = 'DAMENG' ," +//TODO 后面这个可以在数据连接里加一个配置项动态传递
+                "'schema-name' = '${dbName}'," +
+                "'table-name' = '${tableName}' ," +
+                " 'scan.startup.mode' = 'initial'," +
+                " 'debezium.database.tablename.case.insensitive' =  'false'," +
+                " 'debezium.lob.enabled' = 'true'" +
+                ")";
+        sql = StringUtils
+                .replace(sql, "${flinkTableName}", flinkTableName)
+                .replace("${tableName}", tableName)
+                .replace("${host}", property.getHost())
+                .replace("${tableFieldName}", tableFieldName)
+                .replace("${port}", String.valueOf(property.getPort()))
+                .replace("${dbName}", property.getDbName())
+                .replace("${username}", property.getUsername())
+                .replace("${password}", property.getPassword());
+        return sql;
+    }
+
+    @Override
+    public String getFlinkSQL(DbQueryProperty property, String flinkTableName, String tableName, String tableFieldName) {
+        String sql = "CREATE TABLE ${flinkTableName} (${tableFieldName}) " +
+                "WITH ( 'connector' = 'jdbc'," +
+                "'url' = 'jdbc:dm://${host}:${port}/${dbName}?STU&zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&schema=${dbName}&serverTimezone=Asia/Shanghai'," +
+                "'table-name' = '${tableName}'," +
+                "'username' = '${username}'," +
+                "'password' = '${password}')";
+
+        sql = StringUtils
+                .replace(sql, "${flinkTableName}", flinkTableName)
+                .replace("${tableName}", tableName)
+                .replace("${host}", property.getHost())
+                .replace("${tableFieldName}", tableFieldName)
+                .replace("${port}", String.valueOf(property.getPort()))
+                .replace("${dbName}", property.getDbName())
+                .replace("${username}", property.getUsername())
+                .replace("${password}", property.getPassword());
+        return sql;
+    }
+
+    @Override
+    public String getFlinkSinkSQL(DbQueryProperty property, JSONObject config, String flinkTableName, String tableName, String tableFieldName) {
+        String sql = "CREATE TABLE ${flinkTableName} (${tableFieldName}) " +
+                "WITH ( 'connector' = 'jdbc'," +
+                "'url' = 'jdbc:dm://${host}:${port}/${dbName}?STU&zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&schema=${dbName}&serverTimezone=Asia/Shanghai'," +
+                "'table-name' = '${tableName}'," +
+                "'username' = '${username}'," +
+                "'password' = '${password}'," +
+                "'sink.buffer-flush.max-rows' = '${batchSize}'," +
+                "'sink.buffer-flush.interval' = '1s'" +
+                ")";
+
+        sql = StringUtils
+                .replace(sql, "${flinkTableName}", flinkTableName)
+                .replace("${tableName}", tableName)
+                .replace("${host}", property.getHost())
+                .replace("${tableFieldName}", tableFieldName)
+                .replace("${port}", String.valueOf(property.getPort()))
+                .replace("${dbName}", property.getDbName())
+                .replace("${username}", property.getUsername())
+                .replace("${password}", property.getPassword())
+                .replace("${batchSize}", String.valueOf(config.getIntValue("batchSize", 100)));
+        return sql;
+    }
 }

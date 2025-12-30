@@ -3,10 +3,7 @@ package tech.qiantong.qknow.common.database.constants.fieldtypes;
 import tech.qiantong.qknow.common.database.core.DbColumn;
 import tech.qiantong.qknow.common.database.utils.MD5Util;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public enum DM8FieldType {
     // 短文本类型
