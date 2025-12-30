@@ -16,7 +16,7 @@ public interface ExtNeo4jRepository extends BaseRepository<ExtExtraction, Long> 
      * @param taskId
      * @return
      */
-    @Query("MATCH (a:ExtUnStruck {dynamicProperties_task_id: $taskId}) " +
+    @Query("MATCH (a:ExtUnStruck {dynamic_properties_task_id: $taskId}) " +
             "DETACH DELETE a")
     void deleteExtUnStruck(@Param("taskId") Long taskId);
 
@@ -27,7 +27,7 @@ public interface ExtNeo4jRepository extends BaseRepository<ExtExtraction, Long> 
      * @param taskId
      * @return
      */
-    @Query("MATCH (a:ExtStruck {dynamicProperties_task_id: $taskId}) " +
+    @Query("MATCH (a:ExtStruck {dynamic_properties_task_id: $taskId}) " +
             "DETACH DELETE a")
     void deleteExtStruck(@Param("taskId") Long taskId);
 }

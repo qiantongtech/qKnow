@@ -53,6 +53,16 @@ public class ExtStructTaskDO extends BaseEntity {
     /** 发布人 */
     private String publishBy;
 
+    /** 更新类型 */
+    private Integer updateType;
+
+    /** 更新频率 */
+    private String updateFrequency;
+
+    /** 更新类型 */
+    private Integer updateStatus;
+
+
     /** 数据源id */
     private Long datasourceId;
 

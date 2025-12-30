@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.quartz.SchedulerException;
 import org.springframework.web.bind.annotation.RequestBody;
 import tech.qiantong.qknow.common.core.domain.AjaxResult;
 import tech.qiantong.qknow.common.core.page.PageResult;
@@ -82,14 +83,14 @@ public interface IExtStructTaskService extends IService<ExtStructTaskDO> {
      *
      * @param updateReqVO 结构化抽取任务信息
      */
-    int updateExtStructTask(ExtStructTaskSaveReqVO updateReqVO);
+    int updateExtStructTask(ExtStructTaskSaveReqVO updateReqVO) throws SchedulerException;
 
     /**
      * 删除结构化抽取任务
      *
      * @param idList 结构化抽取任务编号
      */
-    int removeExtStructTask(Collection<Long> idList);
+    int removeExtStructTask(Collection<Long> idList) throws SchedulerException;
 
     /**
      * 获得结构化抽取任务详情
@@ -126,4 +127,13 @@ public interface IExtStructTaskService extends IService<ExtStructTaskDO> {
      */
     String importExtStructTask(List<ExtStructTaskRespVO> importExcelList, boolean isUpdateSupport, String operName);
 
+
+
+    /**
+     * 定时任务立即执行一次
+     *
+     * @param extStructTask
+     * @return
+     */
+    void  runStructTask(ExtStructTask extStructTask) throws Exception;
 }

@@ -1,5 +1,6 @@
 package tech.qiantong.qknow.module.ext.dal.dataobject.extSchemaMapping;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -7,6 +8,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import tech.qiantong.qknow.common.core.domain.BaseEntity;
+
+import java.util.Date;
 
 /**
  * 概念映射 DO 对象 ext_schema_mapping
@@ -44,6 +47,16 @@ public class ExtSchemaMappingDO extends BaseEntity {
 
     /** 实体名称字段 */
     private String entityNameField;
+
+
+    /** 实体字段时间 */
+    private String entityTimeField;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")  // 指定 JSON 格式化
+    private Date lastDateTime;
+
+    /** 主键 */
+    private String primaryKey;
 
     /** 概念id */
     private Long schemaId;

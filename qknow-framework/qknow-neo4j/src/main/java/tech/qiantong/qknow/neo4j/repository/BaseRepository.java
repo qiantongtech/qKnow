@@ -1,5 +1,6 @@
 package tech.qiantong.qknow.neo4j.repository;
 
+import com.google.common.collect.Lists;
 import org.neo4j.driver.internal.InternalNode;
 import org.neo4j.driver.internal.value.NodeValue;
 import org.neo4j.driver.types.Relationship;
@@ -12,6 +13,7 @@ import org.springframework.data.repository.query.Param;
 import tech.qiantong.qknow.common.core.page.PageResult;
 import tech.qiantong.qknow.common.utils.spring.SpringUtils;
 import tech.qiantong.qknow.neo4j.domain.DynamicEntity;
+import tech.qiantong.qknow.neo4j.utils.Utils;
 import tech.qiantong.qknow.neo4j.wrapper.Neo4jBuildWrapper;
 import tech.qiantong.qknow.neo4j.wrapper.Neo4jQueryWrapper;
 
@@ -155,6 +157,25 @@ public interface BaseRepository<T, ID> extends Neo4jRepository<T, ID> {
         Neo4jTemplate neo4jTemplate = SpringUtils.getBean(Neo4jTemplate.class);
         String cypherQuery = wrapper.createRelationship(label, startNodeMap, endNodeMap, rel, relMap);
         return neo4jTemplate.findAll(cypherQuery, wrapper.getEntityClass());
+    }
+
+    /**
+     * 获取合并关系语法
+     * @return
+     */
+    public static String mergeRelationship(String relationship, Map<String, Object> params, String mergeSqlStart, String mergeSqlEnd) {
+        StringBuilder query = new StringBuilder();
+        query.append(mergeSqlStart).append(mergeSqlEnd);
+        query.append(" MERGE (a)-[r:").append(relationship).append("]->(b) ");
+
+        List<String> rList = Lists.newArrayList();
+        params.forEach((key, value) -> {
+            rList.add("r." + key + "=" + Utils.getValueString(value));
+        });
+        if(!rList.isEmpty()){
+            query.append("ON CREATE SET ").append(String.join(",", rList));
+        }
+        return query.toString();
     }
 
     /**

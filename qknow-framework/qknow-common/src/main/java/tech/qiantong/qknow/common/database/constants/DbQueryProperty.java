@@ -2,14 +2,19 @@ package tech.qiantong.qknow.common.database.constants;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.annotation.JSONField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.util.StringUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
+import tech.qiantong.qknow.common.database.core.DbName;
 import tech.qiantong.qknow.common.database.exception.DataQueryException;
+import tech.qiantong.qknow.common.database.utils.AesEncryptUtil;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
@@ -17,6 +22,7 @@ public class DbQueryProperty implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @JSONField(alternateNames = {"type"})
     private String dbType;
     private String host;
     private String username;
@@ -24,39 +30,118 @@ public class DbQueryProperty implements Serializable {
     private Integer port;
     private String dbName;
     private String sid;
+    //kafka配置或生成表sql时所需的配置
+    private Map<String, Object> config;
+
+    /**
+     * 配置
+     */
+    private Map<String, Object> datasourceConfig;
+
+    /**
+     * 不解密的构造方法
+     *
+     * @param dbType
+     * @param host
+     * @param username
+     * @param password
+     * @param port
+     * @param dbName
+     * @param sid
+     */
+    public DbQueryProperty(String dbType, String host, String username, String password, Integer port, String dbName, String sid) {
+        this.dbType = dbType;
+        this.host = host;
+        this.username = username;
+        this.password = password;
+        this.port = port;
+        this.dbName = dbName;
+        this.sid = sid;
+    }
 
     /**
      * 参数合法性校验
      */
     public void viald() {
-        if (StringUtils.isEmpty(dbType) || StringUtils.isEmpty(host) ||
-                StringUtils.isEmpty(username) ||
-                StringUtils.isEmpty(port)) {
+        if (StringUtils.isBlank(dbType)) {
             throw new DataQueryException("参数不完整");
         }
-        if (DbType.OTHER.getDb().equals(dbType)) {
-            throw new DataQueryException("不支持的数据库类型");
+        DbType dbTypeEnum = DbType.getDbType(dbType);
+        switch (dbTypeEnum) {
+            case MYSQL:
+            case ORACLE:
+            case ORACLE_12C:
+            case POSTGRE_SQL:
+            case SQL_SERVER2008:
+            case SQL_SERVER:
+            case DM8:
+            case KINGBASE8:
+            case PHOENIX:
+            case DORIS:
+            case DB2:
+            case OSCAR:
+                if (StringUtils.isBlank(host)
+                        || StringUtils.isBlank(username)
+                        || StringUtils.isBlank(password)
+                        || port == null) {
+                    throw new DataQueryException("参数不完整");
+                }
+                break;
+            case REDIS:
+                if (StringUtils.isBlank(host)
+                        || port == null) {
+                    throw new DataQueryException("参数不完整");
+                }
+                break;
+            case HIVE:
+                if (StringUtils.isBlank(host)
+                        || StringUtils.isBlank(username)
+                        || port == null) {
+                    throw new DataQueryException("参数不完整");
+                }
+                break;
+            case HDFS:
+            case KAFKA:
+            case RABBITMQ:
+                if (StringUtils.isBlank(host) || port == null) {
+                    throw new DataQueryException("参数不完整");
+                }
+                break;
+            case FTP:
+                if (StringUtils.isAnyBlank(host, username, password) || port == null) {
+                    throw new DataQueryException("参数不完整");
+                }
+                break;
+            case OSS_ALIYUN:
+                if (datasourceConfig == null
+                        || datasourceConfig.get("keyId") == null
+                        || datasourceConfig.get("keySecret") == null
+                        || datasourceConfig.get("bucket") == null
+                        || datasourceConfig.get("endpoint") == null) {
+                    throw new DataQueryException("参数不完整");
+                }
+                break;
+            case OTHER:
+                throw new DataQueryException("不支持的数据库类型");
         }
     }
 
     /**
-     *
-     * @param datasourceType  类型
-     * @param ip  ip
-     * @param port  端口
-     * @param datasourceConfig  配置信息（JSON字符串）
+     * @param datasourceType   类型
+     * @param ip               ip
+     * @param port             端口
+     * @param datasourceConfig 配置信息（JSON字符串）
      */
     public DbQueryProperty(String datasourceType, String ip, Long port, String datasourceConfig) {
-        if (StringUtils.isEmpty(datasourceType) || StringUtils.isEmpty(ip) || port == null) {
-            throw new DataQueryException("数据库类型、IP和端口号不能为空");
+        if (StringUtils.isEmpty(datasourceType)) {
+            throw new DataQueryException("数据库类型不能为空");
         }
         if (StringUtils.isEmpty(datasourceConfig)) {
             throw new DataQueryException("数据源配置不能为空");
         }
-        if ( DbType.getDbType(datasourceType) == null ) {
+        if (DbType.getDbType(datasourceType) == null) {
             throw new DataQueryException("不支持的数据库类型");
         }
-
 
         JSONObject configJson;
         try {
@@ -64,20 +149,65 @@ public class DbQueryProperty implements Serializable {
         } catch (Exception e) {
             throw new DataQueryException("数据源配置格式错误，应为合法的 JSON");
         }
+        this.datasourceConfig = configJson;
 
         this.dbType = datasourceType;
         this.host = ip;
-        this.port = port.intValue();
+        if (port != null) {
+            this.port = port.intValue();
+        }
 
         this.username = configJson.getString("username");
-        this.password = configJson.getString("password");
+
+        String passwordAes = configJson.getString("password");
+        //发布商业版，临时注释
+        if (StringUtils.isNotBlank(passwordAes)) {
+            try {
+                this.password = AesEncryptUtil.desEncrypt(configJson.getString("password")).trim();
+            } catch (Exception e) {
+                this.password = configJson.getString("password");
+            }
+        }
+//        this.password = passwordAes;
         this.sid = configJson.getString("sid");
         this.dbName = configJson.getString("dbname");
+        String config = configJson.getString("config");
+        if (StringUtils.isNotBlank(config)) {
+            this.config = JSONObject.parseObject(config);
+        }
 
-        if (StringUtils.isEmpty(username)) {
-            throw new DataQueryException("数据源配置中必须包含 username");
+        if (StringUtils.equals(DbType.MONGODB.getDb(), dbType)) {
+            this.sid = StringUtils.isNotEmpty(this.sid) ? this.sid : "admin";
+        }
+
+        if (!StringUtils.equals(DbType.KAFKA.getDb(), dbType) && !StringUtils.equals(DbType.HIVE.getDb(), dbType)
+                && !StringUtils.equals(DbType.HDFS.getDb(), dbType)
+                && !StringUtils.equals(DbType.REDIS.getDb(), dbType)
+                && !StringUtils.equals(DbType.RABBITMQ.getDb(), dbType)
+                && !StringUtils.equals(DbType.OSS_ALIYUN.getDb(), dbType)) {
+            if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
+                throw new DataQueryException("数据源配置中必须包含 username、password");
+            }
         }
     }
+
+    /**
+     * 用于查询dbName下信息，部分数据库只支持切换链接后查询
+     *
+     * @param dbNameVO
+     */
+    public void routeTo(DbName dbNameVO) {
+        int level = dbNameVO == null ? 1 : dbNameVO.getLevel() + 1;
+        if (level != 2) {
+            return;
+        }
+        if (StringUtils.equals(DbType.KINGBASE8.getDb(), dbType)
+                || StringUtils.equals(DbType.POSTGRE_SQL.getDb(), dbType)) {
+            this.dbName = dbNameVO.getDbName();
+            this.sid = "public";
+        }
+    }
+
 
     public String trainToJdbcUrl() {
         String url = DbType.getDbType(this.getDbType()).getUrl();
@@ -88,14 +218,26 @@ public class DbQueryProperty implements Serializable {
         url = url.replace("${port}", String.valueOf(this.getPort()));
         if (DbType.ORACLE.getDb().equals(this.getDbType()) || DbType.ORACLE_12C.getDb().equals(this.getDbType())) {
             url = url.replace("${sid}", this.getSid());
-        } else if (DbType.DM8.getDb().equals(this.getDbType()) ){
+        } else if (DbType.MONGODB.getDb().equals(this.getDbType())) {
+            // MongoDB 用官方 Java Driver 的 URI
+            String authDb = StringUtils.isNotEmpty(this.getSid()) ? this.getSid() : "admin";
+            url = url.replace("${user}", this.getUsername())
+                    .replace("${password}", this.getPassword())
+                    .replace("${dbName}", this.getDbName())
+                    .replace("${authDb}", authDb);
+        } else if (DbType.CLICK_HOUSE.getDb().equals(this.getDbType())) {
             url = url.replace("${dbName}", this.getDbName());
+            String protocol = MapUtils.getString(this.config, "protocol", "");
+            if (StringUtils.equals("NATIVE", protocol)) {
+                url = url + "?protocol=native";
+            }
         } else {
             url = url.replace("${dbName}", this.getDbName());
         }
         return url;
     }
 
+    @Deprecated
     public String trainToJdbcWriterName() {
         if (DbType.ORACLE.getDb().equals(this.getDbType())) {
             return "oraclewriter"; // Oracle 类型返回 "oraclewriter"
@@ -107,11 +249,14 @@ public class DbQueryProperty implements Serializable {
             return "sqlserverwriter"; // SQLServer 类型返回 "sqlserverwriter"
         } else if (DbType.DM8.getDb().equals(this.getDbType())) {
             return "rdbmswriter"; // 达梦8 类型返回 "rdbmswriter"
+        } else if (DbType.KINGBASE8.getDb().equals(this.getDbType())) {
+            return "kingbaseeswriter"; // 人大金仓 类型返回 "rdbmswriter"
         } else {
             return "defaultwriter"; // 默认返回 "defaultwriter"
         }
     }
 
+    @Deprecated
     public String trainToJdbcReaderName() {
         if (DbType.ORACLE.getDb().equals(this.getDbType())) {
             return "oraclereader"; // Oracle 类型返回 "oraclewriter"
@@ -123,13 +268,17 @@ public class DbQueryProperty implements Serializable {
             return "sqlserverreader"; // SQLServer 类型返回 "sqlserverwriter"
         } else if (DbType.DM8.getDb().equals(this.getDbType())) {
             return "rdbmsreader"; // 达梦8 类型返回 "rdbmswriter"
+        } else if (DbType.KINGBASE8.getDb().equals(this.getDbType())) {
+            return "kingbaseesreader"; // 人大金仓 类型返回 "rdbmswriter"
         } else {
             return "defaultreader"; // 默认返回 "defaultwriter"
         }
     }
+
+    @Deprecated
     public String getDbNameTableName(String tableName) {
         if (DbType.ORACLE.getDb().equals(this.getDbType())) {
-            return this.dbName + "." +  tableName;
+            return this.dbName + "." + tableName;
         } else if (DbType.MYSQL.getDb().equals(this.getDbType())) {
             return tableName;
         } else if (DbType.POSTGRE_SQL.getDb().equals(this.getDbType())) {
@@ -140,25 +289,23 @@ public class DbQueryProperty implements Serializable {
         } else if (DbType.SQL_SERVER.getDb().equals(this.getDbType())) {
             return tableName;
         } else if (DbType.DM8.getDb().equals(this.getDbType())) {
-            return this.dbName + "." +  tableName;
+            return this.dbName + "." + tableName;
         } else {
             return tableName;
         }
     }
 
-
+    @Deprecated
     public String trainToJdbcWriteMode(Object columns, String writeModeType, String dbType) {
         // writeModeType: 1 全量写，2 增量写，3 增更写
         if ("1".equals(writeModeType) || "2".equals(writeModeType)) {
             return "insert"; // 全量写 或 增量写 都是 insert
         } else if ("3".equals(writeModeType)) {
             List<String> columnList = (List<String>) columns;
-            if(DbType.MYSQL.getDb().equals(dbType)){
-                return "update";
-            }else if (CollectionUtils.isNotEmpty(columnList) && DbType.DM8.getDb().equals(dbType) ) {
+            if (CollectionUtils.isNotEmpty(columnList) && DbType.DM8.getDb().equals(dbType)) {
                 // 如果columns不为空，则返回update并包含字段名
                 return "update-dm (" + String.join(",", columnList) + ")";
-            }else if (CollectionUtils.isNotEmpty(columnList)) {
+            } else if (CollectionUtils.isNotEmpty(columnList)) {
                 // 如果columns不为空，则返回update并包含字段名
                 return "update (" + String.join(",", columnList) + ")";
             } else {
@@ -169,6 +316,8 @@ public class DbQueryProperty implements Serializable {
             return "insert"; // 无效的 writeModeType
         }
     }
+
+    @Deprecated
     public String trainToJdbcTruncateTable(String tableName) {
         // 获取数据库类型
         DbType dbTypeEnum = DbType.getDbType(dbType);

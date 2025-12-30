@@ -4,8 +4,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import tech.qiantong.qknow.common.annotation.Excel;
+import tech.qiantong.qknow.module.ext.dal.dataobject.extRelationMappingMiddle.ExtRelationMappingMiddleDO;
+
 import java.util.Date;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 关系映射 Response VO 对象 ext_relation_mapping
@@ -103,5 +106,8 @@ public class ExtRelationMappingRespVO implements Serializable {
     @Excel(name = "备注")
     @Schema(description = "备注", example = "")
     private String remark;
+
+
+    private List<ExtRelationMappingMiddleDO> relationMappingMiddle;
 
 }

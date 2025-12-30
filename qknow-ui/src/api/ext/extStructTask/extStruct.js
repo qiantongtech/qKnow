@@ -147,3 +147,17 @@ export function updateStructTaskPublishStatus(data) {
         data: data
     })
 }
+
+
+// 定时任务立即执行一次
+export function runStructTask(taskId, updateType) {
+    const data = {
+      taskId,
+      updateType
+    }
+    return request({
+      url: '/ext/extStruct/runStructTask',
+      method: 'put',
+      data: data
+    })
+  }

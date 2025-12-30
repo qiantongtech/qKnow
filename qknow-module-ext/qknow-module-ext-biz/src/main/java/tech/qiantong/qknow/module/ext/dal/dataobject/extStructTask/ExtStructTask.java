@@ -17,6 +17,11 @@ public class ExtStructTask extends BaseEntity {
     private String remark;// 任务备注
     private Long dataSourceId;// 数据库id
     private List<TableData> tableData;// 数据映射表内容
+    private Long graphId;
+    private Integer updateType;// 更新类型
+    private String updateFrequency; // 更新频率
+    private Integer updateStatus; //定时更新状态
+    private List<Relationship> relationshipList;// 数据映射表内容
 
     /**
      * 数据映射表内容
@@ -40,6 +45,8 @@ public class ExtStructTask extends BaseEntity {
         private String conceptName;// 概念名称
         private String tableName;// 表名
         private String entityNameField;// 实体名称字段
+        private String primaryKey;// 主键
+        private String entityTimeField;// 实体时间字段
         private List<Attribute> attributeList;// 属性映射
         private List<Relationship> relationshipList;// 关系映射
         private List<Custom> customList;// 自定义映射
@@ -62,12 +69,35 @@ public class ExtStructTask extends BaseEntity {
     @Data
     public static class Relationship {
         private Long id;// 关系id
-        private String field;//列
+        //        private String field;//列
+//        private String relation;// 关系
+//        private String associationTable;// 关联表
+//        private String associationTableField;// 关联列
+//        private String associationTableEntityField;// 关联实体名称列
+        private String tableName; //源表
+        private String fieldName;//源表字段名
         private String relation;// 关系
-        private String associationTable;// 关联表
-        private String associationTableField;// 关联列
-        private String associationTableEntityField;// 关联实体名称列
-//        private String associationTableDetail;
+        private String relationTable;// 关联表
+        private String relationField;// 关联列
+        private String relationNameField;// 关联实体名称列
+
+        private List<RelationMappingMiddle> relationMappingMiddle;
+
+
+    }
+
+    /**
+     * 关系中间表映射
+     */
+    @Data
+    public static class RelationMappingMiddle {
+        private Long relationId;// 关系表id
+        private String tableName;// 中间表名称
+        private String tableField; //关联源表字段
+        private String relationField;//关联目标表字段
+
+
+
     }
 
     /**

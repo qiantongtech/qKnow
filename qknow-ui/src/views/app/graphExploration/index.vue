@@ -1,15 +1,50 @@
 <template>
-  <div class="app-container" ref="app-container" v-loading="appLoading" style="height: calc(100vh - 30px)">
+  <div
+    class="app-container"
+    ref="app-container"
+    v-loading="appLoading"
+    style="height: calc(100vh - 30px)"
+  >
     <div class="head-title">
       <div class="name">{{ taskInfo.name }}</div>
       <div class="btns">
-        <el-button v-if="taskInfo.pageType != 0" icon="Back" @click="handleBack">返回</el-button>
+        <el-button v-if="taskInfo.pageType != 0" icon="Back" @click="handleBack"
+          >返回</el-button
+        >
         <!-- 结构化/非结构化 -->
-        <el-button :disabled="graphData.nodes.length == 0" v-if="taskInfo.pageType != 0 && !releaseStatus" icon="Upload" type="primary" @click="handleRelease"> 发布 </el-button>
-        <el-button :disabled="graphData.nodes.length == 0" v-if="taskInfo.pageType != 0 && releaseStatus" icon="Upload" type="primary" @click="handleCancelRelease"> 取消发布 </el-button>
+        <el-button
+          :disabled="graphData.nodes.length == 0"
+          v-if="taskInfo.pageType != 0 && !releaseStatus"
+          icon="Upload"
+          type="primary"
+          @click="handleRelease"
+        >
+          发布
+        </el-button>
+        <el-button
+          :disabled="graphData.nodes.length == 0"
+          v-if="taskInfo.pageType != 0 && releaseStatus"
+          icon="Upload"
+          type="primary"
+          @click="handleCancelRelease"
+        >
+          取消发布
+        </el-button>
         <!-- 故障树 -->
-        <el-button v-if="taskInfo.pageType == 3" type="primary" @click="handleAddEntity"> <i class="iconfont-mini icon-xinzeng mr5"></i>编辑实体 </el-button>
-        <el-button v-if="taskInfo.pageType == 3" type="primary" @click="handleAddRelationship"> <i class="iconfont-mini icon-xinzeng mr5"></i>编辑三元组 </el-button>
+        <el-button
+          v-if="taskInfo.pageType == 3"
+          type="primary"
+          @click="handleAddEntity"
+        >
+          <i class="iconfont-mini icon-xinzeng mr5"></i>编辑实体
+        </el-button>
+        <el-button
+          v-if="taskInfo.pageType == 3"
+          type="primary"
+          @click="handleAddRelationship"
+        >
+          <i class="iconfont-mini icon-xinzeng mr5"></i>编辑三元组
+        </el-button>
       </div>
     </div>
     <el-container class="wrap-container">
@@ -29,20 +64,34 @@
             :filter-node-method="filterNode"
           >
             <template #default="{ node }">
-              <span class="ellipsis" :title="`${node.label}`">{{ node.label }}</span>
+              <span class="ellipsis" :title="`${node.label}`">{{
+                node.label
+              }}</span>
             </template>
           </el-tree>
         </div>
         <div class="toolbar" ref="toolbarRef">
           <template v-for="item in toolbar" :key="item.id">
-            <el-tooltip class="box-item" effect="light" :content="item.tip" placement="bottom">
+            <el-tooltip
+              class="box-item"
+              effect="light"
+              :content="item.tip"
+              placement="bottom"
+            >
               <div class="toolbar-item" @click="toolbarClick(item)">
                 <img :src="getAssetsFile(item.icon)" alt="" />
               </div>
             </el-tooltip>
           </template>
           <div class="search" v-if="searchShow">
-            <el-autocomplete v-model="searchVal" style="width: 240px" :fetch-suggestions="querySearchAsync" placeholder="请输入实体名称" @select="searchSelect" clearable>
+            <el-autocomplete
+              v-model="searchVal"
+              style="width: 240px"
+              :fetch-suggestions="querySearchAsync"
+              placeholder="请输入实体名称"
+              @select="searchSelect"
+              clearable
+            >
               <template #suffix>
                 <el-icon class="el-input__icon"><Search /></el-icon>
               </template>
@@ -53,12 +102,23 @@
         <div class="tool" @click="toolShow = !toolShow">
           <div class="tool-mask" v-if="toolShow">
             <div class="mask-item" v-for="item in toolData" :key="item.label">
-              <div class="mask-icon" :style="{ background: item.icon, border: '2px solid ' + 'rgba(0,0,0, 0.3)' }"></div>
-              <div class="mask-label ellipsis" :title="item.label">{{ item.label }}</div>
+              <div
+                class="mask-icon"
+                :style="{
+                  background: item.icon,
+                  border: '2px solid ' + 'rgba(0,0,0, 0.3)',
+                }"
+              ></div>
+              <div class="mask-label ellipsis" :title="item.label">
+                {{ item.label }}
+              </div>
             </div>
           </div>
         </div>
-        <div :class="['gragh-container', { detailShow: detailShow }]" id="gragh-container"></div>
+        <div
+          :class="['gragh-container', { detailShow: detailShow }]"
+          id="gragh-container"
+        ></div>
         <transition name="el-zoom-in-right">
           <div class="details-dialog" v-if="detailShow">
             <div class="details-title">
@@ -66,10 +126,19 @@
                 <el-icon class="icon" @click="detailClose">
                   <Close />
                 </el-icon>
-                <span class="label ellipsis" :title="currentNodeData.name">{{ currentNodeData.name }}</span>
+                <span class="label ellipsis" :title="currentNodeData.name">{{
+                  currentNodeData.name
+                }}</span>
               </div>
               <div class="title-slot">
-                <el-button :disabled="releaseStatus" size="small" type="danger" icon="Delete" @click="handleDel">删除 </el-button>
+                <el-button
+                  :disabled="releaseStatus"
+                  size="small"
+                  type="danger"
+                  icon="Delete"
+                  @click="handleDel"
+                  >删除
+                </el-button>
               </div>
             </div>
             <div class="details-con">
@@ -79,22 +148,65 @@
                     <div class="collapse-title">属性信息</div>
                   </template>
                   <div class="collapse-con">
-                    <el-table stripe height="150px" v-loading="attrLoading" :data="attrData">
-                      <el-table-column label="属性名称" align="center" prop="name" show-overflow-tooltip />
-                      <el-table-column label="数据类型" prop="dataType" align="center" show-overflow-tooltip>
+                    <el-table
+                      stripe
+                      height="150px"
+                      v-loading="attrLoading"
+                      :data="attrData"
+                    >
+                      <el-table-column
+                        label="属性名称"
+                        align="center"
+                        prop="name"
+                        show-overflow-tooltip
+                      />
+                      <el-table-column
+                        label="数据类型"
+                        prop="dataType"
+                        align="center"
+                        show-overflow-tooltip
+                      >
                         <template #default="scope">
-                          <dict-tag :options="ext_data_type" :value="scope.row.dataType" />
+                          <dict-tag
+                            :options="ext_data_type"
+                            :value="scope.row.dataType"
+                          />
                         </template>
                       </el-table-column>
-                      <el-table-column label="属性值" prop="dataValue" align="center" show-overflow-tooltip>
+                      <el-table-column
+                        label="属性值"
+                        prop="dataValue"
+                        align="center"
+                        show-overflow-tooltip
+                      >
                         <template #default="scope">
                           {{ scope.row.dataValue ? scope.row.dataValue : "-" }}
                         </template>
                       </el-table-column>
-                      <el-table-column label="操作" class-name="small-padding fixed-width" fixed="right" align="center" width="120">
+                      <el-table-column
+                        label="操作"
+                        class-name="small-padding fixed-width"
+                        fixed="right"
+                        align="center"
+                        width="120"
+                      >
                         <template #default="scope">
-                          <el-button :disabled="releaseStatus" link type="primary" icon="Edit" @click="attrUpdate(scope.row)">修改 </el-button>
-                          <el-button :disabled="releaseStatus" link type="danger" icon="Delete" @click="attrDelete(scope.row)">删除 </el-button>
+                          <el-button
+                            :disabled="releaseStatus"
+                            link
+                            type="primary"
+                            icon="Edit"
+                            @click="attrUpdate(scope.row)"
+                            >修改
+                          </el-button>
+                          <el-button
+                            :disabled="releaseStatus"
+                            link
+                            type="danger"
+                            icon="Delete"
+                            @click="attrDelete(scope.row)"
+                            >删除
+                          </el-button>
                         </template>
                       </el-table-column>
                     </el-table>
@@ -105,13 +217,44 @@
                     <div class="collapse-title">关联三元组</div>
                   </template>
                   <div class="collapse-con">
-                    <el-table stripe height="200px" v-loading="tripletLoading" :data="tripletData">
-                      <el-table-column label="起点" key="startName" prop="startName" show-overflow-tooltip />
-                      <el-table-column label="关系" key="name" prop="name" show-overflow-tooltip />
-                      <el-table-column label="终点" key="endName" prop="endName" show-overflow-tooltip />
-                      <el-table-column label="操作" class-name="small-padding fixed-width" fixed="right">
+                    <el-table
+                      stripe
+                      height="200px"
+                      v-loading="tripletLoading"
+                      :data="tripletData"
+                    >
+                      <el-table-column
+                        label="起点"
+                        key="startName"
+                        prop="startName"
+                        show-overflow-tooltip
+                      />
+                      <el-table-column
+                        label="关系"
+                        key="name"
+                        prop="name"
+                        show-overflow-tooltip
+                      />
+                      <el-table-column
+                        label="终点"
+                        key="endName"
+                        prop="endName"
+                        show-overflow-tooltip
+                      />
+                      <el-table-column
+                        label="操作"
+                        class-name="small-padding fixed-width"
+                        fixed="right"
+                      >
                         <template #default="scope">
-                          <el-button :disabled="releaseStatus" link type="danger" icon="Delete" @click="tripletDelete(scope.row)">删除</el-button>
+                          <el-button
+                            :disabled="releaseStatus"
+                            link
+                            type="danger"
+                            icon="Delete"
+                            @click="tripletDelete(scope.row)"
+                            >删除</el-button
+                          >
                         </template>
                       </el-table-column>
                     </el-table>
@@ -123,23 +266,52 @@
                       <div class="collapse-title">关联数据源</div>
                     </template>
                     <div class="collapse-con1">
-                      <div style="display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 8px">
+                      <div
+                        style="
+                          display: grid;
+                          grid-template-columns: 1fr 1fr;
+                          margin-bottom: 8px;
+                        "
+                      >
                         <div style="text-align: left">
                           数据库名称:
                           {{ dataSource.database.type }}
                         </div>
-                        <div style="text-align: left">数据库地址: {{ dataSource.database.host }}</div>
+                        <div style="text-align: left">
+                          数据库地址: {{ dataSource.database.host }}
+                        </div>
                       </div>
-                      <div style="display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 8px">
+                      <div
+                        style="
+                          display: grid;
+                          grid-template-columns: 1fr 1fr;
+                          margin-bottom: 8px;
+                        "
+                      >
                         <div style="text-align: left">
                           数据库名称:
                           {{ dataSource.database.databaseName }}
                         </div>
-                        <div style="text-align: left">表名称: {{ dataSource.database.tableName }}</div>
+                        <div style="text-align: left">
+                          表名称: {{ dataSource.database.tableName }}
+                        </div>
                       </div>
-                      <el-table height="200px" v-loading="dataSourceLoading" :data="dataSource.tableData">
-                        <el-table-column label="表字段" align="center" prop="field" show-overflow-tooltip />
-                        <el-table-column label="数据" align="center" prop="value">
+                      <el-table
+                        height="200px"
+                        v-loading="dataSourceLoading"
+                        :data="dataSource.tableData"
+                      >
+                        <el-table-column
+                          label="表字段"
+                          align="center"
+                          prop="field"
+                          show-overflow-tooltip
+                        />
+                        <el-table-column
+                          label="数据"
+                          align="center"
+                          prop="value"
+                        >
                           <template #default="scope">
                             {{ scope.row.value ? scope.row.value : "-" }}
                           </template>
@@ -155,8 +327,15 @@
                     </template>
                     <div class="collapse-con1">
                       <div v-for="(item, index) in textList" :key="index">
-<!--                        <span v-if="currentNodeData.textIds && currentNodeData.textIds.split(',').includes(item.id.toString())">{{ item.text }}</span>-->
-                        <span v-if="currentNodeData.paragraphIndex && currentNodeData.paragraphIndex === item.paragraphIndex">{{ item.text }}</span>
+                        <!--                        <span v-if="currentNodeData.textIds && currentNodeData.textIds.split(',').includes(item.id.toString())">{{ item.text }}</span>-->
+                        <span
+                          v-if="
+                            currentNodeData.paragraphIndex &&
+                            currentNodeData.paragraphIndex ===
+                              item.paragraphIndex
+                          "
+                          >{{ item.text }}</span
+                        >
                       </div>
                     </div>
                   </el-collapse-item>
@@ -166,11 +345,20 @@
                     </template>
                     <div class="collapse-con1">
                       <div v-for="(doc, index) in docList" :key="index">
-                        <div v-if="currentNodeData.docId == doc.id" class="docItem">
-                          <td class="docTd" :title="doc.name" @click="previewRefactoring(doc)">
+                        <div
+                          v-if="currentNodeData.docId == doc.id"
+                          class="docItem"
+                        >
+                          <td
+                            class="docTd"
+                            :title="doc.name"
+                            @click="previewRefactoring(doc)"
+                          >
                             {{ doc.name }}
                           </td>
-                          <td style="text-align: right">{{ parseTime(doc.createTime, "{y}-{m}-{d}") }}</td>
+                          <td style="text-align: right">
+                            {{ parseTime(doc.createTime, "{y}-{m}-{d}") }}
+                          </td>
                         </div>
                       </div>
                     </div>
@@ -181,12 +369,27 @@
           </div>
         </transition>
         <!-- 属性信息修改 -->
-        <el-dialog class="attr-dialog" title="属性信息" v-model="attrVisible" width="500px" :append-to="$refs['app-container']" draggable destroy-on-close>
+        <el-dialog
+          class="attr-dialog"
+          title="属性信息"
+          v-model="attrVisible"
+          width="500px"
+          :append-to="$refs['app-container']"
+          draggable
+          destroy-on-close
+        >
           <el-form ref="attrRef" :model="attrForm" label-width="80px">
             <el-row :gutter="20">
               <el-col :span="24">
-                <el-form-item label="属性值" prop="name" :rules="{ required: true }">
-                  <el-input v-model="attrForm.dataValue" placeholder="请输入属性值" />
+                <el-form-item
+                  label="属性值"
+                  prop="name"
+                  :rules="{ required: true }"
+                >
+                  <el-input
+                    v-model="attrForm.dataValue"
+                    placeholder="请输入属性值"
+                  />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -194,21 +397,45 @@
           <template #footer>
             <div class="dialog-footer">
               <el-button @click="attrFormCancel">取 消</el-button>
-              <el-button type="primary" @click="attrFormSubmit">确 定</el-button>
+              <el-button type="primary" @click="attrFormSubmit"
+                >确 定</el-button
+              >
             </div>
           </template>
         </el-dialog>
         <!--  弹框  -->
-        <AddEntity ref="nodeRef" :title="addTitle" :graphId="taskInfo" @handle-refresh="handleRefresh"></AddEntity>
-        <AddRelationship ref="edgeRef" :title="addTitle" :graphId="taskInfo" @handle-refresh="handleRefresh"></AddRelationship>
+        <AddEntity
+          ref="nodeRef"
+          :title="addTitle"
+          :graphId="taskInfo"
+          @handle-refresh="handleRefresh"
+        ></AddEntity>
+        <AddRelationship
+          ref="edgeRef"
+          :title="addTitle"
+          :graphId="taskInfo"
+          @handle-refresh="handleRefresh"
+        ></AddRelationship>
       </div>
     </el-container>
     <!-- 预览文件弹窗 -->
     <el-dialog class="fileDialog" v-model="dialogVisible" :title="'预览'">
       <div class="filecont" style="height: 100%">
-        <vue-office-pdf v-if="fileType === 'pdf'" :src="fileUrl" :style="{ height: '100%' }" />
-        <vue-office-excel v-if="fileType === 'xls'" :src="fileUrl" :style="{ height: '100%' }" />
-        <vue-office-docx v-if="fileType === 'docx'" :src="fileUrl" :style="{ height: '100%' }" />
+        <vue-office-pdf
+          v-if="fileType === 'pdf'"
+          :src="fileUrl"
+          :style="{ height: '100%' }"
+        />
+        <vue-office-excel
+          v-if="fileType === 'xls'"
+          :src="fileUrl"
+          :style="{ height: '100%' }"
+        />
+        <vue-office-docx
+          v-if="fileType === 'docx'"
+          :src="fileUrl"
+          :style="{ height: '100%' }"
+        />
       </div>
     </el-dialog>
   </div>
@@ -233,12 +460,25 @@ import "vis-network/dist/dist/vis-network.min.css";
 // 知识平台
 import { useFullscreen } from "@vueuse/core";
 // 非结构化接口
-import { getTaskTextList, updateUnStructTaskPublishStatus } from "@/api/ext/extUnstructTask/unstructTask";
+import {
+  getTaskTextList,
+  updateUnStructTaskPublishStatus,
+} from "@/api/ext/extUnstructTask/unstructTask";
 // 结构化接口
-import { getAttributeInformation, updateNodeAttribute, updateStructTaskPublishStatus } from "@/api/ext/extStructTask/extStruct";
+import {
+  getAttributeInformation,
+  updateNodeAttribute,
+  updateStructTaskPublishStatus,
+} from "@/api/ext/extStructTask/extStruct";
 import { getTableDataByDataId } from "@/api/ext/extDatasource/datasource";
 // 综合接口
-import { getGraph, updateReleaseStatus, deleteNodeAttributeById, deleteRelationshipById, deleteNode } from "@/api/app/graph";
+import {
+  getGraph,
+  updateReleaseStatus,
+  deleteNodeAttributeById,
+  deleteRelationshipById,
+  deleteNode,
+} from "@/api/app/graph";
 // 概念列表
 import { listSchema } from "@/api/ext/extSchema/schema";
 
@@ -377,7 +617,8 @@ function getGraphData(params) {
       return {
         ...item,
         id: item.id + "",
-        label: item.name.length > 6 ? item.name.substring(0, 6) + "..." : item.name,
+        label:
+          item.name.length > 6 ? item.name.substring(0, 6) + "..." : item.name,
         rowBackground: row ? row.color : "#315790",
         rowBorder: row ? `${row.color}4d` : "#7dbffa4d",
         color: {
@@ -390,7 +631,10 @@ function getGraphData(params) {
     });
     edges.value = [];
     data.relationships.map((item) => {
-      if (data.entities.some((node) => node.id == item.startId) && data.entities.some((node) => node.id == item.endId)) {
+      if (
+        data.entities.some((node) => node.id == item.startId) &&
+        data.entities.some((node) => node.id == item.endId)
+      ) {
         edges.value.push({
           ...item,
           id: item.id + "",
@@ -412,7 +656,8 @@ function getGraphData(params) {
     if (taskInfo.value.pageType == "0") {
       releaseStatus.value = false;
     } else {
-      releaseStatus.value = nodes.value.length && nodes.value[0].releaseStatus === 1 ? true : false;
+      releaseStatus.value =
+        nodes.value.length && nodes.value[0].releaseStatus === 1 ? true : false;
     }
     //设置画布
     setGraph(graphData.value);
@@ -564,8 +809,16 @@ function setGraph(data) {
     } else {
       currentNodeData.value = nodes.value.find((e) => e.id == d.nodes[0]);
       let node = graphData.value.nodes.get(currentNodeData.value);
-      graphData.value.nodes.add({ id: "-node", color: "rgba(255, 255, 255, 0)" });
-      graphData.value.edges.add({ id: "-edge", from: currentNodeData.value.id, to: "-node", color: "rgba(255, 255, 255, 0)" });
+      graphData.value.nodes.add({
+        id: "-node",
+        color: "rgba(255, 255, 255, 0)",
+      });
+      graphData.value.edges.add({
+        id: "-edge",
+        from: currentNodeData.value.id,
+        to: "-node",
+        color: "rgba(255, 255, 255, 0)",
+      });
       setTimeout(() => {
         graphData.value.nodes.remove({ id: "-node" });
         graphData.value.edges.remove({ id: "-edge" });
@@ -599,22 +852,32 @@ function setGraph(data) {
           size: 20,
           borderWidth: 15,
           step: 2,
-          color: { highlight: { background: currentNodeData.value.rowBackground, border: currentNodeData.value.rowBorder } },
+          color: {
+            highlight: {
+              background: currentNodeData.value.rowBackground,
+              border: currentNodeData.value.rowBorder,
+            },
+          },
         },
       ]);
-      console.log("---------currentNodeData.value-------", currentNodeData.value);
+      console.log(
+        "---------currentNodeData.value-------",
+        currentNodeData.value
+      );
       //属性信息
       getAttrData(currentNodeData.value);
       //关联三元组
       getTripletData(d.nodes[0]);
       detailShow.value = true;
-      //关联数据源
       if (currentNodeData.value.entityType == 1) {
-        getDataSorceData({
-          id: currentNodeData.value.databaseId,
-          dataId: currentNodeData.value.dataId,
-          tableName: currentNodeData.value.tableName,
-        });
+        if (currentNodeData.value.databaseId) {
+          getDataSorceData({
+            id: currentNodeData.value.databaseId,
+            primaryKey: currentNodeData.value.primaryKey,
+            primaryKeyData: currentNodeData.value.primaryKeyData,
+            tableName: currentNodeData.value.tableName,
+          });
+        }
       }
     }
   });
@@ -674,12 +937,16 @@ const searchShow = ref(false);
 const searchVal = ref("");
 const searchData = ref([]);
 const querySearchAsync = (queryString, cb) => {
-  const results = queryString ? searchData.value.filter(createFilter(queryString)) : searchData.value;
+  const results = queryString
+    ? searchData.value.filter(createFilter(queryString))
+    : searchData.value;
   cb(results);
 };
 const createFilter = (queryString) => {
   return (restaurant) => {
-    return restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0;
+    return (
+      restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+    );
   };
 };
 const searchSelect = (item) => {
@@ -892,9 +1159,13 @@ const handleCheck = (data, checked) => {
     }
   } else {
     if (checked.checkedKeys.length !== 0) {
-      nodes.value.forEach((e) => graphData.value.nodes.update([{ id: e.id, hidden: false }]));
+      nodes.value.forEach((e) =>
+        graphData.value.nodes.update([{ id: e.id, hidden: false }])
+      );
     } else {
-      nodes.value.forEach((e) => graphData.value.nodes.update([{ id: e.id, hidden: true }]));
+      nodes.value.forEach((e) =>
+        graphData.value.nodes.update([{ id: e.id, hidden: true }])
+      );
     }
   }
 };
@@ -951,7 +1222,9 @@ const handleDel = () => {
     .then(() => {
       // 隐藏弹框，过滤树，暂隐node节点
       detailClose();
-      treeData.value[0].children = treeData.value[0].children.filter((e) => e.id !== id);
+      treeData.value[0].children = treeData.value[0].children.filter(
+        (e) => e.id !== id
+      );
       graphData.value.nodes.update([{ id: id, hidden: true }]);
       // 过滤数据
       nodes.value = nodes.value.filter((e) => e.id !== id);
@@ -1010,18 +1283,20 @@ const attrUpdate = (row) => {
   attrForm.value = row;
 };
 const attrDelete = (row) => {
-  proxy.$modal.confirm(`是否确认删除属性名称为【${row.name}】的数据项？`).then(() => {
-    let node = currentNodeData.value;
-    deleteNodeAttributeById({
-      nodeId: node.id,
-      attributeKey: "attribute_id_" + row.id,
-    }).then((res) => {
-      if (res && res.code == 200) {
-        attrData.value = attrData.value.filter((e) => e.id != row.id);
-        proxy.$modal.msgSuccess("删除成功");
-      }
+  proxy.$modal
+    .confirm(`是否确认删除属性名称为【${row.name}】的数据项？`)
+    .then(() => {
+      let node = currentNodeData.value;
+      deleteNodeAttributeById({
+        nodeId: node.id,
+        attributeKey: "attribute_id_" + row.id,
+      }).then((res) => {
+        if (res && res.code == 200) {
+          attrData.value = attrData.value.filter((e) => e.id != row.id);
+          proxy.$modal.msgSuccess("删除成功");
+        }
+      });
     });
-  });
 };
 const attrFormCancel = () => {
   attrForm.value = {};
@@ -1048,7 +1323,9 @@ const attrFormSubmit = () => {
 };
 // 关联三元组
 const getTripletData = (id) => {
-  tripletData.value = edges.value.filter((e) => e.startId == id || e.endId == id);
+  tripletData.value = edges.value.filter(
+    (e) => e.startId == id || e.endId == id
+  );
 };
 const tripletLoading = ref(false);
 const tripletData = ref([]);
@@ -1232,7 +1509,11 @@ function previewRefactoring(row) {
       left: 10px;
       width: 250px;
       height: calc(100% - 20px);
-      background: radial-gradient(100% 0% at 50% 50%, #1c3668 0%, rgba(0, 15, 39, 0.27) 100%);
+      background: radial-gradient(
+        100% 0% at 50% 50%,
+        #1c3668 0%,
+        rgba(0, 15, 39, 0.27) 100%
+      );
       border: 1px solid var(--el-color-primary);
       border-radius: 4px;
       overflow: hidden auto;
@@ -1295,7 +1576,11 @@ function previewRefactoring(row) {
         }
       }
 
-      :deep(.el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content) {
+      :deep(
+          .el-tree--highlight-current
+            .el-tree-node.is-current
+            > .el-tree-node__content
+        ) {
         background-color: var(--el-color-primary) !important;
       }
     }
@@ -1494,7 +1779,9 @@ function previewRefactoring(row) {
         .collapse-con {
           padding: 5px 0;
 
-          :deep(.el-descriptions__label.el-descriptions__cell.is-bordered-label) {
+          :deep(
+              .el-descriptions__label.el-descriptions__cell.is-bordered-label
+            ) {
             width: 100px;
           }
         }
@@ -1502,7 +1789,9 @@ function previewRefactoring(row) {
         .collapse-con1 {
           padding: 5px 5px;
 
-          :deep(.el-descriptions__label.el-descriptions__cell.is-bordered-label) {
+          :deep(
+              .el-descriptions__label.el-descriptions__cell.is-bordered-label
+            ) {
             width: 100px;
           }
 

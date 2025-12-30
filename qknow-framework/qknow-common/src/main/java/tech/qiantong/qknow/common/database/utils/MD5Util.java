@@ -13,7 +13,7 @@ public class MD5Util {
         System.out.println(objects.length);
         int length = arr.length;
         objects[length] = 1;
-        objects[length+1] = 2;
+        objects[length + 1] = 2;
         System.out.println(Arrays.toString(objects));
 //        String encrypt = MD5Util.encrypt("sql" + ":" + Arrays.toString(arr));
 //        System.out.println(encrypt);
@@ -24,14 +24,14 @@ public class MD5Util {
     /**
      * MD5加密
      */
-    public static String encrypt(String value){
+    public static String encrypt(String value) {
         return encrypt(value.getBytes());
     }
 
     /**
      * MD5加密
      */
-    public static String encrypt(byte[] value){
+    public static String encrypt(byte[] value) {
         try {
             byte[] bytes = MessageDigest.getInstance("MD5").digest(value);
             char[] chars = new char[32];

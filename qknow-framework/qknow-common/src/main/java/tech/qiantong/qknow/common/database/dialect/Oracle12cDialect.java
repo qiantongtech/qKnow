@@ -1,5 +1,6 @@
 package tech.qiantong.qknow.common.database.dialect;
 
+import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import tech.qiantong.qknow.common.database.constants.DbQueryProperty;
 import tech.qiantong.qknow.common.database.core.DbColumn;
@@ -7,6 +8,7 @@ import tech.qiantong.qknow.common.database.utils.MD5Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 /**
@@ -30,6 +32,15 @@ public class Oracle12cDialect extends OracleDialect {
     }
 
     @Override
+    public String buildTableNameByDbType(DbQueryProperty dbQueryProperty, String tableName) {
+        if(StringUtils.isNotEmpty(dbQueryProperty.getDbName())){
+            return dbQueryProperty.getDbName() + "." + tableName;
+        }
+
+        return tableName;
+    }
+
+    @Override
     public List<String> someInternalSqlGenerator(DbQueryProperty dbQueryProperty, String tableName, String tableComment, List<DbColumn> dbColumnList) {
         String dbName = dbQueryProperty.getDbName();
 
@@ -41,6 +52,7 @@ public class Oracle12cDialect extends OracleDialect {
 
         return sqlList;
     }
+
 
     private List<String> generateOracleCreateSql(String tableName, String tableComment, List<DbColumn> columns) {
         List<String> sqlList = new ArrayList<>();
@@ -59,12 +71,13 @@ public class Oracle12cDialect extends OracleDialect {
                 }
             }
             if (tech.qiantong.qknow.common.utils.StringUtils.hasText(col.getDataDefault())) {
-                String columnType = col.getDataType();
-                if (isStringTypeSwitchDEFAULT(columnType)) {
-                    createSql.append(" DEFAULT '").append(MD5Util.escapeSingleQuotes(col.getDataDefault())).append("'");
-                } else {
-                    createSql.append(" DEFAULT ").append(col.getDataDefault());
-                }
+                createSql.append(" DEFAULT ").append(col.getDataDefault());
+//                String columnType = col.getDataType();
+//                if (isStringTypeSwitchDEFAULT(columnType)) {
+//                    createSql.append(" DEFAULT '").append(MD5Util.escapeSingleQuotes(col.getDataDefault())).append("'");
+//                } else {
+//                    createSql.append(" DEFAULT ").append(col.getDataDefault());
+//                }
             }
             if (col.getColKey()) {
                 pkList.add(col.getColName());
@@ -224,5 +237,79 @@ public class Oracle12cDialect extends OracleDialect {
         // 构造最终的 SQL 查询语句
         return "SELECT " + fields + " FROM " +dbQueryProperty.getDbName()+"."+ tableName;
     }
+    @Override
+    public String getFlinkCDCSQL(DbQueryProperty property, String flinkTableName, String tableName, String tableFieldName) {
+        String sql = "CREATE TABLE ${flinkTableName} (${tableFieldName}) " +
+                "WITH ( 'connector' = 'oracle-cdc'," +
+                " 'hostname' = '${host}' ," +
+                "'port' = '${port}' ," +
+                "'username' = '${username}' ," +
+                "'password' = '${password}'," +
+                "'database-name' = '${sid}' ," +
+                "'schema-name' = '${dbName}' ," +
+                "'table-name' = '${tableName}' ," +
+                "'scan.startup.mode' = 'initial' ," +
+                "'scan.incremental.snapshot.enabled' = 'true'," +
+                "'debezium.database.connection.adapter'='logminer'," +
+                "'debezium.log.mining.strategy'='online_catalog'," +
+                "'debezium.log.mining.continuous.mine'='true')";
+        sql = StringUtils
+                .replace(sql, "${flinkTableName}", flinkTableName)
+                .replace("${tableName}", tableName)
+                .replace("${host}", property.getHost())
+                .replace("${tableFieldName}", tableFieldName)
+                .replace("${port}", String.valueOf(property.getPort()))
+                .replace("${dbName}", property.getDbName())
+                .replace("${sid}", property.getSid().toUpperCase(Locale.ROOT))
+                .replace("${username}", property.getUsername())
+                .replace("${password}", property.getPassword());
+        return sql;
+    }
 
+    @Override
+    public String getFlinkSQL(DbQueryProperty property, String flinkTableName, String tableName, String tableFieldName) {
+        String sql = "CREATE TABLE ${flinkTableName} (${tableFieldName}) " +
+                "WITH ( 'connector' = 'jdbc'," +
+                "'url' = 'jdbc:oracle:thin:@${host}:${port}:${sid}'," +
+                "'table-name' = '${dbName}.${tableName}'," +
+                "'username' = '${username}'," +
+                "'password' = '${password}')";
+
+        sql = StringUtils
+                .replace(sql, "${flinkTableName}", flinkTableName)
+                .replace("${tableName}", tableName)
+                .replace("${host}", property.getHost())
+                .replace("${tableFieldName}", tableFieldName)
+                .replace("${port}", String.valueOf(property.getPort()))
+                .replace("${dbName}", property.getDbName())
+                .replace("${sid}", property.getSid())
+                .replace("${username}", property.getUsername())
+                .replace("${password}", property.getPassword());
+        return sql;
+    }
+
+    @Override
+    public String getFlinkSinkSQL(DbQueryProperty property, JSONObject config, String flinkTableName, String tableName, String tableFieldName) {
+        String sql = "CREATE TABLE ${flinkTableName} (${tableFieldName}) " +
+                "WITH ( 'connector' = 'jdbc'," +
+                "'url' = 'jdbc:oracle:thin:@${host}:${port}:${sid}'," +
+                "'table-name' = '${dbName}.${tableName}'," +
+                "'username' = '${username}'," +
+                "'password' = '${password}'," +
+                "'sink.buffer-flush.max-rows' = '${batchSize}'," +
+                "'sink.buffer-flush.interval' = '1s'" +
+                ")";
+
+        sql = StringUtils
+                .replace(sql, "${flinkTableName}", flinkTableName)
+                .replace("${tableName}", tableName)
+                .replace("${host}", property.getHost())
+                .replace("${tableFieldName}", tableFieldName)
+                .replace("${port}", String.valueOf(property.getPort()))
+                .replace("${dbName}", property.getDbName())
+                .replace("${username}", property.getUsername())
+                .replace("${password}", property.getPassword())
+                .replace("${batchSize}", String.valueOf(config.getIntValue("batchSize",100)));
+        return sql;
+    }
 }

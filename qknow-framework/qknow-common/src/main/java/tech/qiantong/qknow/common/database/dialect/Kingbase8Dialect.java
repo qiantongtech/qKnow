@@ -1,15 +1,18 @@
 package tech.qiantong.qknow.common.database.dialect;
 
+import com.alibaba.fastjson2.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.RowMapper;
 import tech.qiantong.qknow.common.database.constants.DbQueryProperty;
 import tech.qiantong.qknow.common.database.core.DbColumn;
+import tech.qiantong.qknow.common.database.core.DbName;
 import tech.qiantong.qknow.common.database.core.DbTable;
 import tech.qiantong.qknow.common.database.utils.MD5Util;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 /**
@@ -30,24 +33,25 @@ public class Kingbase8Dialect extends AbstractDbDialect {
                 "        WHEN t.typname = 'float4' THEN 'REAL' " +
                 "        WHEN t.typname = 'float8' THEN 'DOUBLE PRECISION' " +
                 "        WHEN t.typname = 'varchar' THEN 'VARCHAR' " +
+                "        WHEN t.typname = 'bpchar' THEN 'CHAR' " +
                 "        WHEN t.typname = 'text' THEN 'TEXT' " +
                 "        ELSE t.typname  " +
                 "    END AS DATATYPE," +
-                "CASE WHEN t.typname IN ('varchar', 'char', 'text') THEN a.atttypmod - 4 ELSE a.attlen END AS DATALENGTH, " +
+                "CASE WHEN t.typname IN ('varchar', 'char','bpchar',  'text') THEN a.atttypmod - 4 ELSE a.attlen END AS DATALENGTH, " +
                 "CASE WHEN t.typname IN ('numeric', 'decimal', 'float4', 'float8') THEN (a.atttypmod - 4) >> 16 ELSE NULL END AS DATAPRECISION, " +
                 "CASE WHEN t.typname IN ('numeric', 'decimal', 'float4', 'float8') THEN (a.atttypmod - 4) & 65535 ELSE NULL END AS DATASCALE, " +
                 "CASE WHEN con.contype = 'p' THEN TRUE ELSE FALSE END AS COLKEY, " +
                 "NOT a.attnotnull AS NULLABLE, a.attnum AS COLPOSITION, " +
-                "pg_get_expr(d.adbin, d.adrelid) AS DATADEFAULT, " +
+                "regexp_replace(pg_get_expr(d.adbin, d.adrelid), '(::[a-zA-Z0-9_]+)+$', '') AS DATADEFAULT" +
                 "col_description(a.attrelid, a.attnum) AS COLCOMMENT " +
-                "FROM sys_attribute a " +
-                "JOIN sys_class c ON a.attrelid = c.oid " +
-                "JOIN sys_type t ON a.atttypid = t.oid " +
-                "LEFT JOIN sys_constraint con ON con.conrelid = c.oid AND a.attnum = ANY(con.conkey) AND con.contype = 'p' " +
-                "LEFT JOIN sys_attrdef d ON a.attrelid = d.adrelid AND a.attnum = d.adnum " +
+                "FROM pg_attribute a " +
+                "JOIN pg_class c ON a.attrelid = c.oid " +
+                "JOIN pg_type t ON a.atttypid = t.oid " +
+                "LEFT JOIN pg_constraint con ON con.conrelid = c.oid AND a.attnum = ANY(con.conkey) AND con.contype = 'p' " +
+                "LEFT JOIN pg_attrdef d ON a.attrelid = d.adrelid AND a.attnum = d.adnum " +
                 "WHERE (SELECT current_database()) =  '" + dbName + "'  " +
                 "AND c.relname =  '" + tableName + "'  " +
-                "AND c.relnamespace = (SELECT oid FROM sys_namespace WHERE nspname =  '" + "public" + "' ) " +
+                "AND c.relnamespace = (SELECT oid FROM pg_namespace WHERE nspname =  '" + "public" + "' ) " +
                 "AND a.attnum > 0 " +  // 过滤掉系统隐藏列
                 "ORDER BY a.attnum";
     }
@@ -62,27 +66,39 @@ public class Kingbase8Dialect extends AbstractDbDialect {
                 "        WHEN t.typname = 'float4' THEN 'REAL' " +
                 "        WHEN t.typname = 'float8' THEN 'DOUBLE PRECISION' " +
                 "        WHEN t.typname = 'varchar' THEN 'VARCHAR' " +
+                "        WHEN t.typname = 'bpchar' THEN 'CHAR' " +
                 "        WHEN t.typname = 'text' THEN 'TEXT' " +
                 "        ELSE t.typname  " +
                 "    END AS DATATYPE," +
-                "CASE WHEN t.typname IN ('varchar', 'char', 'text') THEN a.atttypmod - 4 ELSE a.attlen END AS DATALENGTH, " +
+                "CASE WHEN t.typname IN ('varchar', 'char', 'bpchar', 'text') THEN a.atttypmod - 4 ELSE a.attlen END AS DATALENGTH, " +
                 "CASE WHEN t.typname IN ('numeric', 'decimal', 'float4', 'float8') THEN (a.atttypmod - 4) >> 16 ELSE NULL END AS DATAPRECISION, " +
                 "CASE WHEN t.typname IN ('numeric', 'decimal', 'float4', 'float8') THEN (a.atttypmod - 4) & 65535 ELSE NULL END AS DATASCALE, " +
                 "CASE WHEN con.contype = 'p' THEN TRUE ELSE FALSE END AS COLKEY, " +
                 "NOT a.attnotnull AS NULLABLE, a.attnum AS COLPOSITION, " +
-                "pg_get_expr(d.adbin, d.adrelid) AS DATADEFAULT, " +
+                "regexp_replace(pg_get_expr(d.adbin, d.adrelid), '(::[a-zA-Z0-9_]+)+$', '') AS DATADEFAULT," +
                 "col_description(a.attrelid, a.attnum) AS COLCOMMENT " +
-                "FROM sys_attribute a " +
-                "JOIN sys_class c ON a.attrelid = c.oid " +
-                "JOIN sys_type t ON a.atttypid = t.oid " +
-                "LEFT JOIN sys_constraint con ON con.conrelid = c.oid AND a.attnum = ANY(con.conkey) AND con.contype = 'p' " +
-                "LEFT JOIN sys_attrdef d ON a.attrelid = d.adrelid AND a.attnum = d.adnum " +
+                "FROM pg_attribute a " +
+                "JOIN pg_class c ON a.attrelid = c.oid " +
+                "JOIN pg_type t ON a.atttypid = t.oid " +
+                "LEFT JOIN pg_constraint con ON con.conrelid = c.oid AND a.attnum = ANY(con.conkey) AND con.contype = 'p' " +
+                "LEFT JOIN pg_attrdef d ON a.attrelid = d.adrelid AND a.attnum = d.adnum " +
                 "WHERE (SELECT current_database()) =  '" + dbQueryProperty.getDbName() + "'  " +
                 "AND c.relname =  '" + tableName + "'  " +
-                "AND c.relnamespace = (SELECT oid FROM sys_namespace WHERE nspname =  '" + dbQueryProperty.getSid() + "' ) " +
+                "AND c.relnamespace = (SELECT oid FROM pg_namespace WHERE nspname =  '" + dbQueryProperty.getSid() + "' ) " +
                 "AND a.attnum > 0 " +  // 过滤掉系统隐藏列
                 "ORDER BY a.attnum";
     }
+
+
+    @Override
+    public String buildTableNameByDbType(DbQueryProperty dbQueryProperty, String tableName) {
+        if (StringUtils.isNotEmpty(dbQueryProperty.getSid())) {
+            return dbQueryProperty.getSid() + "." + tableName;
+        }
+
+        return " public." + tableName;
+    }
+
 
     @Override
     public String generateCheckTableExistsSQL(DbQueryProperty dbQueryProperty, String tableName) {
@@ -96,11 +112,11 @@ public class Kingbase8Dialect extends AbstractDbDialect {
         String dbName = dbQueryProperty.getDbName();
         String sid = dbQueryProperty.getSid();
 
-        if(StringUtils.isNotEmpty(sid)){
+        if (StringUtils.isNotEmpty(sid)) {
             tableName = sid + "." + tableName;
         }
 
-        List<String> sqlList =  generateKingbaseCreateSql(tableName,tableComment,dbColumnList);
+        List<String> sqlList = generateKingbaseCreateSql(tableName, tableComment, dbColumnList);
 
         return sqlList;
     }
@@ -124,12 +140,13 @@ public class Kingbase8Dialect extends AbstractDbDialect {
                 createSql.append(" NOT NULL");
             }
             if (StringUtils.isNotEmpty(col.getDataDefault())) {
-                String columnType = col.getDataType();
-                if (isStringTypeSwitchDEFAULT(columnType)) {
-                    createSql.append(" DEFAULT '").append(MD5Util.escapeSingleQuotes(col.getDataDefault())).append("'");
-                } else {
-                    createSql.append(" DEFAULT ").append(col.getDataDefault());
-                }
+                createSql.append(" DEFAULT ").append(col.getDataDefault());
+//                String columnType = col.getDataType();
+//                if (isStringTypeSwitchDEFAULT(columnType)) {
+//                    createSql.append(" DEFAULT '").append(MD5Util.escapeSingleQuotes(col.getDataDefault())).append("'");
+//                } else {
+//                    createSql.append(" DEFAULT ").append(col.getDataDefault());
+//                }
             }
             if (col.getColKey()) {
                 pkList.add(col.getColName());
@@ -180,15 +197,29 @@ public class Kingbase8Dialect extends AbstractDbDialect {
 
     private static String mapKingbaseColumnType(DbColumn col) {
         // 类似 Oracle
-        String type = col.getDataType();
+        String type = col.getDataType().toUpperCase(Locale.ROOT);
         Long length = MD5Util.getStringToLong(col.getDataLength());
         Long scale = MD5Util.getStringToLong(col.getDataScale());
 
         switch (type) {
             case "VARCHAR":
+            case "VARCHAR2":
+                if (length == null || length < 1) {
+                    return "VARCHAR";
+                }
                 return "VARCHAR(" + (length != null ? length : 255) + ")";
             case "CHAR":
                 return "CHAR(" + (length != null ? length : 1) + ")";
+            case "TEXT":
+                return "TEXT";
+            case "CLOB":
+                return "CLOB";
+            case "NCLOB":
+                return "NCLOB";
+            case "TINYINT":
+                return "TINYINT";
+            case "SMALLINT":
+                return "SMALLINT";
             case "INT":
             case "INTEGER":
                 return "INTEGER";
@@ -196,12 +227,26 @@ public class Kingbase8Dialect extends AbstractDbDialect {
                 return "BIGINT";
             case "DECIMAL":
                 return "DECIMAL(" + (length != null ? length : 10) + "," + (scale != null ? scale : 0) + ")";
+            case "NUMERIC":
+                return "NUMERIC(" + (length != null ? length : 10) + "," + (scale != null ? scale : 0) + ")";
+            case "NUMBER":
+                return "NUMBER(" + (length != null ? length : 10) + "," + (scale != null ? scale : 0) + ")";
+            case "FLOAT":
+                return "FLOAT(" + (scale != null ? scale : 10) + ")";
+            case "REAL":
+                return "REAL";
+            case "DOUBLE PRECISION":
+                return "DOUBLE PRECISION";
+            case "BOOL":
+                return "BOOL";
+            case "BOOLEAN":
+                return "BOOLEAN";
+            case "JSON":
+                return "JSON";
             case "DATE":
                 return "DATE";
             case "DATETIME":
                 return "TIMESTAMP";
-            case "TEXT":
-                return "TEXT";
             default:
                 return type;
         }
@@ -210,16 +255,16 @@ public class Kingbase8Dialect extends AbstractDbDialect {
 
     @Override
     public String tables(String dbName) {
-        return  "SELECT " +
+        return "SELECT " +
                 "    c.relname AS TABLENAME, " +
                 "    d.description AS TABLECOMMENT " +
                 "FROM " +
-                "    sys_class c " +
+                "    pg_class c " +
                 " LEFT JOIN " +
-                "    sys_description d ON c.oid = d.objoid AND d.objsubid = 0 " +
+                "    pg_description d ON c.oid = d.objoid AND d.objsubid = 0 " +
                 "WHERE " +
                 "    c.relkind = 'r' " +
-                "    AND c.relnamespace = (SELECT oid FROM sys_namespace WHERE nspname = '" + "public" + "') " +
+                "    AND c.relnamespace = (SELECT oid FROM pg_namespace WHERE nspname = '" + "public" + "') " +
                 "    AND (SELECT current_database()) = '" + dbName + "' " +
                 "ORDER BY " +
                 "    c.relname;";
@@ -227,16 +272,16 @@ public class Kingbase8Dialect extends AbstractDbDialect {
 
     @Override
     public String tables(DbQueryProperty dbQueryProperty) {
-        return  "SELECT " +
+        return "SELECT " +
                 "    c.relname AS TABLENAME, " +
                 "    d.description AS TABLECOMMENT " +
                 "FROM " +
-                "    sys_class c " +
+                "    pg_class c " +
                 " LEFT JOIN " +
-                "    sys_description d ON c.oid = d.objoid AND d.objsubid = 0 " +
+                "    pg_description d ON c.oid = d.objoid AND d.objsubid = 0 " +
                 "WHERE " +
                 "    c.relkind = 'r' " +
-                "    AND c.relnamespace = (SELECT oid FROM sys_namespace WHERE nspname = '" + dbQueryProperty.getSid() + "') " +
+                "    AND c.relnamespace = (SELECT oid FROM pg_namespace WHERE nspname = '" + dbQueryProperty.getSid() + "') " +
                 "    AND (SELECT current_database()) = '" + dbQueryProperty.getDbName() + "' " +
                 "ORDER BY " +
                 "    c.relname;";
@@ -255,7 +300,7 @@ public class Kingbase8Dialect extends AbstractDbDialect {
                 .collect(Collectors.joining(", "));
 
         // 构造最终的 SQL 查询语句
-        return "SELECT " + fields + " FROM " +dbQueryProperty.getSid()+"."+ tableName;
+        return "SELECT " + fields + " FROM " + dbQueryProperty.getSid() + "." + tableName;
     }
 
     @Override
@@ -274,6 +319,35 @@ public class Kingbase8Dialect extends AbstractDbDialect {
     }
 
     @Override
+    public String getDbName(DbName dbName) {
+        int level = dbName == null ? 1 : dbName.getLevel() + 1;
+        if (level == 1) {
+            return "SELECT datname AS DBNAME, 2 AS TOTALLEVELS " +
+                    "FROM pg_database WHERE datistemplate = false ORDER BY DBNAME";
+        } else if (level == 2) {
+            // 必须先用 dbName 重建连接，再执行：
+            return "SELECT schema_name AS DBNAME, 2 AS TOTALLEVELS " +
+                    "FROM information_schema.schemata " +
+                    "WHERE schema_name NOT LIKE 'pg_%' " +
+                    "AND schema_name <> 'information_schema' " +
+                    "ORDER BY DBNAME";
+        }
+        throw new UnsupportedOperationException("仅支持 level=1/2");
+    }
+
+    @Override
+    public String getInsertOrUpdateSql(String tableName, String where, String tableFieldName, String tableFieldValue, String setValue) {
+        String sql = "MERGE INTO {tableName} USING (SELECT COUNT(1) count FROM {tableName}  WHERE {where}) c ON (c.count > 0) WHEN MATCHED THEN UPDATE SET {setValue} WHERE {where} WHEN NOT MATCHED THEN INSERT ({tableFieldName}) VALUES ({tableFieldValue})";
+        sql = StringUtils
+                .replace(sql, "{tableName}", tableName)
+                .replace("{where}", where)
+                .replace("{tableFieldName}", tableFieldName)
+                .replace("{tableFieldValue}", tableFieldValue)
+                .replace("{setValue}", setValue);
+        return sql;
+    }
+
+    @Override
     public RowMapper<DbColumn> columnMapper() {
         return (ResultSet rs, int rowNum) -> {
             DbColumn entity = new DbColumn();
@@ -281,9 +355,12 @@ public class Kingbase8Dialect extends AbstractDbDialect {
             entity.setDataType(rs.getString("DATATYPE"));
             entity.setDataLength(rs.getString("DATALENGTH"));
             entity.setDataPrecision(rs.getString("DATAPRECISION"));
+            if (rs.getString("DATAPRECISION") != null) {
+                entity.setDataLength(rs.getString("DATAPRECISION"));
+            }
             entity.setDataScale(rs.getString("DATASCALE"));
-            entity.setColKey("1".equals(rs.getString("COLKEY")));
-            entity.setNullable("YES".equals(rs.getString("NULLABLE")));
+            entity.setColKey("t".equals(rs.getString("COLKEY")));
+            entity.setNullable("t".equals(rs.getString("NULLABLE")));
             entity.setColPosition(rs.getInt("COLPOSITION"));
             entity.setDataDefault(rs.getString("DATADEFAULT"));
             entity.setColComment(rs.getString("COLCOMMENT"));
@@ -299,5 +376,86 @@ public class Kingbase8Dialect extends AbstractDbDialect {
             entity.setTableComment(rs.getString("TABLECOMMENT"));
             return entity;
         };
+    }
+
+    @Override
+    public String getFlinkCDCSQL(DbQueryProperty property, String flinkTableName, String tableName, String tableFieldName) {
+        String sql = "CREATE TABLE ${flinkTableName} (${tableFieldName}) " +
+                "WITH ( 'connector' = 'kingbase-cdc'," +
+                "'hostname' = '${host}' ," +
+                "'port' = '${port}' ," +
+                "'username' = '${username}' ," +
+                "'password' = '${password}'," +
+                "'database-name' = '${dbName}' ," +
+                "'schema-name' = '${sid}' ," +
+                "'table-name' = '${tableName}' ," +
+                "'slot.name' = 'flink'," +
+                "'decoding.plugin.name' = 'decoderbufs'," +
+                "'scan.startup.mode' = 'initial' ," +
+                "'scan.incremental.snapshot.enabled' = 'true'," +
+                "'debezium.snapshot.mode'='initial'" +
+                ")";
+        sql = StringUtils
+                .replace(sql, "${flinkTableName}", flinkTableName)
+                .replace("${tableName}", tableName)
+                .replace("${host}", property.getHost())
+                .replace("${tableFieldName}", tableFieldName)
+                .replace("${port}", String.valueOf(property.getPort()))
+                .replace("${sid}", property.getSid())
+                .replace("${dbName}", property.getDbName())
+                .replace("${username}", property.getUsername())
+                .replace("${password}", property.getPassword());
+        return sql;
+    }
+
+    @Override
+    public String getFlinkSQL(DbQueryProperty property, String flinkTableName, String tableName, String tableFieldName) {
+        String sql = "CREATE TABLE ${flinkTableName} (${tableFieldName}) " +
+                "WITH ( 'connector' = 'jdbc'," +
+                "'url' = 'jdbc:kingbase8://${host}:${port}/${dbName}?stringtype=unspecified'," +
+                "'table-name' = '${tableName}'," +
+                "'username' = '${username}'," +
+                "'password' = '${password}')";
+
+        sql = StringUtils
+                .replace(sql, "${flinkTableName}", flinkTableName)
+                .replace("${tableName}", tableName)
+                .replace("${host}", property.getHost())
+                .replace("${tableFieldName}", tableFieldName)
+                .replace("${port}", String.valueOf(property.getPort()))
+                .replace("${dbName}", property.getDbName())
+                .replace("${username}", property.getUsername())
+                .replace("${password}", property.getPassword());
+        return sql;
+    }
+
+    @Override
+    public String getTableName(DbQueryProperty property, String tableName) {
+        return property.getDbName() + "." + property.getSid() + "." + tableName;
+    }
+
+    @Override
+    public String getFlinkSinkSQL(DbQueryProperty property, JSONObject config, String flinkTableName, String tableName, String tableFieldName) {
+        String sql = "CREATE TABLE ${flinkTableName} (${tableFieldName}) " +
+                "WITH ( 'connector' = 'jdbc'," +
+                "'url' = 'jdbc:kingbase8://${host}:${port}/${dbName}?stringtype=unspecified'," +
+                "'table-name' = '${tableName}'," +
+                "'username' = '${username}'," +
+                "'password' = '${password}'," +
+                "'sink.buffer-flush.max-rows' = '${batchSize}'," +
+                "'sink.buffer-flush.interval' = '1s'" +
+                ")";
+
+        sql = StringUtils
+                .replace(sql, "${flinkTableName}", flinkTableName)
+                .replace("${tableName}", tableName)
+                .replace("${host}", property.getHost())
+                .replace("${tableFieldName}", tableFieldName)
+                .replace("${port}", String.valueOf(property.getPort()))
+                .replace("${dbName}", property.getDbName())
+                .replace("${username}", property.getUsername())
+                .replace("${password}", property.getPassword())
+                .replace("${batchSize}", String.valueOf(config.getIntValue("batchSize", 100)));
+        return sql;
     }
 }

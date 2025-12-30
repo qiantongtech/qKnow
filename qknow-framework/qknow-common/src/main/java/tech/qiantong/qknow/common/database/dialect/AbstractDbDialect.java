@@ -1,8 +1,19 @@
 package tech.qiantong.qknow.common.database.dialect;
 
 
+import com.alibaba.fastjson2.JSONObject;
+import org.springframework.util.StringUtils;
 import tech.qiantong.qknow.common.database.DbDialect;
+import tech.qiantong.qknow.common.database.constants.DbQueryProperty;
+import tech.qiantong.qknow.common.database.constants.DbType;
+import tech.qiantong.qknow.common.database.core.DbColumn;
+import tech.qiantong.qknow.common.database.core.DbName;
+import tech.qiantong.qknow.common.database.exception.DataQueryException;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,6 +37,22 @@ public abstract class AbstractDbDialect implements DbDialect {
     }
 
     @Override
+    public String getPkColumnNames(DbQueryProperty dbQueryProperty, String tableName) {
+        return "";
+    }
+
+
+    @Override
+    public String tablesComment(DbQueryProperty dbQueryProperty, String tableName) {
+        return null;
+    }
+
+    @Override
+    public String buildTableNameByDbType(DbQueryProperty dbQueryProperty, String tableName) {
+        return tableName;
+    }
+
+    @Override
     public String buildPaginationSql(String originalSql, long offset, long count) {
         // 获取 分页实际条数
         StringBuilder sqlBuilder = new StringBuilder(originalSql);
@@ -39,13 +66,29 @@ public abstract class AbstractDbDialect implements DbDialect {
     }
 
     @Override
-    public String countNew(String sql, Map<String, Object> params) {
+    public String countNew(String tableName, Map<String, Object> params) {
         // 动态构建 WHERE 子句
-        StringBuilder countSql = new StringBuilder("SELECT COUNT(*) FROM ").append(sql);
+        StringBuilder countSql = new StringBuilder("SELECT COUNT(*) FROM ").append(tableName);
         if (params != null && !params.isEmpty()) {
             countSql.append(buildWhereClause(params));
         }
         return countSql.toString();
+    }
+
+    /**
+     * 验证连接
+     *
+     * @param dataSource
+     * @param dbQueryProperty
+     * @return
+     */
+    @Override
+    public Boolean validConnection(DataSource dataSource, DbQueryProperty dbQueryProperty) {
+        try (Connection conn = dataSource.getConnection()) {
+            return conn.isValid(0);
+        } catch (SQLException e) {
+            throw new DataQueryException("数据库连接失败,稍后重试");
+        }
     }
 
 
@@ -61,5 +104,54 @@ public abstract class AbstractDbDialect implements DbDialect {
             whereClause.append(" AND ").append(key).append(" = :").append(key);
         }
         return whereClause.toString();
+    }
+
+    protected String trainToJdbcUrl(DbQueryProperty property) {
+        String url = DbType.getDbType(property.getDbType()).getUrl();
+        if (StringUtils.isEmpty(url)) {
+            throw new DataQueryException("无效数据库类型!");
+        }
+        url = url.replace("${host}", property.getHost());
+        url = url.replace("${port}", String.valueOf(property.getPort()));
+        if (DbType.ORACLE.getDb().equals(property.getDbType())
+                || DbType.ORACLE_12C.getDb().equals(property.getDbType())) {
+            url = url.replace("${sid}", property.getSid());
+        } else {
+            url = url.replace("${dbName}", property.getDbName());
+        }
+        return url;
+    }
+
+    @Override
+    public String getFlinkCDCSQL(DbQueryProperty property, String flinkTableName, String tableName, String tableFieldName) {
+        return null;
+    }
+
+    @Override
+    public String getFlinkSQL(DbQueryProperty property, String flinkTableName, String tableName, String tableFieldName) {
+        return null;
+    }
+
+    @Override
+    public String getTableName(DbQueryProperty property, String tableName) {
+        if (!StringUtils.isEmpty(property.getDbName())) {
+            return property.getDbName() + "." + tableName;
+        }
+        return tableName;
+    }
+
+    @Override
+    public String getFlinkSinkSQL(DbQueryProperty property, JSONObject config, String flinkTableName, String tableName, String tableFieldName) {
+        return null;
+    }
+
+    @Override
+    public String getDbName(DbName dbName) {
+        return null;
+    }
+
+    @Override
+    public List<String> someInternalSqlDorisGenerator(DbQueryProperty dbQueryProperty, String tableName, String tableComment, List<DbColumn> dbColumnList, String partitionRule, String bucketRule, Integer replica) {
+        return null;
     }
 }
