@@ -3,7 +3,7 @@ include:
   - path: ./docker-compose-qknow.yml
   - path: ./docker-compose-demo.yml
 
-version: "1.0.0"
+version: "1.1.0"
 
 networks:
   qknownet:
