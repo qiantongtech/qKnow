@@ -1,5 +1,3 @@
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 -- 1、部门表
 -- ----------------------------
@@ -455,6 +453,7 @@ insert into system_dict_type values(12, '数据校验', 'ext_data_check', '0', '
 insert into system_dict_type values(13, '发布状态', 'publish_status', '0', '小桐', sysdate(), '', NULL, '发布状态列表');
 insert into system_dict_type values(14, '任务执行状态', 'ext_task_status', '0', '小桐', sysdate(), '', NULL, '任务执行状态列表');
 insert into system_dict_type values(15, '数据源类型', 'datasource_type', '0', '小桐', sysdate(), '', NULL, '数据源类型列表');
+insert into system_dict_type values (16, '导入表映射状态', 'ext_mapping_status', '0', '小桐', sysdate(), '', NULL, '导入表映射状态');
 
 -- ----------------------------
 -- 12、字典数据表
@@ -529,6 +528,8 @@ insert into system_dict_data values (46, 2, 'DM8', 'DM8', 'datasource_type', '',
 insert into system_dict_data values (47, 3, 'Oracle', 'Oracle', 'datasource_type', '', 'primary', 'N', '1', '小桐', sysdate(), '', NULL, 'Oracle数据库');
 insert into system_dict_data values (48, 4, 'Oracle11', 'Oracle11', 'datasource_type', '', 'primary', 'N', '1', '小桐', sysdate(), '', NULL, 'Oracle11数据库');
 insert into system_dict_data values (49, 5, 'Kingbase8', 'Kingbase8', 'datasource_type', '', 'primary', 'N', '1', '小桐', sysdate(), '', NULL, '人大金仓8数据库');
+insert into system_dict_data values (50, 0, '未映射', '0', 'ext_mapping_status', NULL, 'warning', 'N', '0', '小桐', sysdate(), '小桐', sysdate(), NULL);
+insert into system_dict_data values (51, 1, '已映射', '1', 'ext_mapping_status', NULL, 'success', 'N', '0', '小桐', sysdate(), '', NULL, NULL);
 
 -- ----------------------------
 -- 13、参数配置表
@@ -903,6 +904,7 @@ create table ext_schema_attribute (
                                       name_code varchar(128) NOT NULL COMMENT '属性名称代码',
                                       require_flag tinyint(1) NOT NULL COMMENT '是否必填',
                                       data_type tinyint unsigned NOT NULL DEFAULT '0' COMMENT '数据类型;0：文本，1：整数，2：小数，3：时间，4：字节类型，5：布尔值',
+                                      dict_type_id BIGINT(20)  COMMENT '关联字典类型id',
                                       multiple_flag tinyint unsigned NOT NULL DEFAULT '0' COMMENT '单/多值;0：单值，1：多值',
                                       validate_type tinyint unsigned DEFAULT NULL COMMENT '校验方式;0：唯一性校验，1：长度校验，2：区间校验',
                                       min_value decimal(10,0) DEFAULT NULL COMMENT '最小值（用于区间校验）',
@@ -919,11 +921,11 @@ create table ext_schema_attribute (
                                       PRIMARY KEY (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3 COMMENT='概念属性';
 
-insert into ext_schema_attribute values (1, 1001, 7, '用户', '用户id', 'id', 1, 1, 0, 0, NULL, NULL, 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
-insert into ext_schema_attribute values (2, 1001, 7, '用户', '用户名称', 'user_name', 1, 0, 0, 1, NULL, 256, 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
-insert into ext_schema_attribute values (3, 1001, 7, '用户', '手机号码', 'phonenumber', 0, 0, 0, 1, NULL, 11, 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
-insert into ext_schema_attribute values (4, 1001, 8, '角色', '角色id', 'id', 1, 1, 0, NULL, NULL, NULL, 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
-insert into ext_schema_attribute values (5, 1001, 8, '角色', '角色名称', 'role_name', 0, 0, 0, NULL, NULL, NULL, 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
+insert into ext_schema_attribute values (1, 1001, 7, '用户', '用户id', 'id', 1, 1, NULL,0, 0, NULL, NULL, 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
+insert into ext_schema_attribute values (2, 1001, 7, '用户', '用户名称', 'user_name', 1, 0, NULL,0, 1, NULL, 256, 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
+insert into ext_schema_attribute values (3, 1001, 7, '用户', '手机号码', 'phonenumber', 0, 0, NULL,0, 1, NULL, 11, 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
+insert into ext_schema_attribute values (4, 1001, 8, '角色', '角色id', 'id', 1, 1, NULL,0, NULL, NULL, NULL, 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
+insert into ext_schema_attribute values (5, 1001, 8, '角色', '角色名称', 'role_name', 0, 0, NULL,0, NULL, NULL, NULL, 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
 
 
 -- ----------------------------
@@ -937,6 +939,9 @@ create table ext_schema_mapping (
                                     table_name varchar(128) NOT NULL COMMENT '表名',
                                     table_comment varchar(128) DEFAULT NULL COMMENT '表显示名称',
                                     entity_name_field varchar(32) DEFAULT NULL COMMENT '实体名称列',
+                                    primary_key varchar(32) DEFAULT NULL COMMENT '主键',
+                                    entity_time_field varchar(128)  COMMENT '增量依据字段',
+                                    last_date_time DATETIME  COMMENT '最新数据时间',
                                     schema_id bigint DEFAULT NULL COMMENT '概念id',
                                     schema_name varchar(128) DEFAULT NULL COMMENT '概念名称',
                                     valid_flag tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效;0：无效，1：有效',
@@ -951,8 +956,8 @@ create table ext_schema_mapping (
                                     PRIMARY KEY (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3 COMMENT='概念映射';
 
-insert into ext_schema_mapping values (1, 1001, 1, 'system_role', '角色信息表', 'role_name', 8, '角色', 0, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
-insert into ext_schema_mapping values (2, 1001, 1, 'system_user', '用户信息表', 'user_name', 7, '用户', 0, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
+insert into ext_schema_mapping values (1, 1001, 1, 'system_role', '角色信息表', 'role_name', 'id', NULL, NULL,8, '角色', 0, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
+insert into ext_schema_mapping values (2, 1001, 1, 'system_user', '用户信息表', 'user_name', 'id', NULL, NULL,7, '用户', 0, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
 
 
 -- ----------------------------
@@ -997,7 +1002,10 @@ create table ext_struct_task (
                                  publish_time datetime DEFAULT NULL COMMENT '发布时间',
                                  publisher_id bigint DEFAULT NULL COMMENT '发布人id',
                                  publish_by varchar(128) DEFAULT NULL COMMENT '发布人',
-                                 datasource_id bigint NOT NULL COMMENT '数据源id',
+                                 update_type  tinyint DEFAULT 0  COMMENT '更新类型;0：全量更新，1：增量更新',
+                                 update_frequency varchar(256) DEFAULT NULL  COMMENT '更新频率',
+                                 update_status tinyint  DEFAULT 1 COMMENT '定时更新状态（0正常 1暂停）'
+                                   datasource_id bigint NOT NULL COMMENT '数据源id',
                                  datasource_name varchar(128) NOT NULL COMMENT '数据源名称',
                                  valid_flag tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效;0：无效，1：有效',
                                  del_flag tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除标志;1：已删除，0：未删除',
@@ -1011,7 +1019,7 @@ create table ext_struct_task (
                                  PRIMARY KEY (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3 COMMENT='结构化抽取任务';
 
-insert into ext_struct_task values (1, 1001, '用户信息抽取', 2, 1, sysdate(), 1, '小桐', 1, '本地数据库', 0, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
+insert into ext_struct_task values (1, 1001, '用户信息抽取', 2, 1, sysdate(), 1, '小桐', 0,'0 0 2 * * ?',01, '本地数据库', 0, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
 
 
 -- ----------------------------
@@ -1204,177 +1212,22 @@ create table kmc_document (
 insert into kmc_document values (1, 1001, 9, '音乐与影视作品', '全球流行文化的交汇点.docx', '/2025/05/27/683517a88fceebcb4928de44.docx', '用于测试非结构化抽取文件', 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
 insert into kmc_document values (2, 1001, 7, '科技创新与应用', '硅谷的创新者与全球技术变革.docx', '/2025/05/27/683540a58fce4f307dbf6f0a.docx', '用于测试非结构化抽取文件', 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
 
-DROP TABLE IF EXISTS QRTZ_FIRED_TRIGGERS;
-DROP TABLE IF EXISTS QRTZ_PAUSED_TRIGGER_GRPS;
-DROP TABLE IF EXISTS QRTZ_SCHEDULER_STATE;
-DROP TABLE IF EXISTS QRTZ_LOCKS;
-DROP TABLE IF EXISTS QRTZ_SIMPLE_TRIGGERS;
-DROP TABLE IF EXISTS QRTZ_SIMPROP_TRIGGERS;
-DROP TABLE IF EXISTS QRTZ_CRON_TRIGGERS;
-DROP TABLE IF EXISTS QRTZ_BLOB_TRIGGERS;
-DROP TABLE IF EXISTS QRTZ_TRIGGERS;
-DROP TABLE IF EXISTS QRTZ_JOB_DETAILS;
-DROP TABLE IF EXISTS QRTZ_CALENDARS;
-
--- ----------------------------
--- 1、存储每一个已配置的 jobDetail 的详细信息
--- ----------------------------
-create table QRTZ_JOB_DETAILS (
-                                  sched_name           varchar(120)    not null            comment '调度名称',
-                                  job_name             varchar(200)    not null            comment '任务名称',
-                                  job_group            varchar(200)    not null            comment '任务组名',
-                                  description          varchar(250)    null                comment '相关介绍',
-                                  job_class_name       varchar(250)    not null            comment '执行任务类名称',
-                                  is_durable           varchar(1)      not null            comment '是否持久化',
-                                  is_nonconcurrent     varchar(1)      not null            comment '是否并发',
-                                  is_update_data       varchar(1)      not null            comment '是否更新数据',
-                                  requests_recovery    varchar(1)      not null            comment '是否接受恢复执行',
-                                  job_data             blob            null                comment '存放持久化job对象',
-                                  primary key (sched_name, job_name, job_group)
-) engine=innodb comment = '任务详细信息表';
-
--- ----------------------------
--- 2、 存储已配置的 Trigger 的信息
--- ----------------------------
-create table QRTZ_TRIGGERS (
-                               sched_name           varchar(120)    not null            comment '调度名称',
-                               trigger_name         varchar(200)    not null            comment '触发器的名字',
-                               trigger_group        varchar(200)    not null            comment '触发器所属组的名字',
-                               job_name             varchar(200)    not null            comment 'qrtz_job_details表job_name的外键',
-                               job_group            varchar(200)    not null            comment 'qrtz_job_details表job_group的外键',
-                               description          varchar(250)    null                comment '相关介绍',
-                               next_fire_time       bigint(13)      null                comment '上一次触发时间（毫秒）',
-                               prev_fire_time       bigint(13)      null                comment '下一次触发时间（默认为-1表示不触发）',
-                               priority             integer         null                comment '优先级',
-                               trigger_state        varchar(16)     not null            comment '触发器状态',
-                               trigger_type         varchar(8)      not null            comment '触发器的类型',
-                               start_time           bigint(13)      not null            comment '开始时间',
-                               end_time             bigint(13)      null                comment '结束时间',
-                               calendar_name        varchar(200)    null                comment '日程表名称',
-                               misfire_instr        smallint(2)     null                comment '补偿执行的策略',
-                               job_data             blob            null                comment '存放持久化job对象',
-                               primary key (sched_name, trigger_name, trigger_group),
-                               foreign key (sched_name, job_name, job_group) references QRTZ_JOB_DETAILS(sched_name, job_name, job_group)
-) engine=innodb comment = '触发器详细信息表';
-
--- ----------------------------
--- 3、 存储简单的 Trigger，包括重复次数，间隔，以及已触发的次数
--- ----------------------------
-create table QRTZ_SIMPLE_TRIGGERS (
-                                      sched_name           varchar(120)    not null            comment '调度名称',
-                                      trigger_name         varchar(200)    not null            comment 'qrtz_triggers表trigger_name的外键',
-                                      trigger_group        varchar(200)    not null            comment 'qrtz_triggers表trigger_group的外键',
-                                      repeat_count         bigint(7)       not null            comment '重复的次数统计',
-                                      repeat_interval      bigint(12)      not null            comment '重复的间隔时间',
-                                      times_triggered      bigint(10)      not null            comment '已经触发的次数',
-                                      primary key (sched_name, trigger_name, trigger_group),
-                                      foreign key (sched_name, trigger_name, trigger_group) references QRTZ_TRIGGERS(sched_name, trigger_name, trigger_group)
-) engine=innodb comment = '简单触发器的信息表';
-
--- ----------------------------
--- 4、 存储 Cron Trigger，包括 Cron 表达式和时区信息
--- ----------------------------
-create table QRTZ_CRON_TRIGGERS (
-                                    sched_name           varchar(120)    not null            comment '调度名称',
-                                    trigger_name         varchar(200)    not null            comment 'qrtz_triggers表trigger_name的外键',
-                                    trigger_group        varchar(200)    not null            comment 'qrtz_triggers表trigger_group的外键',
-                                    cron_expression      varchar(200)    not null            comment 'cron表达式',
-                                    time_zone_id         varchar(80)                         comment '时区',
-                                    primary key (sched_name, trigger_name, trigger_group),
-                                    foreign key (sched_name, trigger_name, trigger_group) references QRTZ_TRIGGERS(sched_name, trigger_name, trigger_group)
-) engine=innodb comment = 'Cron类型的触发器表';
-
--- ----------------------------
--- 5、 Trigger 作为 Blob 类型存储(用于 Quartz 用户用 JDBC 创建他们自己定制的 Trigger 类型，JobStore 并不知道如何存储实例的时候)
--- ----------------------------
-create table QRTZ_BLOB_TRIGGERS (
-                                    sched_name           varchar(120)    not null            comment '调度名称',
-                                    trigger_name         varchar(200)    not null            comment 'qrtz_triggers表trigger_name的外键',
-                                    trigger_group        varchar(200)    not null            comment 'qrtz_triggers表trigger_group的外键',
-                                    blob_data            blob            null                comment '存放持久化Trigger对象',
-                                    primary key (sched_name, trigger_name, trigger_group),
-                                    foreign key (sched_name, trigger_name, trigger_group) references QRTZ_TRIGGERS(sched_name, trigger_name, trigger_group)
-) engine=innodb comment = 'Blob类型的触发器表';
-
--- ----------------------------
--- 6、 以 Blob 类型存储存放日历信息， quartz可配置一个日历来指定一个时间范围
--- ----------------------------
-create table QRTZ_CALENDARS (
-                                sched_name           varchar(120)    not null            comment '调度名称',
-                                calendar_name        varchar(200)    not null            comment '日历名称',
-                                calendar             blob            not null            comment '存放持久化calendar对象',
-                                primary key (sched_name, calendar_name)
-) engine=innodb comment = '日历信息表';
-
--- ----------------------------
--- 7、 存储已暂停的 Trigger 组的信息
--- ----------------------------
-create table QRTZ_PAUSED_TRIGGER_GRPS (
-                                          sched_name           varchar(120)    not null            comment '调度名称',
-                                          trigger_group        varchar(200)    not null            comment 'qrtz_triggers表trigger_group的外键',
-                                          primary key (sched_name, trigger_group)
-) engine=innodb comment = '暂停的触发器表';
-
--- ----------------------------
--- 8、 存储与已触发的 Trigger 相关的状态信息，以及相联 Job 的执行信息
--- ----------------------------
-create table QRTZ_FIRED_TRIGGERS (
-                                     sched_name           varchar(120)    not null            comment '调度名称',
-                                     entry_id             varchar(95)     not null            comment '调度器实例id',
-                                     trigger_name         varchar(200)    not null            comment 'qrtz_triggers表trigger_name的外键',
-                                     trigger_group        varchar(200)    not null            comment 'qrtz_triggers表trigger_group的外键',
-                                     instance_name        varchar(200)    not null            comment '调度器实例名',
-                                     fired_time           bigint(13)      not null            comment '触发的时间',
-                                     sched_time           bigint(13)      not null            comment '定时器制定的时间',
-                                     priority             integer         not null            comment '优先级',
-                                     state                varchar(16)     not null            comment '状态',
-                                     job_name             varchar(200)    null                comment '任务名称',
-                                     job_group            varchar(200)    null                comment '任务组名',
-                                     is_nonconcurrent     varchar(1)      null                comment '是否并发',
-                                     requests_recovery    varchar(1)      null                comment '是否接受恢复执行',
-                                     primary key (sched_name, entry_id)
-) engine=innodb comment = '已触发的触发器表';
-
--- ----------------------------
--- 9、 存储少量的有关 Scheduler 的状态信息，假如是用于集群中，可以看到其他的 Scheduler 实例
--- ----------------------------
-create table QRTZ_SCHEDULER_STATE (
-                                      sched_name           varchar(120)    not null            comment '调度名称',
-                                      instance_name        varchar(200)    not null            comment '实例名称',
-                                      last_checkin_time    bigint(13)      not null            comment '上次检查时间',
-                                      checkin_interval     bigint(13)      not null            comment '检查间隔时间',
-                                      primary key (sched_name, instance_name)
-) engine=innodb comment = '调度器状态表';
-
--- ----------------------------
--- 10、 存储程序的悲观锁的信息(假如使用了悲观锁)
--- ----------------------------
-create table QRTZ_LOCKS (
-                            sched_name           varchar(120)    not null            comment '调度名称',
-                            lock_name            varchar(40)     not null            comment '悲观锁名称',
-                            primary key (sched_name, lock_name)
-) engine=innodb comment = '存储的悲观锁信息表';
-
--- ----------------------------
--- 11、 Quartz集群实现同步机制的行锁表
--- ----------------------------
-create table QRTZ_SIMPROP_TRIGGERS (
-                                       sched_name           varchar(120)    not null            comment '调度名称',
-                                       trigger_name         varchar(200)    not null            comment 'qrtz_triggers表trigger_name的外键',
-                                       trigger_group        varchar(200)    not null            comment 'qrtz_triggers表trigger_group的外键',
-                                       str_prop_1           varchar(512)    null                comment 'String类型的trigger的第一个参数',
-                                       str_prop_2           varchar(512)    null                comment 'String类型的trigger的第二个参数',
-                                       str_prop_3           varchar(512)    null                comment 'String类型的trigger的第三个参数',
-                                       int_prop_1           int             null                comment 'int类型的trigger的第一个参数',
-                                       int_prop_2           int             null                comment 'int类型的trigger的第二个参数',
-                                       long_prop_1          bigint          null                comment 'long类型的trigger的第一个参数',
-                                       long_prop_2          bigint          null                comment 'long类型的trigger的第二个参数',
-                                       dec_prop_1           numeric(13,4)   null                comment 'decimal类型的trigger的第一个参数',
-                                       dec_prop_2           numeric(13,4)   null                comment 'decimal类型的trigger的第二个参数',
-                                       bool_prop_1          varchar(1)      null                comment 'Boolean类型的trigger的第一个参数',
-                                       bool_prop_2          varchar(1)      null                comment 'Boolean类型的trigger的第二个参数',
-                                       primary key (sched_name, trigger_name, trigger_group),
-                                       foreign key (sched_name, trigger_name, trigger_group) references QRTZ_TRIGGERS(sched_name, trigger_name, trigger_group)
-) engine=innodb comment = '同步机制的行锁表';
-
-commit;
+# 2025-12-16
+DROP TABLE IF EXISTS ext_relation_mapping_middle;
+CREATE TABLE ext_relation_mapping_middle(
+                                            `id` BIGINT AUTO_INCREMENT COMMENT 'ID' ,
+                                            `relation_id` BIGINT NOT NULL  COMMENT '关系表id' ,
+                                            `table_name` VARCHAR(32)   COMMENT '中间表名称' ,
+                                            `table_field` VARCHAR(128) NOT NULL  COMMENT '关联源表字段' ,
+                                            `relation_field` VARCHAR(128) NOT NULL  COMMENT '关联目标表字段' ,
+                                            `valid_flag` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '是否有效;0：无效，1：有效' ,
+                                            `del_flag` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '删除标志;1：已删除，0：未删除' ,
+                                            `create_by` VARCHAR(32)   COMMENT '创建人' ,
+                                            `creator_id` BIGINT   COMMENT '创建人id' ,
+                                            `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间' ,
+                                            `update_by` VARCHAR(32)   COMMENT '更新人' ,
+                                            `updater_id` BIGINT   COMMENT '更新人id' ,
+                                            `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间' ,
+                                            `remark` VARCHAR(512)   COMMENT '备注' ,
+                                            PRIMARY KEY (id)
+)  COMMENT = '关系映射中间表';

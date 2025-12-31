@@ -35,6 +35,6 @@ CREATE TABLE ext_relation_mapping_middle(
 )  COMMENT = '关系映射中间表';
 
 # 2025-12-25
-INSERT INTO system_dict_type VALUES (101, '导入表映射状态', 'ext_mapping_status', '0', '吴同', '2025-12-25 09:34:26', '', NULL, '导入表映射状态');
-INSERT INTO system_dict_data VALUES (102, 0, '未映射', '0', 'ext_mapping_status', NULL, 'warning', 'N', '0', '吴同', '2025-12-25 09:34:52', '吴同', '2025-12-25 09:39:22', NULL);
-INSERT INTO system_dict_data VALUES (103, 1, '已映射', '1', 'ext_mapping_status', NULL, 'success', 'N', '0', '吴同', '2025-12-25 09:35:05', '', NULL, NULL);
+insert into system_dict_type values (16, '导入表映射状态', 'ext_mapping_status', '0', '小桐', sysdate(), '', NULL, '导入表映射状态');
+insert into system_dict_data values (50, 0, '未映射', '0', 'ext_mapping_status', NULL, 'warning', 'N', '0', '小桐', sysdate(), '小桐', sysdate(), NULL);
+insert into system_dict_data values (51, 1, '已映射', '1', 'ext_mapping_status', NULL, 'success', 'N', '0', '小桐', sysdate(), '', NULL, NULL);
