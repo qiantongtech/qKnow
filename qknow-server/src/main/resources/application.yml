@@ -33,7 +33,7 @@ qknow:
   # 名称
   name: qKnow
   # 版本
-  version: 3.8.8
+  version: 1.1.0
   # 版权年份
   copyrightYear: 2025
   # 文件路径 示例（ Windows配置D:/qknow/uploadPath，Linux配置 /home/qknow/uploadPath） -- 需要和 file 模块保持一致
