@@ -37,7 +37,7 @@
     <parent>
         <artifactId>qknow-module-system</artifactId>
         <groupId>tech.qiantong</groupId>
-        <version>3.8.8</version>
+        <version>1.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -52,42 +52,42 @@
         <dependency>
             <groupId>tech.qiantong</groupId>
             <artifactId>qknow-config</artifactId>
-            <version>3.8.8</version>
+            <version>${qknow.version}</version>
         </dependency>
 
         <!-- 系統模块 websocket-->
         <dependency>
             <groupId>tech.qiantong</groupId>
             <artifactId>qknow-websocket</artifactId>
-            <version>3.8.8</version>
+            <version>${qknow.version}</version>
         </dependency>
 
         <!-- 系统模块 qknow-security -->
         <dependency>
             <groupId>tech.qiantong</groupId>
             <artifactId>qknow-security</artifactId>
-            <version>3.8.8</version>
+            <version>${qknow.version}</version>
         </dependency>
 
         <!-- 系统模块 mybatis -->
         <dependency>
             <groupId>tech.qiantong</groupId>
             <artifactId>qknow-mybatis</artifactId>
-            <version>3.8.8</version>
+            <version>${qknow.version}</version>
         </dependency>
 
         <!-- 系统模块 redis -->
         <dependency>
             <groupId>tech.qiantong</groupId>
             <artifactId>qknow-redis</artifactId>
-            <version>3.8.8</version>
+            <version>${qknow.version}</version>
         </dependency>
         <!-- ======================================================================== -->
         <!-- system-api模块 -->
         <dependency>
             <groupId>tech.qiantong</groupId>
             <artifactId>qknow-module-system-api</artifactId>
-            <version>3.8.8</version>
+            <version>${qknow.version}</version>
         </dependency>
 
         <!-- 定时任务-->
@@ -112,21 +112,21 @@
         <dependency>
             <groupId>tech.qiantong</groupId>
             <artifactId>qknow-file</artifactId>
-            <version>3.8.8</version>
+            <version>${qknow.version}</version>
         </dependency>
 
         <!-- pay-->
         <!--        <dependency>
                     <groupId>tech.qiantong</groupId>
                     <artifactId>qknow-pay</artifactId>
-                    <version>3.8.8</version>
+                    <version>${qknow.version}</version>
                 </dependency>-->
 
         <!-- auth-->
         <dependency>
             <groupId>tech.qiantong</groupId>
             <artifactId>qknow-auth</artifactId>
-            <version>3.8.8</version>
+            <version>${qknow.version}</version>
         </dependency>
 
         <!-- swagger3-->
