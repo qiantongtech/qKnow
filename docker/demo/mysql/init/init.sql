@@ -1004,7 +1004,7 @@ create table ext_struct_task (
                                  publish_by varchar(128) DEFAULT NULL COMMENT '发布人',
                                  update_type  tinyint DEFAULT 0  COMMENT '更新类型;0：全量更新，1：增量更新',
                                  update_frequency varchar(256) DEFAULT NULL  COMMENT '更新频率',
-                                 update_status tinyint  DEFAULT 1 COMMENT '定时更新状态（0正常 1暂停）'
+                                 update_status tinyint  DEFAULT 1 COMMENT '定时更新状态（0正常 1暂停）',
                                    datasource_id bigint NOT NULL COMMENT '数据源id',
                                  datasource_name varchar(128) NOT NULL COMMENT '数据源名称',
                                  valid_flag tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效;0：无效，1：有效',
@@ -1019,7 +1019,7 @@ create table ext_struct_task (
                                  PRIMARY KEY (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3 COMMENT='结构化抽取任务';
 
-insert into ext_struct_task values (1, 1001, '用户信息抽取', 2, 1, sysdate(), 1, '小桐', 0,'0 0 2 * * ?',01, '本地数据库', 0, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
+insert into ext_struct_task values (1, 1001, '用户信息抽取', 2, 1, sysdate(), 1, '小桐', 0,'0 0 2 * * ?',0,1, '本地数据库', 0, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
 
 
 -- ----------------------------
