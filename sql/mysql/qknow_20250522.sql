@@ -453,6 +453,7 @@ insert into system_dict_type values(12, '数据校验', 'ext_data_check', '0', '
 insert into system_dict_type values(13, '发布状态', 'publish_status', '0', '小桐', sysdate(), '', NULL, '发布状态列表');
 insert into system_dict_type values(14, '任务执行状态', 'ext_task_status', '0', '小桐', sysdate(), '', NULL, '任务执行状态列表');
 insert into system_dict_type values(15, '数据源类型', 'datasource_type', '0', '小桐', sysdate(), '', NULL, '数据源类型列表');
+insert into system_dict_type values (16, '导入表映射状态', 'ext_mapping_status', '0', '小桐', sysdate(), '', NULL, '导入表映射状态');
 
 -- ----------------------------
 -- 12、字典数据表
@@ -527,6 +528,8 @@ insert into system_dict_data values (46, 2, 'DM8', 'DM8', 'datasource_type', '',
 insert into system_dict_data values (47, 3, 'Oracle', 'Oracle', 'datasource_type', '', 'primary', 'N', '1', '小桐', sysdate(), '', NULL, 'Oracle数据库');
 insert into system_dict_data values (48, 4, 'Oracle11', 'Oracle11', 'datasource_type', '', 'primary', 'N', '1', '小桐', sysdate(), '', NULL, 'Oracle11数据库');
 insert into system_dict_data values (49, 5, 'Kingbase8', 'Kingbase8', 'datasource_type', '', 'primary', 'N', '1', '小桐', sysdate(), '', NULL, '人大金仓8数据库');
+insert into system_dict_data values (50, 0, '未映射', '0', 'ext_mapping_status', NULL, 'warning', 'N', '0', '小桐', sysdate(), '小桐', sysdate(), NULL);
+insert into system_dict_data values (51, 1, '已映射', '1', 'ext_mapping_status', NULL, 'success', 'N', '0', '小桐', sysdate(), '', NULL, NULL);
 
 -- ----------------------------
 -- 13、参数配置表
@@ -901,6 +904,7 @@ create table ext_schema_attribute (
                                         name_code varchar(128) NOT NULL COMMENT '属性名称代码',
                                         require_flag tinyint(1) NOT NULL COMMENT '是否必填',
                                         data_type tinyint unsigned NOT NULL DEFAULT '0' COMMENT '数据类型;0：文本，1：整数，2：小数，3：时间，4：字节类型，5：布尔值',
+                                        dict_type_id BIGINT(20)  COMMENT '关联字典类型id',
                                         multiple_flag tinyint unsigned NOT NULL DEFAULT '0' COMMENT '单/多值;0：单值，1：多值',
                                         validate_type tinyint unsigned DEFAULT NULL COMMENT '校验方式;0：唯一性校验，1：长度校验，2：区间校验',
                                         min_value decimal(10,0) DEFAULT NULL COMMENT '最小值（用于区间校验）',
@@ -917,11 +921,11 @@ create table ext_schema_attribute (
                                         PRIMARY KEY (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3 COMMENT='概念属性';
 
-insert into ext_schema_attribute values (1, 1001, 7, '用户', '用户id', 'id', 1, 1, 0, 0, NULL, NULL, 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
-insert into ext_schema_attribute values (2, 1001, 7, '用户', '用户名称', 'user_name', 1, 0, 0, 1, NULL, 256, 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
-insert into ext_schema_attribute values (3, 1001, 7, '用户', '手机号码', 'phonenumber', 0, 0, 0, 1, NULL, 11, 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
-insert into ext_schema_attribute values (4, 1001, 8, '角色', '角色id', 'id', 1, 1, 0, NULL, NULL, NULL, 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
-insert into ext_schema_attribute values (5, 1001, 8, '角色', '角色名称', 'role_name', 0, 0, 0, NULL, NULL, NULL, 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
+insert into ext_schema_attribute values (1, 1001, 7, '用户', '用户id', 'id', 1, 1, NULL,0, 0, NULL, NULL, 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
+insert into ext_schema_attribute values (2, 1001, 7, '用户', '用户名称', 'user_name', 1, 0, NULL,0, 1, NULL, 256, 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
+insert into ext_schema_attribute values (3, 1001, 7, '用户', '手机号码', 'phonenumber', 0, 0, NULL,0, 1, NULL, 11, 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
+insert into ext_schema_attribute values (4, 1001, 8, '角色', '角色id', 'id', 1, 1, NULL,0, NULL, NULL, NULL, 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
+insert into ext_schema_attribute values (5, 1001, 8, '角色', '角色名称', 'role_name', 0, 0, NULL,0, NULL, NULL, NULL, 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
 
 
 -- ----------------------------
@@ -935,6 +939,9 @@ create table ext_schema_mapping (
                                       table_name varchar(128) NOT NULL COMMENT '表名',
                                       table_comment varchar(128) DEFAULT NULL COMMENT '表显示名称',
                                       entity_name_field varchar(32) DEFAULT NULL COMMENT '实体名称列',
+                                      primary_key varchar(32) DEFAULT NULL COMMENT '主键',
+                                      entity_time_field varchar(128)  COMMENT '增量依据字段',
+                                      last_date_time DATETIME  COMMENT '最新数据时间',
                                       schema_id bigint DEFAULT NULL COMMENT '概念id',
                                       schema_name varchar(128) DEFAULT NULL COMMENT '概念名称',
                                       valid_flag tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效;0：无效，1：有效',
@@ -949,8 +956,8 @@ create table ext_schema_mapping (
                                       PRIMARY KEY (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3 COMMENT='概念映射';
 
-insert into ext_schema_mapping values (1, 1001, 1, 'system_role', '角色信息表', 'role_name', 8, '角色', 0, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
-insert into ext_schema_mapping values (2, 1001, 1, 'system_user', '用户信息表', 'user_name', 7, '用户', 0, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
+insert into ext_schema_mapping values (1, 1001, 1, 'system_role', '角色信息表', 'role_name', 'id', NULL, NULL,8, '角色', 0, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
+insert into ext_schema_mapping values (2, 1001, 1, 'system_user', '用户信息表', 'user_name', 'id', NULL, NULL,7, '用户', 0, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
 
 
 -- ----------------------------
@@ -995,6 +1002,9 @@ create table ext_struct_task (
                                    publish_time datetime DEFAULT NULL COMMENT '发布时间',
                                    publisher_id bigint DEFAULT NULL COMMENT '发布人id',
                                    publish_by varchar(128) DEFAULT NULL COMMENT '发布人',
+                                   update_type  tinyint DEFAULT 0  COMMENT '更新类型;0：全量更新，1：增量更新',
+                                   update_frequency varchar(256) DEFAULT NULL  COMMENT '更新频率',
+                                   update_status tinyint  DEFAULT 1 COMMENT '定时更新状态（0正常 1暂停）'
                                    datasource_id bigint NOT NULL COMMENT '数据源id',
                                    datasource_name varchar(128) NOT NULL COMMENT '数据源名称',
                                    valid_flag tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效;0：无效，1：有效',
@@ -1009,7 +1019,7 @@ create table ext_struct_task (
                                    PRIMARY KEY (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3 COMMENT='结构化抽取任务';
 
-insert into ext_struct_task values (1, 1001, '用户信息抽取', 2, 1, sysdate(), 1, '小桐', 1, '本地数据库', 0, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
+insert into ext_struct_task values (1, 1001, '用户信息抽取', 2, 1, sysdate(), 1, '小桐', 0,'0 0 2 * * ?',01, '本地数据库', 0, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
 
 
 -- ----------------------------
@@ -1202,3 +1212,22 @@ create table kmc_document (
 insert into kmc_document values (1, 1001, 9, '音乐与影视作品', '全球流行文化的交汇点.docx', '/2025/05/27/683517a88fceebcb4928de44.docx', '用于测试非结构化抽取文件', 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
 insert into kmc_document values (2, 1001, 7, '科技创新与应用', '硅谷的创新者与全球技术变革.docx', '/2025/05/27/683540a58fce4f307dbf6f0a.docx', '用于测试非结构化抽取文件', 1, 0, '小桐', 1, sysdate(), '小桐', 1, sysdate(), NULL);
 
+# 2025-12-16
+DROP TABLE IF EXISTS ext_relation_mapping_middle;
+CREATE TABLE ext_relation_mapping_middle(
+                                            `id` BIGINT AUTO_INCREMENT COMMENT 'ID' ,
+                                            `relation_id` BIGINT NOT NULL  COMMENT '关系表id' ,
+                                            `table_name` VARCHAR(32)   COMMENT '中间表名称' ,
+                                            `table_field` VARCHAR(128) NOT NULL  COMMENT '关联源表字段' ,
+                                            `relation_field` VARCHAR(128) NOT NULL  COMMENT '关联目标表字段' ,
+                                            `valid_flag` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '是否有效;0：无效，1：有效' ,
+                                            `del_flag` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '删除标志;1：已删除，0：未删除' ,
+                                            `create_by` VARCHAR(32)   COMMENT '创建人' ,
+                                            `creator_id` BIGINT   COMMENT '创建人id' ,
+                                            `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间' ,
+                                            `update_by` VARCHAR(32)   COMMENT '更新人' ,
+                                            `updater_id` BIGINT   COMMENT '更新人id' ,
+                                            `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间' ,
+                                            `remark` VARCHAR(512)   COMMENT '备注' ,
+                                            PRIMARY KEY (id)
+)  COMMENT = '关系映射中间表';
