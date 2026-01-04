@@ -29,6 +29,8 @@ qKnow 知识平台（开源版）
 *
 更多信息请访问：https://qknow.qiantong.tech/business.html
 */
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 -- 1、部门表
 -- ----------------------------
