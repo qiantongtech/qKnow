@@ -157,6 +157,9 @@
               <el-dropdown-item command="setLayout" v-if="settingsStore.showSettings">
                 <span>布局设置</span>
               </el-dropdown-item>
+              <el-dropdown-item command="aboutUs" v-if="settingsStore.showSettings">
+                <span>关于我们</span>
+              </el-dropdown-item>
               <el-dropdown-item divided command="logout">
                 <span>退出登录</span>
               </el-dropdown-item>
@@ -314,6 +317,48 @@
       </template>
     </el-dialog>
 
+    <el-dialog
+        title="关于我们"
+        class="about-dialog"
+        v-model="activeOpen"
+        append-to-body
+        align-center
+    >
+      <div class="about-content-wrapper">
+        <img
+            src="@/assets/system/images/login/logo.png"
+            alt="qData Logo"
+            class="logo"
+        />
+        <div class="about-title">
+          版本{{ currentVersion }}
+          <!-- <span class="version-badge"></span> -->
+        </div>
+        <div class="copyright">©{{ year }}江苏千桐科技有限公司版权所有</div>
+      </div>
+
+      <template #footer>
+        <div class="about-footer">
+          <div v-if="!needUpdate" class="status-text">
+            版本{{ currentVersion }}已是最新版本。
+          </div>
+          <div v-else class="status-text">
+            版本{{ latestVersion }}
+            <a
+                href="https://gitee.com/qiantongtech/qKnow"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="update-link"
+            >
+              检查更新
+            </a>
+          </div>
+          <div class="head-btns">
+            <el-button type="primary" @click="openUpdateLog">更新日志</el-button>
+          </div>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -335,6 +380,7 @@ import {loginOut} from "@/api/system/sso-auth.js"
 import {onMounted, ref, watch} from "vue";
 import moment from 'moment';
 import {listNotice} from "@/api/system/system/notice";
+import {getCurrentAppVersion} from "@/api/system/update/update.js";
 
 // 认证模式
 const authType = import.meta.env.VITE_APP_AUTH_TYPE;
@@ -374,9 +420,43 @@ const tableData = ref([
   {projectId: null, duration: null}
 ])
 
+// 获取当前年
+const year = moment(new Date()).format("yyyy");
+// 是否最新版本
+const needUpdate = ref(false);
+// 当前版本号
+const currentVersion = ref("");
+// 最新版本号
+const latestVersion = ref("");
+
 onMounted(() => {
   // getListProject();
+  // 获取版本更新信息
+  getCurrentAppVersion().then(res => {
+    if (res.data != null) {
+      // 是否最新版本
+      needUpdate.value = res.data.needUpdate;
+      // 本地版本号
+      currentVersion.value = res.data.currentVersion;
+      // 最新版本号
+      latestVersion.value = res.data.latestVersion;
+    }
+  })
 })
+
+// 将 Markdown 转为 HTML，并进行安全过滤
+// const sanitizedHtml = computed(() => {
+//   if (!markdownContent.value) return '';
+//
+//   // 1. Markdown → HTML
+//   const rawHtml = marked(markdownContent.value, {
+//     breaks: true,   // 支持 \n 换行
+//     gfm: true,      // GitHub Flavored Markdown
+//   });
+//
+//   // 2. 防 XSS：净化 HTML
+//   return DOMPurify.sanitize(rawHtml);
+// });
 
 const projectList = ref([])
 const projectReportList = ref([])
@@ -670,11 +750,23 @@ function toggleSideBar() {
   appStore.toggleSideBar()
 }
 
+const activeOpen = ref(false)
+
+function handleAboutUs() {
+  activeOpen.value = true
+}
+
+function openUpdateLog() {
+  window.open("https://gitee.com/qiantongtech/qKnow/releases", "_blank");
+}
 function handleCommand(command) {
   switch (command) {
     case "setLayout":
       setLayout();
       break;
+    case "aboutUs":
+      handleAboutUs();
+    break;
     case "logout":
       logout();
       break;
@@ -980,5 +1072,125 @@ function clearNotification() {
 /* 确保样式生效，增加选择器的优先级 */
 .rounded-button, .rounded-button .el-button {
   border-radius: 2px !important;
+}
+
+.about-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  //padding: 27px 0;
+  //gap: 16px;
+
+  .logo {
+    height: 34px;
+    width: 146px;
+    margin-top: 27px;
+  }
+
+  .about-title {
+    margin-top: 20px;
+    font-size: 22px;
+    font-weight: 500;
+    color: #000000;
+
+    .version-badge {
+      background-color: #409eff;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 6px;
+    }
+  }
+
+  .copyright {
+    color: #909399;
+    font-size: 16px;
+    margin-top: 27px;
+  }
+}
+
+
+.about-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 35px;
+  border-top: 1px solid var(--el-border-color-light); // 使用 Element Plus 主题变量
+
+  .status-text {
+    font-size: 18px;
+    color: #000000;
+  }
+  .update-link {
+    color: #126BED; // Element Plus 主色，也可以用 var(--el-color-primary)
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 18px;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #66b1ff; // 鼠标悬停时颜色变亮
+    }
+
+    &:active {
+      color: #3a8ee6; // 点击时颜色更深一点
+    }
+  }
+  .head-btns {
+    img {
+      margin-right: 6px;
+    }
+    .currImg {
+      display: inline-block;
+    }
+
+    .act {
+      display: none;
+    }
+
+    .el-button {
+      height: 34px;
+      width: 114px;
+      border-radius: 4px !important;
+      font-size: 18px;
+
+      &:hover {
+        .act {
+          display: inline-block;
+        }
+
+        .currImg {
+          display: none;
+        }
+      }
+    }
+  }
+}
+.markdown-content {
+  padding: 0 15px 15px 15px;
+}
+
+</style>
+<style>
+.about-dialog:not(.is-fullscreen) {
+  margin: auto !important;
+  width: 600px;
+  height: 300px;
+  padding: 0;
+  .el-dialog__header{
+    height: 47px !important;
+    background: #f8f8f8 !important;
+    line-height: 47px;
+    padding-left: 27px;
+    color: #333333;
+  }
+  .el-dialog__footer{
+    padding-top: 0px;
+  }
+  .about-footer{
+    padding: 12px 32px;
+  }
 }
 </style>
