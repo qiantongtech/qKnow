@@ -37,7 +37,8 @@ public enum ExtTaskStatus {
     INPROGRESS(1),//执行中
     EXECUTED(2),//已执行
     ERROR(3),//执行错误
-    CHONG(4);// 文档状态未更新，需要重新执行
+    QUEUE(4),// 队列中
+    CHONG(5); // 文档状态未更新，需要重新执行;
 
     private final Integer status;
 

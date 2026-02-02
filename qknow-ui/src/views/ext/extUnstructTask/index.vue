@@ -688,11 +688,15 @@
             proxy.$modal.msgError("任务执行中");
             return
         }
+      if(row.status == 4){
+        proxy.$modal.msgError("任务已在队列中");
+        return
+      }
         proxy.$modal.confirm('是否确认执行任务名称为"' + row.name + '"的数据项？').then(function () {
         }).then(() => {
             executeExtraction({id: row.id}).then(response => {
                 console.log('---执行抽取-------', response)
-                proxy.$modal.msgSuccess("操作成功,执行中");
+                proxy.$modal.msgSuccess(response.msg);
                 getList();
             }).catch(error => {
             });
