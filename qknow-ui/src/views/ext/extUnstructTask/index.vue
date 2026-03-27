@@ -154,21 +154,41 @@
                         {{ scope.row.remark || '-' }}
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right"
+                <el-table-column label="操作"
+                                 align="center"
+                                 class-name="small-padding fixed-width"
+                                 fixed="right"
                                  width="280">
                     <template #default="scope">
-                        <el-button link type="primary" v-if="scope.row.publishStatus != 1" icon="Edit" @click="extraction(scope.row)"
-                                   v-hasPermi="['ext:extUnstructTask:unstructtask:edit']">执行
-                        </el-button>
-                        <el-button link type="primary" v-if="scope.row.publishStatus != 1" icon="Edit" @click="handleUpdate(scope.row)"
-                                   v-hasPermi="['ext:extUnstructTask:unstructtask:edit']">编辑
-                        </el-button>
-                        <el-button link type="primary" v-if="scope.row.status != 1 && scope.row.status == 2" icon="view" @click="handleResult(scope.row)"
-                                   v-hasPermi="['ext:extUnstructTask:unstructtask:extractResults']">抽取结果
-                        </el-button>
-                        <el-button link type="danger" v-if="scope.row.publishStatus != 1" icon="Delete" @click="handleDelete(scope.row)"
-                                   v-hasPermi="['ext:extUnstructTask:unstructtask:remove']">删除
-                        </el-button>
+                      <el-button link type="primary" :disabled="scope.row.status !== 2" icon="view" @click="handleResult(scope.row)"
+                                 v-hasPermi="['ext:extUnstructTask:unstructtask:extractResults']">抽取结果
+                      </el-button>
+                      <el-button link type="primary" icon="List" @click="showLogDialog(scope.row)"
+                                 v-hasPermi="['ext:extUnstructTask:unstructtask:taskLog']">执行日志
+                      </el-button>
+                      <el-popover  placement="bottom" :width="100" trigger="click">
+                        <template #reference>
+                          <el-button link type="primary"  icon="ArrowDown">更多</el-button>
+                        </template>
+                        <div style="width: 90px;" class="butgdlist">
+                          <el-button link
+                                     type="primary"
+                                     :disabled="scope.row.publishStatus == 1"
+                                     icon="Edit"
+                                     @click="extraction(scope.row)"
+                                     v-hasPermi="['ext:extUnstructTask:unstructtask:edit']"
+                                     style="padding-left: 14px">
+                            执行
+                          </el-button>
+                          <el-button link type="primary" :disabled="scope.row.publishStatus == 1" icon="Edit" @click="handleUpdate(scope.row)"
+                                     v-hasPermi="['ext:extUnstructTask:unstructtask:edit']">编辑
+                          </el-button>
+
+                          <el-button link type="danger" :disabled="scope.row.publishStatus == 1" icon="Delete" @click="handleDelete(scope.row)"
+                                     v-hasPermi="['ext:extUnstructTask:unstructtask:remove']">删除
+                          </el-button>
+                        </div>
+                      </el-popover>
                     </template>
                 </el-table-column>
 
@@ -289,6 +309,7 @@
                    @confirm="selectConfirmData"
         ></SelectDoc>
         <RelationMultiple ref="relationMultiple" @confirm="relationConfirm"></RelationMultiple>
+      <task-log-dialog ref="logDialog"></task-log-dialog>
     </div>
 </template>
 
@@ -304,6 +325,7 @@
     import { getExtSchemaAllList } from "@/api/ext/extSchema/schema";
     import {getToken} from "@/utils/auth.js";
     import moment from 'moment';
+    import TaskLogDialog from "@/views/ext/extTaskLog/taskLogDialog.vue";
     //选择文件 多选
     import SelectDoc from "@/views/kmc/kmcDocument/selection/DocumentMultiple.vue";
     import RelationMultiple from "@/views/ext/extSchemaRelation/selection/relationMultiple.vue";
@@ -352,6 +374,7 @@
     const docList = ref(null)
     const docTitles = ref(null)
     const docIds = ref(null)
+    const logDialog = ref('');
 
     /*** 用户导入参数 */
     const upload = reactive({
@@ -688,11 +711,15 @@
             proxy.$modal.msgError("任务执行中");
             return
         }
+      if(row.status == 4){
+        proxy.$modal.msgError("任务已在队列中");
+        return
+      }
         proxy.$modal.confirm('是否确认执行任务名称为"' + row.name + '"的数据项？').then(function () {
         }).then(() => {
             executeExtraction({id: row.id}).then(response => {
                 console.log('---执行抽取-------', response)
-                proxy.$modal.msgSuccess("操作成功,执行中");
+                proxy.$modal.msgSuccess(response.msg);
                 getList();
             }).catch(error => {
             });
@@ -773,6 +800,11 @@
                 });
             }
         }
+    }
+
+    function showLogDialog(row) {
+      // 1,代表非结构化抽取
+      logDialog.value.show(row.id, 1);
     }
 
 </script>
