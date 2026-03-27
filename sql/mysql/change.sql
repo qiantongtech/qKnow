@@ -70,3 +70,59 @@ CREATE TABLE ext_relation_mapping_middle(
 insert into system_dict_type values (16, '导入表映射状态', 'ext_mapping_status', '0', '小桐', sysdate(), '', NULL, '导入表映射状态');
 insert into system_dict_data values (50, 0, '未映射', '0', 'ext_mapping_status', NULL, 'warning', 'N', '0', '小桐', sysdate(), '小桐', sysdate(), NULL);
 insert into system_dict_data values (51, 1, '已映射', '1', 'ext_mapping_status', NULL, 'success', 'N', '0', '小桐', sysdate(), '', NULL, NULL);
+
+
+# 2026-01-29
+DROP TABLE IF EXISTS ext_task_log;
+CREATE TABLE ext_task_log(
+                             `id` BIGINT AUTO_INCREMENT COMMENT 'ID' ,
+                             `workspace_id` BIGINT NOT NULL  COMMENT '工作区id' ,
+                             `task_id` BIGINT NOT NULL  COMMENT '任务id;' ,
+                             `task_type` TINYINT(4) UNSIGNED NOT NULL  COMMENT '任务类型;0：结构化；1：非结构化' ,
+                             `task_name` VARCHAR(128) NOT NULL  COMMENT '任务名称' ,
+                             `status` TINYINT(4) UNSIGNED   COMMENT '状态;1成功，0失败' ,
+                             `error_msg` VARCHAR(2000)   COMMENT '错误消息;' ,
+                             `start_time` DATETIME   COMMENT '执行开始时间' ,
+                             `end_time` DATETIME   COMMENT '执行结束时间' ,
+                             `valid_flag` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '是否有效;0：无效，1：有效' ,
+                             `del_flag` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '删除标志;1：已删除，0：未删除' ,
+                             `create_by` VARCHAR(32)   COMMENT '创建人' ,
+                             `creator_id` BIGINT   COMMENT '创建人id' ,
+                             `create_time` DATETIME  DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间' ,
+                             `update_by` VARCHAR(32)   COMMENT '更新人' ,
+                             `updater_id` BIGINT   COMMENT '更新人id' ,
+                             `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间' ,
+                             `remark` VARCHAR(512)   COMMENT '备注' ,
+                             PRIMARY KEY (id)
+)  COMMENT = '抽取任务执行日志';
+DROP TABLE IF EXISTS ext_task_log_detail;
+CREATE TABLE ext_task_log_detail(
+                                    `id` BIGINT AUTO_INCREMENT COMMENT 'ID;' ,
+                                    `workspace_id` BIGINT NOT NULL DEFAULT 1001 COMMENT '工作区id' ,
+                                    `log_id` BIGINT NOT NULL  COMMENT '执行日志id' ,
+                                    `step` VARCHAR(2000) NOT NULL  COMMENT '任务执行步骤' ,
+                                    `valid_flag` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '是否有效;0：无效，1：有效' ,
+                                    `del_flag` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '删除标志;1：已删除，0：未删除' ,
+                                    `create_by` VARCHAR(32)   COMMENT '创建人' ,
+                                    `creator_id` BIGINT   COMMENT '创建人id' ,
+                                    `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间' ,
+                                    `update_by` VARCHAR(32)   COMMENT '更新人' ,
+                                    `updater_id` BIGINT   COMMENT '更新人id' ,
+                                    `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间' ,
+                                    `remark` VARCHAR(512)   COMMENT '备注' ,
+                                    PRIMARY KEY (id)
+)  COMMENT = '抽取任务执行日志详情';
+
+insert into system_menu values (2054, '非结构化抽取任务日志', 2030, 8, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'ext:extUnstructTask:unstructtask:taskLog', '#', '小桐', sysdate(), '小桐', sysdate(), '');
+insert into system_menu values (2055, '抽取日志', 2015, 5, 'extTaskLog', 'ext/extTaskLog/index', NULL, '', 1, 0, 'C', '0', '0', 'ext:extTasklog:tasklog:list', '#', '小桐', sysdate(), '小桐', sysdate(), '');
+
+insert into system_dict_type values (17, '知识抽取日志状态', 'ext_log_status', '0', '小桐', sysdate(), '', NULL, '知识抽取日志状态');
+insert into system_dict_type values (18, '知识抽取任务类型', 'ext_task_type', '0', '小桐', sysdate(), '', NULL, '知识抽取任务类型');
+
+insert into system_dict_data values (52, 1, '失败', '0', 'ext_log_status', NULL, 'danger', 'N', '0', '小桐', sysdate(), '', NULL, NULL);
+insert into system_dict_data values (53, 2, '成功', '1', 'ext_log_status', NULL, 'success', 'N', '0', '小桐', sysdate(), '', NULL, NULL);
+insert into system_dict_data values (54, 1, '结构化抽取', '0', 'ext_task_type', NULL, 'default', 'N', '0', '小桐', sysdate(), '', NULL, NULL);
+insert into system_dict_data values (55, 2, '非结构化抽取', '1', 'ext_task_type', NULL, 'default', 'N', '0', '小桐', sysdate(), '', NULL, NULL);
+insert into system_dict_data values (56, 1, '队列中', '4', 'ext_task_status', NULL, 'info', 'N', '0', '小桐', sysdate(), '', NULL, NULL);
+
+insert into system_config values(7, '非结构化抽取线程数量', 'ext.thread.concurrency', '3', 'Y', '小桐', sysdate(), '', NULL, '最大50');
