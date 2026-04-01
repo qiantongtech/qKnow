@@ -37,7 +37,7 @@
     <parent>
         <artifactId>qknow-module-kmc</artifactId>
         <groupId>tech.qiantong</groupId>
-        <version>1.1.0</version>
+        <version>1.1.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
