@@ -38,14 +38,14 @@
 
     <groupId>tech.qiantong</groupId>
     <artifactId>qKnow</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 
     <name>qknow</name>
     <url>https://qiantong.tech</url>
     <description>千知平台</description>
 
     <properties>
-        <qknow.version>1.1.0</qknow.version>
+        <qknow.version>1.1.1</qknow.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
@@ -63,6 +63,19 @@
         <poi.version>5.2.3</poi.version>
         <velocity.version>2.3</velocity.version>
         <jwt.version>0.9.1</jwt.version>
+
+        <!-- Docker 镜像构建配置 -->
+        <docker.hub>crpi-kf13onfj0v8f6jax.cn-shanghai.personal.cr.aliyuncs.com/qiantongkeji</docker.hub>
+        <!-- 镜像仓库名：默认使用模块名称（module name） -->
+        <docker.repo>${project.name}-ce</docker.repo>
+        <!-- 镜像版本号：默认使用当前模块版本 -->
+        <docker.tag>${project.version}</docker.tag>
+        <!-- 是否打印构建命令（默认打印，便于调试，不执行实际构建） -->
+        <docker.print.skip>true</docker.print.skip>
+        <!-- 是否跳过镜像构建（默认跳过，避免在开发环境误构建镜像） -->
+        <docker.build.skip>true</docker.build.skip>
+        <!-- 是否跳过镜像推送（默认跳过，避免误将测试镜像推送至镜像仓库） -->
+        <docker.push.skip>true</docker.push.skip>
     </properties>
 
     <!-- 依赖声明 -->

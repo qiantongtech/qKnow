@@ -1,22 +1,13 @@
-FROM --platform=linux/amd64 ubuntu:18.04
+FROM crpi-kf13onfj0v8f6jax.cn-shanghai.personal.cr.aliyuncs.com/qiantongkeji/eclipse-temurin:8-jre-amd64
 
 # 设置 UTF-8 环境（关键！）
 ENV LANG=C.UTF-8 \
     LC_ALL=C.UTF-8
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-         build-essential \
-         cmake \
-         pkg-config \
-         wget \
-         git \
-         curl \
-         ca-certificates \
-         openjdk-8-jdk \
+    curl \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
-
-ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-ENV PATH=$JAVA_HOME/bin:$PATH
 
 # 安装 Miniconda
 ENV CONDA_HOME=/root/miniconda3
@@ -51,9 +42,9 @@ ENV TZ=Asia/Shanghai \
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && mkdir -p $APP_HOME
 
 WORKDIR $APP_HOME
-COPY ./*.jar ./qknow.jar
-COPY ./bin ./bin
-COPY ./data ./data
+COPY ./target/*.jar ./qknow.jar
+COPY ./docker/bin ./bin
+COPY ./docker/data ./data
 
 EXPOSE 8090
 ENTRYPOINT ["java", "-Xms512m", "-Xmx2g", "-Dspring.profiles.active=prod", "-jar", "qknow.jar"]
