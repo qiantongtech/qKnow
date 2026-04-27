@@ -1,6 +1,6 @@
 <!--
-  Copyright © 2026 Qiantong Technology Co., Ltd.
-  qKnow Knowledge Platform
+  Copyright © 2025 Qiantong Technology Co., Ltd.
+  qData Data Middle Platform (Open Source Edition)
    *
   License:
   Released under the Apache License, Version 2.0.
@@ -12,12 +12,12 @@
   the default system logo and copyright information.
   For brand customization, please apply for brand customization authorization via official channels.
    *
-  More information: https://qknow.qiantong.tech/business.html
+  More information: https://qdata.qiantong.tech/business.html
    *
   ============================================================================
    *
-  版权所有 © 2026 江苏千桐科技有限公司
-  qKnow 知识平台（开源版）
+  版权所有 © 2025 江苏千桐科技有限公司
+  qData 数据中台（开源版）
    *
   许可协议：
   本项目基于 Apache License 2.0 开源协议发布，
@@ -27,7 +27,7 @@
   所有衍生版本不得修改或移除系统默认的 LOGO 和版权信息；
   如需定制品牌，请通过官方渠道申请品牌定制授权。
    *
-  更多信息请访问：https://qknow.qiantong.tech/business.html
+  更多信息请访问：https://qdata.qiantong.tech/business.html
 -->
 
 <template>
@@ -38,26 +38,41 @@
     :ellipsis="false"
   >
     <template v-for="(item, index) in topMenus">
-      <el-menu-item :style="{'--theme': theme}" :index="item.path" :key="index" v-if="index < visibleNumber">
+      <el-menu-item
+        :style="{ '--theme': theme }"
+        :index="item.path"
+        :key="index"
+        v-if="index < visibleNumber"
+      >
         <svg-icon
-        v-if="item.meta && item.meta.icon && item.meta.icon !== '#'"
-        :icon-class="item.meta.icon"/>
+          v-if="item.meta && item.meta.icon && item.meta.icon !== '#'"
+          :icon-class="item.meta.icon"
+        />
         {{ item.meta.title }}
       </el-menu-item>
     </template>
 
     <!-- 顶部菜单超出数量折叠 -->
-    <el-sub-menu :style="{'--theme': theme}" index="more" v-if="topMenus.length > visibleNumber">
-      <template #title>更多菜单</template>
+    <el-sub-menu
+      :style="{ '--theme': theme }"
+      index="more"
+      v-if="topMenus.length > visibleNumber"
+    >
+      <template #title>
+        <svg-icon icon-class="tree-table" />
+        更多菜单</template
+      >
       <template v-for="(item, index) in topMenus">
         <el-menu-item
           :index="item.path"
           :key="index"
-          v-if="index >= visibleNumber">
-        <svg-icon
-          v-if="item.meta && item.meta.icon && item.meta.icon !== '#'"
-          :icon-class="item.meta.icon"/>
-        {{ item.meta.title }}
+          v-if="index >= visibleNumber"
+        >
+          <svg-icon
+            v-if="item.meta && item.meta.icon && item.meta.icon !== '#'"
+            :icon-class="item.meta.icon"
+          />
+          {{ item.meta.title }}
         </el-menu-item>
       </template>
     </el-sub-menu>
@@ -65,30 +80,31 @@
 </template>
 
 <script setup>
-import { constantRoutes } from "@/router"
-import { isHttp } from '@/utils/validate'
-import useAppStore from '@/store/system/app'
-import useSettingsStore from '@/store/system/settings'
-import usePermissionStore from '@/store/system/permission'
-
+import { constantRoutes } from "@/router";
+import { isHttp } from "@/utils/validate";
+import useAppStore from "@/store/system/app";
+import useSettingsStore from "@/store/system/settings";
+import usePermissionStore from "@/store/system/permission";
+import { el } from "element-plus/es/locale/index.mjs";
+import useTagsViewStore from "@/store/system/tagsView";
+const { proxy } = getCurrentInstance();
 // 顶部栏初始数
 const visibleNumber = ref(null);
 // 当前激活菜单的 index
-const currentIndex = ref(null);
+const currentIndex = ref("/system");
 // 隐藏侧边栏路由
-const hideList = ['/index', '/user/profile'];
+const hideList = ["/index", "/user/profile"];
 
-const appStore = useAppStore()
-const settingsStore = useSettingsStore()
-const permissionStore = usePermissionStore()
+const appStore = useAppStore();
+const settingsStore = useSettingsStore();
+const permissionStore = usePermissionStore();
 const route = useRoute();
 const router = useRouter();
-
+const emit = defineEmits(["getRouter"]);
 // 主题颜色
 const theme = computed(() => settingsStore.theme);
 // 所有的路由信息
 const routers = computed(() => permissionStore.topbarRouters);
-
 // 顶部显示菜单
 const topMenus = computed(() => {
   let topMenus = [];
@@ -96,14 +112,14 @@ const topMenus = computed(() => {
     if (menu.hidden !== true) {
       // 兼容顶部栏一级菜单内部跳转
       if (menu.path === "/") {
-          topMenus.push(menu.children[0]);
+        topMenus.push(menu.children[0]);
       } else {
-          topMenus.push(menu);
+        topMenus.push(menu);
       }
     }
-  })
+  });
   return topMenus;
-})
+});
 
 // 设置子路由
 const childrenMenus = computed(() => {
@@ -111,63 +127,149 @@ const childrenMenus = computed(() => {
   routers.value.map((router) => {
     for (let item in router.children) {
       if (router.children[item].parentPath === undefined) {
-        if(router.path === "/") {
+        if (router.path === "/") {
           router.children[item].path = "/" + router.children[item].path;
         } else {
-          if(!isHttp(router.children[item].path)) {
-            router.children[item].path = router.path + "/" + router.children[item].path;
+          if (!isHttp(router.children[item].path)) {
+            router.children[item].path =
+              router.path + "/" + router.children[item].path;
           }
         }
         router.children[item].parentPath = router.path;
       }
       childrenMenus.push(router.children[item]);
     }
-  })
+  });
   return constantRoutes.concat(childrenMenus);
-})
+});
 
 // 默认激活的菜单
 const activeMenu = computed(() => {
   const path = route.path;
   let activePath = path;
-  if (path !== undefined && path.lastIndexOf("/") > 0 && hideList.indexOf(path) === -1) {
+  console.log(route, "菜单");
+  emit("getRouter", path);
+
+  // 如果是根路径，选择第一个可见的菜单项
+  if (path === "/index") {
+    const firstMenu = topMenus.value[0];
+    if (firstMenu) {
+      activePath = firstMenu.path;
+    }
+  } else if (
+    path !== undefined &&
+    path.lastIndexOf("/") > 0 &&
+    hideList.indexOf(path) === -1
+  ) {
     const tmpPath = path.substring(1, path.length);
     activePath = "/" + tmpPath.substring(0, tmpPath.indexOf("/"));
     if (!route.meta.link) {
-        appStore.toggleSideBarHide(false);
+      appStore.toggleSideBarHide(false);
     }
-  } else if(!route.children) {
+  } else if (!route.children) {
     activePath = path;
     appStore.toggleSideBarHide(true);
   }
   activeRoutes(activePath);
   return activePath;
-})
+});
 
-function setVisibleNumber() {
-  const width = document.body.getBoundingClientRect().width / 3;
-  visibleNumber.value = parseInt(width / 85);
+// function setVisibleNumber() {
+//     const width = document.body.getBoundingClientRect().width / 3;
+//     visibleNumber.value = parseInt(width / 85);
+// }
+
+// 计算可用宽度下的顶部导航栏可显示菜单数量
+function calculateVisibleMenus() {
+  const bodyWidth = document.body.getBoundingClientRect().width;
+  const leftWidth = 210 + 50; // Logo + 小图标，左边最大宽度
+  const rightWidth = 606; // 右侧功能区，右边最大宽度
+  const menuWidth = 124; // 每个菜单项宽度
+
+  const availableWidth = bodyWidth - leftWidth - rightWidth;
+
+  if (availableWidth < 0) {
+    visibleNumber.value = 0;
+    return;
+  }
+
+  const rawCount = Math.floor(availableWidth / menuWidth);
+  const finalCount = Math.max(0, rawCount - 1); // 减1留给“更多菜单”
+
+  visibleNumber.value = finalCount;
 }
 
-function handleSelect(key, keyPath) {
+function closePageExclusion(key) {
+  const visitedViews = useTagsViewStore().visitedViews;
+
+  for (let i = visitedViews.length - 1; i >= 0; i--) {
+    const view = visitedViews[i];
+    if (view.path.includes("/index")) {
+      continue;
+    }
+    if (!view.path.includes(key)) {
+      proxy.$tab.closePage(view);
+    }
+  }
+}
+
+// 处理顶部导航菜单的选择事件
+async function handleSelect(key, keyPath, type) {
+  console.log(key, "key");
+  // console.log(currentIndex.value,"value");
+
+  //子组件调用父组件
+  emit("getRouter", key);
+
+  // 设置当前选中的菜单索引
   currentIndex.value = key;
-  const route = routers.value.find(item => item.path === key);
+  // 查找选中的路由配置
+  const route = routers.value.find((item) => item.path === key);
+
   if (isHttp(key)) {
-    // http(s):// 路径新窗口打开
+    // 如果是http(s)链接,在新窗口打开
     window.open(key, "_blank");
   } else if (!route || !route.children) {
-    // 没有子路由路径内部打开
-    const routeMenu = childrenMenus.value.find(item => item.path === key);
+    // 如果没有子路由,在当前窗口打开
+    const routeMenu = childrenMenus.value.find((item) => item.path === key);
     if (routeMenu && routeMenu.query) {
+      // 如果有query参数,解析后带上
       let query = JSON.parse(routeMenu.query);
       router.push({ path: key, query: query });
     } else {
+      // 没有query参数直接跳转
       router.push({ path: key });
     }
+    // 隐藏左侧菜单
     appStore.toggleSideBarHide(true);
   } else {
-    // 显示左侧联动菜单
-    activeRoutes(key);
+    // 有子路由,显示左侧联动菜单
+    let routes = activeRoutes(key);
+    if (type) {
+      closePageExclusion(key);
+      if (routes.length > 0) {
+        // 获取所有标签页
+
+        if (
+          routes[0].children != null &&
+          routes[0].children != undefined &&
+          routes[0].children.length > 0
+        ) {
+          const lastChild = JSON.parse(JSON.stringify(routes[0].children[0]));
+          const fullPath = `${routes[0].path}/${routes[0].children[0].path}`;
+          lastChild.path = fullPath;
+          proxy.$tab.refreshPage(lastChild);
+        } else if (routes[0].query != null) {
+          const lastChild = JSON.parse(JSON.stringify(routes[0]));
+          const query = JSON.parse(routes[0].query);
+          lastChild.query = query;
+          proxy.$tab.refreshPage(lastChild);
+        } else {
+          proxy.$tab.refreshPage(routes[0]);
+        }
+      }
+    }
+    // 显示左侧菜单
     appStore.toggleSideBarHide(false);
   }
 }
@@ -181,7 +283,7 @@ function activeRoutes(key) {
       }
     });
   }
-  if(routes.length > 0) {
+  if (routes.length > 0) {
     permissionStore.setSidebarRouters(routes);
   } else {
     appStore.toggleSideBarHide(true);
@@ -190,45 +292,62 @@ function activeRoutes(key) {
 }
 
 onMounted(() => {
-  window.addEventListener('resize', setVisibleNumber)
-})
+  window.addEventListener("resize", calculateVisibleMenus);
+});
 onBeforeUnmount(() => {
-  window.removeEventListener('resize', setVisibleNumber)
-})
+  window.removeEventListener("resize", calculateVisibleMenus);
+});
 
 onMounted(() => {
-  setVisibleNumber()
-})
+  calculateVisibleMenus();
+});
+// 如果需要暴露给父组件使用，可以使用 defineExpose
+defineExpose({
+  handleSelect,
+});
 </script>
 
 <style lang="scss">
-.topmenu-container.el-menu--horizontal > .el-menu-item {
-  float: left;
-  // height: 50px !important;
-  // line-height: 50px !important;
-  color: #999093 !important;
-  padding: 0 5px !important;
-  margin: 0 10px !important;
+.el-menu--horizontal.el-menu {
+  padding-top: 10px;
 }
 
-.topmenu-container.el-menu--horizontal > .el-menu-item.is-active, .el-menu--horizontal > .el-sub-menu.is-active .el-submenu__title {
-  border-bottom: 2px solid #{'var(--theme)'} !important;
-  color: #303133;
+.topmenu-container.el-menu--horizontal > .el-menu-item {
+  font-size: 16px;
+  float: left;
+  height: 40px !important;
+  line-height: 40px !important;
+  color: #333 !important;
+  padding: 0 15px !important;
+  margin: 0 10px !important;
+  border-radius: 5px;
 }
 
 /* sub-menu item */
 .topmenu-container.el-menu--horizontal > .el-sub-menu .el-sub-menu__title {
+  font-size: 16px;
   float: left;
-  height: 50px !important;
-  line-height: 50px !important;
-  color: #999093 !important;
-  padding: 0 5px !important;
+  height: 40px !important;
+  line-height: 40px !important;
+  color: #333 !important;
+  padding: 0 15px !important;
   margin: 0 10px !important;
+  border-radius: 5px;
+}
+
+.topmenu-container.el-menu--horizontal > .el-menu-item.is-active,
+.el-menu--horizontal > .el-sub-menu.is-active .el-submenu__title,
+.el-menu--horizontal > .el-sub-menu.is-active .el-sub-menu__title {
+  background: #{"var(--theme)"} !important;
+  color: #fff !important;
 }
 
 /* 背景色隐藏 */
-.topmenu-container.el-menu--horizontal>.el-menu-item:not(.is-disabled):focus, .topmenu-container.el-menu--horizontal>.el-menu-item:not(.is-disabled):hover, .topmenu-container.el-menu--horizontal>.el-submenu .el-submenu__title:hover {
-  background-color: #ffffff !important;
+.topmenu-container.el-menu--horizontal > .el-menu-item:not(.is-disabled):focus,
+.topmenu-container.el-menu--horizontal > .el-menu-item:not(.is-disabled):hover,
+.topmenu-container.el-menu--horizontal > .el-submenu .el-submenu__title:hover {
+  background: #{"var(--theme)"} !important;
+  color: #fff !important;
 }
 
 /* 图标右间距 */
@@ -242,5 +361,14 @@ onMounted(() => {
   vertical-align: middle;
   margin-left: 8px;
   margin-top: 0px;
+}
+
+.el-menu--horizontal .el-menu .el-menu-item {
+  height: 40px !important;
+  line-height: 40px !important;
+
+  .svg-icon {
+    margin-right: 10px;
+  }
 }
 </style>

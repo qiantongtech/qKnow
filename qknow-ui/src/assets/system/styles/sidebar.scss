@@ -80,14 +80,32 @@
       display: inline-block !important;
     }
 
-    // menu hover
-    .sub-menu-title-noDropdown,
-    .el-sub-menu__title ,.submenu-title-noDropdown {
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.00) !important;
-        color: #ffffff;
+     .el-menu-item {
+        &.is-active {
+          background-color: #2666fb !important;
+          color: #fff !important;
+          font-weight: bold;
+          position: relative;
+          transition: none !important;
+          height: 100%;
+        .svg-icon {
+            font-size:18px !important;
+            width:18px !important;
+            height:18px !important;
+            filter: brightness(0) invert(1);
+            color: #fff;
+        }
+
+        }
       }
-    }
+    // menu hover
+    // .sub-menu-title-noDropdown,
+    // .el-sub-menu__title ,.submenu-title-noDropdown {
+    //   &:hover {
+    //     background-color: rgba(0, 0, 0, 0.00) !important;
+    //     color: #ffffff;
+    //   }
+    // }
 
     & .theme-dark .is-active > .el-sub-menu__title {
       color: $base-menu-color-active !important;
