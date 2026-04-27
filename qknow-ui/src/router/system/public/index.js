@@ -76,17 +76,36 @@ export default [
     component: () => import('@/views/system/error/401.vue'),
     hidden: true
   },
+  // {
+  //   path: '',
+  //   component: Layout,
+  //   redirect: '/index',
+  //   children: [
+  //     {
+  //       path: '/index',
+  //       component: () => import('@/views/system/index.vue'),
+  //       name: 'Index',
+  //       meta: { title: '首页', icon: '首页', affix: true }
+  //     }
+  //   ]
+  // },
+ {
+    path: '/index',
+    redirect: '/kd/integrated',
+    hidden: true
+  },
   {
     path: '',
-    component: Layout,
-    redirect: '/index',
+    component: 'Layout',
+    redirect: '/kd/integrated',
+    meta: { title: '看板', icon: '组 24885' },
     children: [
-      {
-        path: '/index',
-        component: () => import('@/views/system/index.vue'),
-        name: 'Index',
-        meta: { title: '首页', icon: '首页', affix: true }
-      }
+        {
+            path: 'kd/integrated',
+            component: () => import('@/views/system/index.vue'),
+            name: 'Integrated',
+            meta: { title: '综合看板', icon: 'book-open-fill' }
+        },
     ]
   },
   {

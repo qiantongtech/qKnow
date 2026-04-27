@@ -38,7 +38,9 @@
           <div class="info-main">
             <img :src="userStore.avatar" alt="" class="avatar" />
             <div class="info-con">
-              <div class="info-con-name">上午好，{{ userStore.nickName }} ，祝你开心每一天！</div>
+              <div class="info-con-name">
+                上午好，{{ userStore.nickName }} ，祝你开心每一天！
+              </div>
               <div class="info-con-desc">
                 <span style="color: var(--el-color-primary)"> 系统管理员 </span>
                 <el-divider direction="vertical" />
@@ -48,7 +50,15 @@
             </div>
             <div class="info-btns">
               <!-- <a href="/user/profile" class=""> -->
-              <el-button type="primary" class="info-btn-dft" plain size="large" @click="goprofile"> 个人中心 </el-button>
+              <el-button
+                type="primary"
+                class="info-btn-dft"
+                plain
+                size="large"
+                @click="goprofile"
+              >
+                个人中心
+              </el-button>
               <!-- </a> -->
 
               <!--                            <el-button type="primary" class="info-btn-dft" plain size="large">
@@ -71,14 +81,18 @@
             frameborder="0"
             allowtransparency="true"
             src="https://i.tianqi.com?c=code&id=21&icon=1&site=12"
-            ></iframe>
+          ></iframe>
         </div>
       </el-col>
 
       <el-col :xs="24" :sm="24" :md="18" :lg="18" class="home-gutter">
         <!-- 模块3 -->
         <div class="module-3">
-          <div class="module-item" v-for="(item, index) in module1" :key="index">
+          <div
+            class="module-item"
+            v-for="(item, index) in module1"
+            :key="index"
+          >
             <!-- <router-link to="/sy/index"> -->
             <div class="module-item-t">
               <div class="module-item-t-l">
@@ -92,7 +106,9 @@
             <div class="module-item-border"></div>
             <div class="module-item-data">
               <span>周同比：</span>
-              <span :class="[item.up ? 'data-up' : 'data-down']">{{ item.speed }}% </span>
+              <span :class="[item.up ? 'data-up' : 'data-down']"
+                >{{ item.speed }}%
+              </span>
             </div>
           </div>
         </div>
@@ -127,13 +143,24 @@
         <div class="border-item module-6 home-gutter">
           <div class="border-item-head">
             <span class="head-title">新闻公告 </span>
-            <el-link type="primary" :underline="false" @click="goxinwen">查看更多 </el-link>
+            <el-link type="primary" :underline="false" @click="goxinwen"
+              >查看更多
+            </el-link>
           </div>
           <div class="border-item-body">
-            <div class="module-item" v-for="(item, index) in module6" :key="index" @click="goxinwen">
+            <div
+              class="module-item"
+              v-for="(item, index) in module6"
+              :key="index"
+              @click="goxinwen"
+            >
               <dict-tag :options="sys_notice_type" :value="item.noticeType" />
-              <div class="value" :title="item.noticeTitle">{{ item.noticeTitle }}</div>
-              <div class="time">{{ parseTime(item.createTime, "{y}-{m}-{d}") }}</div>
+              <div class="value" :title="item.noticeTitle">
+                {{ item.noticeTitle }}
+              </div>
+              <div class="time">
+                {{ parseTime(item.createTime, "{y}-{m}-{d}") }}
+              </div>
             </div>
           </div>
         </div>
@@ -144,14 +171,22 @@
                 <span class="head-title">快捷功能入口</span>
                 <router-link to="/"> </router-link>
               </div>
-              <div class="border-item-body" style="padding-top: 8px; padding-left: 5px">
+              <div
+                class="border-item-body"
+                style="padding-top: 8px; padding-left: 5px"
+              >
                 <div class="all-entrance">
-                  <div class="entrance-item" v-for="item in entranceList" :key="item.name" v-hasPermi="item.perm"
-                       @click="routeTo(item.path, item.query)">
+                  <div
+                    class="entrance-item"
+                    v-for="item in entranceList"
+                    :key="item.name"
+                    v-hasPermi="item.perm"
+                    @click="routeTo(item.path, item.query)"
+                  >
                     <div class="image">
                       <div class="icon-background" :class="item.color">
-                        <svg-icon :icon-class="item.icon" class="icon"/>
-<!--                        <i class="icon iconfont">&#xe6d6;</i>-->
+                        <svg-icon :icon-class="item.icon" class="icon" />
+                        <!--                        <i class="icon iconfont">&#xe6d6;</i>-->
                       </div>
                     </div>
                     <div class="name">{{ item.name }}</div>
@@ -183,16 +218,26 @@
           </div>
           <div class="border-item-body">
             <el-table :data="module9" style="width: 100%" height="100%">
-              <el-table-column fixed prop="id" label="id" align="center" width="80">
+              <el-table-column
+                fixed
+                prop="id"
+                label="id"
+                align="center"
+                width="80"
+              >
                 <template #default="scope">
                   <div class="table-column-code">{{ scope.row.id }}</div>
                 </template>
               </el-table-column>
-              <el-table-column prop="name" label="任务名称" width="300"/>
+              <el-table-column prop="name" label="任务名称" width="300" />
               <el-table-column prop="status" align="center" label="任务状态" />
-              <el-table-column prop="publishStatus" align="center" label="发布状态" />
+              <el-table-column
+                prop="publishStatus"
+                align="center"
+                label="发布状态"
+              />
               <el-table-column prop="publishBy" align="center" label="发布人" />
-              <el-table-column prop="createTime" label="创建时间" width="180"/>
+              <el-table-column prop="createTime" label="创建时间" width="180" />
             </el-table>
           </div>
         </div>
@@ -206,48 +251,55 @@ import useUserStore from "@/store/system/user";
 import { listNotice } from "@/api/system/system/notice.js";
 import * as echarts from "echarts";
 // eslint-disable-next-line no-unused-vars
-import { onBeforeUnmount, onMounted, ref, watch, getCurrentInstance } from "vue";
+import {
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+  getCurrentInstance,
+} from "vue";
 
 let { proxy } = getCurrentInstance();
 const router = useRouter();
 const { sys_notice_type } = proxy.useDict("sys_notice_type");
 const getAssetsFile = (url) => {
-  return new URL(`../../assets/system/images/index/${url}`, import.meta.url).href;
+  return new URL(`../../assets/system/images/index/${url}`, import.meta.url)
+    .href;
 };
 
 const entranceList = [
   {
-    name: '文件管理',
-    path: '/kmc/kmcDocument',
+    name: "文件管理",
+    path: "/kg/kmc/kmcDocument",
     query: {},
-    perm: ['kmcDocument:kmcDocument:document:list'],
-    icon: '知识中心',
-    color: 'color-primary'
+    perm: ["kmcDocument:kmcDocument:document:list"],
+    icon: "知识中心",
+    color: "color-primary",
   },
   {
-    name: '非结构化抽取',
-    path: '/ext/unstructTask',
+    name: "非结构化抽取",
+    path: "/kg/ext/unstructTask",
     query: {},
-    icon: '知识抽取',
-    perm: ['ext:extUnstructTask:unstructtask:list'],
-    color: 'color-pale-blue'
+    icon: "知识抽取",
+    perm: ["ext:extUnstructTask:unstructtask:list"],
+    color: "color-pale-blue",
   },
   {
-    name: '结构化抽取',
-    path: '/ext/extStructTask',
+    name: "结构化抽取",
+    path: "/kg/ext/extStructTask",
     query: {},
-    icon: '知识推理',
-    perm: ['ext:extStructTask:struct:list'],
-    color: 'color-orange'
+    icon: "知识推理",
+    perm: ["ext:extStructTask:struct:list"],
+    color: "color-orange",
   },
   {
-    name: '图谱探索',
-    path: '/app/graphExploration',
+    name: "图谱探索",
+    path: "/kg/app/graphExploration",
     query: {},
-    icon: '知识应用',
-    perm: [''],
-    color: 'color-pink'
-  }
+    icon: "知识应用",
+    perm: [""],
+    color: "color-pink",
+  },
 ];
 
 const chartIntances = [];
@@ -301,7 +353,7 @@ function goprofile() {
 }
 
 async function routeTo(link, query = {}) {
-  if (link && link.indexOf('http') !== -1) {
+  if (link && link.indexOf("http") !== -1) {
     window.location.href = link;
     return;
   }
@@ -315,7 +367,7 @@ async function routeTo(link, query = {}) {
         // 跳转成功后再刷新
         // window.location.reload();
       } catch (err) {
-        console.error('路由跳转失败:', err);
+        console.error("路由跳转失败:", err);
       }
     }
   }
@@ -454,7 +506,9 @@ function initModule4() {
         let total = 770;
         let item = m2R2Data.find((item) => item.name === name);
         // eslint-disable-next-line no-unused-vars
-        let percent = item ? ((item.value / total) * 100).toFixed(2) + "%" : "0%";
+        let percent = item
+          ? ((item.value / total) * 100).toFixed(2) + "%"
+          : "0%";
         // return `${name} |  ${percent}  ${item.value}`; // 自定义图例显示
         // 使用 HTML 语法自定义颜色
         let arr = [
@@ -821,9 +875,16 @@ onBeforeUnmount(() => {
 // 获取当前实例
 const instance = getCurrentInstance();
 
+const callback = () => {
+  window.addEventListener("resize", chartIntancesResize);
+};
+
 // 在组件销毁时移除事件监听
 onBeforeUnmount(() => {
-  instance.appContext.config.globalProperties.$bus.off("getsidebarStatus", callback);
+  instance.appContext.config.globalProperties.$bus.off(
+    "getsidebarStatus",
+    callback
+  );
 });
 
 onMounted(() => {
@@ -832,9 +893,12 @@ onMounted(() => {
   initModule6();
   initModule8();
   getxljtcont();
-  instance.appContext.config.globalProperties.$bus.on("getsidebarStatus", () => {
-    window.addEventListener("resize", chartIntancesResize);
-  });
+  instance.appContext.config.globalProperties.$bus.on(
+    "getsidebarStatus",
+    () => {
+      window.addEventListener("resize", chartIntancesResize);
+    }
+  );
 });
 </script>
 
@@ -897,13 +961,13 @@ onMounted(() => {
 .module-8,
 .module-9 {
   height: 350px !important;
-//   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  //   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .module-6,
 .module-7 {
   height: 250px !important;
-//   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  //   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 }
 .module-report {
   margin-bottom: 15px;
@@ -923,12 +987,18 @@ onMounted(() => {
 .userInfo {
   height: 150px;
   padding: 35px 60px 0 32px;
-  background-image: -webkit-gradient(linear, left top, right top, from(#fff), to(#f3f7fe));
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    right top,
+    from(#fff),
+    to(#f3f7fe)
+  );
   background-image: linear-gradient(90deg, #fff, #f3f7fe);
   border-radius: 2px;
   justify-content: space-between;
   align-items: center;
-//   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  //   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .userInfo .menu {
@@ -1022,7 +1092,7 @@ onMounted(() => {
   // background-color: #fff;
   border-radius: 2px;
   text-align: center;
-//   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  //   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 
   img {
     height: 100%;
@@ -1050,7 +1120,7 @@ onMounted(() => {
   padding: 20px;
   background: #fff;
   margin-right: 15px;
-//   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  //   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 }
 .module-3 .module-item:last-of-type {
   margin-right: 0px;
@@ -1346,30 +1416,38 @@ onMounted(() => {
 
           // 背景色：主色
           .color-primary {
-            background-image: linear-gradient(to bottom right,
-                #2162fc 30%,
-                #4f84fd 80%);
+            background-image: linear-gradient(
+              to bottom right,
+              #2162fc 30%,
+              #4f84fd 80%
+            );
           }
 
           // 背景色：橙色
           .color-orange {
-            background-image: linear-gradient(to bottom right,
-                #f59040 30%,
-                #f9bd77 90%);
+            background-image: linear-gradient(
+              to bottom right,
+              #f59040 30%,
+              #f9bd77 90%
+            );
           }
 
           // 背景色：淡蓝色
           .color-pale-blue {
-            background-image: linear-gradient(to bottom right,
-                #348bf2 10%,
-                #63abff 60%);
+            background-image: linear-gradient(
+              to bottom right,
+              #348bf2 10%,
+              #63abff 60%
+            );
           }
 
           // 背景色：粉红色
           .color-pink {
-            background-image: linear-gradient(to bottom right,
-                #fb6594 20%,
-                #fc92bb 80%);
+            background-image: linear-gradient(
+              to bottom right,
+              #fb6594 20%,
+              #fc92bb 80%
+            );
           }
         }
       }
