@@ -131,24 +131,13 @@ insert into system_config values(7, '非结构化抽取线程数量', 'ext.threa
 INSERT INTO system_menu VALUES (2057, 'AI工作台', 0, 1, 'kb', NULL, NULL, '', 1, 0, 'M', '0', '0', '', '系统工具', '小桐', '2026-04-20 17:22:18', '小桐', '2026-04-27 09:38:10', '');
 INSERT INTO system_menu VALUES (2058, '知识图谱', 0, 3, 'kg', NULL, NULL, '', 1, 0, 'M', '0', '0', NULL, '知识中心', '小桐', '2026-04-20 17:23:39', '', NULL, '');
 INSERT INTO system_menu VALUES (2059, '知识库', 0, 4, 'kmc', NULL, NULL, '', 1, 0, 'M', '0', '0', NULL, '知识抽取', '小桐', '2026-04-20 17:24:02', '', NULL, '');
-INSERT INTO system_menu VALUES (2061, '看板', 0, 0, 'kd', NULL, NULL, '', 1, 0, 'M', '0', '0', '', '首页', '小桐', '2026-04-21 11:19:30', '小桐', '2026-04-27 09:31:43', '');
-INSERT INTO system_menu VALUES (2062, '综合看板', 2061, 0, 'integrated', 'system/index', NULL, '', 1, 0, 'C', '0', '0', '', 'chart', '小桐', '2026-04-21 11:20:52', '小桐', '2026-04-27 10:16:32', '');
+INSERT INTO system_menu VALUES (2061, '首页', 0, 0, 'kd', NULL, NULL, '', 1, 0, 'M', '0', '0', '', '首页', '小桐', '2026-04-21 11:19:30', '小桐', '2026-04-27 09:31:43', '');
+INSERT INTO system_menu VALUES (2062, '首页', 2061, 0, 'integrated', 'system/index', NULL, '', 1, 0, 'C', '0', '0', '', '首页', '小桐', '2026-04-21 11:20:52', '小桐', '2026-04-27 14:48:08', '');
 INSERT INTO system_menu VALUES (2063, '应用中心', 0, 2, 'kac', NULL, NULL, '', 1, 0, 'M', '0', '0', NULL, '知识应用', '小桐', '2026-04-27 09:35:56', '', NULL, '');
 INSERT INTO system_menu VALUES (2064, '插件中心', 0, 5, 'plugin', NULL, NULL, '', 1, 0, 'M', '0', '0', NULL, 'tool_new_icon', '小桐', '2026-04-27 09:37:31', '', NULL, '');
-INSERT INTO system_menu VALUES (2065, 'Bot 管理', 2057, 0, 'bot', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', '', '数据管理', '小桐', '2026-04-27 10:37:10', '小桐', '2026-04-27 10:40:45', '');
-INSERT INTO system_menu VALUES (2066, '工具管理', 2057, 1, 'tools', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', '', 'tool_new_icon', '小桐', '2026-04-27 10:40:34', '小桐', '2026-04-27 10:44:23', '');
-INSERT INTO system_menu VALUES (2067, '横向通用应用', 2063, 12, 'horizontal', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', 'kac:apply:apply:list', 'book-3-fill', '小桐', '2026-04-07 13:48:40', '小桐', '2026-04-10 11:31:23', '');
-INSERT INTO system_menu VALUES (2068, '纵向行业应用', 2063, 13, 'vertical', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', 'kac:apply:apply:list', 'book-ai-fill', '小桐', '2026-04-08 13:39:12', '小桐', '2026-04-10 11:31:32', '');
-INSERT INTO system_menu VALUES (2069, '我的解决方案', 2063, 14, 'mySolution', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', 'kac:solution:solution:list', 'account-box-fill', '小桐', '2026-04-08 13:41:59', '小桐', '2026-04-22 15:34:09', '');
-INSERT INTO system_menu VALUES (2070, '我的应用', 2063, 15, 'myApp', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', 'kac:apply:apply:list', 'group-fill', '小桐', '2026-04-08 13:43:33', '小桐', '2026-04-10 11:32:01', '');
-INSERT INTO system_menu VALUES (2071, '概览', 2063, 10, 'overview', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', 'kac:solution:solution:list', 'ai-generate-3d-fill', '小桐', '2026-04-08 13:56:39', '吴同', '2026-04-22 10:40:47', '');
-INSERT INTO system_menu VALUES (2072, '解决方案', 2063, 11, 'solution', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', 'kac:solution:solution:list', 'briefcase-4-fill', '小桐', '2026-04-08 13:57:05', '小桐', '2026-04-22 15:18:13', '');
-INSERT INTO system_menu VALUES (2073, '知识库', 2059, 0, 'knowledgeBase', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', NULL, '#', '小桐', '2026-04-27 10:52:21', '', NULL, '');
-INSERT INTO system_menu VALUES (2074, '知识分类', 2059, 1, ':kbId/kmcCategory', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', '', '#', '小桐', '2026-04-27 10:53:02', '小桐', '2026-04-27 10:54:25', '');
-INSERT INTO system_menu VALUES (2075, '知识文件', 2059, 2, ':kbId/kmcDocument', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', '', '#', '小桐', '2026-04-27 10:53:30', '小桐', '2026-04-27 10:54:30', '');
-INSERT INTO system_menu VALUES (2076, '召回测试', 2059, 3, ':kbId/recall', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', '', '#', '小桐', '2026-04-27 10:53:55', '小桐', '2026-04-27 10:54:35', '');
-INSERT INTO system_menu VALUES (2077, '知识库设置', 2059, 4, ':kbId/knowledgeBase', NULL, NULL, '', 1, 0, 'M', '0', '0', '', '#', '小桐', '2026-04-27 10:54:19', '小桐', '2026-04-27 10:54:39', '');
-INSERT INTO system_menu VALUES (2078, '插件管理', 2064, 0, 'plugin', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', NULL, '#', '小桐', '2026-04-27 10:55:28', '', NULL, '');
+INSERT INTO system_menu VALUES (2079, '产品动态', 2061, 1, 'dynamic', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', NULL, 'education', '小桐', '2026-04-27 15:43:52', '', NULL, '');
+
+
 
 UPDATE system_menu SET order_num = 6, update_by = '小桐', update_time = '2026-04-27 09:37:41' WHERE `menu_id` = 1;
 UPDATE system_menu SET order_num = 7, update_by = '小桐', update_time = '2026-04-27 09:37:46' WHERE `menu_id` = 2;

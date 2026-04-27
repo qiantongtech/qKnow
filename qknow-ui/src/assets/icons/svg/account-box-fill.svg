@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>account-box-fill</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+        
+        </linearGradient>
+        <path d="M2,3.33006 C2,2.59548667 2.59508,2 3.33006,2 L12.6699333,2 C13.4045333,2 14,2.59508 14,3.33006 L14,12.6699333 C14,13.4045333 13.4049333,14 12.6699333,14 L3.33006,14 C2.59548667,14 2,13.4049333 2,12.6699333 L2,3.33006 Z M4.23791333,12 L11.8983333,12 C11.055,10.791 9.65393333,10 8.06813333,10 C6.48229333,10 5.08121333,10.791 4.23791333,12 Z M8,8.66666667 C9.28866667,8.66666667 10.3333333,7.622 10.3333333,6.33333333 C10.3333333,5.04466667 9.28866667,4 8,4 C6.71133333,4 5.66666667,5.04466667 5.66666667,6.33333333 C5.66666667,7.622 6.71133333,8.66666667 8,8.66666667 Z" id="path-2"></path>
+    </defs>
+    <g id="后台管理系统" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="qKnow切图" transform="translate(-389, -636)">
+            <g id="account-box-fill" transform="translate(389, 636)">
+
+                <g id="形状" fill-rule="nonzero">
+        
+                    <use fill="url(#linearGradient-1)" xlink:href="#path-2"></use>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
