@@ -216,15 +216,18 @@ function closePageExclusion(key) {
 // 处理顶部导航菜单的选择事件
 async function handleSelect(key, keyPath, type) {
   console.log(key, "key");
-  // console.log(currentIndex.value,"value");
+  // 查找选中的路由配置
+  const route = routers.value.find((item) => item.path === key);
 
+  if (!route || !route.children) {
+    proxy.$modal.msgWarning("功能开发中！");
+    return;
+  }
   //子组件调用父组件
   emit("getRouter", key);
 
   // 设置当前选中的菜单索引
   currentIndex.value = key;
-  // 查找选中的路由配置
-  const route = routers.value.find((item) => item.path === key);
 
   if (isHttp(key)) {
     // 如果是http(s)链接,在新窗口打开
