@@ -45,7 +45,7 @@ import tech.qiantong.qknow.module.ext.controller.admin.extStructTask.vo.ExtStruc
 import tech.qiantong.qknow.mybatis.core.mapper.BaseMapperX;
 import tech.qiantong.qknow.mybatis.core.query.LambdaQueryWrapperX;
 
-import javax.websocket.server.PathParam;
+import jakarta.websocket.server.PathParam;
 
 /**
  * 结构化抽取任务Mapper接口

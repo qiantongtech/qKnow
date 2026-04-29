@@ -41,7 +41,7 @@ import tech.qiantong.qknow.module.ext.dal.dataobject.extUnstructTaskText.ExtUnst
 import tech.qiantong.qknow.module.ext.service.extUnstructTaskText.IExtUnstructTaskTextService;
 import tech.qiantong.qknow.mybatis.core.query.LambdaQueryWrapperX;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.List;
 
 @Service

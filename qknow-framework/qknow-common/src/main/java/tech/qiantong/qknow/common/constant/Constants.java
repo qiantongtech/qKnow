@@ -200,6 +200,6 @@ public class Constants
     /**
      * 定时任务违规的字符
      */
-    public static final String[] JOB_ERROR_STR = { "java.net.URL", "javax.naming.InitialContext", "org.yaml.snakeyaml",
+    public static final String[] JOB_ERROR_STR = { "java.net.URL", "jakarta.naming.InitialContext", "org.yaml.snakeyaml",
             "org.springframework", "org.apache", "tech.qiantong.common.utils.file", "tech.qiantong.common.config", "tech.qiantong.generator" };
 }

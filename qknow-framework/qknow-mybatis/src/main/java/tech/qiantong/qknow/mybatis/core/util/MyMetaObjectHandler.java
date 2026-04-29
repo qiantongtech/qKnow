@@ -62,12 +62,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         boolean hasCreateBy = metaObject.hasSetter("createBy");
         boolean hasUpdatorId = metaObject.hasSetter("updatorId");
         boolean HasUpdateBy = metaObject.hasSetter("updateBy");
-        LoginUser loginUser = null;
-        try {
-            loginUser = (LoginUser) SecurityUtils.getAuthentication().getPrincipal();
-        } catch (Exception e) {
-            logger.info("获取用户信息异常:{}", e);
-        }
+        LoginUser loginUser = SecurityUtils.getLoginUser();
         if (loginUser != null) {
             if (hasCreatorId) {
                 metaObject.setValue("creatorId", loginUser.getUserId());
@@ -85,7 +80,6 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
     }
 
-
     @Override
     public void updateFill(MetaObject metaObject) {
         // 检查是否有名为updateTime的字段，如果有则自动填充当前时间
@@ -97,12 +91,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         boolean hasUpdatorId = metaObject.hasSetter("updatorId");
         boolean HasUpdateBy = metaObject.hasSetter("updateBy");
 
-        LoginUser loginUser = null;
-        try {
-            loginUser = (LoginUser) SecurityUtils.getAuthentication().getPrincipal();
-        } catch (Exception e) {
-            logger.info("获取用户信息异常:{}", e);
-        }
+        LoginUser loginUser = SecurityUtils.getLoginUser();
         if (loginUser != null) {
             if (hasUpdatorId) {
                 metaObject.setValue("updatorId", loginUser.getUserId());

@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import lombok.extern.slf4j.Slf4j;
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import tech.qiantong.qknow.common.core.page.PageResult;
 import tech.qiantong.qknow.common.exception.ServiceException;
 import tech.qiantong.qknow.common.utils.StringUtils;

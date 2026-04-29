@@ -43,17 +43,15 @@
     <modules>
         <module>qknow-neo4j</module>
         <module>qknow-config</module>
+        <module>qknow-common</module>
         <module>qknow-websocket</module>
         <module>qknow-mybatis</module>
         <module>qknow-redis</module>
         <module>qknow-quartz</module>
         <module>qknow-security</module>
         <module>qknow-generator</module>
-        <module>qknow-common</module>
         <module>qknow-file</module>
-        <module>qknow-es</module>
-        <module>qknow-pay</module>
-        <module>qknow-auth</module>
+        <module>qknow-ai</module>
     </modules>
     <packaging>pom</packaging>
 

@@ -102,6 +102,7 @@ spring:
       - "classpath:application-system-${spring.profiles.active}.yml"
       - "classpath:application-kmc-${spring.profiles.active}.yml"
       - "classpath:application-ext-${spring.profiles.active}.yml"
+      - "classpath:application-ai-${spring.profiles.active}.yml"
       - "classpath:application-neo4j-${spring.profiles.active}.yml"
   # 文件上传
   servlet:
@@ -249,3 +250,5 @@ knife4j:
     enable: true
     username: qknow
     password: qknow12313
+
+

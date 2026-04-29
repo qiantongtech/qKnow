@@ -33,8 +33,8 @@
 package tech.qiantong.qknow.generator.domain;
 
 import java.util.List;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.apache.commons.lang3.ArrayUtils;
 import tech.qiantong.qknow.common.constant.GenConstants;
 import tech.qiantong.qknow.common.core.domain.BaseEntity;

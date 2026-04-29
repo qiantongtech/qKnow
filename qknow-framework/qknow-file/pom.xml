@@ -54,6 +54,8 @@
             <artifactId>qknow-common</artifactId>
         </dependency>
 
+
+
         <!-- 文件存储 https://gitee.com/dromara/x-file-storage-->
         <dependency>
             <groupId>org.dromara.x-file-storage</groupId>

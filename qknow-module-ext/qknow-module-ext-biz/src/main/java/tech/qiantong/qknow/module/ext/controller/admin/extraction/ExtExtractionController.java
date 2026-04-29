@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.*;
 import tech.qiantong.qknow.module.ext.service.deepke.DeepkeExtractionService;
 import tech.qiantong.qknow.module.ext.service.neo4j.service.ExtNeo4jService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 
 /**

@@ -71,9 +71,9 @@ import tech.qiantong.qknow.module.ext.service.unstructTaskRelation.IExtUnstructT
 import tech.qiantong.qknow.module.kmc.api.service.IKmcApiService;
 import tech.qiantong.qknow.module.kmc.dal.dataobject.document.KmcDocumentDO;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import java.util.*;
 import java.util.stream.Collectors;
 

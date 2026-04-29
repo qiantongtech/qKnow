@@ -32,23 +32,17 @@
 
 package tech.qiantong.qknow.module.kmc.controller.admin.kmcDocument;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.io.File;
-import java.io.FileInputStream;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import java.util.Arrays;
 import cn.hutool.core.date.DateUtil;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -61,8 +55,6 @@ import tech.qiantong.qknow.common.core.controller.BaseController;
 import tech.qiantong.qknow.common.core.domain.CommonResult;
 import tech.qiantong.qknow.common.core.page.PageResult;
 import tech.qiantong.qknow.common.enums.BusinessType;
-import tech.qiantong.qknow.common.utils.PdfConverUtil;
-import tech.qiantong.qknow.common.utils.TxtConverUtil;
 import tech.qiantong.qknow.common.utils.object.BeanUtils;
 import tech.qiantong.qknow.common.utils.poi.ExcelUtil;
 import tech.qiantong.qknow.module.kmc.controller.admin.kmcDocument.vo.KmcDocumentPageReqVO;
@@ -157,49 +149,6 @@ public class KmcDocumentController extends BaseController {
     @DeleteMapping("/{ids}")
     public CommonResult<Integer> remove(@PathVariable Long[] ids) {
         return CommonResult.toAjax(kmcDocumentService.removeKmcDocument(Arrays.asList(ids)));
-    }
-
-    /**
-     * 获取文件的base64编码
-     */
-    @PostMapping("/getPdfPreview" )
-    public CommonResult<Map<String, String>> getPdfPreview(@RequestBody String url) {
-        Map<String, String> stringMap = new HashMap<>();
-        JSONObject object = JSONUtil.parseObj(url);
-        String path = object.getStr("url");
-        try {
-            logger.info("接收到的数据：" + path);
-            File fileByHttpUrl = kmcDocumentService.getFileByHttpURL(path);
-            // 获取文件类型
-            String fileName = fileByHttpUrl.getName();
-            String fileType = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
-
-            FileInputStream fileInputStream = new FileInputStream(fileByHttpUrl);
-            String fileBase64 = "";
-            File file = new File("");
-            // 判断文件类型然后调用相应的方法
-            if ("docx".equals(fileType)){
-                file = PdfConverUtil.wordTopdfByAspose(fileInputStream, uploadFilePath);
-            }else if ("excel".equals(fileType)){
-                file = PdfConverUtil.excelToPdf(fileInputStream, uploadFilePath);
-            }else if ("ppt".equals(fileType)){
-                file = PdfConverUtil.pptToPdf(fileInputStream,uploadFilePath);
-            }else if ("pptx".equals(fileType)){
-                file = PdfConverUtil.pptxToPdf(fileInputStream,uploadFilePath);
-            }else if ("txt".equals(fileType)){
-                file = TxtConverUtil.txtToPdf(fileInputStream,uploadFilePath);
-            }else if ("pdf".equals(fileType)){
-                file = fileByHttpUrl;
-            }
-            byte[] bytes = PdfConverUtil.readBytesFromFile(file.getAbsolutePath());
-            fileBase64 = Base64.encodeBase64String(bytes);
-            file.delete();
-            stringMap.put("fileBase64",fileBase64);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("系统错误：", e);
-        }
-        return CommonResult.success(stringMap);
     }
 
     @Operation(summary = "根据条件查询知识文件列表")

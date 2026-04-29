@@ -32,7 +32,7 @@
 
 package tech.qiantong.qknow.generator.domain;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 import tech.qiantong.qknow.common.core.domain.BaseEntity;
 import tech.qiantong.qknow.common.utils.StringUtils;
 

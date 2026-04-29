@@ -51,7 +51,7 @@ import tech.qiantong.qknow.module.system.dal.mapper.message.MessageMapper;
 import tech.qiantong.qknow.module.system.dal.mapper.message.MessageTemplateMapper;
 import tech.qiantong.qknow.module.system.service.message.IMessageService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.Map;
 
 import static tech.qiantong.qknow.common.utils.SecurityUtils.getLoginUser;

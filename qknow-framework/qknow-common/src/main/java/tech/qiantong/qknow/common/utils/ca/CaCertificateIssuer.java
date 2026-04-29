@@ -1,39 +1,81 @@
 /*
- * Copyright © 2026 Qiantong Technology Co., Ltd.
- * qKnow Knowledge Platform
+ * Copyright (c) 2026 Jiangsu Qiantong Technology Co., Ltd.
  *  *
- * License:
- * Released under the Apache License, Version 2.0.
- * You may use, modify, and distribute this software for commercial purposes
- * under the terms of the License.
+ * Software Name: qKnow Knowledge Platform (Business Edition)
+ * Software Copyright Registration No. 15980140
  *  *
- * Special Notice:
- * All derivative versions are strictly prohibited from modifying or removing
- * the default system logo and copyright information.
- * For brand customization, please apply for brand customization authorization via official channels.
+ * [RIGHTS AND LICENSE STATEMENT]
+ * This file contains non-public commercial source code of which Jiangsu Qiantong
+ * Technology Co., Ltd. lawfully possesses complete intellectual property rights.
  *  *
- * More information: https://qknow.qiantong.tech/business.html
+ * Access and use are limited to entities or individuals who have signed a valid
+ * commercial license agreement, within the scope stipulated in the agreement.
+ * The "accessibility" of this source code is premised on lawful authorization
+ * and does not constitute any form of transfer of intellectual property rights
+ * or implied licensing.
+ *  *
+ * [PROHIBITIONS]
+ * Unless explicitly agreed in the license agreement, the following acts in any
+ * form are strictly prohibited:
+ * 1. Copying, disseminating, disclosing, selling, renting, or redistributing
+ * this source code;
+ * 2. Providing the software's functionality to third parties via SaaS, PaaS,
+ * cloud hosting, or other means;
+ * 3. Using this software or its derivative versions to develop products that
+ * compete with the Right Holder;
+ * 4. Providing or displaying this source code or related technical information
+ * to unauthorized third parties;
+ * 5. Tampering with, circumventing, or destroying copyright notices, license
+ * verifications, or other technical protection measures.
+ *  *
+ * [LEGAL LIABILITY]
+ * Any unauthorized use constitutes an infringement of trade secrets and
+ * intellectual property rights.
+ *  *
+ * The Right Holder will strictly pursue liability for breach of contract and
+ * infringement in accordance with the commercial agreement and laws such as
+ * the "Copyright Law of the People's Republic of China" and the "Anti-Unfair
+ * Competition Law".
  *  *
  * ============================================================================
  *  *
- * 版权所有 © 2026 江苏千桐科技有限公司
- * qKnow 知识平台（开源版）
+ * Copyright (c) 2026 江苏千桐科技有限公司
  *  *
- * 许可协议：
- * 本项目基于 Apache License 2.0 开源协议发布，
- * 允许在遵守协议的前提下进行商用、修改和分发。
+ * 软件名称：qKnow 知识平台（商业版） | 软著登字第15980140号
  *  *
- * 特别说明：
- * 所有衍生版本不得修改或移除系统默认的 LOGO 和版权信息；
- * 如需定制品牌，请通过官方渠道申请品牌定制授权。
+ * 【权利与授权声明】
+ * 本文件属于江苏千桐科技有限公司依法享有完全知识产权的非公开商业源代码。
+ * 仅限已签署有效商业授权合同的单位或个人在约定范围内查阅和使用。
+ * 源代码的“可访问性”均以合法授权为前提，不构成任何形式的知识产权转让或默示授权。
  *  *
- * 更多信息请访问：https://qknow.qiantong.tech/business.html
+ * 【禁止事项】
+ * 除授权合同明确约定外，严禁任何形式的：
+ * 1. 复制、传播、披露、出售、出租或再分发本源代码；
+ * 2. 通过 SaaS、PaaS、云托管等方式向第三方提供本软件功能；
+ * 3. 将本软件或其衍生版本用于开发与权利人构成竞争的产品；
+ * 4. 向未授权第三方提供或展示本源代码或相关技术信息；
+ * 5. 篡改、规避或破坏版权标识、授权校验及其他技术保护措施。
+ *  *
+ * 【法律责任】
+ * 任何未经授权的利用行为，均构成对商业秘密及知识产权的侵害。
+ * 权利人将依据商业合同及《中华人民共和国著作权法》《反不正当竞争法》
+ * 等法律法规，严厉追究违约与侵权责任。
  */
 
 package tech.qiantong.qknow.common.utils.ca;
 
 import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.ReUtil;
+import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x509.Extension;
+import org.bouncycastle.asn1.x509.GeneralName;
+import org.bouncycastle.asn1.x509.GeneralNames;
+import org.bouncycastle.cert.X509CertificateHolder;
+import org.bouncycastle.cert.X509v3CertificateBuilder;
+import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
+import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
+import org.bouncycastle.operator.ContentSigner;
+import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.bouncycastle.util.io.pem.PemWriter;
@@ -41,10 +83,9 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
-import sun.security.x509.*;
 
 import javax.security.auth.x500.X500Principal;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.math.BigInteger;
 import java.net.URL;
@@ -85,8 +126,7 @@ public class CaCertificateIssuer {
         PrivateKey rootPrivateKey = loadRootPrivateKey(privateKeyUrl);
 
         // 获取根证书的主体信息，作为用户证书的颁发者信息
-        X500Principal rootDnName = rootCertificate.getSubjectX500Principal();
-        X500Name rootX500Name = new X500Name(rootDnName.getName());
+        X500Name issuerName = new X500Name(rootCertificate.getSubjectX500Principal().getName());
 
         // 生成用户的密钥对（公钥和私钥）
         KeyPair userKeyPair = generateUserKeyPair();
@@ -94,51 +134,53 @@ public class CaCertificateIssuer {
         PrivateKey userPrivateKey = userKeyPair.getPrivate();
 
         // 定义用户证书的主体信息
-        X500Name userX500Name = new X500Name(userDnName.getName());
+        X500Name subjectName = new X500Name(userDnName.getName());
 
-        // 创建 X.509 用户证书信息对象
-        X509CertInfo userCertInfo = new X509CertInfo();
-        userCertInfo.set(X509CertInfo.VERSION, new CertificateVersion(CertificateVersion.V3));
-        userCertInfo.set(X509CertInfo.SERIAL_NUMBER, new CertificateSerialNumber(BigInteger.valueOf(System.currentTimeMillis())));
-        userCertInfo.set(X509CertInfo.SUBJECT, userX500Name);
-        userCertInfo.set(X509CertInfo.ISSUER, rootX500Name);
-        userCertInfo.set(X509CertInfo.VALIDITY, new CertificateValidity(new Date(), new Date(System.currentTimeMillis() + validity * 365L * 24L * 60L * 60L * 1000L)));
-        userCertInfo.set(X509CertInfo.KEY, new CertificateX509Key(userPublicKey));
-        userCertInfo.set(X509CertInfo.ALGORITHM_ID, new CertificateAlgorithmId(AlgorithmId.get("SHA256withRSA")));
+        // 创建证书序列号
+        BigInteger serial = BigInteger.valueOf(System.currentTimeMillis());
 
-        // 添加主题扩展字段 (SAN)，用于浏览器 https 验证
-        String dnsName = ReUtil.get("CN=([^,]+)", userX500Name.getName(), 1);
-        // 判断是否是IP地址或域名
-        boolean isIpAddress = Validator.isIpv4(dnsName);
-        // 判断是否是域名
-        boolean isDomain = ReUtil.isMatch("^(\\*\\.)?([\\w-]+\\.)+[a-zA-Z]{2,}$", dnsName);
+        // 定义证书有效期
+        Date notBefore = new Date();
+        Date notAfter = new Date(System.currentTimeMillis() + validity * 365L * 24L * 60L * 60L * 1000L);
 
-        CertificateExtensions extensions = new CertificateExtensions();
-        GeneralNames san = new GeneralNames();
+        // 创建证书构建器
+        X509v3CertificateBuilder certificateBuilder = new JcaX509v3CertificateBuilder(
+                issuerName, serial, notBefore, notAfter, subjectName, userPublicKey);
 
-        if (isIpAddress) {
-            // 如果是IP地址，使用IPAddress类型添加到SAN
-            san.add(new GeneralName(new IPAddressName(dnsName)));
-        } else if (isDomain) {
-            // 如果是域名，使用DNSName类型添加到SAN
-            san.add(new GeneralName(new DNSName(dnsName)));
-        }
+        // 添加扩展字段
+        String cnValue = ReUtil.get("CN=([^,]+)", userDnName.getName(), 1);
+        if (cnValue != null) {
+            // 判断是否是IP地址或域名
+            boolean isIpAddress = Validator.isIpv4(cnValue);
+            boolean isDomain = ReUtil.isMatch("^(\\*\\.)?([\\w-]+\\.)+[a-zA-Z]{2,}$", cnValue);
 
-        if (isIpAddress || isDomain) {
-            extensions.set(SubjectAlternativeNameExtension.NAME, new SubjectAlternativeNameExtension(san));
-            // 将扩展添加到证书信息中
-            userCertInfo.set(X509CertInfo.EXTENSIONS, extensions);
+            if (isIpAddress || isDomain) {
+                GeneralName generalName;
+                if (isIpAddress) {
+                    generalName = new GeneralName(GeneralName.iPAddress, cnValue);
+                } else {
+                    generalName = new GeneralName(GeneralName.dNSName, cnValue);
+                }
+
+                GeneralNames generalNames = new GeneralNames(generalName);
+                certificateBuilder.addExtension(Extension.subjectAlternativeName, false, generalNames);
+            }
         }
 
         // 使用根证书的私钥签署用户证书
-        X509CertImpl userCertificate = new X509CertImpl(userCertInfo);
-        userCertificate.sign(rootPrivateKey, "SHA256withRSA");
+        ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256WithRSA")
+                .build(rootPrivateKey);
+        X509CertificateHolder certificateHolder = certificateBuilder.build(contentSigner);
+
+        // 转换为标准 X509Certificate
+        JcaX509CertificateConverter converter = new JcaX509CertificateConverter();
+        X509Certificate userCertificate = converter.getCertificate(certificateHolder);
 
         // 将用户证书转换为 MultipartFile
-        fileList.add(convertCertificateToMultipartFile(userCertificate, dnsName + "_certificate.cer"));
+        fileList.add(convertCertificateToMultipartFile(userCertificate, cnValue + "_certificate.cer"));
 
         // 将用户私钥保存为 PEM 文件并转换为 MultipartFile
-        fileList.add(convertPrivateKeyToMultipartFile(userPrivateKey, dnsName + "_privateKey.pem"));
+        fileList.add(convertPrivateKeyToMultipartFile(userPrivateKey, cnValue + "_privateKey.pem"));
 
         return fileList;
     }
@@ -163,7 +205,7 @@ public class CaCertificateIssuer {
      * @return MultipartFile 形式的证书
      * @throws Exception 如果转换过程中发生错误
      */
-    private static MultipartFile convertCertificateToMultipartFile(X509CertImpl certificate, String fileName) throws Exception {
+    private static MultipartFile convertCertificateToMultipartFile(X509Certificate certificate, String fileName) throws Exception {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.US_ASCII))) {
             writer.write("-----BEGIN CERTIFICATE-----\n");
@@ -227,7 +269,6 @@ public class CaCertificateIssuer {
         }
     }
 
-
     /**
      * 获取当前后端服务器的 IP 和端口
      *
@@ -242,10 +283,9 @@ public class CaCertificateIssuer {
         return "http://127.0.0.1" + ":" + serverPort;
     }
 
-
     public static void main(String[] args) throws Exception {
         // 定义用户信息
-        String userName = "CN=::www.wangming.xyz, OU=IT, O=盐城市国有资产投资集团有限公司, L=Yancheng, ST=Yancheng, C=CN";
+        String userName = "CN=www.wangming.xyz, OU=IT, O=盐城市国有资产投资集团有限公司, L=Yancheng, ST=Yancheng, C=CN";
 
         // 定义根证书和私钥的 URL
         String certUrl = "http://127.0.0.1:8000/local-plus/66c1f165146fbf2cdaf53f55.cer";

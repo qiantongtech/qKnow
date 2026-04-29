@@ -42,7 +42,7 @@ import tech.qiantong.qknow.module.kmc.domain.TreeSelects;
 import tech.qiantong.qknow.module.kmc.service.kmcCategory.IKmcCategoryService;
 import tech.qiantong.qknow.module.kmc.service.kmcDocument.IKmcDocumentService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
 

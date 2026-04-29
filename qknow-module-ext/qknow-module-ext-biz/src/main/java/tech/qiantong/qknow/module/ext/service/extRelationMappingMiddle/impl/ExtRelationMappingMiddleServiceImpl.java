@@ -48,7 +48,7 @@ import tech.qiantong.qknow.module.ext.dal.dataobject.extRelationMappingMiddle.Ex
 import tech.qiantong.qknow.module.ext.dal.mapper.extRelationMappingMiddle.ExtRelationMappingMiddleMapper;
 import tech.qiantong.qknow.module.ext.service.extRelationMappingMiddle.IExtRelationMappingMiddleService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

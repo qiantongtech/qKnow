@@ -58,7 +58,7 @@ import tech.qiantong.qknow.common.utils.SecurityUtils;
 import tech.qiantong.qknow.common.utils.StringUtils;
 import tech.qiantong.qknow.security.web.service.TokenService;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 /**
  * 个人信息 业务处理

@@ -89,6 +89,8 @@
             <artifactId>qknow-common</artifactId>
         </dependency>
 
+
+
         <!-- 文件上传-->
         <dependency>
             <groupId>tech.qiantong</groupId>
@@ -100,17 +102,6 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>tech.qiantong</groupId>
-            <artifactId>qknow-auth</artifactId>
-            <version>${qknow.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>tech.qiantong</groupId>
-            <artifactId>qknow-common</artifactId>
         </dependency>
 
         <dependency>

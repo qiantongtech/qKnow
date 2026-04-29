@@ -1,7 +1,7 @@
 package tech.qiantong.qknow.common.database.dialect;
 
-import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.jdbc.core.RowMapper;
 import tech.qiantong.qknow.common.database.constants.DbQueryProperty;
 import tech.qiantong.qknow.common.database.constants.fieldtypes.PhoenixDataTypeEnum;
@@ -9,7 +9,6 @@ import tech.qiantong.qknow.common.database.core.DbColumn;
 import tech.qiantong.qknow.common.database.core.DbName;
 import tech.qiantong.qknow.common.database.core.DbTable;
 import tech.qiantong.qknow.common.database.exception.DataQueryException;
-import tech.qiantong.qknow.common.database.utils.MD5Util;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

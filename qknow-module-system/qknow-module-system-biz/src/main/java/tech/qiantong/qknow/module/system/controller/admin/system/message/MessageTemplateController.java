@@ -51,9 +51,9 @@ import tech.qiantong.qknow.module.system.convert.message.MessageTemplateConvert;
 import tech.qiantong.qknow.module.system.dal.dataobject.message.MessageTemplateDO;
 import tech.qiantong.qknow.module.system.service.message.IMessageTemplateService;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;

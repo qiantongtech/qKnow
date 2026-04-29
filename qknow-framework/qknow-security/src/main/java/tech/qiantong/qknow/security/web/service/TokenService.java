@@ -51,7 +51,7 @@ import tech.qiantong.qknow.common.utils.ip.AddressUtils;
 import tech.qiantong.qknow.common.utils.ip.IpUtils;
 import tech.qiantong.qknow.common.utils.uuid.IdUtils;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;

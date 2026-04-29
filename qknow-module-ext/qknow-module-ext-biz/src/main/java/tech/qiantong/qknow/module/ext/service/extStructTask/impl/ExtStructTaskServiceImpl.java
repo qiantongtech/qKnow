@@ -96,8 +96,8 @@ import tech.qiantong.qknow.quartz.util.CronUtils;
 import tech.qiantong.qknow.quartz.util.ScheduleUtils;
 import tech.qiantong.qknow.redis.service.IRedisService;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.*;

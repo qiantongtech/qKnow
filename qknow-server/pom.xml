@@ -83,12 +83,19 @@
             <version>${qknow.version}</version>
         </dependency>
 
-        <!-- spring-boot-devtools -->
+        <!-- AI 大模型相关模块 -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional> <!-- 表示依赖不会传递 -->
+            <groupId>tech.qiantong</groupId>
+            <artifactId>qknow-module-ai-biz</artifactId>
+            <version>${qknow.version}</version>
         </dependency>
+
+        <!-- spring-boot-devtools -->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-devtools</artifactId>-->
+<!--            <optional>true</optional> &lt;!&ndash; 表示依赖不会传递 &ndash;&gt;-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -111,28 +118,63 @@
 
     <build>
         <plugins>
+            <!-- 将所有的模块打包在一个jar中-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <!-- 限制只处理 tech.qiantong 相关的依赖 -->
+                            <artifactSet>
+                                <includes>
+                                    <include>tech.qiantong:*:*</include> <!-- 只包括 tech.qiantong 开头的所有依赖 -->
+                                </includes>
+                            </artifactSet>
+
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <!-- 排除 JAR 中的签名文件等不必要的文件 -->
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- maven-compiler-plugin 配置 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.14.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                     <annotationProcessorPaths>
                         <!-- 引入 mapstruct-processor -->
                         <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
-                            <version>1.5.5.Final</version>
+                            <version>1.6.3</version>
                         </path>
                         <!-- 引入 lombok-processor -->
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.36</version>
+                            <version>1.18.42</version>
                         </path>
                     </annotationProcessorPaths>
+                    <parameters>true</parameters>
                 </configuration>
             </plugin>
 
@@ -140,9 +182,11 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.5.15</version>
+                <version>3.5.8</version>
                 <configuration>
-                    <fork>true</fork> <!-- 如果没有该配置，devtools不会生效 -->
+                    <!--                    <fork>true</fork> &lt;!&ndash; 如果没有该配置，devtools不会生效 &ndash;&gt;-->
+                    <!-- 排除 `tech.qiantong` 下的所有模块 -->
+                    <excludeGroupIds>tech.qiantong</excludeGroupIds>
                 </configuration>
                 <executions>
                     <execution>
@@ -162,8 +206,7 @@
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                     <warName>${project.artifactId}</warName>
                 </configuration>
-           </plugin>
-
+            </plugin>
             <!-- docker 镜像打包 -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -263,8 +306,10 @@
 
                 </executions>
             </plugin>
+
         </plugins>
         <finalName>${project.artifactId}</finalName>
     </build>
+
 
 </project>

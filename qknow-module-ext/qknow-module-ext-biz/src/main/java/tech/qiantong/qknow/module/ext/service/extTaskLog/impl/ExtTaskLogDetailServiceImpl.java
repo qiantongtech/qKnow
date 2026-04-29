@@ -80,7 +80,7 @@ import tech.qiantong.qknow.module.ext.dal.dataobject.extTaskLog.ExtTaskLogDetail
 import tech.qiantong.qknow.module.ext.dal.mapper.extTaskLog.ExtTaskLogDetailMapper;
 import tech.qiantong.qknow.module.ext.service.extTaskLog.IExtTaskLogDetailService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

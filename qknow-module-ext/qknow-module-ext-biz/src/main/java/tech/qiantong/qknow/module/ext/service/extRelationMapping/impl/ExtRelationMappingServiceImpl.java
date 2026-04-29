@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import tech.qiantong.qknow.common.core.page.PageResult;
 import tech.qiantong.qknow.common.utils.object.BeanUtils;
 import tech.qiantong.qknow.common.utils.StringUtils;

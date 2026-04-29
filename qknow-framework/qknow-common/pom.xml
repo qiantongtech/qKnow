@@ -1,36 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Copyright © 2026 Qiantong Technology Co., Ltd.
-  qKnow Knowledge Platform
-   *
-  License:
-  Released under the Apache License, Version 2.0.
-  You may use, modify, and distribute this software for commercial purposes
-  under the terms of the License.
-   *
-  Special Notice:
-  All derivative versions are strictly prohibited from modifying or removing
-  the default system logo and copyright information.
-  For brand customization, please apply for brand customization authorization via official channels.
-   *
-  More information: https://qknow.qiantong.tech/business.html
-   *
-  ============================================================================
-   *
-  版权所有 © 2026 江苏千桐科技有限公司
-  qKnow 知识平台（开源版）
-   *
-  许可协议：
-  本项目基于 Apache License 2.0 开源协议发布，
-  允许在遵守协议的前提下进行商用、修改和分发。
-   *
-  特别说明：
-  所有衍生版本不得修改或移除系统默认的 LOGO 和版权信息；
-  如需定制品牌，请通过官方渠道申请品牌定制授权。
-   *
-  更多信息请访问：https://qknow.qiantong.tech/business.html
--->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -48,34 +16,20 @@
     </description>
     <packaging>jar</packaging>
     <properties>
-        <etl.deploy.scope.maven>compile</etl.deploy.scope.maven>
-        <qdata.version>1.1.11</qdata.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-        <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
-        <spring-framework.version>5.3.33</spring-framework.version>
-        <spring-security.version>5.7.12</spring-security.version>
-        <druid.version>1.2.23</druid.version>
-        <bitwalker.version>1.21</bitwalker.version>
-        <swagger.version>3.0.0</swagger.version>
-        <kaptcha.version>2.3.3</kaptcha.version>
-        <pagehelper.boot.version>1.4.7</pagehelper.boot.version>
-        <fastjson.version>2.0.43</fastjson.version>
-        <oshi.version>6.6.1</oshi.version>
-        <commons.io.version>2.13.0</commons.io.version>
-        <poi.version>4.1.2</poi.version>
-        <velocity.version>2.3</velocity.version>
-        <jwt.version>0.9.1</jwt.version>
-        <scala.version>2.12.18</scala.version>
-        <spark.version>3.4.4</spark.version>
-        <hadoop.version>3.1.4</hadoop.version>
-        <easyexcel.version>3.3.4</easyexcel.version>
-        <flink.version>1.17.2</flink.version>
-        <flink-cdc.version>2.4.1</flink-cdc.version>
+        <java.version>17</java.version>
+        <poi.version>5.3.0</poi.version>
+        <jwt.version>0.12.6</jwt.version>
+        <hadoop.version>3.4.0</hadoop.version>
     </properties>
 
     <dependencies>
+        <!-- commons-compress 版本 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.26.2</version>
+        </dependency>
 
         <!-- Spring框架基本的核心工具 -->
         <dependency>
@@ -142,6 +96,13 @@
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
+
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-compress</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- yml解析器 -->
@@ -150,7 +111,7 @@
             <artifactId>snakeyaml</artifactId>
         </dependency>
 
-        <!-- Token生成与解析-->
+        <!-- Token生成与解析 -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
@@ -158,8 +119,9 @@
 
         <!-- Jaxb -->
         <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <!-- redis 缓存操作 -->
@@ -182,8 +144,8 @@
 
         <!-- servlet包 -->
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
         </dependency>
 
         <dependency>
@@ -195,7 +157,7 @@
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
-            <version>1.59</version>
+            <version>1.70</version>
         </dependency>
 
         <dependency>
@@ -208,33 +170,33 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.36</version>
+            <version>1.18.42</version>
         </dependency>
 
         <!-- mybatis-plus 增强CRUD -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.5.2</version>
+            <version>3.5.8</version>
         </dependency>
 
         <!-- 多数据源 -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-            <version>4.3.0</version>
+            <version>4.3.1</version>
         </dependency>
 
         <dependency>
             <groupId>org.elasticsearch.client</groupId>
             <artifactId>elasticsearch-rest-high-level-client</artifactId>
-            <version>7.14.0</version>
+            <version>7.17.20</version>
         </dependency>
 
         <dependency>
             <groupId>org.elasticsearch</groupId>
             <artifactId>elasticsearch</artifactId>
-            <version>7.14.0</version>
+            <version>7.17.20</version>
         </dependency>
 
         <!-- 对象转换 -->
@@ -257,8 +219,20 @@
         <!-- knife4j -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
-            <version>4.4.0</version>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+            <version>4.5.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springdoc</groupId>
+                    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.8.14</version>
         </dependency>
 
         <dependency>
@@ -272,52 +246,52 @@
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
-            <version>5.4.3</version>
+            <version>5.5.13</version>
         </dependency>
 
         <!-- excel工具 -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-scratchpad</artifactId>
-            <version>5.2.3</version>
-        </dependency>
+            <version>${poi.version}</version>
 
-        <dependency>
-            <groupId>com.aspose-words</groupId>
-            <artifactId>aspose-words-java</artifactId>
-            <version>15.8.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.aspose-cells</groupId>
-            <artifactId>aspose-cells-java</artifactId>
-            <version>21.8</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-compress</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!--  csv -->
         <dependency>
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
-            <version>5.6</version>
+            <version>5.9</version>
         </dependency>
 
-        <!-- OkHttps网络请求库： http://okhttps.ejlchina.com/ -->
+        <!-- OkHttps网络请求库 -->
         <dependency>
-            <groupId>com.ejlchina</groupId>
+            <groupId>cn.zhxu</groupId>
             <artifactId>okhttps</artifactId>
-            <version>3.1.1</version>
+            <version>4.1.0</version>
         </dependency>
 
-        <!-- kafka驱动-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+
+        <!-- kafka驱动 -->
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
-            <version>3.0.0</version>
+            <version>3.7.0</version>
         </dependency>
         <dependency>
             <groupId>com.rabbitmq</groupId>
             <artifactId>amqp-client</artifactId>
-            <version>5.16.0</version>
+            <version>5.18.0</version>
         </dependency>
         <!-- 指定hadoop-client API的版本 -->
         <dependency>
@@ -332,6 +306,10 @@
                 <exclusion>
                     <groupId>com.fasterxml.jackson.core</groupId>
                     <artifactId>*</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-reload4j</artifactId>
+                    <groupId>org.slf4j</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -356,11 +334,25 @@
             <version>${hadoop.version}</version>
         </dependency>
 
+        <!-- json-path -->
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+
+        <!-- commons-net -->
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.10.0</version>
+        </dependency>
+
         <!-- 阿里云OSS -->
         <dependency>
             <groupId>com.aliyun.oss</groupId>
             <artifactId>aliyun-sdk-oss</artifactId>
-            <version>3.16.1</version>
+            <version>3.17.4</version>
         </dependency>
 
         <!-- 人大金仓驱动包 -->
@@ -368,6 +360,13 @@
             <groupId>cn.com.kingbase</groupId>
             <artifactId>kingbase8</artifactId>
             <version>8.6.0</version>
+        </dependency>
+
+        <!-- commons-csv -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>1.10.0</version>
         </dependency>
 
         <!-- mongodb驱动包 -->
@@ -381,7 +380,7 @@
         <dependency>
             <groupId>com.clickhouse</groupId>
             <artifactId>clickhouse-jdbc</artifactId>
-            <version>0.6.0</version> <!-- 可以用最新版 -->
+            <version>0.6.0</version>
         </dependency>
         <!-- ClickHouse 的 Apache Http Client 支持 -->
         <dependency>
@@ -389,6 +388,42 @@
             <artifactId>httpclient5</artifactId>
             <version>5.2.1</version>
         </dependency>
+
+
+        <!-- 核心Tika依赖 -->
+        <!-- 降级到 Tika 2.9.1 或 2.7.0 -->
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+            <version>2.9.1</version>  <!-- 或 2.7.0 -->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-parsers-standard-package</artifactId>
+            <version>2.9.1</version>  <!-- 保持与 core 相同版本 -->
+            <exclusions>
+                <!-- 排除内部的 commons-compress，使用我们指定的版本 -->
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-compress</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- Flexmark 核心依赖，支持HTML/XHTML转Markdown -->
+        <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-all</artifactId>
+            <version>0.64.8</version>
+        </dependency>
+
+        <!-- Jsoup for HTML parsing -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.17.2</version>
+        </dependency>
+
 
     </dependencies>
 

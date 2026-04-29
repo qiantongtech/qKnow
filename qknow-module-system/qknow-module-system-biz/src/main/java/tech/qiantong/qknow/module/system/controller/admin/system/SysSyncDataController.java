@@ -43,7 +43,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tech.qiantong.qknow.common.core.domain.AjaxResult;
 import tech.qiantong.qknow.module.system.service.auth.SysSyncDataService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  * 接收认证平台推送的数据

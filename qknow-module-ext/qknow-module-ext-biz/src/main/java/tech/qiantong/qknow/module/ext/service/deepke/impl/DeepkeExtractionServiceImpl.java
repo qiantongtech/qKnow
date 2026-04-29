@@ -43,7 +43,7 @@ import tech.qiantong.qknow.module.ext.dal.mapper.extUnstructTaskText.ExtUnstruct
 import tech.qiantong.qknow.module.ext.service.deepke.DeepkeExtractionService;
 import tech.qiantong.qknow.module.ext.service.neo4j.service.ExtNeo4jService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.io.*;
 import java.util.Map;
 

@@ -35,7 +35,7 @@ package tech.qiantong.qknow.module.app.controller.admin.appGraph.vo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 /**
  * 三元组 Request VO ext_schema
