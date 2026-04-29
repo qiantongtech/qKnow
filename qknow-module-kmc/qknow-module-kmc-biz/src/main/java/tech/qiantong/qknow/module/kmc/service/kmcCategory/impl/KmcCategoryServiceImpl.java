@@ -35,7 +35,7 @@ package tech.qiantong.qknow.module.kmc.service.kmcCategory.impl;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 import tech.qiantong.qknow.common.core.page.PageResult;
 import tech.qiantong.qknow.common.exception.ServiceException;

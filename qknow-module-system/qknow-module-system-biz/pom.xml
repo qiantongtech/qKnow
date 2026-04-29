@@ -108,6 +108,8 @@
             <artifactId>qknow-common</artifactId>
         </dependency>
 
+
+
         <!-- 文件上传-->
         <dependency>
             <groupId>tech.qiantong</groupId>
@@ -121,13 +123,6 @@
                     <artifactId>qknow-pay</artifactId>
                     <version>${qknow.version}</version>
                 </dependency>-->
-
-        <!-- auth-->
-        <dependency>
-            <groupId>tech.qiantong</groupId>
-            <artifactId>qknow-auth</artifactId>
-            <version>${qknow.version}</version>
-        </dependency>
 
         <!-- swagger3-->
         <!--        <dependency>

@@ -90,6 +90,9 @@
             <artifactId>qknow-common</artifactId>
         </dependency>
 
+
+
+
         <!-- system-api模块 -->
         <dependency>
             <groupId>tech.qiantong</groupId>

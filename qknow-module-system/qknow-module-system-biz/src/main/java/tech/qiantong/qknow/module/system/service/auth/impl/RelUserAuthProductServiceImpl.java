@@ -32,7 +32,7 @@
 
 package tech.qiantong.qknow.module.system.service.auth.impl;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

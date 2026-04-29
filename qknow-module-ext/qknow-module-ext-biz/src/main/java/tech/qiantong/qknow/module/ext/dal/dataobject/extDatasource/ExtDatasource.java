@@ -34,7 +34,7 @@ package tech.qiantong.qknow.module.ext.dal.dataobject.extDatasource;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 @Data
 public class ExtDatasource {

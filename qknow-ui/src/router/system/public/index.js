@@ -32,7 +32,8 @@
 
 /* Layout */
 import Layout from '@/layout/index.vue'
-
+/* AI模块公共路由 */
+import AIPublicRouter from '../../ai/public/index.js';
 // 系统模块公共路由
 export default [
   {
@@ -135,5 +136,14 @@ export default [
         meta: { title: '个人中心', icon: 'user' }
       }
     ]
-  }
+  },
+  {
+    path: '/system',
+    component: Layout,
+    redirect: 'ai',
+    // hidden: true,
+    children: [
+        ...AIPublicRouter
+    ]
+  },
 ]

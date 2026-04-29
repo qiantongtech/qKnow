@@ -105,7 +105,12 @@ public class SecurityUtils
     {
         try
         {
-            return (LoginUser) getAuthentication().getPrincipal();
+            Authentication authentication = getAuthentication();
+            if (authentication == null)
+            {
+                return null;
+            }
+            return (LoginUser) authentication.getPrincipal();
         }
         catch (Exception e)
         {

@@ -34,8 +34,9 @@ package tech.qiantong.qknow.common.utils.ip;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import javax.servlet.http.HttpServletRequest;
 
+
+import jakarta.servlet.http.HttpServletRequest;
 import tech.qiantong.qknow.common.utils.ServletUtils;
 import tech.qiantong.qknow.common.utils.StringUtils;
 

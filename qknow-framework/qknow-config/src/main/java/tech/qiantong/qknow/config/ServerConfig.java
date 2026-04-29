@@ -32,7 +32,7 @@
 
 package tech.qiantong.qknow.config;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 import tech.qiantong.qknow.common.utils.ServletUtils;
 

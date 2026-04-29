@@ -64,9 +64,9 @@ import tech.qiantong.qknow.module.ext.extEnum.ExtReleaseStatus;
 import tech.qiantong.qknow.module.ext.service.extStructTask.IExtStructTaskService;
 import tech.qiantong.qknow.module.ext.service.neo4j.service.ExtNeo4jService;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;

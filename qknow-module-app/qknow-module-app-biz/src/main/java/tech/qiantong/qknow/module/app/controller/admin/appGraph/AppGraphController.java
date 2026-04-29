@@ -46,7 +46,7 @@ import tech.qiantong.qknow.module.app.controller.admin.appGraph.vo.AppGraphVO;
 import tech.qiantong.qknow.module.app.controller.admin.appGraph.vo.DeleteNodeAttributeVO;
 import tech.qiantong.qknow.module.app.service.appGraph.AppGraphService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;

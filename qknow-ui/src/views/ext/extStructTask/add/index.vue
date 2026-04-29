@@ -1029,7 +1029,7 @@ const handleSuccess = () => {
   // 然后跳转
   setTimeout(() => {
     router.push("/da/quality/qualityTask");
-    const obj = { path: "/ext/extStructTask" };
+    const obj = { path: "/kg/ext/extStructTask" };
     proxy.$tab.closeOpenPage(obj);
   }, 800);
 };

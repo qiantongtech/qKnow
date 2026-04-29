@@ -84,7 +84,7 @@ import tech.qiantong.qknow.module.ext.extEnum.ExtLogStatusEnum;
 import tech.qiantong.qknow.module.ext.extEnum.ExtTaskTypeEnum;
 import tech.qiantong.qknow.module.ext.service.extTaskLog.IExtTaskLogService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.Date;
 import java.util.Objects;
 

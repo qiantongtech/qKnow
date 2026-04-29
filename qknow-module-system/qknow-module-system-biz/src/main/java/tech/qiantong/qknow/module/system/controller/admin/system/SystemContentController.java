@@ -50,8 +50,8 @@ import tech.qiantong.qknow.module.system.domain.vo.SystemContentRespVO;
 import tech.qiantong.qknow.module.system.domain.vo.SystemContentSaveReqVO;
 import tech.qiantong.qknow.module.system.service.ISystemContentService;
 
-import javax.annotation.Resource;
-import javax.validation.Valid;
+import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
 import java.util.Arrays;
 
 /**

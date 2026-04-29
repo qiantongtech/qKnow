@@ -36,7 +36,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import tech.qiantong.qknow.common.core.domain.BaseEntity;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 
 /**
  * 概念配置 创建/修改 Request VO ext_schema

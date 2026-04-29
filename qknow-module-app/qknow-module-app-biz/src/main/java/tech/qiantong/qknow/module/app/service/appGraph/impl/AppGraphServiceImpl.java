@@ -56,7 +56,7 @@ import tech.qiantong.qknow.neo4j.utils.Convert;
 import tech.qiantong.qknow.neo4j.wrapper.Neo4jBuildWrapper;
 import tech.qiantong.qknow.neo4j.wrapper.Neo4jQueryWrapper;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

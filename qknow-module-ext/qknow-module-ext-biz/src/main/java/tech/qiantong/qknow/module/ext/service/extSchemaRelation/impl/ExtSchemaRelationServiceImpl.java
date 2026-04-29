@@ -52,7 +52,7 @@ import tech.qiantong.qknow.module.ext.dal.mapper.extSchemaRelation.ExtSchemaRela
 import tech.qiantong.qknow.module.ext.service.extSchema.IExtSchemaService;
 import tech.qiantong.qknow.module.ext.service.extSchemaRelation.IExtSchemaRelationService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;

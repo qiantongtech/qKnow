@@ -57,7 +57,7 @@ import tech.qiantong.qknow.neo4j.repository.DynamicRepository;
 import tech.qiantong.qknow.neo4j.wrapper.Neo4jBuildWrapper;
 import tech.qiantong.qknow.neo4j.wrapper.Neo4jQueryWrapper;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 

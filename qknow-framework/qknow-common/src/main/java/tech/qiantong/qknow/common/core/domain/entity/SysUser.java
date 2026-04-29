@@ -34,7 +34,7 @@ package tech.qiantong.qknow.common.core.domain.entity;
 
 import java.util.Date;
 import java.util.List;
-import javax.validation.constraints.*;
+import jakarta.validation.constraints.*;
 
 import tech.qiantong.qknow.common.utils.SecurityUtils;
 import tech.qiantong.qknow.common.utils.StringUtils;

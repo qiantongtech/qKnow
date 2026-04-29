@@ -42,7 +42,7 @@ import tech.qiantong.qknow.common.core.domain.AjaxResult;
 import tech.qiantong.qknow.module.ext.dal.dataobject.extDatasource.ExtDataSourceTable;
 import tech.qiantong.qknow.module.ext.service.extDatasource.IExtDatasourceService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  * 数据源Controller

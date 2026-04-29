@@ -52,7 +52,6 @@ import tech.qiantong.qknow.common.exception.ServiceException;
 import tech.qiantong.qknow.common.exception.user.*;
 import tech.qiantong.qknow.common.utils.DateUtils;
 import tech.qiantong.qknow.common.utils.MessageUtils;
-import tech.qiantong.qknow.common.utils.SecurityUtils;
 import tech.qiantong.qknow.common.utils.StringUtils;
 import tech.qiantong.qknow.common.utils.ip.IpUtils;
 import tech.qiantong.qknow.module.system.service.ISysConfigService;
@@ -61,7 +60,7 @@ import tech.qiantong.qknow.security.context.AuthenticationContextHolder;
 import tech.qiantong.qknow.security.manager.AsyncManager;
 import tech.qiantong.qknow.security.manager.factory.AsyncFactory;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Map;
 

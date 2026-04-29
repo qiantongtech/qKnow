@@ -60,7 +60,7 @@ import tech.qiantong.qknow.module.system.service.ISysNoticeService;
 import tech.qiantong.qknow.module.system.service.message.IMessageService;
 import tech.qiantong.qknow.module.system.service.message.impl.MessageServiceImpl;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 import static tech.qiantong.qknow.common.utils.SecurityUtils.getLoginUser;
 

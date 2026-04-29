@@ -31,7 +31,7 @@
  */
 
 /* Layout */
-import Layout from '@/layout/index.vue'
+import Layout from '@/layout/index.vue';
 
 // 知识应用模块动公共路由
 export default [
@@ -46,5 +46,5 @@ export default [
                 meta: { title: '图谱探索', activeMenu: '/app/graphExploration'  }
             }
         ]
-    }
+    },
 ]

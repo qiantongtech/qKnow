@@ -37,9 +37,9 @@ import lombok.Data;
 import tech.qiantong.qknow.common.core.domain.BaseEntity;
 import tech.qiantong.qknow.common.utils.StringUtils;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Schema(description="分页参数")

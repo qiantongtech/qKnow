@@ -42,7 +42,7 @@ import tech.qiantong.qknow.module.ext.dal.dataobject.extSchemaAttribute.ExtSchem
 import tech.qiantong.qknow.module.ext.service.extSchemaAttribute.IExtSchemaAttributeService;
 import tech.qiantong.qknow.mybatis.core.query.LambdaQueryWrapperX;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.List;
 
 @Service

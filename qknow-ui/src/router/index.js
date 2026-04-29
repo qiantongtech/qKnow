@@ -39,6 +39,8 @@ import systemPublicRouter from './system/public/index.js'
 import systemDynamicRouter from './system/dynamic/index.js'
 /* 知识抽取模块 */
 import extPublicRouter from './ext/public/index.js'
+/* 知识应用模块 */
+import appPublicRouter from './app/public/index.js'
 
 /**
  * Note: 路由配置项
@@ -65,7 +67,8 @@ import extPublicRouter from './ext/public/index.js'
 // 公共路由
 export const constantRoutes = [
     ...systemPublicRouter,
-    ...extPublicRouter
+    ...extPublicRouter,
+    ...appPublicRouter
 ]
 
 // 动态路由，基于用户权限动态去加载
@@ -88,6 +91,12 @@ const router = createRouter({
 // 在路由守卫中添加取消请求逻辑
 router.beforeEach((to, from, next) => {
     clearCancelTokens() // 在路由切换前取消所有未完成的请求
+     if (to.meta.dynamicTitle && to.query.title) {
+    // 动态覆盖标题
+    document.title = to.query.title
+  } else  if (to.meta.type == 'plugin') {
+    document.title = to.meta.title || '默认标题'
+  }
     next()
 })
 

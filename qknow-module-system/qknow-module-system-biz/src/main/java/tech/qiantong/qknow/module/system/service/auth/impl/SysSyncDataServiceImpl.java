@@ -52,7 +52,7 @@ import tech.qiantong.qknow.module.system.mapper.SysUserRoleMapper;
 import tech.qiantong.qknow.module.system.rsa.RSAUtil;
 import tech.qiantong.qknow.module.system.service.auth.SysSyncDataService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.sql.Wrapper;
 import java.util.ArrayList;
 import java.util.HashMap;

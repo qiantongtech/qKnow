@@ -75,7 +75,7 @@ import tech.qiantong.qknow.module.kmc.service.kmcDocument.IKmcDocumentService;
 import tech.qiantong.qknow.module.system.service.ISysConfigService;
 import tech.qiantong.qknow.redis.service.IRedisService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;

@@ -54,7 +54,7 @@ import tech.qiantong.qknow.module.system.mapper.SysUserMapper;
 import tech.qiantong.qknow.module.system.service.ISysDeptService;
 import tech.qiantong.qknow.module.system.service.ISysUserService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

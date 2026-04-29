@@ -32,6 +32,7 @@
 
 package tech.qiantong.qknow.security.config;
 
+import jakarta.servlet.DispatcherType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -141,11 +142,11 @@ public class SecurityConfig
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             // 注解标记允许匿名访问的url
             .authorizeHttpRequests((requests) -> {
-                permitAllUrl.getUrls().forEach(url -> requests.antMatchers(url).permitAll());
+                permitAllUrl.getUrls().forEach(url -> requests.requestMatchers(url).permitAll());
                 // 对于登录login 注册register 验证码captchaImage 允许匿名访问
-                requests.antMatchers("/login", "/register", "/captchaImage", "/flyflow/**","/updater/getLocalVersion").permitAll()
+                requests.requestMatchers("/login", "/register", "/captchaImage", "/flyflow/**","/updater/getLocalVersion").permitAll()
                     // 静态资源，可匿名访问
-                    .antMatchers(HttpMethod.GET, "/",
+                    .requestMatchers(HttpMethod.GET, "/",
                             "/*.html",
                             "/**/*.html",
                             "/**/*.css",
@@ -158,7 +159,7 @@ public class SecurityConfig
                             "/sso/**",
                             "/favicon.ico"
                     ).permitAll()
-                    .antMatchers("/swagger-ui.html",
+                    .requestMatchers("/swagger-ui.html",
                             "/swagger-resources/**",
                             "/webjars/**",
                             "/*/api-docs",
@@ -168,8 +169,11 @@ public class SecurityConfig
                             "/payment/**",
                             "/syncData/**",
                             "/sys/**",
-                            "/oauth2/**"
+                            "/oauth2/**",
+                            "/api/app/**"
                     ).permitAll()
+                    // WebFlux 异步请求，无需认证，目的：SSE 场景
+                    .dispatcherTypeMatchers(DispatcherType.ASYNC).permitAll()
                     // 除上面外的所有请求全部需要鉴权认证
                     .anyRequest().authenticated();
             })

@@ -69,7 +69,7 @@ import tech.qiantong.qknow.module.dm.service.datasource.IDmDatasourceService;
 import tech.qiantong.qknow.mybatis.core.query.LambdaQueryWrapperX;
 import tech.qiantong.qknow.redis.service.IRedisService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

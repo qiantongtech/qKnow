@@ -32,9 +32,9 @@
 
 package tech.qiantong.qknow.module.kmc.controller.admin.kmcCategory;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import java.util.Arrays;
 import cn.hutool.core.date.DateUtil;
 import java.util.List;
