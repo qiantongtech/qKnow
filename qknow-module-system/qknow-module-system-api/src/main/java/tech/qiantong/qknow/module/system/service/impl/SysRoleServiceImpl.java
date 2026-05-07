@@ -136,6 +136,20 @@ public class SysRoleServiceImpl implements ISysRoleService
         return permsSet;
     }
 
+
+    /**
+     * 根据用户ID查询权限
+     *
+     * @param userId 用户ID
+     * @return 权限列表
+     */
+    @Override
+    public List<SysRole> selectRoleByUserId(Long userId)
+    {
+        return roleMapper.selectRolePermissionByUserId(userId);
+    }
+
+
     /**
      * 查询所有角色
      *

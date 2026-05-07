@@ -33,9 +33,11 @@
 package tech.qiantong.qknow.generator.service;
 
 import java.util.List;
+
+import cn.hutool.core.convert.Convert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tech.qiantong.qknow.common.core.text.Convert;
+
 import tech.qiantong.qknow.generator.domain.GenTableColumn;
 import tech.qiantong.qknow.generator.mapper.GenTableColumnMapper;
 

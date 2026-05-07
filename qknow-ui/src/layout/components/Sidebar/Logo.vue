@@ -31,52 +31,102 @@
 -->
 
 <template>
-  <div class="sidebar-logo-container" :class="{ 'collapse': collapse }"
-    :style="{ backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground }">
+  <div
+    class="sidebar-logo-container"
+    :class="{ collapse: collapse }"
+    :style="{
+      backgroundColor:
+        sideTheme === 'theme-dark'
+          ? variables.menuBackground
+          : variables.menuLightBackground,
+    }"
+  >
     <transition name="sidebarLogoFade">
-      <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
+      <router-link
+        v-if="collapse"
+        key="collapse"
+        class="sidebar-logo-link"
+        to="/"
+      >
         <!--        <img v-if="logo" :src="simpLogo" class="sidebar-logo" />-->
-        <img v-if="logo" :src="refSimpLogo" class="sidebar-logo" />
-        <h1 v-else class="sidebar-title"
-          :style="{ color: sideTheme === 'theme-dark' ? variables.logoTitleColor : variables.logoLightTitleColor }">{{
-            title }}</h1>
+        <img v-if="logo" :src="displaySimpLogo" class="sidebar-logo" />
+        <h1
+          v-else
+          class="sidebar-title"
+          :style="{
+            color:
+              sideTheme === 'theme-dark'
+                ? variables.logoTitleColor
+                : variables.logoLightTitleColor,
+          }"
+        >
+          {{ title }}
+        </h1>
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <!--        <img v-if="logo" :src="logo" class="sidebar-logo" />-->
-        <img v-if="logo" :src="refLogo" class="sidebar-logo" />
+        <!--        <img v-if="logo" :src="logo" class="sidebar-logo" /> -->
+        <img v-if="logo" :src="displayLogo" class="sidebar-logo" />
       </router-link>
     </transition>
   </div>
 </template>
 
 <script setup>
-import variables from '@/assets/system/styles/variables.module.scss'
-import logo from '@/assets/system/logo/logo.png'
-import simpLogo from '@/assets/system/logo/simpLogo.png'
-import useSettingsStore from '@/store/system/settings'
+import variables from "@/assets/system/styles/variables.module.scss";
+import logo from "@/assets/system/logo/logo.png";
+import logo2 from "@/assets/system/logo/logo.png";
+import simpLogo from "@/assets/system/logo/simpLogo.png";
+
+import useSettingsStore from "@/store/system/settings";
+import defaultSettings from "@/settings";
 import { getContent } from "@/api/system/system/content";
 
+import { computed } from "vue";
+const route = useRoute();
 // 使用 ref 来创建响应式的 logo
 const refLogo = ref(null); // 初始化 logo 为 simpLogo.png
 const refSimpLogo = ref(null); // 初始化 logo 为 simpLogo.png
 
-defineProps({
+const props = defineProps({
   collapse: {
     type: Boolean,
-    required: true
-  }
-})
+    required: true,
+  },
+  currentRoute: {
+    type: String,
+    default: "/",
+  },
+});
+
+const displayLogo = computed(() => {
+  console.log(
+    "defaultSettings.navbarLogoRoutes",
+    defaultSettings.navbarLogoRoutes
+  );
+  const navbarLogoRoutes = defaultSettings.navbarLogoRoutes || [];
+  const isSpecialRoute = navbarLogoRoutes.some((logoPath) =>
+    route.path.startsWith(logoPath)
+  );
+  return isSpecialRoute ? logo2 : refLogo.value;
+});
+
+const displaySimpLogo = computed(() => {
+  const navbarLogoRoutes = defaultSettings.navbarLogoRoutes || [];
+  const isSpecialRoute = navbarLogoRoutes.some((logoPath) =>
+    route.path.startsWith(logoPath)
+  );
+  return isSpecialRoute ? logo2 : refSimpLogo.value;
+});
 onMounted(() => {
   fetchContent();
 });
 // 使用 getContent 来获取数据，而不是重新定义一个 getContent 函数
 const fetchContent = async () => {
   try {
-    // 调用你从 API 导入的 getContent 方法
-    const res = await getContent(1);  // 假设请求的是 id 为 1 的数据
+    const res = await getContent(1);
     if (res.code == 200) {
-      const data = res.data
-      const sysLogo = data.logo
+      const data = res.data;
+      const sysLogo = data.logo;
       refLogo.value = sysLogo ? sysLogo : logo;
       refSimpLogo.value = sysLogo ? sysLogo : simpLogo;
     }

@@ -55,7 +55,14 @@
             <version>${qknow.version}</version>
         </dependency>
 
-        <!-- 知识中心模块 -->
+        <!-- 知识图谱模块 -->
+        <dependency>
+            <groupId>tech.qiantong</groupId>
+            <artifactId>qknow-module-kg-biz</artifactId>
+            <version>${qknow.version}</version>
+        </dependency>
+
+        <!-- 知识库模块 -->
         <dependency>
             <groupId>tech.qiantong</groupId>
             <artifactId>qknow-module-kmc-biz</artifactId>

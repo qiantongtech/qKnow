@@ -35,12 +35,17 @@ import { clearCancelTokens } from '@/utils/request'  // 确保导入路径正确
 
 /* 系统模块公共路由 */
 import systemPublicRouter from './system/public/index.js'
-/* 系统模块动态路由 */
-import systemDynamicRouter from './system/dynamic/index.js'
 /* 知识抽取模块 */
 import extPublicRouter from './ext/public/index.js'
 /* 知识应用模块 */
 import appPublicRouter from './app/public/index.js'
+/* 知识库模块公共路由 */
+import KmcPublicRouter from './kmc/public/index.js';
+
+/* 系统模块动态路由 */
+import systemDynamicRouter from './system/dynamic/index.js'
+/* 知识库模块动态路由 */
+import KmcDynamicRouter from './kmc/dynamic/index.js'
 
 /**
  * Note: 路由配置项
@@ -68,12 +73,14 @@ import appPublicRouter from './app/public/index.js'
 export const constantRoutes = [
     ...systemPublicRouter,
     ...extPublicRouter,
-    ...appPublicRouter
+    ...appPublicRouter,
+    ...KmcPublicRouter,
 ]
 
 // 动态路由，基于用户权限动态去加载
 export const dynamicRoutes = [
-    ...systemDynamicRouter
+    ...systemDynamicRouter,
+    ...KmcDynamicRouter,
 ]
 
 const router = createRouter({

@@ -34,6 +34,8 @@ package tech.qiantong.qknow.module.system.service.impl;
 
 import java.util.Collection;
 import java.util.List;
+
+import cn.hutool.core.convert.Convert;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,7 +43,7 @@ import tech.qiantong.qknow.common.annotation.DataSource;
 import tech.qiantong.qknow.common.constant.CacheConstants;
 import tech.qiantong.qknow.common.constant.UserConstants;
 import tech.qiantong.qknow.common.core.redis.RedisCache;
-import tech.qiantong.qknow.common.core.text.Convert;
+
 import tech.qiantong.qknow.common.enums.DataSourceType;
 import tech.qiantong.qknow.common.exception.ServiceException;
 import tech.qiantong.qknow.common.utils.StringUtils;

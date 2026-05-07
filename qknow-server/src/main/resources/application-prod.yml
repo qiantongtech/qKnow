@@ -44,7 +44,7 @@ spring:
       # 数据库索引
       database: 0
       # 密码
-      password:
+      password: J98%FHF#9h@e88h9fre9
       # 连接超时时间
       timeout: 10s
       lettuce:
@@ -131,11 +131,11 @@ dm8:
   # JDBC驱动类名
   driver-class-name: dm.jdbc.driver.DmDriver
   # 主库JDBC连接URL
-  url: jdbc:dm://127.0.0.1:5236/ANIVIA?STU&zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&schema=ANIVIA&serverTimezone=Asia/Shanghai
+  url: jdbc:mysql://127.0.0.1:3306/qknow_demo?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
   # 主库用户名
-  username:
+  username: root
   # 主库密码
-  password:
+  password: OAKC7dAs04BgWt
 
 # 人大金仓配置文件
 kingbase8:

@@ -38,9 +38,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import cn.hutool.core.text.StrFormatter;
 import org.springframework.util.AntPathMatcher;
 import tech.qiantong.qknow.common.constant.Constants;
-import tech.qiantong.qknow.common.core.text.StrFormatter;
 
 /**
  * 字符串工具类

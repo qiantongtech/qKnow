@@ -100,10 +100,11 @@ spring:
       - "classpath:application-file-${spring.profiles.active}.yml"
       # 示意：引入业务模块配置文件（请按照项目情况调整）
       - "classpath:application-system-${spring.profiles.active}.yml"
-      - "classpath:application-kmc-${spring.profiles.active}.yml"
       - "classpath:application-ext-${spring.profiles.active}.yml"
       - "classpath:application-ai-${spring.profiles.active}.yml"
       - "classpath:application-neo4j-${spring.profiles.active}.yml"
+      - "classpath:application-kmc-${spring.profiles.active}.yml"
+      - "classpath:application-thirdparty-${spring.profiles.active}.yml"
   # 文件上传
   servlet:
     multipart:
@@ -116,6 +117,15 @@ spring:
     restart:
       # 热部署开关
       enabled: true
+  main:
+    allow-circular-references: true # 允许循环依赖，因为项目是三层架构，无法避免这个情况。
+  autoconfigure:
+    exclude:
+      # 禁用 MongoDB 自动配置
+      - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
+      # 禁用 ArangoDB 自动配置
+      - com.arangodb.springframework.boot.autoconfigure.ArangoAutoConfiguration
 
 # token配置
 token:

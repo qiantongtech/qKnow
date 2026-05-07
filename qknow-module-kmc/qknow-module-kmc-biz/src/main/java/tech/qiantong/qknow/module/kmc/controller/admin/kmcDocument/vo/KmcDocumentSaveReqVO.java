@@ -1,44 +1,76 @@
 /*
- * Copyright © 2026 Qiantong Technology Co., Ltd.
- * qKnow Knowledge Platform
+ * Copyright (c) 2026 Jiangsu Qiantong Technology Co., Ltd.
  *  *
- * License:
- * Released under the Apache License, Version 2.0.
- * You may use, modify, and distribute this software for commercial purposes
- * under the terms of the License.
+ * Software Name: qKnow Knowledge Platform (Business Edition)
+ * Software Copyright Registration No. 15980140
  *  *
- * Special Notice:
- * All derivative versions are strictly prohibited from modifying or removing
- * the default system logo and copyright information.
- * For brand customization, please apply for brand customization authorization via official channels.
+ * [RIGHTS AND LICENSE STATEMENT]
+ * This file contains non-public commercial source code of which Jiangsu Qiantong
+ * Technology Co., Ltd. lawfully possesses complete intellectual property rights.
  *  *
- * More information: https://qknow.qiantong.tech/business.html
+ * Access and use are limited to entities or individuals who have signed a valid
+ * commercial license agreement, within the scope stipulated in the agreement.
+ * The "accessibility" of this source code is premised on lawful authorization
+ * and does not constitute any form of transfer of intellectual property rights
+ * or implied licensing.
+ *  *
+ * [PROHIBITIONS]
+ * Unless explicitly agreed in the license agreement, the following acts in any
+ * form are strictly prohibited:
+ * 1. Copying, disseminating, disclosing, selling, renting, or redistributing
+ * this source code;
+ * 2. Providing the software's functionality to third parties via SaaS, PaaS,
+ * cloud hosting, or other means;
+ * 3. Using this software or its derivative versions to develop products that
+ * compete with the Right Holder;
+ * 4. Providing or displaying this source code or related technical information
+ * to unauthorized third parties;
+ * 5. Tampering with, circumventing, or destroying copyright notices, license
+ * verifications, or other technical protection measures.
+ *  *
+ * [LEGAL LIABILITY]
+ * Any unauthorized use constitutes an infringement of trade secrets and
+ * intellectual property rights.
+ *  *
+ * The Right Holder will strictly pursue liability for breach of contract and
+ * infringement in accordance with the commercial agreement and laws such as
+ * the "Copyright Law of the People's Republic of China" and the "Anti-Unfair
+ * Competition Law".
  *  *
  * ============================================================================
  *  *
- * 版权所有 © 2026 江苏千桐科技有限公司
- * qKnow 知识平台（开源版）
+ * Copyright (c) 2026 江苏千桐科技有限公司
  *  *
- * 许可协议：
- * 本项目基于 Apache License 2.0 开源协议发布，
- * 允许在遵守协议的前提下进行商用、修改和分发。
+ * 软件名称：qKnow 知识平台（商业版） | 软著登字第15980140号
  *  *
- * 特别说明：
- * 所有衍生版本不得修改或移除系统默认的 LOGO 和版权信息；
- * 如需定制品牌，请通过官方渠道申请品牌定制授权。
+ * 【权利与授权声明】
+ * 本文件属于江苏千桐科技有限公司依法享有完全知识产权的非公开商业源代码。
+ * 仅限已签署有效商业授权合同的单位或个人在约定范围内查阅和使用。
+ * 源代码的“可访问性”均以合法授权为前提，不构成任何形式的知识产权转让或默示授权。
  *  *
- * 更多信息请访问：https://qknow.qiantong.tech/business.html
+ * 【禁止事项】
+ * 除授权合同明确约定外，严禁任何形式的：
+ * 1. 复制、传播、披露、出售、出租或再分发本源代码；
+ * 2. 通过 SaaS、PaaS、云托管等方式向第三方提供本软件功能；
+ * 3. 将本软件或其衍生版本用于开发与权利人构成竞争的产品；
+ * 4. 向未授权第三方提供或展示本源代码或相关技术信息；
+ * 5. 篡改、规避或破坏版权标识、授权校验及其他技术保护措施。
+ *  *
+ * 【法律责任】
+ * 任何未经授权的利用行为，均构成对商业秘密及知识产权的侵害。
+ * 权利人将依据商业合同及《中华人民共和国著作权法》《反不正当竞争法》
+ * 等法律法规，严厉追究违约与侵权责任。
  */
 
 package tech.qiantong.qknow.module.kmc.controller.admin.kmcDocument.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import tech.qiantong.qknow.common.core.domain.BaseEntity;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import tech.qiantong.qknow.common.core.domain.BaseEntity;
 
 /**
  * 知识文件 创建/修改 Request VO kmc_document
@@ -48,7 +80,7 @@ import jakarta.validation.constraints.Size;
  */
 @Schema(description = "知识文件 Response VO")
 @Data
-public class KmcDocumentSaveReqVO extends BaseEntity{
+public class KmcDocumentSaveReqVO extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -80,10 +112,71 @@ public class KmcDocumentSaveReqVO extends BaseEntity{
     @Size(max = 256, message = "文件描述长度不能超过256个字符")
     private String description;
 
+    @Schema(description = "预览次数", example = "")
+    private Long previewCount;
+
+    @Schema(description = "下载次数", example = "")
+    private Long downloadCount;
+
+    @Schema(description = "同步状态", example = "")
+    private Integer syncStatus;
+
     @Schema(description = "更新人id", example = "")
     private Long updaterId;
+
+    @Schema(description = "知识库id", example = "")
+    @NotNull(message = "知识库id不能为空")
+    private Long knowledgeBaseId;
+
+    @Schema(description = "知识库名称", example = "")
+    private String knowledgeBaseName;
+
+    @Schema(description = "分段模式", example = "")
+    @NotNull(message = "分段模式不能为空")
+    private String mode;
+
+    @Schema(description = "父分段的召回模式", example = "")
+    private String parentMode;
+
+    @Schema(description = "替换连续空格、换行符、制表符", example = "")
+    private Boolean removeExtraSpaces;
+
+    @Schema(description = "删除 URL、电子邮件地址", example = "")
+    private Boolean removeUrlsEmails;
+
+    @Schema(description = "分段重叠", example = "")
+    @NotNull(message = "分段重叠不能为空")
+    private String chunkOverlap;
+
+    @Schema(description = "最大长度", example = "")
+    @NotNull(message = "分段最大长度不能为空")
+    private Integer maxTokens;
+
+    @Schema(description = "分段标识符", example = "")
+    @NotNull(message = "分段标识符不能为空")
+    private String separator;
+
+    @Schema(description = "索引内容的形式", example = "")
+    private String docForm;
+
+    @Schema(description = "在 Q&A 模式下，指定文档的语言", example = "")
+    private String docLanguage;
+
+    @Schema(description = "子分段最大长度", example = "")
+    private Integer subchunkMaxTokens;
+
+    @Schema(description = "子分段分隔符", example = "")
+    private String subchunkSeparator;
 
     @Schema(description = "备注", example = "")
     @Size(max = 256, message = "备注长度不能超过256个字符")
     private String remark;
+
+    @Schema(description = "对话模型", example = "")
+    @Size(max = 128, message = "备注长度不能超过128个字符")
+    private String chatModel;
+
+    @Schema(description = "对话模型提供商", example = "")
+    @Size(max = 128, message = "备注长度不能超过128个字符")
+    private String chatModelProvider;
 }

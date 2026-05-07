@@ -50,6 +50,7 @@
         <module>qknow-quartz</module>
         <module>qknow-security</module>
         <module>qknow-generator</module>
+        <module>qknow-thirdparty</module>
         <module>qknow-file</module>
         <module>qknow-ai</module>
     </modules>
