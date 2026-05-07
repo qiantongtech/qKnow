@@ -261,7 +261,7 @@ qKnow 欢迎开发者、企业用户和行业伙伴共同参与建设。
         <td><img alt="" src=".gitee/system/workbench.png"/></td>
     </tr>
     <tr>
-        <td><img alt="" src=".gitee/system/kmcCategory.png"/></td>
+        <td><img alt="" src=".gitee/system/bot.png"/></td>
         <td><img alt="" src=".gitee/system/kmcDocument.png"/></td>
     </tr>
     <tr>
@@ -273,7 +273,7 @@ qKnow 欢迎开发者、企业用户和行业伙伴共同参与建设。
         <td><img alt="" src=".gitee/system/extResult.png"/></td>
     </tr>
     <tr>
-        <td><img alt="" src=".gitee/system/extSetting.png"/></td>
+        <td><img alt="" src=".gitee/system/ragSetting.png"/></td>
         <td><img alt="" src=".gitee/system/graph.png"/></td>
     </tr>
 </table>
