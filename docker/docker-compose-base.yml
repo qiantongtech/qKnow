@@ -28,7 +28,7 @@
 #  *
 # 更多信息请访问：https://qknow.qiantong.tech/business.html
 
-version: "2.0.1"
+version: "2.0.2"
 
 services:
   redis:
@@ -125,3 +125,33 @@ services:
       retries: 10
     networks:
       - qknownet
+  weaviate:
+    image: semitechnologies/weaviate:1.32.23
+    container_name: weaviate
+    profiles: [ "base" ]
+    restart: always
+    ports:
+      - "18080:8080"
+      - "50051:50051"
+    volumes:
+      - ./qKnow/weaviate:/var/lib/weaviate
+    environment:
+      PERSISTENCE_DATA_PATH: /var/lib/weaviate
+      QUERY_DEFAULTS_LIMIT: 25
+      CLUSTER_ENABLED: "false"
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: false
+      DEFAULT_VECTORIZER_MODULE: none
+      AUTHENTICATION_APIKEY_ENABLED: true
+      AUTHENTICATION_APIKEY_ALLOWED_KEYS: WVF5YThaHlkYwhGUSmCRgsX3tD5ngdN8pkih
+      AUTHENTICATION_APIKEY_USERS: hello@qknow
+      AUTHORIZATION_ADMINLIST_ENABLED: true
+      AUTHORIZATION_ADMINLIST_USERS: hello@qknow
+    healthcheck:
+      # 健康检查，确保服务正常启动
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/v1/meta" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - qknow_net
+

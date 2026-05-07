@@ -38,14 +38,14 @@
 
     <groupId>tech.qiantong</groupId>
     <artifactId>qKnow</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
 
     <name>qknow</name>
     <url>https://qiantong.tech</url>
     <description>千知平台</description>
 
     <properties>
-        <qknow.version>2.0.1</qknow.version>
+        <qknow.version>2.0.2</qknow.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>17</java.version>
