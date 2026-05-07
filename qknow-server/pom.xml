@@ -97,6 +97,14 @@
             <version>${qknow.version}</version>
         </dependency>
 
+
+        <!-- AI 大模型相关模块 -->
+        <dependency>
+            <groupId>tech.qiantong</groupId>
+            <artifactId>qknow-module-kb-biz</artifactId>
+            <version>${qknow.version}</version>
+        </dependency>
+
         <!-- spring-boot-devtools -->
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.boot</groupId>-->

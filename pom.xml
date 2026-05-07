@@ -236,6 +236,7 @@
         <module>qknow-module-app</module>
         <module>qknow-module-dm</module>
         <module>qknow-module-ext</module>
+        <module>qknow-module-kb</module>
         <module>qknow-module-kg</module>
         <module>qknow-module-kmc</module>
         <module>qknow-module-system</module>
