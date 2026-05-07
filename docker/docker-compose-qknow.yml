@@ -28,7 +28,7 @@
 #  *
 # 更多信息请访问：https://qknow.qiantong.tech/business.html
 
-version: "2.0.1"
+version: "2.0.2"
 
 services:
   # qknow 后端服务
