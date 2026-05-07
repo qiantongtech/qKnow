@@ -42,7 +42,7 @@
    *
   Copyright (c) 2026 江苏千桐科技有限公司
    *
-  软件名称：qKnow 知识平台（商业版） | 软著登字第15980140号
+  软件名称：qKnow 知识平台（开源版） | 软著登字第15980140号
    *
   【权利与授权声明】
   本文件属于江苏千桐科技有限公司依法享有完全知识产权的非公开商业源代码。
@@ -67,7 +67,7 @@
     <parent>
         <artifactId>qKnow</artifactId>
         <groupId>tech.qiantong</groupId>
-        <version>2.0.0</version>
+        <version>2.0.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

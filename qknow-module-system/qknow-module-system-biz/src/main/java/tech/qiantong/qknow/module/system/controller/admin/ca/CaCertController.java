@@ -32,7 +32,7 @@
 
 package tech.qiantong.qknow.module.system.controller.admin.ca;
 
-import cn.hutool.core.convert.Convert;
+import tech.qiantong.qknow.common.core.text.Convert;
 import tech.qiantong.qknow.config.ServerConfig;
 import tech.qiantong.qknow.module.system.ca.domain.CaCert;
 import tech.qiantong.qknow.module.system.ca.domain.CaSubject;

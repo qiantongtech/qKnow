@@ -51,6 +51,7 @@ const bus = reactive({
   },
 
   emit(event, data) {
+    console.log('bus.emit 触发, event:', event, 'data:', data);
     this.events[event]?.forEach(callback => callback(data));
   }
 });

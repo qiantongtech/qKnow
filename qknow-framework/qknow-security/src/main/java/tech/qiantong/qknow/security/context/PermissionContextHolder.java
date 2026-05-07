@@ -32,9 +32,10 @@
 
 package tech.qiantong.qknow.security.context;
 
+import cn.hutool.core.convert.Convert;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
-import tech.qiantong.qknow.common.core.text.Convert;
+
 
 /**
  * 权限信息

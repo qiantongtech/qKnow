@@ -37,7 +37,7 @@
     <parent>
         <artifactId>qKnow</artifactId>
         <groupId>tech.qiantong</groupId>
-        <version>2.0.0</version>
+        <version>2.0.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
@@ -55,7 +55,14 @@
             <version>${qknow.version}</version>
         </dependency>
 
-        <!-- 知识中心模块 -->
+        <!-- 知识图谱模块 -->
+        <dependency>
+            <groupId>tech.qiantong</groupId>
+            <artifactId>qknow-module-kg-biz</artifactId>
+            <version>${qknow.version}</version>
+        </dependency>
+
+        <!-- 知识库模块 -->
         <dependency>
             <groupId>tech.qiantong</groupId>
             <artifactId>qknow-module-kmc-biz</artifactId>
@@ -87,6 +94,14 @@
         <dependency>
             <groupId>tech.qiantong</groupId>
             <artifactId>qknow-module-ai-biz</artifactId>
+            <version>${qknow.version}</version>
+        </dependency>
+
+
+        <!-- AI 大模型相关模块 -->
+        <dependency>
+            <groupId>tech.qiantong</groupId>
+            <artifactId>qknow-module-kb-biz</artifactId>
             <version>${qknow.version}</version>
         </dependency>
 

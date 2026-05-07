@@ -47,7 +47,7 @@ export default {
   /**
    * 是否显示顶部导航
    */
-  topNav: false,
+  topNav: true,
 
   /**
    * 是否显示 tagsView
@@ -68,6 +68,12 @@ export default {
    * 是否显示动态标题
    */
   dynamicTitle: true,
+  
+  /**
+   * 导航栏中需要显示 Logo 的路由路径
+   * 当访问这些路径时，会在导航栏左侧动态插入 Logo（占用 200px 宽度）
+   */
+  navbarLogoRoutes: ['/kmc/knowledgeBase',],
 
   /**
    * @type {string | array} 'production' | ['production', 'development']

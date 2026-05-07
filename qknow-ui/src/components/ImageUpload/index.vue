@@ -69,7 +69,8 @@
       title="预览"
       width="800px"
       :append-to="$refs['app-container']"
-       draggable destroy-on-close
+      draggable
+      destroy-on-close
     >
       <img
         :src="dialogImageUrl"
@@ -102,12 +103,12 @@ const props = defineProps({
   // 是否显示提示
   isShowTip: {
     type: Boolean,
-    default: true
+    default: true,
   },
   // platform参数
   platForm: {
     type: String,
-    default: null
+    default: null,
   },
 });
 
@@ -122,41 +123,52 @@ const uploadImgUrl = ref(import.meta.env.VITE_APP_BASE_API + "/upload"); // 上�
 const headers = ref({ Authorization: "Bearer " + getToken() });
 const fileList = ref([]);
 const uploadData = ref({
-  platForm: props.platForm
+  platForm: props.platForm,
 });
 const showTip = computed(
   () => props.isShowTip && (props.fileType || props.fileSize)
 );
 
-watch(() => props.modelValue, val => {
-  if (val) {
-    // 首先将值转为数组
-    const list = Array.isArray(val) ? val : props.modelValue.split(",");
-    // 然后将数组转为对象数组
-    fileList.value = list.map(item => {
-      // 如果 item 是字符串，统一处理成对象
-      if (typeof item === "string") {
-        const url = item.indexOf(baseUrl) === -1 && props.platForm === '' ? baseUrl + item : item;
-        return { name: url, url };
-      }
-      // 如果 item 已经是对象，直接返回
-      return item;
-    });
-    // fileList.value = list.map(item => {
-    //   if (typeof item === "string") {
-    //     if (item.indexOf(baseUrl) === -1) {
-    //       item = { name: baseUrl + item, url: baseUrl + item };
-    //     } else {
-    //       item = { name: item, url: item };
-    //     }
-    //   }
-    //   return item;
-    // });
-  } else {
-    fileList.value = [];
-    return [];
-  }
-},{ deep: true, immediate: true });
+watch(
+  () => props.modelValue,
+  (val) => {
+    if (val) {
+      // 首先将值转为数组
+      const list = Array.isArray(val) ? val : props.modelValue.split(",");
+      // 然后将数组转为对象数组
+      fileList.value = list.map((item) => {
+        // 如果 item 是字符串，统一处理成对象
+        if (typeof item === "string") {
+          const url =
+            item.indexOf(baseUrl) === -1 && props.platForm === ""
+              ? baseUrl + item
+              : item;
+          if (url.indexOf("http") === -1) {
+            const path = import.meta.env.VITE_APP_BASE_API + "/profile" + url;
+            return { name: url, url: path };
+          }
+          return { name: url, url };
+        }
+        // 如果 item 已经是对象，直接返回
+        return item;
+      });
+      // fileList.value = list.map(item => {
+      //   if (typeof item === "string") {
+      //     if (item.indexOf(baseUrl) === -1) {
+      //       item = { name: baseUrl + item, url: baseUrl + item };
+      //     } else {
+      //       item = { name: item, url: item };
+      //     }
+      //   }
+      //   return item;
+      // });
+    } else {
+      fileList.value = [];
+      return [];
+    }
+  },
+  { deep: true, immediate: true }
+);
 
 // 上传前loading加载
 function handleBeforeUpload(file) {
@@ -166,7 +178,7 @@ function handleBeforeUpload(file) {
     if (file.name.lastIndexOf(".") > -1) {
       fileExtension = file.name.slice(file.name.lastIndexOf(".") + 1);
     }
-    isImg = props.fileType.some(type => {
+    isImg = props.fileType.some((type) => {
       if (file.type.indexOf(type) > -1) return true;
       if (fileExtension && fileExtension.indexOf(type) > -1) return true;
       return false;
@@ -199,7 +211,10 @@ function handleExceed() {
 // 上传成功回调
 function handleUploadSuccess(res, file) {
   if (res.url) {
-    uploadList.value.push({ name: '/profile/' + res.path + res.filename, url: res.url });
+    uploadList.value.push({
+      name: "/profile/" + res.path + res.filename,
+      url: res.url,
+    });
     uploadedSuccessfully();
   } else {
     number.value--;
@@ -212,7 +227,7 @@ function handleUploadSuccess(res, file) {
 
 // 删除图片
 function handleDelete(file) {
-  const findex = fileList.value.map(f => f.name).indexOf(file.name);
+  const findex = fileList.value.map((f) => f.name).indexOf(file.name);
   if (findex > -1 && uploadList.value.length === number.value) {
     fileList.value.splice(findex, 1);
     emit("update:modelValue", listToString(fileList.value));
@@ -223,7 +238,9 @@ function handleDelete(file) {
 // 上传结束处理
 function uploadedSuccessfully() {
   if (number.value > 0 && uploadList.value.length === number.value) {
-    fileList.value = fileList.value.filter(f => f.url !== undefined).concat(uploadList.value);
+    fileList.value = fileList.value
+      .filter((f) => f.url !== undefined)
+      .concat(uploadList.value);
     uploadList.value = [];
     number.value = 0;
     emit("update:modelValue", listToString(fileList.value));
@@ -239,7 +256,7 @@ function handleUploadError() {
 
 // 预览
 function handlePictureCardPreview(file) {
-  dialogImageUrl.value = file.url.replace(baseUrl,"");
+  dialogImageUrl.value = file.url.replace(baseUrl, "");
   dialogVisible.value = true;
 }
 
@@ -259,6 +276,6 @@ function listToString(list, separator) {
 <style scoped lang="scss">
 // .el-upload--picture-card 控制加号部分
 :deep(.hide .el-upload--picture-card) {
-    display: none;
+  display: none;
 }
 </style>

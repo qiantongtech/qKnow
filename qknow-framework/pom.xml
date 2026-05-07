@@ -36,7 +36,7 @@
     <parent>
         <groupId>tech.qiantong</groupId>
         <artifactId>qKnow</artifactId>
-        <version>2.0.0</version>
+        <version>2.0.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -50,6 +50,7 @@
         <module>qknow-quartz</module>
         <module>qknow-security</module>
         <module>qknow-generator</module>
+        <module>qknow-thirdparty</module>
         <module>qknow-file</module>
         <module>qknow-ai</module>
     </modules>

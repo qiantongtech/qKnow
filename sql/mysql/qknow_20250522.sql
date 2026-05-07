@@ -295,7 +295,7 @@ insert into system_menu values('1060', '生成代码', '114', '6', '#', '', '', 
 insert into system_menu  values (2000, '知识中心', 0, 1, 'kmc', NULL, NULL, NULL, 1, 0, 'M', '0', '0', '', '知识中心', '小桐', sysdate(), '', null, '');
 
 -- 知识分类
-insert into system_menu  values (2001, '知识分类', 2000, 0, 'kmcCategory', 'kmc/kmcCategory/index', '', NULL, 1, 0, 'C', '0', '0', 'kmc:kmcCategory:kmcCategory:list', '#', '小桐', sysdate(), '', null, '');
+insert into system_menu  values (2001, '知识分类', 2000, 1, 'kmcCategory', 'kmc/kmcCategory/index', '', NULL, 1, 0, 'C', '0', '0', 'kmc:kmcCategory:kmcCategory:list', '#', '小桐', sysdate(), '', null, '');
 insert into system_menu  values (2002, '知识分类导出', 2001, 1, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmc:kmcCategory:kmcCategory:export', '#', '小桐', sysdate(), '', null, '');
 insert into system_menu  values (2003, '知识分类导入', 2001, 2, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmc:kmcCategory:kmcCategory:import', '#', '小桐', sysdate(), '', null, '');
 insert into system_menu  values (2004, '知识分类详情', 2001, 3, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmc:kmcCategory:kmcCategory:query', '#', '小桐', sysdate(), '', null, '');
@@ -304,7 +304,7 @@ insert into system_menu  values (2006, '知识分类修改', 2001, 5, '', NULL, 
 insert into system_menu  values (2007, '知识分类删除', 2001, 6, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmc:kmcCategory:kmcCategory:remove', '#', '小桐', sysdate(), '', null, '');
 
 -- 文件管理
-insert into system_menu  values (2008, '文件管理', 2000, 1, 'kmcDocument', 'kmc/kmcDocument/index', '', NULL, 1, 0, 'C', '0', '0', 'kmcDocument:kmcDocument:document:list', '#', '小桐', sysdate(), '', null, '');
+insert into system_menu  values (2008, '文件管理', 2000, 2, 'kmcDocument', 'kmc/kmcDocument/index', '', NULL, 1, 0, 'C', '0', '0', 'kmcDocument:kmcDocument:document:list', '#', '小桐', sysdate(), '', null, '');
 insert into system_menu  values (2009, '知识文件导出', 2008, 1, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmcDocument:kmcDocument:document:export', '#', '小桐', sysdate(), '', null, '');
 insert into system_menu  values (2010, '知识文件导入', 2008, 2, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmcDocument:kmcDocument:document:import', '#', '小桐', sysdate(), '', null, '');
 insert into system_menu  values (2011, '知识文件详情', 2008, 3, '', NULL, NULL, NULL, 1, 0, 'F', '0', '0', 'kmcDocument:kmcDocument:document:query', '#', '小桐', sysdate(), '', null, '');
