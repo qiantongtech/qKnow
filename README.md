@@ -23,6 +23,8 @@
 
 ✨✨✨**专业版演示地址**✨✨✨ <a href="https://pro2.qknow.tech" target="_blank">https://pro2.qknow.tech</a> ，演示账号请 [联系客服获取](https://qknow.qiantong.tech/business.html)
 
+![framework.png](.gitee/framework.png)
+
 > 如果 qKnow 对您有帮助，请点个 **Star ⭐️**，这是我们持续更新的最大动力！ 🚀
 
 ## 🎯 qKnow 能帮你解决哪些场景？
