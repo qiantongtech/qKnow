@@ -48,10 +48,56 @@
       @getRouter="getRouter"
       class="topmenu-container"
       v-if="settingsStore.topNav"
+      :style="{ left: sidebar.hide ? '0' : '50px' }"
     />
 
     <div class="right-menu">
       <template v-if="appStore.device !== 'mobile'">
+        <div
+          style="width: 220px; margin-top: 10px"
+          v-if="showSelector && knowledgeBaseId"
+        >
+          <el-form
+            class="btn-style"
+            :model="route.params"
+            ref="queryRef"
+            :inline="true"
+            label-width="93px"
+          >
+            <el-form-item label="" prop="kbId">
+              <el-select
+                style="width: 200px"
+                :fit-input-width="true"
+                v-model="knowledgeBaseId"
+                @change="knowledgeBaseIdChange"
+                placeholder="请选择所属知识库"
+                popper-class="custom-option-style"
+              >
+                <el-option
+                  v-for="item in knowledgeBaseOptions"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="String(item.id)"
+                >
+                  <template #default>
+                    <template v-if="item.name.length > 10">
+                      <el-tooltip
+                        placement="left"
+                        :content="item.name"
+                        effect="dark"
+                      >
+                        <div class="ellipsis-option">{{ item.name }}</div>
+                      </el-tooltip>
+                    </template>
+                    <template v-else>
+                      <div class="ellipsis-option">{{ item.name }}</div>
+                    </template>
+                  </template>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+        </div>
         <!-- ---------------------------- 报工 --------------------------------- -->
         <el-popover
           trigger="hover"
@@ -507,6 +553,8 @@ import { loginOut } from "@/api/system/sso-auth.js";
 import { onMounted, ref, watch } from "vue";
 import moment from "moment";
 import { listNotice } from "@/api/system/system/notice";
+import picomatch from "picomatch";
+import { getKmcKnowledgeBaseList } from "@/api/kmc/knowledgeBase/knowledgeBase.js";
 import { getCurrentAppVersion } from "@/api/system/update/update.js";
 
 // 认证模式
@@ -519,9 +567,47 @@ const userStore = useUserStore();
 const settingsStore = useSettingsStore();
 const { proxy } = getCurrentInstance();
 const visitedViews = computed(() => useTagsViewStore().visitedViews);
+const sidebar = computed(() => useAppStore().sidebar);
 
 // 默认选择的消息类型
 const activeMsg = ref("first");
+
+const isFlag = ref(false);
+const showSelector = computed(() => isFlag.value);
+const knowledgeBaseOptions = ref([]);
+const knowledgeBaseId = ref("");
+
+watch(
+  () => route.params.kbId,
+  (val) => {
+    knowledgeBaseId.value = val;
+    if (val) {
+      getKnowledgeBase();
+    }
+  },
+  { immediate: true }
+);
+
+// 知识库或知识图谱下拉框逻辑
+function knowledgeBaseIdChange(value) {
+  // if (route.meta.activeMenu) {
+  //   proxy.$tab.closeOpenPage({
+  //     path: route.meta.activeMenu.replace(":kbId", value),
+  //     query: route.query
+  //   })
+  // }
+  const obj = {
+    path: "/kmc/" + value + "/kmcCategory",
+  };
+  proxy.$tab.openPage(obj);
+  proxy.$tab.closeOtherPage(obj);
+}
+
+function getKnowledgeBase() {
+  getKmcKnowledgeBaseList().then((res) => {
+    knowledgeBaseOptions.value = res.data;
+  });
+}
 
 //-----------------------以下报工内容-------------------------
 const data = reactive({
@@ -606,6 +692,37 @@ function clickViewMessage(msg) {
   viewData.value.content = msg.noticeContent;
   viewData.value.createTime = msg.time;
 }
+
+function handleOpenNotice() {}
+
+/**
+ * 检查路径是否匹配任何模式
+ * @param {string} path - 要检查的路径
+ * @param {string[]} patterns - 模式数组
+ * @returns {boolean} 是否匹配
+ */
+function matchPatterns(path, patterns) {
+  return patterns.some((pattern) => picomatch(pattern)(path));
+}
+
+function getRouter(path) {
+  const paths = ["kmc"];
+  const notPaths = ["/kmc/knowledgeBase/**"];
+  const firstPath = path.split("/")[1];
+
+  console.log("path", path);
+  //处理特殊页面的导航logo展开部分
+  if (path == "/kmc/knowledgeBase") {
+    const appStore = useAppStore();
+    appStore.sidebar.opened = true;
+  }
+  if (paths.includes(firstPath) && !matchPatterns(path, notPaths)) {
+    isFlag.value = true;
+  } else {
+    isFlag.value = false;
+  }
+}
+
 //请假了
 function offFromWork() {
   proxy.$modal
@@ -964,6 +1081,23 @@ function clearNotification() {
 </script>
 
 <style lang='scss' scoped>
+.ellipsis-option {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.custom-option-style .el-select-dropdown__item {
+  display: flex;
+  align-items: center;
+}
+
+:deep(.el-select__wrapper) {
+  box-shadow: 0 0 0 1px #dcdfe6 inset;
+  border-radius: 2px !important;
+}
+
 .message-list {
   display: flex;
   flex-direction: column;

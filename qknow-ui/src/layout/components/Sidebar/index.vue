@@ -32,16 +32,25 @@
 
 <template>
   <div
-    :class="{ 'has-logo': showLogo }"
+    :class="{ 'has-logo': showLogo, 'navbar-logo': displayLogo }"
     :style="{
       backgroundColor:
         sideTheme === 'theme-dark'
           ? variables.menuBackground
           : variables.menuLightBackground,
+      height: sidebar.hide ? '60px' : '100%',
     }"
   >
-    <logo v-if="showLogo" :collapse="isCollapse" />
-    <el-scrollbar :class="sideTheme" wrap-class="scrollbar-wrapper">
+    <logo
+      v-if="showLogo"
+      :collapse="isCollapse"
+      :class="{ 'navbar-logo': displayLogo }"
+    />
+    <el-scrollbar
+      :class="sideTheme"
+      wrap-class="scrollbar-wrapper"
+      v-if="!sidebar.hide"
+    >
       <el-menu
         :default-active="activeMenu"
         :collapse="isCollapse"
@@ -79,6 +88,7 @@ import variables from "@/assets/system/styles/variables.module.scss";
 import useAppStore from "@/store/system/app";
 import useSettingsStore from "@/store/system/settings";
 import usePermissionStore from "@/store/system/permission";
+import defaultSettings from "@/settings";
 
 const route = useRoute();
 const appStore = useAppStore();
@@ -90,6 +100,7 @@ const showLogo = computed(() => settingsStore.sidebarLogo);
 const sideTheme = computed(() => settingsStore.sideTheme);
 const theme = computed(() => settingsStore.theme);
 const isCollapse = computed(() => !appStore.sidebar.opened);
+const sidebar = computed(() => useAppStore().sidebar);
 
 const activeMenu = computed(() => {
   const { meta, path } = route;
@@ -99,6 +110,18 @@ const activeMenu = computed(() => {
     return meta.activeMenu;
   }
   return path;
+});
+
+const displayLogo = computed(() => {
+  console.log(
+    "defaultSettings.navbarLogoRoutes",
+    defaultSettings.navbarLogoRoutes
+  );
+  const navbarLogoRoutes = defaultSettings.navbarLogoRoutes || [];
+  const isSpecialRoute = navbarLogoRoutes.some((logoPath) =>
+    route.path.startsWith(logoPath)
+  );
+  return isSpecialRoute;
 });
 </script>
 
@@ -115,5 +138,10 @@ const activeMenu = computed(() => {
   ::v-deep div .nest-menu li.is-active {
     background-color: var(--bgColor) !important;
   }
+}
+.navbar-logo {
+  // background-color: #fff !important;
+  // webkit-box-shadow: 2px 0 6px rgb(255 255 255 / 35%) !important;
+  // box-shadow: 2px 0 6px rgb(255 255 255 / 35%) !important;
 }
 </style>

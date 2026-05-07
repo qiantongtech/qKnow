@@ -86,7 +86,7 @@ public class WeaviateConfig {
     private String scheme;
     @Value("${weaviate.apiKey:}")
     private String apiKey;
-    @Value("${weaviate.host:localhost:8080}")
+    @Value("${weaviate.host:}")
     private String host;
 
     /**

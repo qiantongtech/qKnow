@@ -1,68 +1,99 @@
 /*
- * Copyright © 2026 Qiantong Technology Co., Ltd.
- * qKnow Knowledge Platform
+ * Copyright (c) 2026 Jiangsu Qiantong Technology Co., Ltd.
  *  *
- * License:
- * Released under the Apache License, Version 2.0.
- * You may use, modify, and distribute this software for commercial purposes
- * under the terms of the License.
+ * Software Name: qKnow Knowledge Platform (Business Edition)
+ * Software Copyright Registration No. 15980140
  *  *
- * Special Notice:
- * All derivative versions are strictly prohibited from modifying or removing
- * the default system logo and copyright information.
- * For brand customization, please apply for brand customization authorization via official channels.
+ * [RIGHTS AND LICENSE STATEMENT]
+ * This file contains non-public commercial source code of which Jiangsu Qiantong
+ * Technology Co., Ltd. lawfully possesses complete intellectual property rights.
  *  *
- * More information: https://qknow.qiantong.tech/business.html
+ * Access and use are limited to entities or individuals who have signed a valid
+ * commercial license agreement, within the scope stipulated in the agreement.
+ * The "accessibility" of this source code is premised on lawful authorization
+ * and does not constitute any form of transfer of intellectual property rights
+ * or implied licensing.
+ *  *
+ * [PROHIBITIONS]
+ * Unless explicitly agreed in the license agreement, the following acts in any
+ * form are strictly prohibited:
+ * 1. Copying, disseminating, disclosing, selling, renting, or redistributing
+ * this source code;
+ * 2. Providing the software's functionality to third parties via SaaS, PaaS,
+ * cloud hosting, or other means;
+ * 3. Using this software or its derivative versions to develop products that
+ * compete with the Right Holder;
+ * 4. Providing or displaying this source code or related technical information
+ * to unauthorized third parties;
+ * 5. Tampering with, circumventing, or destroying copyright notices, license
+ * verifications, or other technical protection measures.
+ *  *
+ * [LEGAL LIABILITY]
+ * Any unauthorized use constitutes an infringement of trade secrets and
+ * intellectual property rights.
+ *  *
+ * The Right Holder will strictly pursue liability for breach of contract and
+ * infringement in accordance with the commercial agreement and laws such as
+ * the "Copyright Law of the People's Republic of China" and the "Anti-Unfair
+ * Competition Law".
  *  *
  * ============================================================================
  *  *
- * 版权所有 © 2026 江苏千桐科技有限公司
- * qKnow 知识平台（开源版）
+ * Copyright (c) 2026 江苏千桐科技有限公司
  *  *
- * 许可协议：
- * 本项目基于 Apache License 2.0 开源协议发布，
- * 允许在遵守协议的前提下进行商用、修改和分发。
+ * 软件名称：qKnow 知识平台（商业版） | 软著登字第15980140号
  *  *
- * 特别说明：
- * 所有衍生版本不得修改或移除系统默认的 LOGO 和版权信息；
- * 如需定制品牌，请通过官方渠道申请品牌定制授权。
+ * 【权利与授权声明】
+ * 本文件属于江苏千桐科技有限公司依法享有完全知识产权的非公开商业源代码。
+ * 仅限已签署有效商业授权合同的单位或个人在约定范围内查阅和使用。
+ * 源代码的“可访问性”均以合法授权为前提，不构成任何形式的知识产权转让或默示授权。
  *  *
- * 更多信息请访问：https://qknow.qiantong.tech/business.html
+ * 【禁止事项】
+ * 除授权合同明确约定外，严禁任何形式的：
+ * 1. 复制、传播、披露、出售、出租或再分发本源代码；
+ * 2. 通过 SaaS、PaaS、云托管等方式向第三方提供本软件功能；
+ * 3. 将本软件或其衍生版本用于开发与权利人构成竞争的产品；
+ * 4. 向未授权第三方提供或展示本源代码或相关技术信息；
+ * 5. 篡改、规避或破坏版权标识、授权校验及其他技术保护措施。
+ *  *
+ * 【法律责任】
+ * 任何未经授权的利用行为，均构成对商业秘密及知识产权的侵害。
+ * 权利人将依据商业合同及《中华人民共和国著作权法》《反不正当竞争法》
+ * 等法律法规，严厉追究违约与侵权责任。
  */
 
 package tech.qiantong.qknow.module.kmc.controller.admin.kmcDocument;
 
-import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
-import java.util.Arrays;
 import cn.hutool.core.date.DateUtil;
-
-import java.util.List;
-import java.util.Map;
-
+import cn.hutool.core.lang.Assert;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import tech.qiantong.qknow.common.core.domain.AjaxResult;
-import tech.qiantong.qknow.common.core.page.PageParam;
 import tech.qiantong.qknow.common.annotation.Log;
 import tech.qiantong.qknow.common.core.controller.BaseController;
+import tech.qiantong.qknow.common.core.domain.AjaxResult;
 import tech.qiantong.qknow.common.core.domain.CommonResult;
+import tech.qiantong.qknow.common.core.page.PageParam;
 import tech.qiantong.qknow.common.core.page.PageResult;
 import tech.qiantong.qknow.common.enums.BusinessType;
-import tech.qiantong.qknow.common.utils.object.BeanUtils;
-import tech.qiantong.qknow.common.utils.poi.ExcelUtil;
+import tech.qiantong.qknow.common.core.utils.object.BeanUtils;
+import tech.qiantong.qknow.common.core.utils.poi.ExcelUtil;
 import tech.qiantong.qknow.module.kmc.controller.admin.kmcDocument.vo.KmcDocumentPageReqVO;
 import tech.qiantong.qknow.module.kmc.controller.admin.kmcDocument.vo.KmcDocumentRespVO;
 import tech.qiantong.qknow.module.kmc.controller.admin.kmcDocument.vo.KmcDocumentSaveReqVO;
+import tech.qiantong.qknow.module.kmc.controller.admin.kmcDocument.vo.KmcDocumentTrackReqVO;
 import tech.qiantong.qknow.module.kmc.convert.kmcDocument.KmcDocumentConvert;
 import tech.qiantong.qknow.module.kmc.dal.dataobject.document.KmcDocumentDO;
 import tech.qiantong.qknow.module.kmc.service.kmcDocument.IKmcDocumentService;
+
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import tech.qiantong.qknow.thirdparty.domain.dify.enums.DocFormEnum;
+import java.util.*;
 
 /**
  * 知识文件Controller
@@ -75,11 +106,9 @@ import tech.qiantong.qknow.module.kmc.service.kmcDocument.IKmcDocumentService;
 @RequestMapping("/kmcDocument/document")
 @Validated
 public class KmcDocumentController extends BaseController {
+
     @Resource
     private IKmcDocumentService kmcDocumentService;
-
-    @Value("${upload.filePath}")
-    private String uploadFilePath;
 
     @Operation(summary = "查询知识文件列表")
     @PreAuthorize("@ss.hasPermi('kmcDocument:kmcDocument:document:list')")
@@ -124,11 +153,15 @@ public class KmcDocumentController extends BaseController {
     @PreAuthorize("@ss.hasPermi('kmcDocument:kmcDocument:document:add')")
     @Log(title = "知识文件", businessType = BusinessType.INSERT)
     @PostMapping
-    public CommonResult<Long> add(@Valid @RequestBody KmcDocumentSaveReqVO kmcDocument) {
+    public CommonResult<Integer> add(@Valid @RequestBody KmcDocumentSaveReqVO kmcDocument) {
         kmcDocument.setCreatorId(getUserId());
         kmcDocument.setCreateBy(getNickName());
         kmcDocument.setCreateTime(DateUtil.date());
         kmcDocument.setWorkspaceId(super.getWorkSpaceId());
+        if (Objects.equals(kmcDocument.getDocForm(), DocFormEnum.QA_MODEL.getType())){
+            Assert.notBlank(kmcDocument.getMode(),"对话模型不能为空");
+            Assert.notBlank(kmcDocument.getChatModelProvider(),"对话模型不能为空");
+        }
         return CommonResult.toAjax(kmcDocumentService.createKmcDocument(kmcDocument));
     }
 
@@ -159,10 +192,28 @@ public class KmcDocumentController extends BaseController {
     }
 
     @Operation(summary = "获取多少种类型及每种类型下面的总文件数量")
-    @GetMapping("/getFileTypes")
-    public CommonResult<List<Map<String, Object>>> getFileTypes() {
-        List<Map<String, Object>> list = kmcDocumentService.getFileTypes();
+    @GetMapping("/getFileTypes/{knowledgeBaseId}")
+    public CommonResult<List<Map<String, Object>>> getFileTypes(@PathVariable("knowledgeBaseId")Long knowledgeBaseId) {
+        List<Map<String, Object>> list = kmcDocumentService.getFileTypes(knowledgeBaseId);
         return CommonResult.success(list);
     }
 
+    @Operation(summary = "文件跟踪统计")
+    @PostMapping("/trackCount")
+    public CommonResult<Boolean> trackCount(@Valid @RequestBody List<KmcDocumentTrackReqVO> documentTrackList) {
+        return CommonResult.success(kmcDocumentService.trackCount(documentTrackList, getUserId(), getUsername()));
+    }
+
+    @Operation(summary = "获取该知识库下的第一个文档")
+    @GetMapping("/getOne/{knowledgeBaseId}")
+    public CommonResult<KmcDocumentRespVO> getOne(@PathVariable("knowledgeBaseId") Long knowledgeBaseId) {
+        KmcDocumentDO kmcDocumentDO = kmcDocumentService.getKnowledgeBaseOne(knowledgeBaseId);
+        return CommonResult.success(BeanUtils.toBean(kmcDocumentDO, KmcDocumentRespVO.class));
+    }
+
+    @Operation(summary = "检查文件名称是否有重复的")
+    @GetMapping("/checkFileName")
+    public CommonResult<String> checkFileName(Long id, String fileNames, Long knowledgeBaseId) {
+        return CommonResult.success(kmcDocumentService.checkFileName(id, fileNames, knowledgeBaseId));
+    }
 }

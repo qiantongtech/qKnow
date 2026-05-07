@@ -32,7 +32,7 @@
 
 package tech.qiantong.qknow.security.web.exception;
 
-import cn.hutool.core.convert.Convert;
+import tech.qiantong.qknow.common.core.text.Convert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;

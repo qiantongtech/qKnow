@@ -83,11 +83,11 @@ public class ResourcesConfig implements WebMvcConfigurer
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/dist/admin/static/");
 
         /** 页面静态化Vue3 */
-        registry.addResourceHandler("/assets/**", "/favicon.ico")
-                .addResourceLocations("classpath:/dist/admin/assets/")
-                .addResourceLocations("classpath:/dist/sso/assets/")
-                .addResourceLocations("classpath:/dist/sso/")
-        ;
+//        registry.addResourceHandler("/assets/**", "/favicon.ico")
+//                .addResourceLocations("classpath:/dist/admin/assets/")
+//                .addResourceLocations("classpath:/dist/sso/assets/")
+//                .addResourceLocations("classpath:/dist/sso/")
+//        ;
 
         /** 页面静态化 SSO 认证登录页面 */
 //        registry.addResourceHandler("/sso/v1/**").addResourceLocations("classpath:/dist/sso/");
@@ -97,6 +97,10 @@ public class ResourcesConfig implements WebMvcConfigurer
         registry.addResourceHandler("/swagger-ui/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/springfox-swagger-ui/")
                 .setCacheControl(CacheControl.maxAge(5, TimeUnit.HOURS).cachePublic());;
+
+        /** qKnow知识平台文档 */
+        registry.addResourceHandler("/docs/**").addResourceLocations("classpath:/docs/dist/");
+        registry.addResourceHandler("/docs/assets/**").addResourceLocations("classpath:/docs/dist/assets/");
     }
 
     /**

@@ -34,6 +34,8 @@ package tech.qiantong.qknow.module.system.controller.admin.system;
 
 import java.io.IOException;
 import java.util.List;
+
+import cn.hutool.core.convert.Convert;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
@@ -53,7 +55,7 @@ import tech.qiantong.qknow.common.core.controller.BaseController;
 import tech.qiantong.qknow.common.core.domain.AjaxResult;
 import tech.qiantong.qknow.common.core.domain.entity.SysDictType;
 import tech.qiantong.qknow.common.core.page.TableDataInfo;
-import tech.qiantong.qknow.common.core.text.Convert;
+
 import tech.qiantong.qknow.common.enums.BusinessType;
 import tech.qiantong.qknow.common.utils.poi.ExcelUtil;
 import tech.qiantong.qknow.generator.service.IGenTableService;

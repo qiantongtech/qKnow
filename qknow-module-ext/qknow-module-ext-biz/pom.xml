@@ -148,9 +148,16 @@
             <artifactId>qknow-module-app-api</artifactId>
             <version>${qknow.version}</version>
         </dependency>
+        
         <dependency>
             <groupId>tech.qiantong</groupId>
             <artifactId>qknow-module-ext-api</artifactId>
+            <version>${qknow.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>tech.qiantong</groupId>
+            <artifactId>qknow-module-kg-api</artifactId>
             <version>${qknow.version}</version>
         </dependency>
 
