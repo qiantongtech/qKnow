@@ -36,6 +36,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import cn.hutool.core.convert.Convert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.qiantong.qknow.common.annotation.DataScope;
@@ -44,7 +46,7 @@ import tech.qiantong.qknow.common.core.domain.TreeSelect;
 import tech.qiantong.qknow.common.core.domain.entity.SysDept;
 import tech.qiantong.qknow.common.core.domain.entity.SysRole;
 import tech.qiantong.qknow.common.core.domain.entity.SysUser;
-import tech.qiantong.qknow.common.core.text.Convert;
+
 import tech.qiantong.qknow.common.exception.ServiceException;
 import tech.qiantong.qknow.common.utils.SecurityUtils;
 import tech.qiantong.qknow.common.utils.StringUtils;

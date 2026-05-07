@@ -37,6 +37,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import cn.hutool.core.convert.Convert;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +61,7 @@ import tech.qiantong.qknow.common.constant.GenConstants;
 import tech.qiantong.qknow.common.core.controller.BaseController;
 import tech.qiantong.qknow.common.core.domain.AjaxResult;
 import tech.qiantong.qknow.common.core.page.TableDataInfo;
-import tech.qiantong.qknow.common.core.text.Convert;
+
 import tech.qiantong.qknow.common.enums.BusinessType;
 import tech.qiantong.qknow.common.utils.SecurityUtils;
 import tech.qiantong.qknow.common.utils.sql.SqlUtil;

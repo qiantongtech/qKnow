@@ -225,6 +225,14 @@
         transform: translate3d(-$base-sidebar-width, 0, 0);
       }
     }
+
+     .sidebarHide .fixed-header .navbar{
+      margin-left: 0;
+    }
+
+    &.big-logo .sidebarHide .fixed-header .navbar{
+      margin-left: 210px !important;
+    }
   }
 
   .withoutAnimation {

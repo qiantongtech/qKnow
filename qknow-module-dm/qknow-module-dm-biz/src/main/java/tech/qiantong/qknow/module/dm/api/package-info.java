@@ -30,7 +30,4 @@
  * 更多信息请访问：https://qknow.qiantong.tech/business.html
  */
 
-/**
- * API 包，实现其他模块的 API
- */
-package tech.qiantong.qknow.module.kmc.api;
+

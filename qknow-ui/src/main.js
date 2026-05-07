@@ -87,9 +87,13 @@ import ImagePreview from "@/components/ImagePreview"
 import TreeSelect from '@/components/TreeSelect'
 // 字典标签组件
 import DictTag from '@/components/DictTag'
+// 表单提示组件
+import QtFormItem from '@/components/QtFormItem';
+//标签组件
+import Tag from '@/components/Tag';
 
-const app = createApp(App)
-app.use(AniviaComponents)
+const app = createApp(App);
+app.use(AniviaComponents);
 
 // 全局方法挂载
 app.config.globalProperties.useDict = useDict
@@ -105,6 +109,7 @@ app.config.globalProperties.$bus = bus;
 
 // 全局组件挂载
 app.component('DictTag', DictTag)
+app.component('Tag', Tag);
 app.component('Pagination', Pagination)
 app.component('TreeSelect', TreeSelect)
 app.component('FileUpload', FileUpload)
@@ -112,7 +117,8 @@ app.component('ImageUpload', ImageUpload)
 app.component('ImagePreview', ImagePreview)
 app.component('RightToolbar', RightToolbar)
 app.component('RightToolbar2', RightToolbar2)
-app.component('Editor', Editor)
+app.component('Editor', Editor);
+app.component('QtFormItem', QtFormItem);
 app.use(router)
 app.use(store)
 app.use(plugins)

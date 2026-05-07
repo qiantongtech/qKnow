@@ -34,6 +34,8 @@ package tech.qiantong.qknow.security.aspectj;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.hutool.core.convert.Convert;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -43,7 +45,7 @@ import tech.qiantong.qknow.common.core.domain.BaseEntity;
 import tech.qiantong.qknow.common.core.domain.entity.SysRole;
 import tech.qiantong.qknow.common.core.domain.entity.SysUser;
 import tech.qiantong.qknow.common.core.domain.model.LoginUser;
-import tech.qiantong.qknow.common.core.text.Convert;
+
 import tech.qiantong.qknow.common.utils.SecurityUtils;
 import tech.qiantong.qknow.common.utils.StringUtils;
 import tech.qiantong.qknow.security.context.PermissionContextHolder;

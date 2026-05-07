@@ -36,6 +36,7 @@
     mode="horizontal"
     @select="handleSelect"
     :ellipsis="false"
+    class="custom-topmenu"
   >
     <template v-for="(item, index) in topMenus">
       <el-menu-item
@@ -123,39 +124,48 @@ const topMenus = computed(() => {
 
 // 设置子路由
 const childrenMenus = computed(() => {
-  let childrenMenus = [];
-  routers.value.map((router) => {
-    for (let item in router.children) {
-      if (router.children[item].parentPath === undefined) {
+  let arr = [];
+  routers.value.forEach((router) => {
+    if (!router.children) {
+      return;
+    }
+    router.children.forEach((child) => {
+      if (child.parentPath === undefined) {
         if (router.path === "/") {
-          router.children[item].path = "/" + router.children[item].path;
+          child.path = "/" + child.path;
         } else {
-          if (!isHttp(router.children[item].path)) {
-            router.children[item].path =
-              router.path + "/" + router.children[item].path;
+          if (!isHttp(child.path)) {
+            child.path = router.path + "/" + child.path;
           }
         }
-        router.children[item].parentPath = router.path;
+        child.parentPath = router.path;
       }
-      childrenMenus.push(router.children[item]);
-    }
+      arr.push(child);
+    });
   });
-  return constantRoutes.concat(childrenMenus);
+  return arr;
 });
+
+function isRootGroupChild(path) {
+  return childrenMenus.value.some(
+    (item) =>
+      item.parentPath === "" &&
+      (item.path === path || path.startsWith(`${item.path}/`))
+  );
+}
 
 // 默认激活的菜单
 const activeMenu = computed(() => {
   const path = route.path;
   let activePath = path;
-  console.log(route, "菜单");
   emit("getRouter", path);
 
-  // 如果是根路径，选择第一个可见的菜单项
   if (path === "/index") {
     const firstMenu = topMenus.value[0];
-    if (firstMenu) {
-      activePath = firstMenu.path;
-    }
+    if (firstMenu) activePath = firstMenu.path;
+  } else if (isRootGroupChild(path)) {
+    activePath = "";
+    if (!route.meta.link) appStore.toggleSideBarHide(false);
   } else if (
     path !== undefined &&
     path.lastIndexOf("/") > 0 &&
@@ -163,14 +173,17 @@ const activeMenu = computed(() => {
   ) {
     const tmpPath = path.substring(1, path.length);
     activePath = "/" + tmpPath.substring(0, tmpPath.indexOf("/"));
-    if (!route.meta.link) {
-      appStore.toggleSideBarHide(false);
-    }
+    if (!route.meta.link) appStore.toggleSideBarHide(false);
   } else if (!route.children) {
     activePath = path;
     appStore.toggleSideBarHide(true);
   }
   activeRoutes(activePath);
+
+  // 根据路由配置，直接控制左侧菜单的隐藏
+  if (route.meta.sidebar === false) {
+    appStore.toggleSideBarHide(true);
+  }
   return activePath;
 });
 
