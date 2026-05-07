@@ -84,9 +84,9 @@ public class WeaviateConfig {
 
     @Value("${weaviate.scheme:http}")
     private String scheme;
-    @Value("${weaviate.apiKey:}")
+    @Value("${weaviate.apiKey}")
     private String apiKey;
-    @Value("${weaviate.host:}")
+    @Value("${weaviate.host}")
     private String host;
 
     /**
