@@ -41,6 +41,8 @@ import extPublicRouter from './ext/public/index.js'
 import appPublicRouter from './app/public/index.js'
 /* 知识库模块公共路由 */
 import KmcPublicRouter from './kmc/public/index.js';
+/* Bot模块动态路由 */
+import kbPublicRouter from './kb/public/index.js';
 
 /* 系统模块动态路由 */
 import systemDynamicRouter from './system/dynamic/index.js'
@@ -75,6 +77,7 @@ export const constantRoutes = [
     ...extPublicRouter,
     ...appPublicRouter,
     ...KmcPublicRouter,
+    ...kbPublicRouter
 ]
 
 // 动态路由，基于用户权限动态去加载
