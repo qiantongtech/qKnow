@@ -138,18 +138,24 @@
         @pagination="getList"
       />
     </div>
-    <el-dialog :title="title" v-model="open" width="800px" :append-to="$refs['app-container']" draggable>
+    <el-dialog
+      :title="title"
+      v-model="open"
+      width="800px"
+      :append-to="$refs['app-container']"
+      draggable
+    >
       <template #header="{ close, titleId, titleClass }">
         <span role="heading" aria-level="2" class="el-dialog__title">
           {{ title }}
         </span>
       </template>
       <el-form
-          ref="knowledgeBaseRef"
-          :model="form"
-          :rules="rules"
-          label-width="auto"
-          @submit.prevent
+        ref="knowledgeBaseRef"
+        :model="form"
+        :rules="rules"
+        label-width="auto"
+        @submit.prevent
       >
         <el-row :gutter="24">
           <el-col :span="24">
@@ -163,26 +169,24 @@
         <el-row :gutter="24">
           <el-col :span="24">
             <qt-form-item
-                label="索引方式"
-                prop="indexingTechnique"
-                class="index-form-item"
-                :tip="form.indexingTechnique === 'high_quality'
-                ? '调用高级模型来处理文本以实现更精确的检索，可以相对大语言模型生成高质量的回答。'
-                : '每个块使用 10 个关键词进行检索，不消耗tokens，但会降低检索准确性。'"
+              label="索引方式"
+              prop="indexingTechnique"
+              class="index-form-item"
+              :tip="
+                form.indexingTechnique === 'high_quality'
+                  ? '调用高级模型来处理文本以实现更精确的检索，可以相对大语言模型生成高质量的回答。'
+                  : '每个块使用 10 个关键词进行检索，不消耗tokens，但会降低检索准确性。'
+              "
             >
               <el-select
-                  v-model="form.indexingTechnique"
-                  placeholder="请选择索引方式"
-                  :disabled="isDisabled && form.indexingTechnique === 'high_quality'"
+                v-model="form.indexingTechnique"
+                placeholder="请选择索引方式"
+                :disabled="
+                  isDisabled && form.indexingTechnique === 'high_quality'
+                "
               >
-                <el-option
-                    label="高质量 (推荐)"
-                    value="high_quality"
-                />
-                <el-option
-                    label="经济"
-                    value="economy"
-                />
+                <el-option label="高质量 (推荐)" value="high_quality" />
+                <el-option label="经济" value="economy" />
               </el-select>
             </qt-form-item>
           </el-col>
@@ -191,21 +195,25 @@
         <!-- Embedding 模型 -->
         <el-row :gutter="24">
           <el-col :span="24">
-            <el-form-item label="Embedding模型" prop="embeddingModel" class="emdedding-form-item">
+            <el-form-item
+              label="Embedding模型"
+              prop="embeddingModel"
+              class="emdedding-form-item"
+            >
               <el-select
-                  v-model="form.embeddingModel"
-                  placeholder="请选择Embedding模型"
+                v-model="form.embeddingModel"
+                placeholder="请选择Embedding模型"
               >
                 <el-option-group
-                    v-for="group in embeddingModel"
-                    :key="group.label.zh_Hans"
-                    :label="group.label.zh_Hans"
+                  v-for="group in embeddingModel"
+                  :key="group.label.zh_Hans"
+                  :label="group.label.zh_Hans"
                 >
                   <el-option
-                      v-for="item in group.models"
-                      :key="item.model"
-                      :label="item.model"
-                      :value="item.model"
+                    v-for="item in group.models"
+                    :key="item.model"
+                    :label="item.model"
+                    :value="item.model"
                   />
                 </el-option-group>
               </el-select>
@@ -215,12 +223,18 @@
 
         <el-row :gutter="24">
           <el-col :span="24">
-            <el-form-item label="封面图" prop="coverImage" class="image-form-item">
-              <image-upload v-model="form.coverImage"
-                            :limit="1"
-                            :fileSize="10"
-                            :isShowTip="true"
-                            :platForm="platForm" />
+            <el-form-item
+              label="封面图"
+              prop="coverImage"
+              class="image-form-item"
+            >
+              <image-upload
+                v-model="form.coverImage"
+                :limit="1"
+                :fileSize="10"
+                :isShowTip="true"
+                :platForm="platForm"
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -230,24 +244,29 @@
             <el-form-item label="标签" prop="tags" class="tag-form-item">
               <div class="flex gap-2">
                 <el-tag
-                    v-for="(tag, index) in form.items.row"
-                    :key="index"
-                    closable
-                    :disable-transitions="false"
-                    @close="handleClose(tag)"
+                  v-for="(tag, index) in form.items.row"
+                  :key="index"
+                  closable
+                  :disable-transitions="false"
+                  @close="handleClose(tag)"
                 >
                   {{ tag.name }}
                 </el-tag>
                 <el-input
-                    v-if="inputVisible"
-                    ref="InputRef"
-                    v-model="inputValue"
-                    class="w-20"
-                    size="small"
-                    @keyup.enter="handleInputConfirm"
-                    @blur="handleInputConfirm"
+                  v-if="inputVisible"
+                  ref="InputRef"
+                  v-model="inputValue"
+                  class="w-20"
+                  size="small"
+                  @keyup.enter="handleInputConfirm"
+                  @blur="handleInputConfirm"
                 />
-                <el-button v-else class="button-new-tag" size="small" @click="showInput">
+                <el-button
+                  v-else
+                  class="button-new-tag"
+                  size="small"
+                  @click="showInput"
+                >
                   + 添加标签
                 </el-button>
               </div>
@@ -255,17 +274,20 @@
           </el-col>
         </el-row>
 
-        <el-row :gutter="24" >
+        <el-row :gutter="24">
           <el-col :span="24">
             <el-form-item
-                class="status-form-item"
-                label="状态:"
-                prop="validFlag"
-                style="display: flex;
-                  align-items: center;"
+              class="status-form-item"
+              label="状态:"
+              prop="validFlag"
+              style="display: flex; align-items: center"
             >
               <el-radio-group v-model="form.validFlag">
-                <el-radio v-for="item in kmc_know_valid " :key="item.value" :label="item.value === 'true'">
+                <el-radio
+                  v-for="item in kmc_know_valid"
+                  :key="item.value"
+                  :label="item.value === 'true'"
+                >
                   {{ item.label }}
                 </el-radio>
               </el-radio-group>
@@ -275,13 +297,17 @@
 
         <el-row :gutter="24">
           <el-col :span="24">
-            <el-form-item label="描述" prop="description" class="desc-form-item">
+            <el-form-item
+              label="描述"
+              prop="description"
+              class="desc-form-item"
+            >
               <el-input
-                  type="textarea"
-                  v-model="form.description"
-                  placeholder="请输入描述"
-                  maxlength="256"
-                  show-word-limit
+                type="textarea"
+                v-model="form.description"
+                placeholder="请输入描述"
+                maxlength="256"
+                show-word-limit
               />
             </el-form-item>
           </el-col>
@@ -290,7 +316,9 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button size="mini" @click="cancel">取 消</el-button>
-          <el-button type="primary" size="mini" @click="submitForm">确 定</el-button>
+          <el-button type="primary" size="mini" @click="submitForm"
+            >确 定</el-button
+          >
         </div>
       </template>
     </el-dialog>
@@ -298,7 +326,7 @@
 </template>
 
 <script setup name="KnowledgeBase">
-import { nextTick, ref, reactive, toRefs } from 'vue';
+import { nextTick, ref, reactive, toRefs } from "vue";
 import {
   listKnowledgeBase,
   getRole,
@@ -307,13 +335,13 @@ import {
   updateKnowledgeBaseRole,
   changeKnowledgeValid,
   getTextEmbedding,
-  delKnowledgeBase
+  delKnowledgeBase,
 } from "@/api/kmc/knowledgeBase/knowledgeBase";
 import Card from "./components/card.vue";
-import {Trophy} from "@element-plus/icons-vue";
+import { Trophy } from "@element-plus/icons-vue";
 
 const { proxy } = getCurrentInstance();
-const { kmc_know_valid } = proxy.useDict( 'kmc_know_valid');
+const { kmc_know_valid } = proxy.useDict("kmc_know_valid");
 
 const knowledgeBaseList = ref([]);
 const open = ref(false);
@@ -332,8 +360,8 @@ const router = useRouter();
 // 响应式变量
 const isDisabled = ref(false);
 const embeddingModel = ref([]);
-const platForm = ref('local');
-const inputValue = ref('');
+const platForm = ref("local");
+const inputValue = ref("");
 const inputVisible = ref(false);
 const InputRef = ref(null);
 const isAdd = ref(true); // 默认为新增模式
@@ -361,15 +389,21 @@ const data = reactive({
     validFlag: null,
   },
   form: {
-    items: { row: [] } // 标签数组容器
+    items: { row: [] }, // 标签数组容器
   },
   rules: {
-    name: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
-    validFlag: [{ required: true, message: '状态不能为空', trigger: 'blur' }],
-    indexingTechnique: [{ required: true, message: '索引方式不能为空', trigger: 'blur' }],
-    searchMethod: [{ required: true, message: '检索方式不能为空', trigger: 'blur' }],
-    embeddingModel: [{ required: true, message: '请选择一个模型', trigger: 'change' }]
-  }
+    name: [{ required: true, message: "名称不能为空", trigger: "blur" }],
+    validFlag: [{ required: true, message: "状态不能为空", trigger: "blur" }],
+    indexingTechnique: [
+      { required: true, message: "索引方式不能为空", trigger: "blur" },
+    ],
+    searchMethod: [
+      { required: true, message: "检索方式不能为空", trigger: "blur" },
+    ],
+    embeddingModel: [
+      { required: true, message: "请选择一个模型", trigger: "change" },
+    ],
+  },
 });
 
 const vectorData = ref({
@@ -377,14 +411,14 @@ const vectorData = ref({
   rerankingModelName: null,
   topK: 1,
   scoreThresholdEnabled: false,
-  scoreThreshold: 0
+  scoreThreshold: 0,
 });
 const fullTextData = ref({
   rerankingEnable: null,
   rerankingModelName: null,
   topK: 1,
   scoreThresholdEnabled: false,
-  scoreThreshold: 0
+  scoreThreshold: 0,
 });
 const mixData = ref({
   rerankingEnable: null,
@@ -394,7 +428,7 @@ const mixData = ref({
   scoreThreshold: 0,
   keywordWeight: 0.5,
   vectorWeight: null,
-  rerankingMode: 'weighted_score'
+  rerankingMode: "weighted_score",
 });
 
 const { queryParams, form, rules } = toRefs(data);
@@ -465,19 +499,19 @@ function handleDelete(row) {
 /** 提交按钮 */
 function submitForm() {
   // 同步检索参数到表单
-  if (form.value.searchMethod === 'semantic_search') {
+  if (form.value.searchMethod === "semantic_search") {
     form.value.rerankingEnable = vectorData.value.rerankingEnable;
     form.value.rerankingModelName = vectorData.value.rerankingModelName;
     form.value.topK = vectorData.value.topK;
     form.value.scoreThresholdEnabled = vectorData.value.scoreThresholdEnabled;
     form.value.scoreThreshold = vectorData.value.scoreThreshold;
-  } else if (form.value.searchMethod === 'full_text_search') {
+  } else if (form.value.searchMethod === "full_text_search") {
     form.value.rerankingEnable = fullTextData.value.rerankingEnable;
     form.value.rerankingModelName = fullTextData.value.rerankingModelName;
     form.value.topK = fullTextData.value.topK;
     form.value.scoreThresholdEnabled = fullTextData.value.scoreThresholdEnabled;
     form.value.scoreThreshold = fullTextData.value.scoreThreshold;
-  } else if (form.value.searchMethod === 'hybrid_search') {
+  } else if (form.value.searchMethod === "hybrid_search") {
     form.value.rerankingEnable = mixData.value.rerankingEnable;
     form.value.rerankingModelName = mixData.value.rerankingModelName;
     form.value.topK = mixData.value.topK;
@@ -489,36 +523,47 @@ function submitForm() {
   }
 
   // 表单验证与提交
-  proxy.$refs['knowledgeBaseRef'].validate(valid => {
+  proxy.$refs["knowledgeBaseRef"].validate((valid) => {
     if (valid) {
+      console.log("form", form.value);
+      if (form.value.embeddingModel) {
+        const matchedItem = embeddingModel.value.find((item) =>
+          item.models.some(
+            (modelObj) => modelObj.model === form.value.embeddingModel
+          )
+        );
+        form.value.embeddingModelProvider = matchedItem
+          ? matchedItem.provider
+          : null;
+      }
       // 区分修改和新增场景
       if (form.value.id) {
         // 修改场景：已有ID，先更新基础信息，再更新权限
         updateKnowledgeBase(form.value).then(() => {
           updateKnowledgeBaseRole({
             knowledgeId: form.value.id,
-            roleIds: roleIds.value
+            roleIds: roleIds.value,
           }).then(() => {
-            proxy.$modal.msgSuccess('保存成功');
+            proxy.$modal.msgSuccess("保存成功");
           });
         });
       } else {
         // 新增场景：先新增知识库，获取ID后再绑定权限
-        addKnowledgeBase(form.value).then(response => {
+        addKnowledgeBase(form.value).then((response) => {
           const newKnowledgeId = response.data;
           if (newKnowledgeId) {
             updateKnowledgeBaseRole({
               knowledgeId: newKnowledgeId,
-              roleIds: roleIds.value
+              roleIds: roleIds.value,
             }).then(() => {
-              proxy.$modal.msgSuccess('新增成功');
-              const obj = { path: '/kmc/knowledgeBase' };
+              proxy.$modal.msgSuccess("新增成功");
+              const obj = { path: "/kmc/knowledgeBase" };
               proxy.$tab.closeOpenPage(obj).then(() => {
                 proxy.$tab.refreshPage();
               });
             });
           } else {
-            proxy.$modal.msgError('新增失败，未获取到知识库ID');
+            proxy.$modal.msgError("新增失败，未获取到知识库ID");
           }
         });
       }
@@ -560,9 +605,9 @@ function cancel() {
   reset();
 }
 
-  // 标签操作
+// 标签操作
 const handleClose = (tag) => {
-  const index = form.value.items.row.findIndex(t => t.name === tag.name);
+  const index = form.value.items.row.findIndex((t) => t.name === tag.name);
   if (index !== -1) {
     form.value.items.row.splice(index, 1);
     form.value.tags = JSON.stringify(form.value.items.row);
@@ -576,7 +621,7 @@ const handleInputConfirm = () => {
     form.value.tags = JSON.stringify(form.value.items.row);
   }
   inputVisible.value = false;
-  inputValue.value = '';
+  inputValue.value = "";
 };
 
 const showInput = () => {
@@ -598,11 +643,11 @@ function reset() {
     items: { row: [] },
     tags: null,
     description: null,
-    indexingTechnique: 'high_quality',
+    indexingTechnique: "high_quality",
     permission: null,
     embeddingModel: null,
     embeddingModelProvider: null,
-    searchMethod: 'hybrid_search',
+    searchMethod: "hybrid_search",
     rerankingEnable: false,
     rerankingProviderName: null,
     rerankingModelName: null,
@@ -620,14 +665,14 @@ function reset() {
     remark: null,
     keywordWeight: null,
     vectorWeight: null,
-    rerankingMode: null
+    rerankingMode: null,
   };
-  proxy.resetForm('knowledgeBaseRef');
+  proxy.resetForm("knowledgeBaseRef");
 }
 
 // 初始化模型数据
 function init() {
-  getTextEmbedding().then(response => {
+  getTextEmbedding().then((response) => {
     embeddingModel.value = response.data;
   });
 }
@@ -707,9 +752,9 @@ proxy.$tab.closeAllPage();
 
   &.act {
     background-color: #f0f7ff;
-    border-color: #2666FB;
+    border-color: #2666fb;
     .indexing-title {
-      color: #2666FB;
+      color: #2666fb;
       font-weight: 500;
     }
   }
