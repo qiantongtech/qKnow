@@ -309,8 +309,8 @@ INSERT INTO system_dict_data VALUES (97, 0, '高质量', 'high_quality', 'kmc_kn
 INSERT INTO system_dict_data VALUES (98, 1, '经济', 'economy', 'kmc_know_index', 'economy', 'default', 'N', '0', '吴同', '2026-04-24 10:01:38', '', NULL, NULL);
 INSERT INTO kb_tool VALUES (1, 1001, '获取当前时间', '', '[]', NULL, NULL, 1, 0, '小桐', 1, '2026-05-07 15:45:46', '小桐', 1, '2026-05-07 16:24:34', '');
 INSERT INTO kb_tool VALUES (2, 1001, '获取城市天气', NULL, '[]', NULL, NULL, 1, 0, '小桐', 1, '2026-05-07 16:24:53', '小桐', NULL, '2026-05-07 16:24:53', NULL);
-INSERT INTO kb_tool_methodVALUES (1, 1001, 1, 'get_current_time', '获取当前时间', '获取当前时间', 1, 0, '小桐', 1, '2026-05-07 15:49:28', '小桐', 1, '2026-05-07 16:24:43', NULL);
-INSERT INTO kb_tool_methodVALUES (2, 1001, 2, 'weather_query', '获取城市天气', '获取城市天气', 1, 0, '小桐', 1, '2026-05-07 16:25:22', '小桐', NULL, '2026-05-07 16:25:22', NULL);
+INSERT INTO kb_tool_method VALUES (1, 1001, 1, 'get_current_time', '获取当前时间', '获取当前时间', 1, 0, '小桐', 1, '2026-05-07 15:49:28', '小桐', 1, '2026-05-07 16:24:43', NULL);
+INSERT INTO kb_tool_method VALUES (2, 1001, 2, 'weather_query', '获取城市天气', '获取城市天气', 1, 0, '小桐', 1, '2026-05-07 16:25:22', '小桐', NULL, '2026-05-07 16:25:22', NULL);
 
 INSERT INTO kb_tool_method VALUES (1, 1001, 1, 'get_current_time', '获取当前时间', '获取当前时间', 1, 0, '小桐', 1, '2026-05-07 15:49:28', '小桐', 1, '2026-05-07 16:24:43', NULL);
 INSERT INTO kb_tool_method VALUES (2, 1001, 2, 'weather_query', '获取城市天气', '获取城市天气', 1, 0, '小桐', 1, '2026-05-07 16:25:22', '小桐', NULL, '2026-05-07 16:25:22', NULL);
