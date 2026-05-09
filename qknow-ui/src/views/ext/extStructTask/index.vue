@@ -349,7 +349,7 @@
                     type="primary"
                     v-if="scope.row.publishStatus != 1"
                     icon="Edit"
-                    @click="routeTo(`/ext/editStructTask`, scope.row)"
+                    @click="routeTo(`/kg/ext/editStructTask`, scope.row)"
                     v-hasPermi="['ext:extStructTask:struct:edit']"
                     >编辑
                   </el-button>
