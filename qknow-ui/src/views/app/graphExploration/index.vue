@@ -359,16 +359,24 @@
                     </template>
                     <div class="collapse-con1">
                       <div v-for="(item, index) in textList" :key="index">
-                        <!--                        <span v-if="currentNodeData.textIds && currentNodeData.textIds.split(',').includes(item.id.toString())">{{ item.text }}</span>-->
                         <span
                           v-if="
-                            currentNodeData.paragraphIndex &&
-                            currentNodeData.paragraphIndex ===
-                              item.paragraphIndex
+                            currentNodeData.textIds &&
+                            currentNodeData.textIds
+                              .split(',')
+                              .includes(item.id.toString())
                           "
                           >{{ item.text }}</span
                         >
                       </div>
+                      <!-- <span
+                          v-if="
+                            currentNodeData.textIds &&
+                            parseInt(currentNodeData.textIds) === item.id
+                          "
+                          >{{ item.text }}</span
+                        >
+                      </div> -->
                     </div>
                   </el-collapse-item>
                   <el-collapse-item title="关联文件" name="4">
@@ -541,10 +549,10 @@ const handleBack = () => {
   let path;
   switch (taskInfo.value.pageType) {
     case "1":
-      path = "/ext/extStructTask";
+      path = "/kg/ext/extStructTask";
       break;
     case "2":
-      path = "/ext/unstructTask";
+      path = "/kg/ext/unstructTask";
       break;
     case "3":
       path = "/flt/graph";

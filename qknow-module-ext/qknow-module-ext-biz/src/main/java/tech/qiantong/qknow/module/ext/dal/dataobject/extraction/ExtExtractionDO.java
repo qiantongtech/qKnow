@@ -56,4 +56,9 @@ public class ExtExtractionDO extends BaseNeo4jEntity {
     private String relation;
     private String confidence;
     private String workspaceId;
+
+    private Long startSchemaId;
+    private String  startTextIds;
+    private Long endSchemaId;
+    private String endTextIds;
 }

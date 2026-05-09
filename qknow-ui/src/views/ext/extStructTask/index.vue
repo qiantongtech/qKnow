@@ -120,7 +120,7 @@
             <el-button
               type="primary"
               plain
-              @click="routeTo(`/ext/addStructTask`)"
+              @click="routeTo(`/kg/ext/addStructTask`)"
               v-hasPermi="['ext:extStructTask:struct:add']"
               @mousedown="(e) => e.preventDefault()"
             >
@@ -855,7 +855,7 @@ function handleDelete(row) {
 // 抽取结果
 function handleResult(row) {
   router.push({
-    path: `/ext/structuredResult`,
+    path: `/kg/ext/structuredResult`,
     query: {
       id: row.id,
       name: row.name,

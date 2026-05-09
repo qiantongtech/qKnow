@@ -154,6 +154,26 @@
             <version>${qknow.version}</version>
         </dependency>
 
+
+        <dependency>
+            <groupId>tech.qiantong</groupId>
+            <artifactId>qknow-module-kb-api</artifactId>
+            <version>${qknow.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>tech.qiantong</groupId>
+            <artifactId>qknow-module-dm-api</artifactId>
+            <version>${qknow.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>tech.qiantong</groupId>
+            <artifactId>qknow-module-ai-api</artifactId>
+            <version>${qknow.version}</version>
+        </dependency>
+
+
     </dependencies>
 
 </project>

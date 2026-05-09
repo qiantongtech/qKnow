@@ -32,29 +32,42 @@
 
 package tech.qiantong.qknow.module.ext.service.extUnstructTask.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.tika.exception.TikaException;
+import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import tech.qiantong.qknow.common.core.domain.AjaxResult;
 import tech.qiantong.qknow.common.core.page.PageResult;
 import tech.qiantong.qknow.common.exception.ServiceException;
+import tech.qiantong.qknow.common.utils.DateUtils;
+import tech.qiantong.qknow.common.utils.FileReader;
 import tech.qiantong.qknow.common.utils.StringUtils;
 import tech.qiantong.qknow.common.utils.object.BeanUtils;
+import tech.qiantong.qknow.module.ai.api.enums.AiWorkflowIdEnums;
 import tech.qiantong.qknow.module.app.enums.ReleaseStatus;
 import tech.qiantong.qknow.module.ext.controller.admin.extUnstructTask.vo.ExtUnstructTaskPageReqVO;
 import tech.qiantong.qknow.module.ext.controller.admin.extUnstructTask.vo.ExtUnstructTaskRespVO;
 import tech.qiantong.qknow.module.ext.controller.admin.extUnstructTask.vo.ExtUnstructTaskSaveReqVO;
 import tech.qiantong.qknow.module.ext.controller.admin.extUnstructTaskDocRel.vo.ExtUnstructTaskDocRelPageReqVO;
 import tech.qiantong.qknow.module.ext.controller.admin.extUnstructTaskDocRel.vo.ExtUnstructTaskDocRelSaveReqVO;
+import tech.qiantong.qknow.module.ext.dal.dataobject.extSchema.ExtSchemaDO;
+import tech.qiantong.qknow.module.ext.dal.dataobject.extSchemaAttribute.ExtSchemaAttributeDO;
+import tech.qiantong.qknow.module.ext.dal.dataobject.extSchemaRelation.ExtSchemaRelationDO;
 import tech.qiantong.qknow.module.ext.dal.dataobject.extUnstructTask.ExtUnstructTaskDO;
 import tech.qiantong.qknow.module.ext.dal.dataobject.extUnstructTaskDocRel.ExtUnstructTaskDocRelDO;
 import tech.qiantong.qknow.module.ext.dal.dataobject.extUnstructTaskText.ExtUnstructTaskTextDO;
@@ -64,17 +77,27 @@ import tech.qiantong.qknow.module.ext.dal.mapper.extUnstructTask.ExtUnstructTask
 import tech.qiantong.qknow.module.ext.dal.mapper.extUnstructTaskText.ExtUnstructTaskTextMapper;
 import tech.qiantong.qknow.module.ext.extEnum.*;
 import tech.qiantong.qknow.module.ext.service.deepke.DeepkeExtractionService;
+import tech.qiantong.qknow.module.ext.service.extSchema.IExtSchemaService;
+import tech.qiantong.qknow.module.ext.service.extSchemaAttribute.IExtSchemaAttributeService;
+import tech.qiantong.qknow.module.ext.service.extSchemaRelation.IExtSchemaRelationService;
 import tech.qiantong.qknow.module.ext.service.extTaskLog.IExtTaskLogService;
 import tech.qiantong.qknow.module.ext.service.extUnstructTask.IExtUnstructTaskService;
 import tech.qiantong.qknow.module.ext.service.extUnstructTaskDocRel.IExtUnstructTaskDocRelService;
 import tech.qiantong.qknow.module.ext.service.neo4j.service.ExtNeo4jService;
 import tech.qiantong.qknow.module.ext.service.unstructTaskRelation.IExtUnstructTaskRelationService;
+import tech.qiantong.qknow.module.kb.api.flow.dto.KbRuntimeRespDTO;
+import tech.qiantong.qknow.module.kb.api.flow.service.IBotApiService;
 import tech.qiantong.qknow.module.kg.api.knowledge.IKgKnowledgeApiService;
 import tech.qiantong.qknow.module.kg.api.knowledge.dto.KgKnowledgeDocumentRespDTO;
 import tech.qiantong.qknow.module.system.service.ISysConfigService;
+import tech.qiantong.qknow.neo4j.domain.DynamicEntity;
+import tech.qiantong.qknow.neo4j.domain.relationship.DynamicEntityRelationship;
+import tech.qiantong.qknow.neo4j.enums.GraphLabelEnum;
 import tech.qiantong.qknow.redis.service.IRedisService;
 
 import jakarta.annotation.Resource;
+
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -82,7 +105,9 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 非结构化抽取任务Service业务层处理
@@ -106,15 +131,26 @@ public class ExtUnstructTaskServiceImpl extends ServiceImpl<ExtUnstructTaskMappe
     @Resource
     private ExtUnstructTaskTextMapper extUnstructTaskTextMapper;
     @Resource
+    private IExtSchemaRelationService extSchemaRelationService;
+    @Resource
+    private IExtSchemaService extSchemaService;
+    @Resource
     private ExtNeo4jService extNeo4jService;
     @Resource
     private IRedisService redisService;
-    @Value("${unstruct.type}")
-    private String unstructType;
     @Resource
     private IExtTaskLogService extTaskLogService;
     @Resource
     private ISysConfigService configService;
+    @Resource
+    private IExtSchemaAttributeService extSchemaAttributeService;
+    @Resource
+    private IBotApiService botApiService;
+
+    @Value("${unstruct.type}")
+    private String unstructType;
+    @Value("${dromara.x-file-storage.local-plus[0].storage-path}")
+    private String prefix;
 
     private ExecutorService executor = null;
     // 锁对象：防止并发创建线程池
@@ -212,9 +248,9 @@ public class ExtUnstructTaskServiceImpl extends ServiceImpl<ExtUnstructTaskMappe
         // 遍历任务关联的文件
         for (ExtUnstructTaskDocRelDO extUnstructTaskDocRelDO : taskDocRelDOList) {
             KgKnowledgeDocumentRespDTO kgDocument = documentMap.get(extUnstructTaskDocRelDO.getDocId());
-
-            // 拼接文件地址
-            String fileUrl = "http://127.0.0.1:8095/profile" + kgDocument.getPath();
+//
+//            // 拼接文件地址
+//            String fileUrl = "http://127.0.0.1:8090/profile" + kgDocument.getPath();
 
             // 删除neo4j中之前抽取相关的数据, 如果有的话
             ExtExtractionDO extractionDO = new ExtExtractionDO();
@@ -222,28 +258,37 @@ public class ExtUnstructTaskServiceImpl extends ServiceImpl<ExtUnstructTaskMappe
             extNeo4jService.deleteExtUnStruck(extractionDO);
             // 删除mysql中之前抽取的段落相关的数据, 如果有的话
             extUnstructTaskTextMapper.deleteByTaskId(unstructTaskDO.getId());
+//
+//            // 创建 URL 对象
+//            URL url = new URL(fileUrl);
+//            // 打开连接
+//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//            // 设置请求方法
+//            connection.setRequestMethod("GET");
+//            // 获取输入流
+//            InputStream inputStream = connection.getInputStream();
+//            // 使用 XWPFDocument 解析 docx 文件
+//            XWPFDocument document = new XWPFDocument(inputStream);
+//            // 获取文档中的段落
+//            List<XWPFParagraph> paragraphs = document.getParagraphs();
 
-            // 创建 URL 对象
-            URL url = new URL(fileUrl);
-            // 打开连接
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            // 设置请求方法
-            connection.setRequestMethod("GET");
-            // 获取输入流
-            InputStream inputStream = connection.getInputStream();
-            // 使用 XWPFDocument 解析 docx 文件
-            XWPFDocument document = new XWPFDocument(inputStream);
-            // 获取文档中的段落
-            List<XWPFParagraph> paragraphs = document.getParagraphs();
+
+            // 使用本地前缀，取出多余的/
+            String base = StringUtils.substring(prefix, 0, prefix.length() - 1);
+            // 获取文件内容
+            String fileText = FileReader.safeReadFile(base + kgDocument.getPath());
+            // 获取片段
+            List<String> paragraphs = FileReader.splitText2(fileText, 5000, "\n\n");
 
             int i = 0;
             // 输出每个段落的文本内容
-            for (XWPFParagraph paragraph : paragraphs) {
+            for (String text : paragraphs) {
                 i++;
-                String text = paragraph.getText();
                 if (StringUtils.isBlank(text)) {
                     continue;
                 }
+
+                text = text.replace("“", "").replace("”", "").replace("'", "").replace("\"", "");
                 log.info("============>抽取文本: {}", text);
 
                 log.info("============调用DeepKE工具开始抽取============");
@@ -301,6 +346,459 @@ public class ExtUnstructTaskServiceImpl extends ServiceImpl<ExtUnstructTaskMappe
         extUnstructTaskMapper.updateExtUnstructTask(unstructTaskDO);
         log.info("---------- 执行抽取任务结束 -------------");
     }
+
+    /**
+     * 调用大模型，执行抽取任务
+     *
+     * @param unStructTaskDO
+     * @param taskDocRelDOList
+     * @author shaun
+     * @date 2025/06/10 16:25
+     */
+    @SuppressWarnings("unchecked")
+    private void execTaskByModel(ExtUnstructTaskDO unStructTaskDO, List<ExtUnstructTaskDocRelDO> taskDocRelDOList, Long logId, ExecutorService executor) throws TikaException, IOException {
+        // 获取任务关联的所有文件
+        List<Long> docIdList = taskDocRelDOList.stream().map(ExtUnstructTaskDocRelDO::getDocId).collect(Collectors.toList());
+        List<KgKnowledgeDocumentRespDTO> documentList = kgKnowledgeApiService.getKgDocumentListByIds(docIdList);
+        // 获取任务关联的所有关系
+        List<ExtUnstructTaskRelationDO> relationList = extUnstructTaskRelationService.findByTaskId(unStructTaskDO.getId());
+        List<Long> relationIdList = relationList.stream().map(ExtUnstructTaskRelationDO::getRelationId).collect(Collectors.toList());
+        List<ExtSchemaRelationDO> schemaRelationList = extSchemaRelationService.listByIds(relationIdList);
+
+        //  动态实体集合
+        List<DynamicEntity> graphEntityAll = Lists.newArrayList();
+        // 段落文本集合
+        Map<String, List<ExtUnstructTaskTextDO>> textMap = Maps.newHashMap();
+        // 提示词类型集合
+        Map<String, String> typeMap = Maps.newHashMap();
+        // 生成提示词
+        Map<String, String> callWord = this.callWord(schemaRelationList);
+        // 使用本地前缀，取出多余的/
+        String base = StringUtils.substring(prefix, 0, prefix.length() - 1);
+
+        List<CompletableFuture<Void>> futures = Lists.newArrayList();
+        // 创建任务取消标志
+        AtomicBoolean taskCancelled = new AtomicBoolean(false);
+        try {
+            for (KgKnowledgeDocumentRespDTO documentDO : documentList) {
+                List<DynamicEntity> list = Lists.newArrayList();
+                int fileIndex = documentList.indexOf(documentDO);
+                // 获取文件内容
+                String fileText = FileReader.safeReadFile(base + documentDO.getPath());
+                // 获取片段
+                List<String> segments = FileReader.splitText2(fileText, 5000, "\n\n");
+
+                for (String segment : segments) {
+                    CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+                        if (taskCancelled.get()) {
+                            String count = String.valueOf(getCurrentConcurrentCount() - 1);
+                            redisService.set("ext_run_model_count", count);
+                            return; // 如果任务已被取消，则直接返回
+                        }
+                        ServiceException serviceException = new ServiceException();
+                        int partIndex = segments.indexOf(segment);
+                        String logText = "开始抽取第" + (fileIndex + 1) + "个文件的第" + (partIndex + 1) + "个分段";
+                        try {
+                            extTaskLogService.recordStep(logId, logText);
+                            Map<String, String> entityMap = new HashMap<>();
+                            entityMap.put("entityCallWord", callWord.get("entity"));
+                            entityMap.put("relationCallWord", callWord.get("relation"));
+                            entityMap.put("context", String.join("", segment));
+                            entityMap.put("entityAttribute", callWord.get("entityAttributeDesc"));
+                            KbRuntimeRespDTO executeFlow = botApiService.executeFlow(AiWorkflowIdEnums.TRIPLE_EXTRACTION.getId()
+                                    , unStructTaskDO.getWorkspaceId()
+                                    , entityMap);
+                            String output = executeFlow.getOutput();
+                            Map<String, Object> map = resultUnstruct2(output, unStructTaskDO, documentDO.getId(), callWord);
+                            //实体数据
+                            if (map.get("entityList") != null) {
+                                list.addAll((List<DynamicEntity>) map.get("entityList"));
+                            }
+                            //实体对应片段
+                            if (map.get("textMap") != null) {
+                                textMap.putAll((Map<String, List<ExtUnstructTaskTextDO>>) map.get("textMap"));
+                            }
+                            //实体对应类型
+                            if (map.get("typeMap") != null) {
+                                typeMap.putAll((Map<String, String>) map.get("typeMap"));
+                            }
+                        } catch (Exception e) {
+                            log.error("结果解析异常:", e.getMessage());
+                            serviceException.setMessage("结果解析异常：" + e.getMessage());
+                        }
+
+                        if (StringUtils.isNotEmpty(serviceException.getMessage())) {
+                            taskCancelled.set(true);
+                            String count = String.valueOf(getCurrentConcurrentCount() - 1);
+                            redisService.set("ext_run_model_count", count);
+                            throw serviceException;
+                        }
+
+                        extTaskLogService.recordStep(logId, logText + ",调用大模型抽取完成");
+                        // 合并多分段相同name的实体
+                        List<DynamicEntity> graphEntityList = mergeEntitiesByName(list, unStructTaskDO.getId());
+                        graphEntityAll.addAll(graphEntityList);
+                        String count = String.valueOf(getCurrentConcurrentCount() - 1);
+                        redisService.set("ext_run_model_count", count);
+                    }, executor);
+                    futures.add(future);
+                }
+            }
+        } finally {
+            // 线程数量
+            String count = String.valueOf(getCurrentConcurrentCount() + futures.size());
+            redisService.set("ext_run_model_count", count);
+            if (getCurrentConcurrentCount() <= 0) {
+                executor.shutdown();
+            }
+        }
+
+        CompletableFuture.runAsync(() -> {
+            try {
+                // 等待所有片段处理完成
+                CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+                processingAndSave(textMap, schemaRelationList, graphEntityAll, unStructTaskDO, typeMap);
+                extTaskLogService.endInvoke(logId, ExtLogStatusEnum.SUCCESS, "");
+            } catch (Exception e) {
+                unStructTaskDO.setStatus(ExtTaskStatus.ERROR.getValue());
+                extUnstructTaskMapper.updateExtUnstructTask(unStructTaskDO);
+                extTaskLogService.recordStep(logId, e.getMessage());
+                extTaskLogService.endInvoke(logId, ExtLogStatusEnum.FAIL, e.getMessage());
+            } finally {
+                if (getCurrentConcurrentCount() <= 0) {
+                    executor.shutdown();
+                }
+            }
+        });
+    }
+
+
+    /**
+     * 处理并保存数据
+     *
+     * @param textMap            存储所有分段文本
+     * @param schemaRelationList 存储所有关系
+     * @param graphEntityAll     存储所有实体
+     * @param unStructTaskDO     unstructTaskDO
+     * @param typeMap            提示词类型集合
+     */
+    private void processingAndSave(Map<String, List<ExtUnstructTaskTextDO>> textMap,
+                                   List<ExtSchemaRelationDO> schemaRelationList,
+                                   List<DynamicEntity> graphEntityAll,
+                                   ExtUnstructTaskDO unStructTaskDO,
+                                   Map<String, String> typeMap) {
+        // 1. 合并所有 textList 为一个大列表
+        List<ExtUnstructTaskTextDO> textAll = new ArrayList<>();
+        textMap.values().forEach(textAll::addAll);
+        // 2. 关键：给每条数据设置 paragraphIndex（从1开始递增）
+        int index = 1;
+        for (ExtUnstructTaskTextDO textDO : textAll) {
+            textDO.setParagraphIndex(index++);
+        }
+        // 3. 批量插入数据库
+        if (textAll != null && !textAll.isEmpty()) {
+            extUnstructTaskTextMapper.insertBatch(textAll);
+        }
+
+        // 所有的概念id
+        Map<String, ExtSchemaDO> schemaMap = new HashMap<>();
+        if (schemaRelationList != null && !schemaRelationList.isEmpty()) {
+            List<Long> schemaIdList = schemaRelationList.stream()
+                    .flatMap(relation -> java.util.stream.Stream.of(relation.getStartSchemaId(), relation.getEndSchemaId()))
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .collect(Collectors.toList());
+
+            // 获取所有概念
+            List<ExtSchemaDO> extSchemaList = extSchemaService.listByIds(schemaIdList);
+            schemaMap = extSchemaList.stream().collect(Collectors.toMap(ExtSchemaDO::getName, Function.identity(), (key1, key2) -> key1));
+        }
+
+        // 4. 处理实体关系抽取（修复对象复用BUG + 空安全 + 性能优化）
+        List<ExtExtractionDO> extractionDOList = new ArrayList<>();
+        if (graphEntityAll != null && !graphEntityAll.isEmpty()) {
+            Long taskId = unStructTaskDO.getId();
+            for (DynamicEntity entity : graphEntityAll) {
+                Map<String, Object> properties = entity.getDynamicProperties();
+                // 安全获取 docId
+                Integer docId = null;
+                Object docIdObj = properties.get("doc_id");
+                if (docIdObj != null) {
+                    try {
+                        docId = Integer.valueOf(docIdObj.toString());
+                    } catch (Exception ignored) {}
+                }
+                // 安全获取 workspaceId
+                String workspaceId = "";
+                Object workspaceIdObj = properties.get("workspace_id");
+                if (workspaceIdObj != null) {
+                    workspaceId = workspaceIdObj.toString();
+                }
+
+                // 基础实体（每次循环都新建，彻底修复数据覆盖BUG）
+                ExtExtractionDO baseDO = new ExtExtractionDO();
+                baseDO.setHead(entity.getName());
+                baseDO.setTaskId(taskId);
+                baseDO.setDocId(docId);
+                baseDO.setParagraphIndex(docId);
+                baseDO.setWorkspaceId(workspaceId);
+                baseDO.setConfidence("");
+                if (entity.getName() != null) {
+                    // 概念
+                    String schemaName = typeMap.get(entity.getName());
+                    if (StringUtils.isNotEmpty(schemaName) && schemaMap.get(schemaName) != null) {
+                        baseDO.setStartSchemaId(schemaMap.get(schemaName).getId());
+                        // 片段关联
+                        List<ExtUnstructTaskTextDO> unstructTaskTextList = textMap.get(entity.getName());
+                        List<String> textList = unstructTaskTextList.stream().map(ExtUnstructTaskTextDO::getId).map(Object::toString).collect(Collectors.toList());
+                        baseDO.setStartTextIds(String.join(",", textList));
+                    }
+                }
+
+                Map<String, List<DynamicEntityRelationship>> relationshipEntityMap = entity.getRelationshipEntityMap();
+                boolean hasMatchRelation = false;
+
+                // 遍历关系配置
+                if (schemaRelationList != null && !schemaRelationList.isEmpty() && relationshipEntityMap != null) {
+                    for (ExtSchemaRelationDO schemaRelationDO : schemaRelationList) {
+                        List<DynamicEntityRelationship> relationList = relationshipEntityMap.get(schemaRelationDO.getRelation());
+                        if (relationList == null || relationList.isEmpty()) {
+                            continue;
+                        }
+                        hasMatchRelation = true;
+                        // 每条关系新建一个DO，避免复用覆盖
+                        for (DynamicEntityRelationship rel : relationList) {
+                            ExtExtractionDO copyDO = new ExtExtractionDO();
+                            // 手动复制属性（无任何工具类依赖）
+                            copyDO.setHead(baseDO.getHead());
+                            copyDO.setTaskId(baseDO.getTaskId());
+                            copyDO.setDocId(baseDO.getDocId());
+                            copyDO.setParagraphIndex(baseDO.getParagraphIndex());
+                            copyDO.setWorkspaceId(baseDO.getWorkspaceId());
+                            copyDO.setConfidence(baseDO.getConfidence());
+                            copyDO.setTail(rel.getEndNode().getName());
+                            copyDO.setRelation(schemaRelationDO.getRelation());
+
+                            copyDO.setStartSchemaId(baseDO.getStartSchemaId());
+                            copyDO.setStartTextIds(baseDO.getStartTextIds());
+                            if (entity.getName() != null) {
+                                // 概念
+                                String schemaName = typeMap.get(rel.getEndNode().getName());
+                                if (StringUtils.isNotEmpty(schemaName) && schemaMap.get(schemaName) != null) {
+                                    copyDO.setEndSchemaId(schemaMap.get(schemaName).getId());
+                                    // 片段关联
+                                    List<ExtUnstructTaskTextDO> unstructTaskTextList = textMap.get(rel.getEndNode().getName());
+                                    List<String> textList = unstructTaskTextList.stream().map(ExtUnstructTaskTextDO::getId).map(Object::toString).collect(Collectors.toList());
+                                    copyDO.setEndTextIds(String.join(",", textList));
+                                }
+                            }
+                            extractionDOList.add(copyDO);
+                        }
+                    }
+                }
+                // 无匹配关系时，添加基础DO
+                if (!hasMatchRelation) {
+                    extractionDOList.add(baseDO);
+                }
+            }
+        }
+
+        // 批量插入Neo4j
+        if (!extractionDOList.isEmpty()) {
+            extNeo4jService.insertExtractionList(extractionDOList);
+        }
+
+        // 5. 更新任务状态
+        unStructTaskDO.setStatus(ExtTaskStatus.EXECUTED.getValue());
+        extUnstructTaskMapper.updateExtUnstructTask(unStructTaskDO);
+    }
+
+
+    /**
+     * 根据概念关系，生成提示词
+     *
+     * @return java.util.Map<java.lang.String, java.lang.String>
+     * @author shaun
+     * @date 2025/06/10 17:21
+     */
+    private Map<String, String> callWord(List<ExtSchemaRelationDO> schemaRelationDOList) {
+        // 所有的概念id
+        List<Long> idList = schemaRelationDOList.stream()
+                .flatMap(relation -> Stream.of(relation.getStartSchemaId(), relation.getEndSchemaId()))
+                .collect(Collectors.toList());
+        // 获取所有概念
+        List<ExtSchemaDO> extSchemaList = extSchemaService.listByIds(idList);
+        Map<Long, ExtSchemaDO> schemaMap = extSchemaList.stream().collect(Collectors.toMap(ExtSchemaDO::getId, Function.identity()));
+
+        Set<String> entity = Sets.newHashSet();
+        Set<String> relation = Sets.newHashSet();
+
+        for (ExtSchemaRelationDO schemaRelationDO : schemaRelationDOList) {
+            // 获取概念
+            ExtSchemaDO startExtSchemaDO = schemaMap.get(schemaRelationDO.getStartSchemaId());
+            ExtSchemaDO endExtSchemaDO = schemaMap.get(schemaRelationDO.getEndSchemaId());
+            // 添加实体和关系
+            entity.add(startExtSchemaDO.getName());
+            entity.add(endExtSchemaDO.getName());
+            relation.add(schemaRelationDO.getRelation());
+        }
+        // 拼接实体和关系
+        String entityStr = String.join("、", entity);
+        String relationStr = String.join("、", relation);
+        Map<String, String> attributeMap = attributeCallWord(idList);
+        Map<String, String> map = Maps.newHashMap();
+        map.put("entity", entityStr);
+        map.put("relation", relationStr);
+
+        map.putAll(attributeMap);
+        return map;
+    }
+
+    /**
+     * 结果处理
+     *
+     * @param result
+     * @param unstructTaskDO
+     * @param docId
+     * @param callWord       提示词内容
+     * @return java.util.Map<java.lang.String, java.lang.Object>
+     * @author shaun
+     * @date 2025/06/10 17:43
+     */
+    private Map<String, Object> resultUnstruct2(String result, ExtUnstructTaskDO unstructTaskDO, Long docId, Map<String, String> callWord) {
+        List<DynamicEntity> list = Lists.newArrayList();
+        Map<String, List<ExtUnstructTaskTextDO>> textMap = Maps.newHashMap();
+        Map<String, String> typeMap = Maps.newHashMap();
+        Map<String, DynamicEntity> entityMap = Maps.newHashMap();
+        BeanOutputConverter<JSONObject> beanOutputConverter = new BeanOutputConverter<>(JSONObject.class);
+        result = JSONObject.parseObject(result).getString("text");
+        JSONObject jsonObject = beanOutputConverter.convert(result);
+        // 实体
+        JSONArray entities = jsonObject.getJSONArray("entities");
+        for (JSONObject entity : entities.toList(JSONObject.class)) {
+            String entityName = entity.getString("实体文本");
+            // 概念
+            String entityType = entity.getString("实体类型");
+            typeMap.put(entityName, entityType);
+            // 片段
+            String segments = entity.getString("片段");
+            ExtUnstructTaskTextDO unstructTaskTextDO = this.getExtUnstructTaskTextDO(unstructTaskDO, docId, segments);
+            if (textMap.get(entityName) != null) {
+                textMap.get(entityName).add(unstructTaskTextDO);
+            } else {
+                textMap.put(entityName, Lists.newArrayList(unstructTaskTextDO));
+            }
+            // 属性
+            Map<String, Object> properties = this.cover2GraphProperties(entity, callWord);
+
+            // 实体
+            DynamicEntity graphEntity = new DynamicEntity();
+            graphEntity.addLabels(GraphLabelEnum.UNSTRUCTURED.getLabel());
+
+            graphEntity.setDynamicProperties(properties);
+            graphEntity.putDynamicProperties("name", entityName);
+            graphEntity.putDynamicProperties("schemaName", entityType);
+            graphEntity.putDynamicProperties("table_name", "ext_unStruct_test");
+            graphEntity.setName(entityName);
+            graphEntity.putDynamicProperties("doc_id", docId);
+            graphEntity.putDynamicProperties("workspace_id", unstructTaskDO.getWorkspaceId());
+
+            list.add(graphEntity);
+            entityMap.put(entityName, graphEntity);
+        }
+        // 关系
+        JSONArray relations = jsonObject.getJSONArray("relations");
+        for (JSONObject relation : relations.toList(JSONObject.class)) {
+            String startEntityName = relation.getString("头实体");
+            String relationName = relation.getString("关系");
+            String endEntityName = relation.getString("尾实体");
+            // 实体和实体的关系
+            DynamicEntity startEntity = entityMap.get(startEntityName);
+            DynamicEntity endEntity = entityMap.get(endEntityName);
+            if (startEntity != null && endEntity != null) {
+                startEntity.addRelationship(relationName, endEntity);
+            }
+        }
+
+        Map<String, Object> map = Maps.newHashMap();
+        map.put("entityList", list);
+        map.put("textMap", textMap);
+        map.put("typeMap", typeMap);
+
+        return map;
+    }
+
+    /**
+     * 合并多分段相同name的实体
+     *
+     * @param entityList
+     * @param taskId
+     * @author shaun
+     * @date 2025/06/10 17:46
+     */
+    private List<DynamicEntity> mergeEntitiesByName(List<DynamicEntity> entityList, Long taskId) {
+        Map<String, DynamicEntity> mergedMap = Maps.newHashMap();
+        Map<DynamicEntity, DynamicEntity> oldToNewMap = new HashMap<>();
+
+        // 第一步：合并实体
+        for (DynamicEntity entity : entityList) {
+            String name = entity.getName();
+            if (mergedMap.containsKey(name)) {
+                DynamicEntity existingEntity = mergedMap.get(name);
+                existingEntity.getDynamicProperties().putAll(entity.getDynamicProperties());
+                if (entity.getRelationshipEntityMap() != null) {
+                    existingEntity.mergeRelationshipEntityMap(entity.getRelationshipEntityMap());
+                }
+                oldToNewMap.put(entity, existingEntity);
+            } else {
+                DynamicEntity newEntity = new DynamicEntity();
+                newEntity.setLabels(entity.getLabels());
+                newEntity.setName(name);
+                newEntity.putDynamicProperties("task_id", taskId);
+                newEntity.setReleaseStatus(ReleaseStatus.UNPUBLISHED.getValue());
+                newEntity.putDynamicProperties("entity_type", ExtractType.UNSTRUCTURED.getValue());
+                newEntity.getDynamicProperties().putAll(entity.getDynamicProperties());
+                if (entity.getRelationshipEntityMap() != null) {
+                    newEntity.setRelationshipEntityMap(entity.getRelationshipEntityMap());
+                }
+                mergedMap.put(name, newEntity);
+                oldToNewMap.put(entity, newEntity);
+            }
+
+        }
+//
+//        // 第二步：更新 relationshipEntityMap 中的实体引用
+//        for (DynamicEntity newEntity : mergedMap.values()) {
+//            Map<String, List<DynamicEntityRelationship>> relatedRelationships = newEntity.getRelationshipEntityMap();
+//            for (GraphRelationship relationship : relatedRelationships.get) {
+//                GraphEntity oldRelatedEntity = relationship.getEndNode();
+//                GraphEntity newRelatedEntity = oldToNewMap.get(oldRelatedEntity);
+//                if (newRelatedEntity != null) {
+//                    relationship.setEndNode(newRelatedEntity);
+//                }
+//            }
+//        }
+
+        return Lists.newArrayList(mergedMap.values());
+    }
+
+    private ExtUnstructTaskTextDO getExtUnstructTaskTextDO(ExtUnstructTaskDO unstructTaskDO, Long docId, String segments) {
+        ExtUnstructTaskTextDO unstructTaskTextDO = new ExtUnstructTaskTextDO();
+        unstructTaskTextDO.setWorkspaceId(unstructTaskDO.getWorkspaceId());
+        unstructTaskTextDO.setDocId(docId);
+        unstructTaskTextDO.setTaskId(unstructTaskDO.getId());
+        unstructTaskTextDO.setCreateBy(unstructTaskDO.getUpdateBy());
+        unstructTaskTextDO.setUpdateBy(unstructTaskDO.getUpdateBy());
+        unstructTaskTextDO.setCreatorId(unstructTaskDO.getUpdaterId());
+        unstructTaskTextDO.setUpdaterId(unstructTaskDO.getUpdaterId());
+        unstructTaskTextDO.setCreateTime(DateUtils.getNowDate());
+        unstructTaskTextDO.setUpdateTime(DateUtils.getNowDate());
+        unstructTaskTextDO.setText(segments);
+        return unstructTaskTextDO;
+    }
+
+
+
 //
 //
 //    /**
@@ -681,8 +1179,7 @@ public class ExtUnstructTaskServiceImpl extends ServiceImpl<ExtUnstructTaskMappe
             // 根据配置文件判断使用哪种方式进行抽取
             if (UnstructTypeEnums.MODEL.eq(unstructType)) {
                 // 使用大模型进行抽取
-                // TODO 使用大模型抽取，开源版本暂未支持，如有需要请咨询相关管理人员
-                log.warn("大模型抽取暂未支持～");
+                this.execTaskByModel(unstructTaskDO, taskDocRelDOList, logId, executor);
             } else {
                 // 使用DeepKE进行抽取
                 this.execTaskByDeepKe(unstructTaskDO, taskDocRelDOList, logId);
@@ -748,4 +1245,74 @@ public class ExtUnstructTaskServiceImpl extends ServiceImpl<ExtUnstructTaskMappe
         String count = String.valueOf(currentConcurrentCount - 1);
         redisService.set("ext_run_model_count", count);
     }
+
+
+
+    /**
+     * 获取实体属性的提示词
+     *
+     * @param schemaIdList 实体id 列表
+     */
+    private Map<String, String> attributeCallWord(List<Long> schemaIdList) {
+        JSONObject attributeDesc = new JSONObject();
+        JSONObject attributeList = new JSONObject();
+        LambdaQueryWrapper<ExtSchemaAttributeDO> queryWrapper = Wrappers.<ExtSchemaAttributeDO>lambdaQuery()
+                .in(ExtSchemaAttributeDO::getSchemaId, schemaIdList);
+        List<ExtSchemaAttributeDO> attributeDOList = extSchemaAttributeService.list(queryWrapper);
+        if (CollUtil.isEmpty(attributeDOList)) {
+            return new HashMap<>();
+        }
+        Map<String, String> result = new HashMap<>(2);
+        for (ExtSchemaAttributeDO attributeDO : attributeDOList) {
+            JSONArray descArray = attributeDesc.getJSONArray(attributeDO.getSchemaName());
+            JSONArray attributeArray = attributeList.getJSONArray(attributeDO.getSchemaName());
+            if (Objects.isNull(descArray)) {
+                descArray = new JSONArray();
+            }
+            if (Objects.isNull(attributeArray)) {
+                attributeArray = new JSONArray();
+            }
+            JSONObject obj = new JSONObject();
+            obj.put("属性名", attributeDO.getName());
+            obj.put("是否必须", Objects.equals(attributeDO.getRequireFlag(), 1) ? "是" : "否");
+            obj.put("数据类型", AttributeDataTypeEnums.getCode(attributeDO.getDataType()));
+            descArray.add(obj);
+            attributeArray.add(JSONObject.from(attributeDO));
+            attributeDesc.put(attributeDO.getSchemaName(), descArray);
+            attributeList.put(attributeDO.getSchemaName(), attributeArray);
+        }
+        result.put("entityAttributeDesc", JSONObject.toJSONString(attributeDesc));
+        result.put("entityAttributeList", JSONObject.toJSONString(attributeList));
+        return result;
+    }
+
+    /**
+     * 从大模型回答的 json 实体中提取出属性Map
+     *
+     * @param entity 大模型回答中的实体对象
+     * @return DynamicEntity 的 Properties
+     */
+    private Map<String, Object> cover2GraphProperties(JSONObject entity, Map<String, String> callWord) {
+        JSONObject attributeObj = entity.getJSONObject("属性");
+        Map<String, Object> result = new HashMap<>();
+
+        JSONObject attribute = JSONObject.parseObject(callWord.get("entityAttributeList"));
+        JSONObject kgDictMap = JSONObject.parseObject(callWord.get("kgDictMap"));
+        if (Objects.isNull(attribute) || Objects.isNull(kgDictMap)) {
+            return new HashMap<>(0);
+        }
+        JSONArray attributeArray = attribute.getJSONArray(entity.getString("实体类型"));
+        if (Objects.isNull(attributeArray) || attributeArray.size() < 1) {
+            return new HashMap<>(0);
+        }
+
+        return result;
+    }
+
+
+
+
+
+
+
 }

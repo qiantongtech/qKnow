@@ -847,7 +847,7 @@ function handleUpdate(row) {
 // 抽取结果
 function handleResult(row) {
   router.push({
-    path: "/ext/extractResults",
+    path: "/kg/ext/extractResults",
     query: {
       id: row.id,
       name: row.name,
