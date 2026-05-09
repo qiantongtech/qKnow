@@ -40,6 +40,7 @@ import org.springframework.data.neo4j.core.Neo4jClient;
 import org.springframework.data.neo4j.core.Neo4jTemplate;
 import org.springframework.stereotype.Service;
 import tech.qiantong.qknow.common.core.domain.AjaxResult;
+import tech.qiantong.qknow.common.utils.StringUtils;
 import tech.qiantong.qknow.module.app.enums.ReleaseStatus;
 import tech.qiantong.qknow.module.ext.dal.dataobject.extExtraction.ExtExtraction;
 import tech.qiantong.qknow.module.ext.dal.dataobject.extNeo4j.ExtNeo4j;
@@ -87,27 +88,85 @@ public class ExtNeo4jServiceImpl implements ExtNeo4jService {
      * @param extractionList
      * @return
      */
+//    @Override
+//    public AjaxResult insertExtractionList(List<ExtExtractionDO> extractionList) {
+//        for (ExtExtractionDO extractionDO : extractionList) {
+//            try {
+//                Neo4jBuildWrapper<DynamicEntity> startBuild = new Neo4jBuildWrapper<>(DynamicEntity.class);
+//                ExtUnstruckExtractionMergeDO.Node startMerge = new ExtUnstruckExtractionMergeDO.Node();
+//                startMerge.setName(extractionDO.getHead());
+//                startMerge.setTask_id(extractionDO.getTaskId());
+//                startMerge.setDoc_id(extractionDO.getDocId());
+//                startMerge.setParagraphIndex(extractionDO.getParagraphIndex());
+//                startMerge.setEntity_type(ExtractType.UNSTRUCTURED.getValue());
+//                ConcurrentHashMap<String, Object> startMergeMap = new ObjectMapper().readValue(JSONObject.toJSONString(startMerge), ConcurrentHashMap.class);
+//
+//                ExtUnstruckExtractionMergeDO.Node endMerge = new ExtUnstruckExtractionMergeDO.Node();
+//                endMerge.setName(extractionDO.getTail());
+//                endMerge.setTask_id(extractionDO.getTaskId());
+//                endMerge.setDoc_id(extractionDO.getDocId());
+//                endMerge.setParagraphIndex(extractionDO.getParagraphIndex());
+//                endMerge.setEntity_type(ExtractType.UNSTRUCTURED.getValue());
+//                ConcurrentHashMap<String, Object> endMergeMap = new ObjectMapper().readValue(JSONObject.toJSONString(endMerge), ConcurrentHashMap.class);
+//
+//                ConcurrentHashMap<String, Object> propertiesMap = new ConcurrentHashMap<>();
+//                propertiesMap.put("task_id", extractionDO.getTaskId());
+//                propertiesMap.put("entity_type", ExtractType.UNSTRUCTURED.getValue());
+//                propertiesMap.put("release_status", ExtReleaseStatus.UNPUBLISHED.getStatus());
+//                propertiesMap.put("doc_id", extractionDO.getDocId());
+//                propertiesMap.put("paragraph_index", extractionDO.getParagraphIndex());
+//                propertiesMap.put("confidence", extractionDO.getConfidence());
+//                propertiesMap.put("workspace_id", extractionDO.getWorkspaceId() == null ? "" : extractionDO.getWorkspaceId());
+//
+//                ConcurrentHashMap<String, Object> startMap = new ConcurrentHashMap<>();
+//                startMap.put("name", extractionDO.getHead());
+//                startMap.putAll(propertiesMap);
+//                ConcurrentHashMap<String, Object> endMap = new ConcurrentHashMap<>();
+//                endMap.put("name", extractionDO.getTail());
+//                endMap.putAll(propertiesMap);
+//                dynamicRepository.mergeCreateNode(Neo4jLabelEnum.DYNAMICENTITY.getLabel() + ":" + Neo4jLabelEnum.UNSTRUCTURED.getLabel(), startBuild, startMergeMap, startMap);
+//                dynamicRepository.mergeCreateNode(Neo4jLabelEnum.DYNAMICENTITY.getLabel() + ":" + Neo4jLabelEnum.UNSTRUCTURED.getLabel(), startBuild, endMergeMap, endMap);
+//
+//                //关系
+//                ConcurrentHashMap<String, Object> relMa = new ConcurrentHashMap<>();
+//                relMa.put("task_id", extractionDO.getTaskId());
+//                relMa.put("entity_type", ExtractType.UNSTRUCTURED.getValue());
+//                dynamicRepository.mergeRelationship(Neo4jLabelEnum.UNSTRUCTURED.getLabel(), startBuild, startMergeMap, endMergeMap, extractionDO.getRelation(), relMa);
+//            } catch (Exception e) {
+//                log.info("数据导入到Neo4j异常: {}", e);
+//            }
+//        }
+//        return AjaxResult.success();
+//    }
+
     @Override
     public AjaxResult insertExtractionList(List<ExtExtractionDO> extractionList) {
+        // 把 ObjectMapper 提到循环外，避免重复创建
+        ObjectMapper objectMapper = new ObjectMapper();
+        String label = Neo4jLabelEnum.DYNAMICENTITY.getLabel() + ":" + Neo4jLabelEnum.UNSTRUCTURED.getLabel();
+
         for (ExtExtractionDO extractionDO : extractionList) {
             try {
+                String head = extractionDO.getHead();
+                String tail = extractionDO.getTail();
+                // 头节点为空直接跳过整条
+                if (head == null || head.isBlank()) {
+                    continue;
+                }
+
                 Neo4jBuildWrapper<DynamicEntity> startBuild = new Neo4jBuildWrapper<>(DynamicEntity.class);
+
+                // ========== 1、构建并创建【头节点】==========
                 ExtUnstruckExtractionMergeDO.Node startMerge = new ExtUnstruckExtractionMergeDO.Node();
-                startMerge.setName(extractionDO.getHead());
+                startMerge.setName(head);
                 startMerge.setTask_id(extractionDO.getTaskId());
                 startMerge.setDoc_id(extractionDO.getDocId());
                 startMerge.setParagraphIndex(extractionDO.getParagraphIndex());
                 startMerge.setEntity_type(ExtractType.UNSTRUCTURED.getValue());
-                ConcurrentHashMap<String, Object> startMergeMap = new ObjectMapper().readValue(JSONObject.toJSONString(startMerge), ConcurrentHashMap.class);
+                ConcurrentHashMap<String, Object> startMergeMap = objectMapper.readValue(
+                        JSONObject.toJSONString(startMerge), ConcurrentHashMap.class);
 
-                ExtUnstruckExtractionMergeDO.Node endMerge = new ExtUnstruckExtractionMergeDO.Node();
-                endMerge.setName(extractionDO.getTail());
-                endMerge.setTask_id(extractionDO.getTaskId());
-                endMerge.setDoc_id(extractionDO.getDocId());
-                endMerge.setParagraphIndex(extractionDO.getParagraphIndex());
-                endMerge.setEntity_type(ExtractType.UNSTRUCTURED.getValue());
-                ConcurrentHashMap<String, Object> endMergeMap = new ObjectMapper().readValue(JSONObject.toJSONString(endMerge), ConcurrentHashMap.class);
-
+                // 公共属性
                 ConcurrentHashMap<String, Object> propertiesMap = new ConcurrentHashMap<>();
                 propertiesMap.put("task_id", extractionDO.getTaskId());
                 propertiesMap.put("entity_type", ExtractType.UNSTRUCTURED.getValue());
@@ -117,22 +176,61 @@ public class ExtNeo4jServiceImpl implements ExtNeo4jService {
                 propertiesMap.put("confidence", extractionDO.getConfidence());
                 propertiesMap.put("workspace_id", extractionDO.getWorkspaceId() == null ? "" : extractionDO.getWorkspaceId());
 
-                ConcurrentHashMap<String, Object> startMap = new ConcurrentHashMap<>();
-                startMap.put("name", extractionDO.getHead());
-                startMap.putAll(propertiesMap);
-                ConcurrentHashMap<String, Object> endMap = new ConcurrentHashMap<>();
-                endMap.put("name", extractionDO.getTail());
-                endMap.putAll(propertiesMap);
-                dynamicRepository.mergeCreateNode(Neo4jLabelEnum.DYNAMICENTITY.getLabel() + ":" + Neo4jLabelEnum.UNSTRUCTURED.getLabel(), startBuild, startMergeMap, startMap);
-                dynamicRepository.mergeCreateNode(Neo4jLabelEnum.DYNAMICENTITY.getLabel() + ":" + Neo4jLabelEnum.UNSTRUCTURED.getLabel(), startBuild, endMergeMap, endMap);
 
-                //关系
+                // 头节点完整属性
+                ConcurrentHashMap<String, Object> startMap = new ConcurrentHashMap<>();
+                startMap.put("name", head);
+                startMap.putAll(propertiesMap);
+                if(extractionDO.getStartSchemaId() != null){
+                    propertiesMap.put("schema_id", extractionDO.getStartSchemaId());
+                }
+                if (StringUtils.isNotBlank(extractionDO.getStartTextIds())){
+                    propertiesMap.put("text_ids", extractionDO.getStartTextIds());
+                }
+                // 必建头节点
+                dynamicRepository.mergeCreateNode(label, startBuild, startMergeMap, startMap);
+
+                // ========== 2、尾节点为空：不建尾节点、不建关系 ==========
+                if (tail == null || tail.isBlank()) {
+                    continue;
+                }
+
+                // ========== 3、尾节点有值：正常建尾节点 + 关系 ==========
+                ExtUnstruckExtractionMergeDO.Node endMerge = new ExtUnstruckExtractionMergeDO.Node();
+                endMerge.setName(tail);
+                endMerge.setTask_id(extractionDO.getTaskId());
+                endMerge.setDoc_id(extractionDO.getDocId());
+                endMerge.setParagraphIndex(extractionDO.getParagraphIndex());
+                endMerge.setEntity_type(ExtractType.UNSTRUCTURED.getValue());
+                ConcurrentHashMap<String, Object> endMergeMap = objectMapper.readValue(
+                        JSONObject.toJSONString(endMerge), ConcurrentHashMap.class);
+
+                // 尾节点完整属性
+                ConcurrentHashMap<String, Object> endMap = new ConcurrentHashMap<>();
+                endMap.put("name", tail);
+                endMap.putAll(propertiesMap);
+                if(extractionDO.getEndSchemaId() != null){
+                    propertiesMap.put("schema_id", extractionDO.getEndSchemaId());
+                }
+                if (StringUtils.isNotBlank(extractionDO.getEndTextIds())){
+                    propertiesMap.put("text_ids", extractionDO.getEndTextIds());
+                }
+                dynamicRepository.mergeCreateNode(label, startBuild, endMergeMap, endMap);
+
+                // ========== 关系为空，不创建关系 ==========
+                if (extractionDO.getRelation() == null || extractionDO.getRelation().isBlank()) {
+                    continue;
+                }
+
+                // 构建关系属性并创建关系
                 ConcurrentHashMap<String, Object> relMa = new ConcurrentHashMap<>();
                 relMa.put("task_id", extractionDO.getTaskId());
                 relMa.put("entity_type", ExtractType.UNSTRUCTURED.getValue());
-                dynamicRepository.mergeRelationship(Neo4jLabelEnum.UNSTRUCTURED.getLabel(), startBuild, startMergeMap, endMergeMap, extractionDO.getRelation(), relMa);
+                dynamicRepository.mergeRelationship(Neo4jLabelEnum.UNSTRUCTURED.getLabel(),
+                        startBuild, startMergeMap, endMergeMap, extractionDO.getRelation(), relMa);
+
             } catch (Exception e) {
-                log.info("数据导入到Neo4j异常: {}", e);
+                log.error("数据导入到Neo4j异常:{}", e.getMessage(), e);
             }
         }
         return AjaxResult.success();

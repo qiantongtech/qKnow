@@ -70,15 +70,14 @@ public class DeepkeExtractionServiceImpl implements DeepkeExtractionService {
 
         // 获取当前工作目录（即项目根目录）
         String projectRoot = new File("").getCanonicalPath();
-        // 构建 bin/start.sh 路径
-        String startShPath = new File(projectRoot, "bin/DeepKE/start.sh").getCanonicalPath();
-
         // 根据当前运行环境判断脚本执行命令
         String osName = System.getProperty("os.name").toLowerCase();
         if (osName.contains("windows")) {
+            String startShPath = new File(projectRoot, "bin/DeepKE/start.cmd").getCanonicalPath();
             // Windows 环境下使用 WSL
-            processBuilder = new ProcessBuilder("wsl", startShPath, text);
+            processBuilder = new ProcessBuilder("cmd", "/c", startShPath, text);
         } else {
+            String startShPath = new File(projectRoot, "bin/DeepKE/start.sh").getCanonicalPath();
             // 假设为 Linux 或其他类 Unix 系统
             processBuilder = new ProcessBuilder("bash", startShPath, text);
         }
