@@ -18,15 +18,15 @@ public enum DbType {
             "LENGTH",
             "SELECT COUNT(1) FROM {tableName}",
             "SELECT {tableFieldName} FROM {tableName} ORDER BY {orderBy} DESC LIMIT ({pageNo}-1)*{pageSize},{pageSize}"),
-//    /**
-//     * MARIADB
-//     */
-//    MARIADB("2",
-//            "MariaDB数据库",
-//            "jdbc:mariadb://${host}:${port}/${dbName}",
-//            "CHAR_LENGTH",
-//            "SELECT COUNT(1) FROM {tableName}",
-//            "SELECT {tableFieldName} FROM {tableName} ORDER BY {orderBy} DESC LIMIT ({pageNo}-1)*{pageSize},{pageSize}"),
+    /**
+     * MARIADB
+     */
+    MARIADB("2",
+            "MariaDB数据库",
+            "jdbc:mariadb://${host}:${port}/${dbName}",
+            "CHAR_LENGTH",
+            "SELECT COUNT(1) FROM {tableName}",
+            "SELECT {tableFieldName} FROM {tableName} ORDER BY {orderBy} DESC LIMIT ({pageNo}-1)*{pageSize},{pageSize}"),
     /**
      * ORACLE
      */
@@ -45,146 +45,146 @@ public enum DbType {
             "LENGTH",
             "SELECT COUNT(1) FROM {tableName}",
             "SELECT {tableFieldName} FROM {tableName} ORDER BY {orderBy} DESC OFFSET {pageNo} ROWS FETCH NEXT {pageSize} ROWS ONLY"),
-//    /**
-//     * POSTGRESQL
-//     */
-//    POSTGRE_SQL("PostgreSQL",
-//            "PostgreSQL数据库",
-//            "jdbc:postgresql://${host}:${port}/${dbName}?stringtype=unspecified",
-//            "LENGTH",
-//            "SELECT COUNT(1) FROM {tableName}",
-//            "SELECT {tableFieldName} FROM {tableName} ORDER BY {orderBy} DESC LIMIT {pageSize} OFFSET ({pageNo}-1)*{pageSize}"),
-//    /**
-//     * SQLServer2008及以下数据库
-//     */
-//    SQL_SERVER2008("SQL_Server2008",
-//            "SQLServer2008及以下数据库",
-//            "jdbc:sqlserver://${host}:${port};DatabaseName=${dbName};encrypt=false;trustServerCertificate=false",
-//            "LEN",
-//            "SELECT COUNT(1) FROM {tableName}",
-//            "SELECT {tableFieldName} FROM {tableName} ORDER BY {orderBy} DESC OFFSET {pageNo} ROWS FETCH NEXT {pageSize} ROWS ONLY"),
-//    /**
-//     * SQLSERVER
-//     */
-//    SQL_SERVER("SQL_Server",
-//            "SQLServer2012+数据库",
-//            "jdbc:sqlserver://${host}:${port};DatabaseName=${dbName};encrypt=true;trustServerCertificate=true",
-//            "LEN",
-//            "SELECT COUNT(1) FROM {tableName}",
-//            "SELECT {tableFieldName} FROM {tableName} ORDER BY {orderBy} DESC OFFSET {pageNo} ROWS FETCH NEXT {pageSize} ROWS ONLY"),
-//    /**
-//     * UNKONWN DB
-//     */
-//    OTHER("8",
-//            "其他数据库",
-//            "",
-//            "LENGTH",
-//            "SELECT COUNT(1) FROM {tableName}",
-//            ""),
-//    /**
-//     * 达梦8
-//     */
-//    DM8("DM8",
-//            "达梦8",
-//            "jdbc:dm://${host}:${port}?schema=${dbName}",
-//            "LENGTH",
-//            "SELECT COUNT(1) FROM {tableName}",
-//            "SELECT {tableFieldName} FROM {tableName} LIMIT ({pageNo}-1)*{pageSize},{pageSize}"),
-//    /**
-//     * 人大金仓数据库
-//     */
-//    KINGBASE8("Kingbase8",
-//            "人大金仓数据库",
-//            "jdbc:kingbase8://${host}:${port}/${dbName}?stringtype=unspecified",
-//            "LENGTH",
-//            "SELECT COUNT(1) FROM {tableName}",
-//            "SELECT {tableFieldName} FROM {tableName} ORDER BY {orderBy} DESC LIMIT {pageSize} OFFSET ({pageNo}-1)*{pageSize} "),
-//    /**
-//     * 人大金仓数据库
-//     */
-//    HIVE("Hive",
-//            "Hive on HBase",
-//            "jdbc:hive2://${host}:${port}/${dbName}?hive.resultset.use.unique.column.names=false",
-//            "LENGTH",
-//            null,
-//            null),
-//    /**
-//     * 人大金仓数据库
-//     */
-//    HDFS("HDFS",
-//            "HDFS数据库",
-//            "jdbc:kingbase8://${host}:${port}",
-//            "LENGTH",
-//            null,
-//            null),
-//    /**
-//     * Kafka
-//     */
-//    KAFKA("Kafka",
-//            "人大金仓数据库",
-//            "${host}:${port}",
-//            "LENGTH",
-//            "SELECT COUNT(1) FROM {tableName}",
-//            "SELECT {tableFieldName} FROM {tableName} ORDER BY {orderBy} DESC LIMIT {pageSize} OFFSET ({pageNo}-1)*{pageSize}"),
-//
-//    /**
-//     * Phoenix(HBase)
-//     */
-//    PHOENIX("Phoenix",
-//            "Phoenix数据库",
-//            "jdbc:phoenix:${host}:${port}:/${dbName}",
-//            "LENGTH",
-//            "SELECT COUNT(1) FROM {tableName}",
-//            "SELECT {tableFieldName} FROM {tableName} ORDER BY {orderBy} DESC LIMIT ({pageNo}-1)*{pageSize},{pageSize}"),
-//
-//    /**
-//     * Doris
-//     */
-//    DORIS("Doris",
-//            "Doris数据库",
-//            "jdbc:mysql://${host}:${port}/${dbName}?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&rewriteBatchedStatements=true&useServerPrepStmts=true&serverTimezone=GMT%2B8",
-//            "LENGTH",
-//            "SELECT COUNT(1) FROM {tableName}",
-//            "SELECT {tableFieldName} FROM {tableName} ORDER BY {orderBy} DESC LIMIT ({pageNo}-1)*{pageSize},{pageSize}"),
-//
-//    /**
-//     * ClickHouse
-//     */
-//    CLICK_HOUSE("ClickHouse",
-//            "ClickHouse数据库",
-//            "jdbc:clickhouse://${host}:${port}/${dbName}",
-//            "LENGTH",
-//            "SELECT COUNT(1) FROM {tableName}",
-//            "SELECT {tableFieldName} FROM {tableName} ORDER BY {orderBy} DESC LIMIT {pageSize} OFFSET ({pageNo}-1)*{pageSize}"),
-//    /**
-//     * MongoDB（官方 Java Driver）
-//     */
-//    MONGODB("MongoDB",
-//            "MongoDB数据库",
-//            "mongodb://${user}:${password}@${host}:${port}/${dbName}?authSource=${authDb}",
-//            "",
-//            "",
-//            ""),
-//
-//    /**
-//     * 神通数据库（官方 Java Driver）
-//     */
-//    OSCAR("OSCAR",
-//            "神通数据库",
-//            "jdbc:oscar://${host}:${port}/${dbName}",
-//            "LENGTH",
-//            "SELECT COUNT(1) FROM {tableName}",
-//            "SELECT {tableFieldName} FROM {tableName} ORDER BY {orderBy} DESC LIMIT ({pageNo}-1)*{pageSize},{pageSize}"),
-//
-//    /**
-//     * DB2 idm
-//     */
-//    DB2("DB2",
-//            "DB2",
-//            "jdbc:db2://${host}:${port}/${dbName}",
-//            "LENGTH",
-//            "SELECT COUNT(1) FROM {tableName}",
-//            "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY 1) AS rownum FROM {tableName} ORDER BY {orderBy} DESC) AS temp_table WHERE rownum BETWEEN  ( {pageNo} - 1 ) * {pageSize} AND ( {pageNo} - 1 ) * {pageSize} + {pageSize})"),
+    /**
+     * POSTGRESQL
+     */
+    POSTGRE_SQL("PostgreSQL",
+            "PostgreSQL数据库",
+            "jdbc:postgresql://${host}:${port}/${dbName}?stringtype=unspecified",
+            "LENGTH",
+            "SELECT COUNT(1) FROM {tableName}",
+            "SELECT {tableFieldName} FROM {tableName} ORDER BY {orderBy} DESC LIMIT {pageSize} OFFSET ({pageNo}-1)*{pageSize}"),
+    /**
+     * SQLServer2008及以下数据库
+     */
+    SQL_SERVER2008("SQL_Server2008",
+            "SQLServer2008及以下数据库",
+            "jdbc:sqlserver://${host}:${port};DatabaseName=${dbName};encrypt=false;trustServerCertificate=false",
+            "LEN",
+            "SELECT COUNT(1) FROM {tableName}",
+            "SELECT {tableFieldName} FROM {tableName} ORDER BY {orderBy} DESC OFFSET {pageNo} ROWS FETCH NEXT {pageSize} ROWS ONLY"),
+    /**
+     * SQLSERVER
+     */
+    SQL_SERVER("SQL_Server",
+            "SQLServer2012+数据库",
+            "jdbc:sqlserver://${host}:${port};DatabaseName=${dbName};encrypt=true;trustServerCertificate=true",
+            "LEN",
+            "SELECT COUNT(1) FROM {tableName}",
+            "SELECT {tableFieldName} FROM {tableName} ORDER BY {orderBy} DESC OFFSET {pageNo} ROWS FETCH NEXT {pageSize} ROWS ONLY"),
+    /**
+     * UNKONWN DB
+     */
+    OTHER("8",
+            "其他数据库",
+            "",
+            "LENGTH",
+            "SELECT COUNT(1) FROM {tableName}",
+            ""),
+    /**
+     * 达梦8
+     */
+    DM8("DM8",
+            "达梦8",
+            "jdbc:dm://${host}:${port}?schema=${dbName}",
+            "LENGTH",
+            "SELECT COUNT(1) FROM {tableName}",
+            "SELECT {tableFieldName} FROM {tableName} LIMIT ({pageNo}-1)*{pageSize},{pageSize}"),
+    /**
+     * 人大金仓数据库
+     */
+    KINGBASE8("Kingbase8",
+            "人大金仓数据库",
+            "jdbc:kingbase8://${host}:${port}/${dbName}?stringtype=unspecified",
+            "LENGTH",
+            "SELECT COUNT(1) FROM {tableName}",
+            "SELECT {tableFieldName} FROM {tableName} ORDER BY {orderBy} DESC LIMIT {pageSize} OFFSET ({pageNo}-1)*{pageSize} "),
+    /**
+     * 人大金仓数据库
+     */
+    HIVE("Hive",
+            "Hive on HBase",
+            "jdbc:hive2://${host}:${port}/${dbName}?hive.resultset.use.unique.column.names=false",
+            "LENGTH",
+            null,
+            null),
+    /**
+     * 人大金仓数据库
+     */
+    HDFS("HDFS",
+            "HDFS数据库",
+            "jdbc:kingbase8://${host}:${port}",
+            "LENGTH",
+            null,
+            null),
+    /**
+     * Kafka
+     */
+    KAFKA("Kafka",
+            "人大金仓数据库",
+            "${host}:${port}",
+            "LENGTH",
+            "SELECT COUNT(1) FROM {tableName}",
+            "SELECT {tableFieldName} FROM {tableName} ORDER BY {orderBy} DESC LIMIT {pageSize} OFFSET ({pageNo}-1)*{pageSize}"),
+
+    /**
+     * Phoenix(HBase)
+     */
+    PHOENIX("Phoenix",
+            "Phoenix数据库",
+            "jdbc:phoenix:${host}:${port}:/${dbName}",
+            "LENGTH",
+            "SELECT COUNT(1) FROM {tableName}",
+            "SELECT {tableFieldName} FROM {tableName} ORDER BY {orderBy} DESC LIMIT ({pageNo}-1)*{pageSize},{pageSize}"),
+
+    /**
+     * Doris
+     */
+    DORIS("Doris",
+            "Doris数据库",
+            "jdbc:mysql://${host}:${port}/${dbName}?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&rewriteBatchedStatements=true&useServerPrepStmts=true&serverTimezone=GMT%2B8",
+            "LENGTH",
+            "SELECT COUNT(1) FROM {tableName}",
+            "SELECT {tableFieldName} FROM {tableName} ORDER BY {orderBy} DESC LIMIT ({pageNo}-1)*{pageSize},{pageSize}"),
+
+    /**
+     * ClickHouse
+     */
+    CLICK_HOUSE("ClickHouse",
+            "ClickHouse数据库",
+            "jdbc:clickhouse://${host}:${port}/${dbName}",
+            "LENGTH",
+            "SELECT COUNT(1) FROM {tableName}",
+            "SELECT {tableFieldName} FROM {tableName} ORDER BY {orderBy} DESC LIMIT {pageSize} OFFSET ({pageNo}-1)*{pageSize}"),
+    /**
+     * MongoDB（官方 Java Driver）
+     */
+    MONGODB("MongoDB",
+            "MongoDB数据库",
+            "mongodb://${user}:${password}@${host}:${port}/${dbName}?authSource=${authDb}",
+            "",
+            "",
+            ""),
+
+    /**
+     * 神通数据库（官方 Java Driver）
+     */
+    OSCAR("OSCAR",
+            "神通数据库",
+            "jdbc:oscar://${host}:${port}/${dbName}",
+            "LENGTH",
+            "SELECT COUNT(1) FROM {tableName}",
+            "SELECT {tableFieldName} FROM {tableName} ORDER BY {orderBy} DESC LIMIT ({pageNo}-1)*{pageSize},{pageSize}"),
+
+    /**
+     * DB2 idm
+     */
+    DB2("DB2",
+            "DB2",
+            "jdbc:db2://${host}:${port}/${dbName}",
+            "LENGTH",
+            "SELECT COUNT(1) FROM {tableName}",
+            "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY 1) AS rownum FROM {tableName} ORDER BY {orderBy} DESC) AS temp_table WHERE rownum BETWEEN  ( {pageNo} - 1 ) * {pageSize} AND ( {pageNo} - 1 ) * {pageSize} + {pageSize})"),
     /**
      * Redis
      */
@@ -274,7 +274,8 @@ public enum DbType {
      */
     public static DbType getDbType(String dbType) {
         for (DbType type : DbType.values()) {
-            if (type.db.equals(dbType)) {
+            //仅支持MYSQL和ORACLE
+            if (type.db.equals(dbType) && (dbType.equals(DbType.MYSQL.db) || dbType.equals(DbType.ORACLE.db) || dbType.equals(DbType.ORACLE_12C.db))) {
                 return type;
             }
         }
