@@ -39,6 +39,7 @@ import org.neo4j.driver.Driver;
 import org.springframework.data.neo4j.core.Neo4jClient;
 import org.springframework.data.neo4j.core.Neo4jTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tech.qiantong.qknow.common.core.domain.AjaxResult;
 import tech.qiantong.qknow.common.utils.StringUtils;
 import tech.qiantong.qknow.module.app.enums.ReleaseStatus;
@@ -64,6 +65,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Service
+@Transactional(readOnly = false)
 public class ExtNeo4jServiceImpl implements ExtNeo4jService {
 
     @Resource
