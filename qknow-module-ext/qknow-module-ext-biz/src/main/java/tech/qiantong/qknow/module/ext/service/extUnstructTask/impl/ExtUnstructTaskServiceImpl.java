@@ -693,6 +693,7 @@ public class ExtUnstructTaskServiceImpl extends ServiceImpl<ExtUnstructTaskMappe
 
             // 实体
             DynamicEntity graphEntity = new DynamicEntity();
+            System.out.println(GraphLabelEnum.UNSTRUCTURED.getLabel());
             graphEntity.addLabels(GraphLabelEnum.UNSTRUCTURED.getLabel());
 
             graphEntity.setDynamicProperties(properties);

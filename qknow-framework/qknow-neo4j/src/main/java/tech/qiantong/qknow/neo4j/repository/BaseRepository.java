@@ -42,6 +42,7 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 import tech.qiantong.qknow.common.core.page.PageResult;
 import tech.qiantong.qknow.common.utils.spring.SpringUtils;
 import tech.qiantong.qknow.neo4j.domain.DynamicEntity;
@@ -53,6 +54,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @NoRepositoryBean  // 关键注解：阻止Spring实例化此基础仓库
+@Transactional
 public interface BaseRepository<T, ID> extends Neo4jRepository<T, ID> {
 
     /**
