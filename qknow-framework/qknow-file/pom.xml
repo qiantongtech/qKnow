@@ -37,7 +37,7 @@
     <parent>
         <artifactId>qknow-framework</artifactId>
         <groupId>tech.qiantong</groupId>
-        <version>2.1.0</version>
+        <version>2.1.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -64,10 +64,6 @@
         </dependency>
 
         <!-- 框架配置模块 -->
-        <dependency>
-            <groupId>tech.qiantong</groupId>
-            <artifactId>qknow-config</artifactId>
-        </dependency>
         <dependency>
             <groupId>tech.qiantong</groupId>
             <artifactId>qknow-config</artifactId>
