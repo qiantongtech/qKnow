@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>book-open-fill</title>
+    <title>progress-6-fill</title>
     <defs>
         <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
             <stop stop-color="#8DCBFD" offset="0.0851077633%"></stop>
             <stop stop-color="#0578FF" offset="100%"></stop>
         </linearGradient>
-        <path d="M14,14 L8.66666667,14 L8.66666667,4 C8.66666667,2.89543333 9.56206667,2 10.6666667,2 L14,2 C14.3682,2 14.6666667,2.29848 14.6666667,2.66666667 L14.6666667,13.3333333 C14.6666667,13.7015333 14.3682,14 14,14 Z M7.33333333,14 L2,14 C1.63181333,14 1.33333333,13.7015333 1.33333333,13.3333333 L1.33333333,2.66666667 C1.33333333,2.29848 1.63181333,2 2,2 L5.33333333,2 C6.4379,2 7.33333333,2.89543333 7.33333333,4 L7.33333333,14 Z M7.33333333,14 L8.66666667,14 L8.66666667,15.3333333 L7.33333333,15.3333333 L7.33333333,14 Z" id="path-2"></path>
+        <path d="M8,14.6666667 C11.6818667,14.6666667 14.6666667,11.6818667 14.6666667,8 C14.6666667,4.3181 11.6818667,1.33333333 8,1.33333333 C4.3181,1.33333333 1.33333333,4.3181 1.33333333,8 C1.33333333,11.6818667 4.3181,14.6666667 8,14.6666667 Z M12,8 C12,10.2091333 10.2091333,12 8,12 C5.79086,12 4,10.2091333 4,8 L8,8 L8,4 C10.2091333,4 12,5.79086 12,8 Z" id="path-2"></path>
     </defs>
     <g id="后台管理系统" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="qKnow切图" transform="translate(-269, -376)">
-            <g id="book-open-fill" transform="translate(269, 376)">
+        <g id="qKnow切图" transform="translate(-204, -686)">
+            <g id="progress-6-fill" transform="translate(204, 686)">
 
                 <g id="形状" fill-rule="nonzero">
                     <use fill="#1D2945" xlink:href="#path-2"></use>

@@ -362,3 +362,19 @@ INSERT INTO system_dict_data VALUES (96, 0, '解析失败', '3', 'document_sync_
 INSERT INTO system_dict_type VALUES (39, '结构化抽取更新类型', 'ext_update_type', '0', '吴同', '2026-04-24 10:01:38', '', NULL, '结构化抽取更新类型列表');
 INSERT INTO system_dict_data VALUES (122, 2, '全量更新', '0', 'ext_update_type', NULL, 'default', 'N', '0', '吴同', '2026-04-24 10:01:38', '', NULL, NULL);
 INSERT INTO system_dict_data VALUES (123, 2, '增量更新', '1', 'ext_update_type', NULL, 'default', 'N', '0', '吴同', '2026-04-24 10:01:38', '', NULL, NULL);
+
+
+# 2026-05-13
+INSERT INTO system_menu VALUES (2402, '知识资产看板', 2061, 3, 'knowledgeAsset', 'kd/knowledgeAsset/index', NULL, '', 1, 0, 'C', '0', '0', NULL, '#', '小桐', '2026-05-13 10:34:41', '', NULL, '');
+INSERT INTO system_menu VALUES (2403, 'Bot运营看板', 2061, 4, 'botOperation', 'kd/botOperation/index', NULL, '', 1, 0, 'C', '0', '0', NULL, '#', '小桐', '2026-05-13 10:43:41', '', NULL, '');
+INSERT INTO system_menu VALUES (2404, '应用运营看板', 2061, 5, 'appOperations', 'kd/appOperations/index', NULL, '', 1, 0, 'C', '0', '0', NULL, '#', '小桐', '2026-05-13 10:44:06', '', NULL, '');
+INSERT INTO system_menu VALUES (2405, '概览', 2063, 0, 'overview', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', NULL, '#', '小桐', '2026-05-13 13:42:03', '', NULL, '');
+INSERT INTO system_menu VALUES (2406, '解决方案', 2063, 1, 'solution', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', '', '#', '小桐', '2026-05-13 13:42:40', '小桐', '2026-05-13 13:43:35', '');
+INSERT INTO system_menu VALUES (2407, '横向通用应用', 2063, 2, 'horizontal', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', '', '#', '小桐', '2026-05-13 13:42:58', '小桐', '2026-05-13 13:43:31', '');
+INSERT INTO system_menu VALUES (2408, '纵向行业应用', 2063, 3, 'vertical', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', NULL, '#', '小桐', '2026-05-13 13:43:26', '', NULL, '');
+INSERT INTO system_menu VALUES (2409, '我的解决方案', 2063, 4, 'mySolution', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', '', '#', '小桐', '2026-05-13 13:43:58', '小桐', '2026-05-13 13:44:05', '');
+INSERT INTO system_menu VALUES (2410, '我的应用', 2063, 5, 'myApp', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', NULL, '#', '小桐', '2026-05-13 13:44:26', '', NULL, '');
+INSERT INTO system_menu VALUES (2411, '插件管理', 2064, 0, 'plugin', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', NULL, '#', '小桐', '2026-05-13 13:45:32', '', NULL, '');
+
+UPDATE system_menu SET `menu_name` = '产品动态', `parent_id` = 2061, `order_num` = 1, `path` = 'dynamic', `component` = 'system/developing/index', `query` = NULL, `route_name` = '', `is_frame` = 1, `is_cache` = 0, `menu_type` = 'C', `visible` = '1', `status` = '0', `perms` = '', `icon` = 'education', `create_by` = '小桐', `create_time` = '2026-04-27 15:43:52', `update_by` = '小桐', `update_time` = '2026-05-13 11:47:42', `remark` = '' WHERE `menu_id` = 2079;
+UPDATE system_menu SET `menu_name` = '知识文件', `parent_id` = 2223, `order_num` = 0, `path` = 'document', `component` = 'kg/knowledge/document/index', `query` = NULL, `route_name` = '', `is_frame` = 1, `is_cache` = 0, `menu_type` = 'C', `visible` = '0', `status` = '0', `perms` = 'kg:knowledge:document:list', `icon` = '#', `create_by` = 'admin', `create_time` = '2025-10-20 09:51:05', `update_by` = '小桐', `update_time` = '2026-05-13 13:47:33', `remark` = '知识文件菜单' WHERE `menu_id` = 2231;

@@ -44,6 +44,7 @@ import locale from 'element-plus/es/locale/lang/zh-cn'
 
 import '@/assets/system/styles/index.scss' // global css
 import '@/assets/system/styles/qknow.scss' // 自定义样式 css
+import '@/assets/system/styles/table-style-optimized.scss' // 自定义样式 css
 import '@/assets/iconfont/iconfont.css' // iconfont css
 import '@/assets/iconfont/font_new/iconfont.css' // iconfont css
 
