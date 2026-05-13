@@ -41,7 +41,7 @@
    *
   Copyright (c) 2026 江苏千桐科技有限公司
    *
-  软件名称：qKnow 知识平台（商业版） | 软著登字第15980140号
+  软件名称：qKnow 知识平台（开源版） | 软著登字第15980140号
    *
   【权利与授权声明】
   本文件属于江苏千桐科技有限公司依法享有完全知识产权的非公开商业源代码。
@@ -70,6 +70,7 @@
       <DeptTree
         :deptOptions="KcOptions"
         :leftWidth="leftWidth"
+        ref="DeptTreeRef"
         :placeholder="'请输入分类名称'"
         @node-click="handleNodeClick"
       />
@@ -125,6 +126,19 @@
                   <i class="iconfont-mini icon-xinzeng mr5"></i>新增
                 </el-button>
               </el-col>
+              <el-col :span="1.5">
+                <el-button
+                  type="danger"
+                  plain
+                  :disabled="multiple"
+                  @click="handleDelete"
+                  icon="Delete"
+                  v-hasPermi="['kg:knowledge:document:remove']"
+                  @mousedown="(e) => e.preventDefault()"
+                >
+                  删除
+                </el-button>
+              </el-col>
             </el-row>
             <div class="justify-end top-right-btn">
               <right-toolbar
@@ -136,18 +150,27 @@
           </div>
           <el-table
             stripe
-            height="58vh"
             v-loading="loading"
             :data="documentList"
             @selection-change="handleSelectionChange"
             :default-sort="defaultSort"
             @sort-change="handleSortChange"
           >
+            <el-table-column type="selection" width="55" align="center" />
             <el-table-column
-              v-if="getColumnVisibility(4)"
+              v-if="getColumnVisibility(1)"
+              label="编号"
+              align="center"
+              prop="id"
+              width="80"
+              sortable="custom"
+            />
+            <el-table-column
+              v-if="getColumnVisibility(2)"
               label="文件名称"
               prop="name"
-              width="300px"
+              align="left"
+              width="200px"
               :show-overflow-tooltip="{ effect: 'light' }"
             >
               <template #default="scope">
@@ -155,11 +178,11 @@
               </template>
             </el-table-column>
             <el-table-column
-              v-if="getColumnVisibility(6)"
+              v-if="getColumnVisibility(3)"
               label="文件描述"
               align="left"
               prop="description"
-              width="350px"
+              width="200px"
               :show-overflow-tooltip="{ effect: 'light' }"
             >
               <template #default="scope">
@@ -167,7 +190,30 @@
               </template>
             </el-table-column>
             <el-table-column
-              v-if="getColumnVisibility(9)"
+              v-if="getColumnVisibility(4)"
+              label="分类"
+              align="center"
+              prop="categoryName"
+              :show-overflow-tooltip="{ effect: 'light' }"
+            >
+              <template #default="scope">
+                {{ scope.row.categoryName || "-" }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              v-if="getColumnVisibility(5)"
+              label="备注"
+              width="200"
+              align="left"
+              prop="remark"
+              :show-overflow-tooltip="{ effect: 'light' }"
+            >
+              <template #default="scope">
+                {{ scope.row.remark || "-" }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              v-if="getColumnVisibility(6)"
               label="创建人"
               align="center"
               prop="createBy"
@@ -177,7 +223,7 @@
               </template>
             </el-table-column>
             <el-table-column
-              v-if="getColumnVisibility(11)"
+              v-if="getColumnVisibility(7)"
               label="创建时间"
               align="center"
               prop="createTime"
@@ -192,21 +238,14 @@
               </template>
             </el-table-column>
             <el-table-column
+              v-if="getColumnVisibility(8)"
               label="操作"
               align="center"
               class-name="small-padding fixed-width"
               fixed="right"
-              width="320"
+              width="200"
             >
               <template #default="scope">
-                <el-button
-                  link
-                  type="primary"
-                  icon="Edit"
-                  @click="handleUpdate(scope.row)"
-                  v-hasPermi="['kg:knowledge:document:edit']"
-                  >修改</el-button
-                >
                 <el-button
                   v-track="{
                     type: 'preview',
@@ -231,15 +270,33 @@
                   @click="handleDownload(scope.row)"
                   >下载</el-button
                 >
-                <el-button
-                  link
-                  type="danger"
-                  icon="Delete"
-                  @click="handleDelete(scope.row)"
-                  v-hasPermi="['kg:knowledge:document:remove']"
-                  >删除</el-button
-                >
-              </template>
+
+                <el-popover placement="bottom" :width="150" trigger="click">
+                  <template #reference>
+                    <el-button link type="primary" icon="ArrowDown"
+                      >更多</el-button
+                    >
+                  </template>
+                  <div style="width: 100px" class="butgdlist">
+                    <el-button
+                      link
+                      type="primary"
+                      icon="Edit"
+                      @click="handleUpdate(scope.row)"
+                      v-hasPermi="['kg:knowledge:document:edit']"
+                      >修改</el-button
+                    >
+                    <el-button
+                      link
+                      type="danger"
+                      icon="Delete"
+                      @click="handleDelete(scope.row)"
+                      v-hasPermi="['kg:knowledge:document:remove']"
+                      >删除</el-button
+                    >
+                  </div>
+                </el-popover></template
+              >
             </el-table-column>
 
             <template #empty>
@@ -387,11 +444,14 @@ const documentList = ref([]);
 
 // 列显隐信息
 const columns = ref([
-  { key: 4, label: "文件名称", visible: true },
-  { key: 6, label: "文件描述", visible: true },
-  // { key: 8, label: "同步状态", visible: true },
-  { key: 9, label: "创建人", visible: true },
-  { key: 11, label: "创建时间", visible: true },
+  { key: 1, label: "编号", visible: true },
+  { key: 2, label: "文件名称", visible: true },
+  { key: 3, label: "文件描述", visible: true },
+  { key: 4, label: "分类", visible: true },
+  { key: 5, label: "备注", visible: true },
+  { key: 6, label: "创建人", visible: true },
+  { key: 7, label: "创建时间", visible: true },
+  { key: 8, label: "操作", visible: true },
 ]);
 
 const getColumnVisibility = (key) => {
@@ -529,9 +589,13 @@ function handleQuery() {
   //请求树形数据
   // getCategoryTree();
 }
+const DeptTreeRef = ref(null);
 
 /** 重置按钮操作 */
 function resetQuery() {
+  if (DeptTreeRef.value?.resetTree) {
+    DeptTreeRef.value.resetTree();
+  }
   proxy.resetForm("queryRef");
   //不重置知识库id
   selectedNodeId.value = null;
