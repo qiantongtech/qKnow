@@ -17,11 +17,11 @@
 
 **qKnow** 是一套面向企业**知识智能化**与**行业 AI 应用**场景的开源 AI 智能体构建平台，围绕**知识图谱**、**知识库 RAG**、**Bot 构建**与**开箱即用的 AI 应用**等核心能力，支持企业文档、结构化数据、业务知识和专家经验的统一接入与智能化沉淀，帮助企业快速完成知识抽取、知识建模、智能问答、Bot 构建和 AI 应用落地，可作为企业建设知识中枢、智能问答平台、智能体开发平台和行业深度 AI 解决方案的开源基础底座，也适合开发者进行二次开发与场景扩展。
 
-✨✨✨**在线文档**✨✨✨ <a href="https://qknow.qiantong.tech" target="_blank">https://qknow.qiantong.tech</a>
+✨✨✨**在线文档**✨✨✨ <a href="https://community.qknow.ai" target="_blank">https://community.qknow.ai</a>
 
-✨✨✨**开源版演示地址**✨✨✨ <a href="https://qknow-demo.qiantong.tech" target="_blank">https://qknow-demo.qiantong.tech</a> ，账号：qKnow 密码：qKnow123
+✨✨✨**开源版演示地址**✨✨✨ <a href="https://demo.qknow.ai" target="_blank">https://demo.qknow.ai</a> ，账号：qKnow 密码：qKnow123
 
-✨✨✨**专业版演示地址**✨✨✨ <a href="https://pro2.qknow.tech" target="_blank">https://pro2.qknow.tech</a> ，演示账号请 [联系客服获取](https://qknow.qiantong.tech/business.html)
+✨✨✨**专业版演示地址**✨✨✨ <a href="https://pro-demo.qknow.ai" target="_blank">https://pro-demo.qknow.ai</a> ，演示账号请 [联系客服获取](https://qknow.qiantong.tech/business.html)
 
 ![framework.png](.gitee/framework.png)
 
