@@ -1111,7 +1111,7 @@
 
     .el-dialog__body {
       overflow: auto;
-      height: 550px;
+      min-height: 550px;
       padding: 20px 40px !important;
       // border: 1px solid red;
     }

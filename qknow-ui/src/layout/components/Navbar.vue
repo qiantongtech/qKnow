@@ -597,7 +597,7 @@ function knowledgeBaseIdChange(value) {
   //   })
   // }
   const obj = {
-    path: "/kmc/" + value + "/kmcCategory",
+    path: "/kmc/" + value + "/kmcDocument",
   };
   proxy.$tab.openPage(obj);
   proxy.$tab.closeOtherPage(obj);

@@ -79,6 +79,8 @@ import RightToolbar2 from '@/components/RightToolbar/index2.vue'
 import Editor from "@/components/Editor"
 // 文件上传组件
 import FileUpload from "@/components/FileUpload2"
+// 提示组件
+import GuideTip from '@/components/GuideTip';
 // 文件上传组件
 // 图片上传组件
 import ImageUpload from "@/components/ImageUpload"
@@ -119,6 +121,7 @@ app.component('ImagePreview', ImagePreview)
 app.component('RightToolbar', RightToolbar)
 app.component('RightToolbar2', RightToolbar2)
 app.component('Editor', Editor);
+app.component('GuideTip', GuideTip);
 app.component('QtFormItem', QtFormItem);
 app.use(router)
 app.use(store)

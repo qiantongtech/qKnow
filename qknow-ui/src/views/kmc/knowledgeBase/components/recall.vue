@@ -1252,8 +1252,6 @@ init();
 
 <style scoped lang="scss">
 .app-container {
-  margin: 0px;
-
   .pagecont-top {
     padding: 0px;
     //background-color: #f0f2f5;
@@ -1614,12 +1612,10 @@ init();
   gap: 20px;
   display: flex;
   flex-direction: column;
-  margin-left: 15px;
 }
 
 .right-container {
   flex: 1;
-  margin-right: 15px;
   .title {
     display: flex;
     align-items: center;
