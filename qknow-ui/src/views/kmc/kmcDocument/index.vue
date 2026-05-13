@@ -63,670 +63,745 @@
 -->
 
 <template>
-    <div class="app-container" ref="app-container">
-      <GuideTip tip-id="kmc/kmcDocument.list" />
-      <el-container>
-            <!-- 左侧可调整的部分 -->
-            <DeptTree :deptOptions="KcOptions" :leftWidth="leftWidth" :placeholder="'请输入分类名称'"
-                    @node-click="handleNodeClick" />
-            <el-main>
-                <div class="pagecont-top" v-show="showSearch">
-                    <el-form
-                        class="btn-style"
-                        :model="queryParams"
-                        ref="queryRef"
-                        :inline="true"
-                        label-width="75px"
-                        v-show="showSearch"
-                        @submit.prevent
+  <div class="app-container" ref="app-container">
+    <GuideTip tip-id="kmc/kmcDocument.list" />
+    <el-container>
+      <!-- 左侧可调整的部分 -->
+      <DeptTree
+        :deptOptions="KcOptions"
+        :leftWidth="leftWidth"
+        ref="DeptTreeRef"
+        :placeholder="'请输入分类名称'"
+        @node-click="handleNodeClick"
+      />
+      <el-main>
+        <div class="pagecont-top" v-show="showSearch">
+          <el-form
+            class="btn-style"
+            :model="queryParams"
+            ref="queryRef"
+            :inline="true"
+            label-width="75px"
+            v-show="showSearch"
+            @submit.prevent
+          >
+            <el-form-item label="文件名称" prop="name">
+              <el-input
+                class="el-form-input-width"
+                v-model="queryParams.name"
+                placeholder="请输入文件名称"
+                clearable
+                @keyup.enter="handleQuery"
+              />
+            </el-form-item>
+            <el-form-item>
+              <el-button
+                plain
+                type="primary"
+                @click="handleQuery"
+                @mousedown="(e) => e.preventDefault()"
+              >
+                <i class="iconfont-mini icon-a-zu22377 mr5"></i>查询
+              </el-button>
+              <el-button
+                @click="resetQuery"
+                @mousedown="(e) => e.preventDefault()"
+              >
+                <i class="iconfont-mini icon-a-zu22378 mr5"></i>重置
+              </el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+
+        <div class="pagecont-bottom">
+          <div class="justify-between mb15">
+            <el-row :gutter="15" class="btn-style">
+              <el-col :span="1.5">
+                <el-button
+                  type="primary"
+                  plain
+                  @click="handleAdd"
+                  v-hasPermi="['kmcDocument:kmcDocument:document:add']"
+                  @mousedown="(e) => e.preventDefault()"
+                >
+                  <i class="iconfont-mini icon-xinzeng mr5"></i>新增
+                </el-button>
+              </el-col>
+              <el-col :span="1.5">
+                <el-button
+                  type="danger"
+                  plain
+                  :disabled="multiple"
+                  @click="handleDelete"
+                  icon="Delete"
+                  v-hasPermi="['kg:knowledge:document:remove']"
+                  @mousedown="(e) => e.preventDefault()"
+                >
+                  删除
+                </el-button>
+              </el-col>
+            </el-row>
+            <div class="justify-end top-right-btn">
+              <right-toolbar
+                v-model:showSearch="showSearch"
+                @queryTable="getList"
+                :columns="columns"
+              ></right-toolbar>
+            </div>
+          </div>
+          <el-table
+            stripe
+            v-loading="loading"
+            :data="documentList"
+            @selection-change="handleSelectionChange"
+            :default-sort="defaultSort"
+            @sort-change="handleSortChange"
+          >
+            <el-table-column type="selection" width="55" align="center" />
+            <el-table-column
+              v-if="getColumnVisibility(1)"
+              label="编号"
+              align="center"
+              prop="id"
+              width="80"
+              sortable="custom"
+            />
+            <el-table-column
+              v-if="getColumnVisibility(2)"
+              label="文件名称"
+              prop="name"
+              align="left"
+              width="200px"
+              :show-overflow-tooltip="{ effect: 'light' }"
+            >
+              <template #default="scope">
+                {{ scope.row.name || "-" }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              v-if="getColumnVisibility(3)"
+              label="文件描述"
+              align="left"
+              prop="description"
+              width="200px"
+              :show-overflow-tooltip="{ effect: 'light' }"
+            >
+              <template #default="scope">
+                {{ scope.row.description || "-" }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              v-if="getColumnVisibility(4)"
+              label="分类"
+              align="center"
+              prop="categoryName"
+              width="150px"
+              :show-overflow-tooltip="{ effect: 'light' }"
+            >
+              <template #default="scope">
+                {{ scope.row.categoryName || "-" }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              v-if="getColumnVisibility(5)"
+              label="解析状态"
+              align="center"
+              prop="syncStatus"
+              width="100px"
+            >
+              <template #default="scope">
+                <dict-tag
+                  :options="document_sync_status"
+                  :value="scope.row.syncStatus"
+                />
+              </template>
+            </el-table-column>
+            <el-table-column
+              v-if="getColumnVisibility(6)"
+              label="备注"
+              width="200"
+              align="left"
+              prop="remark"
+              :show-overflow-tooltip="{ effect: 'light' }"
+            >
+              <template #default="scope">
+                {{ scope.row.remark || "-" }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              v-if="getColumnVisibility(7)"
+              label="创建人"
+              align="center"
+              prop="createBy"
+            >
+              <template #default="scope">
+                {{ scope.row.createBy || "-" }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              v-if="getColumnVisibility(8)"
+              label="创建时间"
+              align="center"
+              prop="createTime"
+              width="160"
+              sortable="custom"
+              :sort-orders="['descending', 'ascending']"
+            >
+              <template #default="scope">
+                <span>{{
+                  parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}:{s}")
+                }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              v-if="getColumnVisibility(9)"
+              label="操作"
+              align="center"
+              class-name="small-padding fixed-width"
+              fixed="right"
+              width="250"
+            >
+              <template #default="scope">
+                <el-button
+                  v-track="{ type: 'preview', documentId: scope.row.id }"
+                  link
+                  type="primary"
+                  icon="Document"
+                  @click="handleSegment(scope.row)"
+                  :disabled="scope.row.syncStatus !== 2"
+                  >解析结果</el-button
+                >
+                <el-button
+                  v-track="{ type: 'preview', documentId: scope.row.id }"
+                  link
+                  type="primary"
+                  icon="view"
+                  @click="previewRefactoring(scope.row)"
+                  >预览</el-button
+                >
+
+                <el-popover placement="bottom" :width="150" trigger="click">
+                  <template #reference>
+                    <el-button type="primary" icon="ArrowDown" link @click.stop
+                      >更多</el-button
                     >
-                        <el-form-item label="文件名称" prop="name">
-                            <el-input
-                                class="el-form-input-width"
-                                v-model="queryParams.name"
-                                placeholder="请输入文件名称"
-                                clearable
-                                @keyup.enter="handleQuery"
-                            />
-                        </el-form-item>
-                        <el-form-item>
-                            <el-button
-                                plain
-                                type="primary"
-                                @click="handleQuery"
-                                @mousedown="(e) => e.preventDefault()"
-                            >
-                                <i class="iconfont-mini icon-a-zu22377 mr5"></i>查询
-                            </el-button>
-                            <el-button @click="resetQuery" @mousedown="(e) => e.preventDefault()">
-                                <i class="iconfont-mini icon-a-zu22378 mr5"></i>重置
-                            </el-button>
-                        </el-form-item>
-                    </el-form>
-                </div>
-
-                <div class="pagecont-bottom">
-                    <div class="justify-between mb15">
-                        <el-row :gutter="15" class="btn-style">
-                            <el-col :span="1.5">
-                                <el-button
-                                    type="primary"
-                                    plain
-                                    @click="handleAdd"
-                                    v-hasPermi="['kmcDocument:kmcDocument:document:add']"
-                                    @mousedown="(e) => e.preventDefault()"
-                                >
-                                    <i class="iconfont-mini icon-xinzeng mr5"></i>新增
-                                </el-button>
-                            </el-col>
-                            <!--              <el-col :span="1.5">-->
-                            <!--                <el-button type="warning" plain @click="handleSyncToDify" @mousedown="(e) => e.preventDefault()">-->
-                            <!--                  <i class="iconfont-mini icon-refresh-line mr5"></i>一键解析-->
-                            <!--                </el-button>-->
-                            <!--              </el-col>-->
-                        </el-row>
-                        <div class="justify-end top-right-btn">
-                            <right-toolbar
-                                v-model:showSearch="showSearch"
-                                @queryTable="getList"
-                                :columns="columns"
-                            ></right-toolbar>
-                        </div>
-                    </div>
-                    <el-table
-                        stripe
-                        height="58vh"
-                        v-loading="loading"
-                        :data="documentList"
-                        @selection-change="handleSelectionChange"
-                        :default-sort="defaultSort"
-                        @sort-change="handleSortChange"
+                  </template>
+                  <div class="card-button-group">
+                    <el-button
+                      v-track="{ type: 'download', documentId: scope.row.id }"
+                      link
+                      type="primary"
+                      icon="download"
+                      @click="handleDownload(scope.row)"
+                      >下载</el-button
                     >
-                        <el-table-column v-if="getColumnVisibility(4)" label="文件名称" prop="name">
-                            <template #default="scope">
-                                {{ scope.row.name || '-' }}
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            v-if="getColumnVisibility(6)"
-                            label="文件描述"
-                            align="left"
-                            prop="description"
-                        >
-                            <template #default="scope">
-                                {{ scope.row.description || '-' }}
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            v-if="getColumnVisibility(8)"
-                            label="解析状态"
-                            align="center"
-                            prop="syncStatus"
-                        >
-                            <template #default="scope">
-                                <dict-tag
-                                    :options="document_sync_status"
-                                    :value="scope.row.syncStatus"
-                                />
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            v-if="getColumnVisibility(9)"
-                            label="创建人"
-                            align="center"
-                            prop="createBy"
-                        >
-                            <template #default="scope">
-                                {{ scope.row.createBy || '-' }}
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            v-if="getColumnVisibility(11)"
-                            label="创建时间"
-                            align="center"
-                            prop="createTime"
-                            width="160"
-                            sortable="custom"
-                            :sort-orders="['descending', 'ascending']"
-                        >
-                            <template #default="scope">
-                                <span>{{
-                                    parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}:{s}')
-                                }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            label="操作"
-                            align="center"
-                            class-name="small-padding fixed-width"
-                            fixed="right"
-                            width="320"
-                        >
-                            <template #default="scope">
-                                <el-button
-                                  v-track="{ type: 'preview', documentId: scope.row.id }"
-                                  link
-                                  type="primary"
-                                  icon="Document"
-                                  @click="handleSegment(scope.row)"
-                                  :disabled="scope.row.syncStatus !== 2"
-                                >解析结果</el-button
-                                >
-                                <el-button
-                                    link
-                                    type="primary"
-                                    icon="Edit"
-                                    @click="handleUpdate(scope.row)"
-                                    v-hasPermi="['kmcDocument:kmcDocument:document:edit']"
-                                    >修改</el-button
-                                >
+                    <el-button
+                      link
+                      type="primary"
+                      icon="Edit"
+                      @click="handleUpdate(scope.row)"
+                      v-hasPermi="['kmcDocument:kmcDocument:document:edit']"
+                      >修改</el-button
+                    >
 
-                              <el-popover placement="bottom" :width="150" trigger="click">
-                                <template #reference>
-                                  <el-button type="primary" icon="ArrowDown"  link @click.stop>更多</el-button>
-                                </template>
-                                <div class="card-button-group" >
-                                  <el-button
-                                      v-track="{ type: 'preview', documentId: scope.row.id }"
-                                      link
-                                      type="primary"
-                                      icon="view"
-                                      @click="previewRefactoring(scope.row)"
-                                  >预览</el-button
-                                  >
-                                  <el-button
-                                      v-track="{ type: 'download', documentId: scope.row.id }"
-                                      link
-                                      type="primary"
-                                      icon="download"
-                                      @click="handleDownload(scope.row)"
-                                  >下载</el-button
-                                  >
-                                  <el-button
-                                      link
-                                      type="danger"
-                                      icon="Delete"
-                                      @click="handleDelete(scope.row)"
-                                      v-hasPermi="['kmcDocument:kmcDocument:document:remove']"
-                                  >删除</el-button
-                                  >
-                                </div>
-                              </el-popover>
-                            </template>
-                        </el-table-column>
+                    <el-button
+                      link
+                      type="danger"
+                      icon="Delete"
+                      @click="handleDelete(scope.row)"
+                      v-hasPermi="['kmcDocument:kmcDocument:document:remove']"
+                      >删除</el-button
+                    >
+                  </div>
+                </el-popover>
+              </template>
+            </el-table-column>
 
-                        <template #empty>
-                            <div class="emptyBg">
-                                <img src="@/assets/system/images/no_data/noData.png" alt="" />
-                                <p>暂无记录</p>
-                            </div>
-                        </template>
-                    </el-table>
+            <template #empty>
+              <div class="emptyBg">
+                <img src="@/assets/system/images/no_data/noData.png" alt="" />
+                <p>暂无记录</p>
+              </div>
+            </template>
+          </el-table>
 
-                    <pagination
-                        v-show="total > 0"
-                        :total="total"
-                        v-model:page="queryParams.pageNum"
-                        v-model:limit="queryParams.pageSize"
-                        @pagination="getList"
-                    />
-                </div>
-            </el-main>
-        </el-container>
-    </div>
+          <pagination
+            v-show="total > 0"
+            :total="total"
+            v-model:page="queryParams.pageNum"
+            v-model:limit="queryParams.pageSize"
+            @pagination="getList"
+          />
+        </div>
+      </el-main>
+    </el-container>
+  </div>
 </template>
 
 <script setup name="kmcDocument">
-    import DeptTree from "@/components/DeptTree";
-    import {
-        listDocument,
-        delDocument,
-        addDocument,
-        updateDocument,
-        getFileTypes
-    } from '@/api/kmc/kmcDocument/kmcDocument.js';
-    import { getToken } from '@/utils/auth.js';
-    import { ref } from 'vue';
-    import moment from 'moment/moment.js';
-    import { getKmcKnowledgeBaseList } from '@/api/kmc/knowledgeBase/knowledgeBase.js';
-    import { filePreview } from '@/utils/kkFileView.js';
-    import {ElMessage} from "element-plus";
+import DeptTree from "@/components/DeptTree";
+import {
+  listDocument,
+  delDocument,
+  addDocument,
+  updateDocument,
+  getFileTypes,
+} from "@/api/kmc/kmcDocument/kmcDocument.js";
+import { getToken } from "@/utils/auth.js";
+import { ref } from "vue";
+import moment from "moment/moment.js";
+import { getKmcKnowledgeBaseList } from "@/api/kmc/knowledgeBase/knowledgeBase.js";
+import { filePreview } from "@/utils/kkFileView.js";
+import { ElMessage } from "element-plus";
 
-    const { proxy } = getCurrentInstance();
+const { proxy } = getCurrentInstance();
 
-    const { document_sync_status } = proxy.useDict('document_sync_status');
+const { document_sync_status } = proxy.useDict("document_sync_status");
 
-    const documentList = ref([]);
+const documentList = ref([]);
 
-    const defaultSort = ref({ prop: 'createTime', order: 'desc' });
+const defaultSort = ref({ prop: "createTime", order: "desc" });
 
-    // 列显隐信息
-    const columns = ref([
-        { key: 4, label: '文件名称', visible: true },
-        { key: 6, label: '文件描述', visible: true },
-        { key: 9, label: '创建人', visible: true },
-        { key: 11, label: '创建时间', visible: true }
-    ]);
+// 列显隐信息
+const columns = ref([
+  { key: 1, label: "编号", visible: true },
+  { key: 2, label: "文件名称", visible: true },
+  { key: 3, label: "文件描述", visible: true },
+  { key: 4, label: "分类", visible: true },
+  { key: 5, label: "解析状态", visible: true },
+  { key: 6, label: "备注", visible: true },
+  { key: 7, label: "创建人", visible: true },
+  { key: 8, label: "创建时间", visible: true },
+  { key: 9, label: "操作", visible: true },
+]);
 
-    const getColumnVisibility = (key) => {
-        const column = columns.value.find((col) => col.key === key);
-        // 如果没有找到对应列配置，默认显示
-        if (!column) return true;
-        // 如果找到对应列配置，根据visible属性来控制显示
-        return column.visible;
-    };
+const getColumnVisibility = (key) => {
+  const column = columns.value.find((col) => col.key === key);
+  // 如果没有找到对应列配置，默认显示
+  if (!column) return true;
+  // 如果找到对应列配置，根据visible属性来控制显示
+  return column.visible;
+};
 
-    const open = ref(false);
-    const loading = ref(true);
-    const showSearch = ref(true);
-    const ids = ref([]);
-    const single = ref(true);
-    const multiple = ref(true);
-    const total = ref(0);
-    const route = useRoute();
+const open = ref(false);
+const loading = ref(true);
+const showSearch = ref(true);
+const ids = ref([]);
+const single = ref(true);
+const multiple = ref(true);
+const total = ref(0);
+const route = useRoute();
 
-    const leftWidth = ref(300); // 初始左侧宽度
-    const isResizing = ref(false); // 判断是否正在拖拽
-    let startX = 0; // 鼠标按下时的初始位置
-    const KcOptions = ref(undefined);
-    const selectedNodeId = ref(null);
-    const selectedNodeName = ref(null);
-    const selectNoteId = ref(null);
-    watch(
-        () => route.params.kbId,
-        (newKbId) => {
-          if (newKbId) {
-            getKnowledge(); // 调用 getKnowledge 方法
-          }
-        },
-        { immediate: true } // 确保初始值也会触发
-    );
-    watch(
-        () => route.fullPath,
-        () => {
-          if (route.params.kbId) {
-            getKnowledge();
-            // treeQuery();
-          }
-        },
-        { immediate: true } // 确保初始值也会触发
-    );
-
-    /*** 用户导入参数 */
-    const upload = reactive({
-        // 是否显示弹出层（用户导入）
-        open: false,
-        // 弹出层标题（用户导入）
-        title: '',
-        // 是否禁用上传
-        isUploading: false,
-        // 是否更新已经存在的用户数据
-        updateSupport: 0,
-        // 设置上传的请求头部
-        headers: { Authorization: 'Bearer ' + getToken() },
-        // 上传的地址
-        url: import.meta.env.VITE_APP_BASE_API + '/kmcDocument/document/importData'
-    });
-
-    const data = reactive({
-        form: {},
-        queryParams: {
-            pageNum: 1,
-            pageSize: 10,
-            name: null,
-            knowledgeBaseId: null,
-            orderByColumn: 'createTime',
-            isAsc: 'descending'
-        },
-        rules: {
-            workspaceId: [{ required: true, message: '工作区id不能为空', trigger: 'blur' }],
-            categoryId: [{ required: true, message: '知识分类id不能为空', trigger: 'blur' }],
-            name: [{ required: true, message: '文件名称不能为空', trigger: 'blur' }],
-            path: [{ required: true, message: '文件路径不能为空', trigger: 'blur' }],
-            validFlag: [{ required: true, message: '是否有效不能为空', trigger: 'blur' }],
-            delFlag: [{ required: true, message: '删除标志不能为空', trigger: 'blur' }],
-            updateTime: [{ required: true, message: '更新时间不能为空', trigger: 'blur' }]
-        }
-    });
-
-    const { queryParams, form, rules } = toRefs(data);
-
-    async function treeQuery() {
-        await getKmcCategoryTree();
+const leftWidth = ref(300); // 初始左侧宽度
+const isResizing = ref(false); // 判断是否正在拖拽
+let startX = 0; // 鼠标按下时的初始位置
+const KcOptions = ref(undefined);
+const selectedNodeId = ref(null);
+const selectedNodeName = ref(null);
+const selectNoteId = ref(null);
+watch(
+  () => route.params.kbId,
+  (newKbId) => {
+    if (newKbId) {
+      getKnowledge(); // 调用 getKnowledge 方法
     }
-
-    /** 查询部门下拉树结构 */
-    function getKmcCategoryTree() {
-        getFileTypes(queryParams.value.knowledgeBaseId).then((response) => {
-            KcOptions.value = response.data;
-        });
+  },
+  { immediate: true } // 确保初始值也会触发
+);
+watch(
+  () => route.fullPath,
+  () => {
+    if (route.params.kbId) {
+      getKnowledge();
+      // treeQuery();
     }
-    /** 查询知识文件列表 */
-    function getList() {
-        loading.value = true;
-        listDocument(queryParams.value).then((response) => {
-            documentList.value = response.data.rows;
-            total.value = response.data.total;
-            loading.value = false;
-        });
+  },
+  { immediate: true } // 确保初始值也会触发
+);
+
+/*** 用户导入参数 */
+const upload = reactive({
+  // 是否显示弹出层（用户导入）
+  open: false,
+  // 弹出层标题（用户导入）
+  title: "",
+  // 是否禁用上传
+  isUploading: false,
+  // 是否更新已经存在的用户数据
+  updateSupport: 0,
+  // 设置上传的请求头部
+  headers: { Authorization: "Bearer " + getToken() },
+  // 上传的地址
+  url: import.meta.env.VITE_APP_BASE_API + "/kmcDocument/document/importData",
+});
+
+const data = reactive({
+  form: {},
+  queryParams: {
+    pageNum: 1,
+    pageSize: 10,
+    name: null,
+    knowledgeBaseId: null,
+    orderByColumn: "createTime",
+    isAsc: "descending",
+  },
+  rules: {
+    workspaceId: [
+      { required: true, message: "工作区id不能为空", trigger: "blur" },
+    ],
+    categoryId: [
+      { required: true, message: "知识分类id不能为空", trigger: "blur" },
+    ],
+    name: [{ required: true, message: "文件名称不能为空", trigger: "blur" }],
+    path: [{ required: true, message: "文件路径不能为空", trigger: "blur" }],
+    validFlag: [
+      { required: true, message: "是否有效不能为空", trigger: "blur" },
+    ],
+    delFlag: [{ required: true, message: "删除标志不能为空", trigger: "blur" }],
+    updateTime: [
+      { required: true, message: "更新时间不能为空", trigger: "blur" },
+    ],
+  },
+});
+
+const { queryParams, form, rules } = toRefs(data);
+
+async function treeQuery() {
+  await getKmcCategoryTree();
+}
+
+/** 查询部门下拉树结构 */
+function getKmcCategoryTree() {
+  getFileTypes(queryParams.value.knowledgeBaseId).then((response) => {
+    KcOptions.value = response.data;
+  });
+}
+/** 查询知识文件列表 */
+function getList() {
+  loading.value = true;
+  listDocument(queryParams.value).then((response) => {
+    documentList.value = response.data.rows;
+    total.value = response.data.total;
+    loading.value = false;
+  });
+}
+
+/** 递归查找选中的节点 */
+const findNodeById = (nodes, id) => {
+  for (let node of nodes) {
+    if (node.id === id) {
+      return node;
     }
-
-    /** 递归查找选中的节点 */
-    const findNodeById = (nodes, id) => {
-        for (let node of nodes) {
-            if (node.id === id) {
-                return node;
-            }
-            if (node.children) {
-                const found = findNodeById(node.children, id);
-                if (found) return found;
-            }
-        }
-        return null;
-    };
-
-    /** 节点单击事件 */
-    function handleNodeClick(data) {
-        let ids = [];
-        collectIds(data, ids);
-        queryParams.value.ids = ids;
-        handleQuery();
+    if (node.children) {
+      const found = findNodeById(node.children, id);
+      if (found) return found;
     }
+  }
+  return null;
+};
 
-    function collectIds(node, ids) {
-        ids.push(node.id);
-        if (node.children && Array.isArray(node.children)) {
-            node.children.forEach((child) => collectIds(child, ids));
-        }
-    }
+/** 节点单击事件 */
+function handleNodeClick(data) {
+  let ids = [];
+  collectIds(data, ids);
+  queryParams.value.ids = ids;
+  handleQuery();
+}
 
-    function getKnowledge() {
-        // TODO：后续改为校验id是否合法即可，无需查询所有
-        getKmcKnowledgeBaseList().then((res) => {
-            if (res.data.length > 0) {
-              const kbId = route.params.kbId || '';
-              if (kbId) {
-                const matchedItem = res.data.find((item) => item.id == kbId);
-                if (matchedItem) {
-                  queryParams.value.knowledgeBaseId = matchedItem.id;
-                  form.value.knowledgeBaseId = matchedItem.id;
-                  getList();
-                  treeQuery();
-                } else {
-                  ElMessage.error('未匹配到知识库列表中的任何项');
-                }
-              } else {
-                ElMessage.error('非法路径！');
-              }
-            } else {
-              ElMessage.error('请先创建知识库！');
-              loading.value = false;
-            }
-        });
-    }
+function collectIds(node, ids) {
+  ids.push(node.id);
+  if (node.children && Array.isArray(node.children)) {
+    node.children.forEach((child) => collectIds(child, ids));
+  }
+}
 
-    // 表单重置
-    function reset() {
-        form.value = {
-            id: null,
-            workspaceId: null,
-            categoryId: null,
-            categoryName: null,
-            name: null,
-            path: null,
-            description: null,
-            validFlag: null,
-            delFlag: null,
-            createBy: null,
-            creatorId: null,
-            createTime: null,
-            updateBy: null,
-            updaterId: null,
-            updateTime: null,
-            remark: null,
-            previewCount: null,
-            downloadCount: null
-        };
-        proxy.resetForm('documentRef');
-    }
-
-    /** 搜索按钮操作 */
-    function handleQuery() {
-        queryParams.value.pageNum = 1;
-        getList();
-        //请求树形数据
-        // getKmcCategoryTree();
-    }
-
-    /** 重置按钮操作 */
-    function resetQuery() {
-        const preservedKnowledgeBaseId = queryParams.value.knowledgeBaseId;
-        proxy.resetForm('queryRef');
-        //不重置知识库id
-        queryParams.value.knowledgeBaseId = preservedKnowledgeBaseId;
-        selectedNodeId.value = null;
-        selectedNodeName.value = null;
-        form.value.categoryId = null;
-        queryParams.value.categoryId = undefined;
-        queryParams.value.ids = undefined;
-        handleQuery();
-    }
-
-    // 多选框选中数据
-    function handleSelectionChange(selection) {
-        ids.value = selection.map((item) => item.id);
-        single.value = selection.length != 1;
-        multiple.value = !selection.length;
-    }
-
-    /** 排序触发事件 */
-    function handleSortChange(column, prop, order) {
-        queryParams.value.orderByColumn = column.prop;
-        queryParams.value.isAsc = column.order;
-        getList();
-    }
-
-    /** 新增按钮操作 */
-    function handleAdd() {
-        reset();
-        const obj = {
-            path: `/kmc/${route.params.kbId}/kmcDocument/add`,
-            query: {
-                categoryId: selectNoteId.value,
-            }
-        };
-        proxy.$tab.openPage(obj);
-    }
-
-    /** 修改按钮操作 */
-    function handleUpdate(row) {
-        reset();
-        const obj = {
-            path: `/kmc/${route.params.kbId}/kmcDocument/edit`,
-            query: {
-                id: row.id,
-            }
-        };
-        proxy.$tab.openPage(obj);
-    }
-
-    //跳转分段详情页面
-    function handleSegment(row) {
-        const obj = {
-            path: `/kmc/${route.params.kbId}/knowledgeSegment/index`,
-            query: {
-                id: row.id,
-                mode: row.docForm,
-            }
-        };
-        proxy.$tab.openPage(obj);
-    }
-
-    /** 删除按钮操作 */
-    function handleDelete(row) {
-        const _ids = row.id || ids.value;
-        const name = row.name;
-        proxy.$modal
-            .confirm('是否确认删除知识文件名称为"' + name + '"的数据项？')
-            .then(function () {
-                return delDocument(_ids);
-            })
-            .then(() => {
-                treeQuery();
-                getList();
-                proxy.$modal.msgSuccess('删除成功');
-            })
-            .catch(() => {});
-    }
-
-    const startResize = (event) => {
-        isResizing.value = true;
-        startX = event.clientX;
-        // 使用 requestAnimationFrame 减少重绘频率
-        document.addEventListener('mousemove', updateResize);
-        document.addEventListener('mouseup', stopResize);
-    };
-
-    const updateResize = (event) => {
-        if (isResizing.value) {
-            const delta = event.clientX - startX; // 计算鼠标移动距离
-            leftWidth.value += delta; // 修改左侧宽度
-            startX = event.clientX; // 更新起始位置
-            // 使用 requestAnimationFrame 来减少页面重绘频率
-            requestAnimationFrame(() => {});
-        }
-    };
-
-    const stopResize = () => {
-        isResizing.value = false;
-        document.removeEventListener('mousemove', updateResize);
-        document.removeEventListener('mouseup', stopResize);
-    };
-
-    function handleDownload(row) {
-        if (row.path === '') {
-            proxy.$modal.msgError('没有文件');
+function getKnowledge() {
+  // TODO：后续改为校验id是否合法即可，无需查询所有
+  getKmcKnowledgeBaseList().then((res) => {
+    if (res.data.length > 0) {
+      const kbId = route.params.kbId || "";
+      if (kbId) {
+        const matchedItem = res.data.find((item) => item.id == kbId);
+        if (matchedItem) {
+          queryParams.value.knowledgeBaseId = matchedItem.id;
+          form.value.knowledgeBaseId = matchedItem.id;
+          getList();
+          treeQuery();
         } else {
-            let path = import.meta.env.VITE_APP_BASE_API + '/profile' + row.path;
-            fetch(path) // 使用 fetch 获取文件数据
-                .then((response) => response.blob()) // 将文件数据转换为 Blob
-                .then((blob) => {
-                    const link = document.createElement('a');
-                    const url = URL.createObjectURL(blob); // 创建 Blob URL
-                    link.href = url;
-                    link.setAttribute('download', row.name || '下载文件'); // 设置文件名
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    URL.revokeObjectURL(url); // 释放 Blob URL
-                })
-                .catch(() => {
-                    proxy.$modal.msgError('文件下载失败');
-                });
+          ElMessage.error("未匹配到知识库列表中的任何项");
         }
+      } else {
+        ElMessage.error("非法路径！");
+      }
+    } else {
+      ElMessage.error("请先创建知识库！");
+      loading.value = false;
     }
+  });
+}
 
-    function previewRefactoring(row) {
-        let path = import.meta.env.VITE_APP_BASE_API + '/profile' + row.path;
-        filePreview(path);
-    }
+// 表单重置
+function reset() {
+  form.value = {
+    id: null,
+    workspaceId: null,
+    categoryId: null,
+    categoryName: null,
+    name: null,
+    path: null,
+    description: null,
+    validFlag: null,
+    delFlag: null,
+    createBy: null,
+    creatorId: null,
+    createTime: null,
+    updateBy: null,
+    updaterId: null,
+    updateTime: null,
+    remark: null,
+    previewCount: null,
+    downloadCount: null,
+  };
+  proxy.resetForm("documentRef");
+}
+
+/** 搜索按钮操作 */
+function handleQuery() {
+  queryParams.value.pageNum = 1;
+  getList();
+  //请求树形数据
+  // getKmcCategoryTree();
+}
+
+/** 重置按钮操作 */
+function resetQuery() {
+  const preservedKnowledgeBaseId = queryParams.value.knowledgeBaseId;
+  proxy.resetForm("queryRef");
+  //不重置知识库id
+  queryParams.value.knowledgeBaseId = preservedKnowledgeBaseId;
+  selectedNodeId.value = null;
+  selectedNodeName.value = null;
+  form.value.categoryId = null;
+  queryParams.value.categoryId = undefined;
+  queryParams.value.ids = undefined;
+  handleQuery();
+}
+
+// 多选框选中数据
+function handleSelectionChange(selection) {
+  ids.value = selection.map((item) => item.id);
+  single.value = selection.length != 1;
+  multiple.value = !selection.length;
+}
+
+/** 排序触发事件 */
+function handleSortChange(column, prop, order) {
+  queryParams.value.orderByColumn = column.prop;
+  queryParams.value.isAsc = column.order;
+  getList();
+}
+
+/** 新增按钮操作 */
+function handleAdd() {
+  reset();
+  const obj = {
+    path: `/kmc/${route.params.kbId}/kmcDocument/add`,
+    query: {
+      categoryId: selectNoteId.value,
+    },
+  };
+  proxy.$tab.openPage(obj);
+}
+
+/** 修改按钮操作 */
+function handleUpdate(row) {
+  reset();
+  const obj = {
+    path: `/kmc/${route.params.kbId}/kmcDocument/edit`,
+    query: {
+      id: row.id,
+    },
+  };
+  proxy.$tab.openPage(obj);
+}
+
+//跳转分段详情页面
+function handleSegment(row) {
+  const obj = {
+    path: `/kmc/${route.params.kbId}/knowledgeSegment/index`,
+    query: {
+      id: row.id,
+      mode: row.docForm,
+    },
+  };
+  proxy.$tab.openPage(obj);
+}
+
+/** 删除按钮操作 */
+function handleDelete(row) {
+  const _ids = row.id || ids.value;
+  const name = row.name;
+  proxy.$modal
+    .confirm('是否确认删除知识文件名称为"' + name + '"的数据项？')
+    .then(function () {
+      return delDocument(_ids);
+    })
+    .then(() => {
+      treeQuery();
+      getList();
+      proxy.$modal.msgSuccess("删除成功");
+    })
+    .catch(() => {});
+}
+
+const startResize = (event) => {
+  isResizing.value = true;
+  startX = event.clientX;
+  // 使用 requestAnimationFrame 减少重绘频率
+  document.addEventListener("mousemove", updateResize);
+  document.addEventListener("mouseup", stopResize);
+};
+
+const updateResize = (event) => {
+  if (isResizing.value) {
+    const delta = event.clientX - startX; // 计算鼠标移动距离
+    leftWidth.value += delta; // 修改左侧宽度
+    startX = event.clientX; // 更新起始位置
+    // 使用 requestAnimationFrame 来减少页面重绘频率
+    requestAnimationFrame(() => {});
+  }
+};
+
+const stopResize = () => {
+  isResizing.value = false;
+  document.removeEventListener("mousemove", updateResize);
+  document.removeEventListener("mouseup", stopResize);
+};
+
+function handleDownload(row) {
+  if (row.path === "") {
+    proxy.$modal.msgError("没有文件");
+  } else {
+    let path = import.meta.env.VITE_APP_BASE_API + "/profile" + row.path;
+    fetch(path) // 使用 fetch 获取文件数据
+      .then((response) => response.blob()) // 将文件数据转换为 Blob
+      .then((blob) => {
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob); // 创建 Blob URL
+        link.href = url;
+        link.setAttribute("download", row.name || "下载文件"); // 设置文件名
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url); // 释放 Blob URL
+      })
+      .catch(() => {
+        proxy.$modal.msgError("文件下载失败");
+      });
+  }
+}
+
+function previewRefactoring(row) {
+  let path = import.meta.env.VITE_APP_BASE_API + "/profile" + row.path;
+  filePreview(path);
+}
 </script>
 <style scoped lang="scss">
-    :deep(.selectlist .el-tag.el-tag--info) {
-        background: #f3f8ff !important;
-        border: 0px solid #6ba7ff !important;
-        color: #2666fb !important;
-    }
+:deep(.selectlist .el-tag.el-tag--info) {
+  background: #f3f8ff !important;
+  border: 0px solid #6ba7ff !important;
+  color: #2666fb !important;
+}
 
-    .left-pane {
-        background-color: #ffffff;
-        overflow: hidden;
-        transition: width 0s; /* 可以根据需要调整过渡时间 */
-    }
+.left-pane {
+  background-color: #ffffff;
+  overflow: hidden;
+  transition: width 0s; /* 可以根据需要调整过渡时间 */
+}
 
-    .resize-bar {
-        cursor: ew-resize;
-        background-color: #f0f2f5;
-        height: 86vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+.resize-bar {
+  cursor: ew-resize;
+  background-color: #f0f2f5;
+  height: 86vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    .resize-handle-sx {
-        width: 15px;
-        text-align: center;
-        //   cursor:pointer
-    }
+.resize-handle-sx {
+  width: 15px;
+  text-align: center;
+  //   cursor:pointer
+}
 
-    .zjsx {
-        display: inline-block;
-        width: 5px;
-        height: 50px;
-        border-left: 1px solid #ccc;
-        border-right: 1px solid #ccc;
-    }
+.zjsx {
+  display: inline-block;
+  width: 5px;
+  height: 50px;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+}
 
-    .el-main {
-        padding: 2px 0px;
-        // box-shadow: 1px 1px 3px rgba(0, 0, 0, .2);
-    }
+.el-main {
+  padding: 2px 0px;
+  // box-shadow: 1px 1px 3px rgba(0, 0, 0, .2);
+}
 
-    .el-aside {
-        padding: 2px 0px;
-        margin-bottom: 0px;
-        background-color: #f0f2f5;
-    }
+.el-aside {
+  padding: 2px 0px;
+  margin-bottom: 0px;
+  background-color: #f0f2f5;
+}
 
-    .custom-tree-node {
-        display: flex;
-        align-items: center;
-    }
+.custom-tree-node {
+  display: flex;
+  align-items: center;
+}
 
-    .treelable {
-        margin-left: 5px;
-    }
+.treelable {
+  margin-left: 5px;
+}
 
-    .zjiconimg {
-        font-size: 12px;
-    }
+.zjiconimg {
+  font-size: 12px;
+}
 
-    .colorxz {
-        color: #358cf3;
-    }
+.colorxz {
+  color: #358cf3;
+}
 
-    .colorwxz {
-        color: #afd1fa;
-    }
+.colorwxz {
+  color: #afd1fa;
+}
 
-    .iconimg {
-        font-size: 15px;
-    }
+.iconimg {
+  font-size: 15px;
+}
 
-    //上传附件样式调整
-    // .el-upload-list{
-    //    display: flex;
-    // }
-    :deep(.el-upload-list__item) {
-        width: 100%;
-        height: 25px;
-    }
+//上传附件样式调整
+// .el-upload-list{
+//    display: flex;
+// }
+:deep(.el-upload-list__item) {
+  width: 100%;
+  height: 25px;
+}
 
-    .filecont {
-        height: 100%;
-    }
-    :deep(.el-dialog .el-dialog__body) {
-        height: 100% !important;
-        //padding: 10px !important;
-    }
-    .mr0 {
-        margin-right: 0px !important;
-    }
-    .card-button-group {
-      display: flex;
-      flex-direction: column;
-      button{
-        margin-left: 0;
-      }
-    }
+.filecont {
+  height: 100%;
+}
+:deep(.el-dialog .el-dialog__body) {
+  height: 100% !important;
+  //padding: 10px !important;
+}
+.mr0 {
+  margin-right: 0px !important;
+}
+.card-button-group {
+  display: flex;
+  flex-direction: column;
+  button {
+    margin-left: 0;
+  }
+}
 </style>
