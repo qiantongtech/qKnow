@@ -174,6 +174,14 @@ public class DmDatasourceController extends BaseController {
         return daDatasourceService.clientsTest(ids);
     }
 
+    @Operation(summary = "测试连接(表单数据)")
+    @PreAuthorize("@ss.hasPermi('dm:datasource:datasource:edit')")
+    @Log(title = "测试连接", businessType = BusinessType.DELETE)
+    @PostMapping("clientsTestWithForm")
+    public AjaxResult clientsTestWithForm(@RequestBody DmDatasourceRespVO reqVO) {
+        return daDatasourceService.clientsTestWithForm(reqVO);
+    }
+
 
     @Operation(summary = "获取数据源里面的数据表")
     @PreAuthorize("@ss.hasPermi('dm:datasource:datasource:query')")
