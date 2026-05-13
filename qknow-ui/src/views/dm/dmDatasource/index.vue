@@ -51,11 +51,11 @@
                         @keyup.enter="handleQuery"
                     />
                 </el-form-item>
-                <el-form-item label="数据源类型" prop="datasourceType">
+                <el-form-item label="数据连接类型" prop="datasourceType">
                     <el-select
                         class="el-form-input-width"
                         v-model="queryParams.datasourceType"
-                        placeholder="请选择数据源类型"
+                        placeholder="请选择数据连接类型"
                         clearable
                     >
                         <el-option
@@ -126,28 +126,26 @@
                 :default-sort="defaultSort"
                 @sort-change="handleSortChange"
             >
-<!--                <el-table-column-->
-<!--                    v-if="getColumnVisibility(1)"-->
-<!--                    label="编号"-->
-<!--                    align="center"-->
-<!--                    prop="id"-->
-<!--                    show-overflow-tooltip-->
-<!--                >-->
-<!--                    <template #default="scope">-->
-<!--                        {{ scope.row.id || '-' }}-->
-<!--                    </template>-->
-<!--                </el-table-column>-->
-                <!--       <el-table-column type="selection" width="55" align="center" />-->
-                <el-table-column label="序号" align="center" width="80">
-                  <template #default="{ $index }">
-                    {{ $index + 1 }}
-                  </template>
-                </el-table-column>
                 <el-table-column
                     v-if="getColumnVisibility(1)"
-                    label="数据连接名称"
+                    label="编号"
                     align="center"
+                    prop="id"
+                    width="80"
+                    sortable="custom"
+                    :sort-orders="['descending', 'ascending']"
+                    show-overflow-tooltip
+                >
+                    <template #default="scope">
+                        {{ scope.row.id || '-' }}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    v-if="getColumnVisibility(2)"
+                    label="数据连接名称"
+                    align="left"
                     prop="datasourceName"
+                    width="240"
                     show-overflow-tooltip
                 >
                     <template #default="scope">
@@ -155,10 +153,11 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    v-if="getColumnVisibility(9)"
-                    label="数据连接描述"
-                    align="center"
+                    v-if="getColumnVisibility(3)"
+                    label="描述"
+                    align="left"
                     prop="description"
+                    width="240"
                     show-overflow-tooltip
                 >
                     <template #default="scope">
@@ -167,18 +166,7 @@
                 </el-table-column>
                 <el-table-column
                     v-if="getColumnVisibility(4)"
-                    label="数据库IP"
-                    align="center"
-                    prop="ip"
-                    show-overflow-tooltip
-                >
-                    <template #default="scope">
-                        {{ scope.row.ip || '-' }}
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    v-if="getColumnVisibility(2)"
-                    label="数据源类型"
+                    label="数据连接类型"
                     align="center"
                     prop="datasourceType"
                 >
@@ -186,15 +174,38 @@
                         <dict-tag :options="datasource_type" :value="scope.row.datasourceType" />
                     </template>
                 </el-table-column>
-
-
-
                 <el-table-column
-                    v-if="getColumnVisibility(13)"
+                    v-if="getColumnVisibility(5)"
+                    label="状态"
+                    align="center"
+                    prop="validFlag"
+                >
+                    <template #default="scope">
+                        <el-switch
+                            v-model="scope.row.validFlag"
+                            :active-value="true"
+                            :inactive-value="false"
+                            @change="handleStatusChange(scope.row)"
+                        />
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    v-if="getColumnVisibility(6)"
+                    label="创建人"
+                    align="center"
+                    prop="description"
+                    show-overflow-tooltip
+                >
+                  <template #default="scope">
+                    {{ scope.row.createBy || '-' }}
+                  </template>
+                </el-table-column>
+                <el-table-column
+                    v-if="getColumnVisibility(7)"
                     label="创建时间"
                     align="center"
                     prop="createTime"
-                    width="180"
+                    width="160"
                     sortable="custom"
                     :sort-orders="['descending', 'ascending']"
                 >
@@ -205,62 +216,62 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    v-if="getColumnVisibility(14)"
-                    label="更新时间"
-                    align="center"
-                    prop="updateTime"
-                    width="180"
-                >
-                    <template #default="scope">
-                        <span>{{
-                            parseTime(scope.row.updateTime, '{y}-{m}-{d} {h}:{i}:{s}')
-                        }}</span>
-                    </template>
-                </el-table-column>
-
-                <el-table-column
+                    v-if="getColumnVisibility(8)"
                     label="操作"
                     align="center"
                     class-name="small-padding fixed-width"
                     fixed="right"
-                    width="350"
+                    width="280"
                 >
                     <template #default="scope">
                         <el-button
                             link
                             type="primary"
-                            icon="view"
-                            @click="handleTestConnection(scope.row)"
+                            @click="handleTestConnection(scope.row,'table')"
                             v-hasPermi="['dm:datasource:datasource:edit']"
-                            >测试连接</el-button
                         >
+                            <template #icon><el-icon :size="14"><Connection /></el-icon></template>
+                            测试连接
+                        </el-button>
                         <el-button
                             link
                             type="primary"
-                            icon="Edit"
-                            @click="handleUpdate(scope.row)"
-                            v-hasPermi="['dm:datasource:datasource:edit']"
-                            >修改</el-button
-                        >
-
-                        <el-button
-                            link
-                            type="danger"
-                            icon="Delete"
-                            @click="handleDelete(scope.row)"
-                            v-hasPermi="['dm:datasource:datasource:remove']"
-                            >删除</el-button
-                        >
-                        <el-button
-                            link
-                            type="primary"
-                            icon="view"
                             @click="handleDetail(scope.row)"
                             v-hasPermi="['dm:datasource:datasource:edit']"
-                            >详情</el-button
                         >
-                        <!--           <el-button link type="primary" icon="view" @click="routeTo('/da/datasource/daDatasourceDetail',scope.row)"-->
-                        <!--                      v-hasPermi="['dm:datasource:datasource:edit']">复杂详情</el-button>-->
+                            <template #icon><el-icon :size="14"><View /></el-icon></template>
+                            详情
+                        </el-button>
+                        <el-popover placement="bottom" :width="150" trigger="click">
+                            <template #reference>
+                                <el-button type="primary" link @click.stop>
+                                    <template #icon><el-icon :size="14"><ArrowDown /></el-icon></template>
+                                    更多
+                                </el-button>
+                            </template>
+                            <div class="card-button-group">
+                                <el-button
+                                    link
+                                    type="primary"
+                                    @click="handleUpdate(scope.row)"
+                                    v-hasPermi="['dm:datasource:datasource:edit']"
+                                    style="margin-left: 28px"
+                                >
+                                    <template #icon><el-icon :size="14"><Edit /></el-icon></template>
+                                    修改
+                                </el-button>
+                                <el-button
+                                    link
+                                    type="danger"
+                                    @click="handleDelete(scope.row)"
+                                    v-hasPermi="['dm:datasource:datasource:remove']"
+                                    style="margin-left: 28px"
+                                >
+                                    <template #icon><el-icon :size="14"><Delete /></el-icon></template>
+                                    删除
+                                </el-button>
+                            </div>
+                        </el-popover>
                     </template>
                 </el-table-column>
 
@@ -281,11 +292,11 @@
             />
         </div>
 
-        <!-- 添加或修改数据源对话框 -->
+        <!-- 新增或修改数据源对话框 -->
         <el-dialog
             :title="title"
             v-model="open"
-            width="800px"
+            width="1000px"
             :append-to="$refs['app-container']"
             draggable
         >
@@ -312,8 +323,8 @@
                     </el-col>
 
                     <el-col :span="12">
-                        <el-form-item label="数据源类型" prop="datasourceType">
-                            <el-select v-model="form.datasourceType" placeholder="请选择数据源类型">
+                        <el-form-item label="数据连接类型" prop="datasourceType">
+                            <el-select v-model="form.datasourceType" placeholder="请选择数据连接类型">
                                 <el-option
                                     v-for="dict in datasource_type"
                                     :key="dict.value"
@@ -321,6 +332,18 @@
                                     :value="dict.value"
                                 ></el-option>
                             </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                        <el-form-item label="IP" prop="ip">
+                            <el-input v-model="form.ip" placeholder="请输入IP" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="端口号" prop="port">
+                            <el-input v-model="form.port" placeholder="请输入端口号" />
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -336,13 +359,13 @@
                             <el-input
                                 v-model="form.password"
                                 placeholder="请输入密码"
-                                v-if="title === '添加数据源'"
+                                v-if="title === '新增数据源'"
                             />
                             <el-input
                                 type="password"
                                 v-model="form.password"
                                 placeholder="请输入密码"
-                                v-if="title !== '添加数据源'"
+                                v-if="title !== '新增数据源'"
                             />
                         </el-form-item>
                     </el-col>
@@ -355,7 +378,7 @@
                     </el-col>
                     <el-col
                         :span="12"
-                        v-if="form.datasourceType !== null && form.datasourceType !== 'DM8'"
+                        v-if="form.datasourceType !== null && form.datasourceType !== 'DM8' && form.datasourceType !== 'MySql'"
                     >
                         <el-form-item label="模式" prop="sid">
                             <el-input v-model="form.sid" placeholder="请输入模式" />
@@ -364,26 +387,26 @@
                 </el-row>
 
                 <el-row :gutter="20">
-                    <el-col :span="12">
-                        <el-form-item label="数据库IP" prop="ip">
-                            <el-input v-model="form.ip" placeholder="请输入数据库IP" />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="端口号" prop="port">
-                            <el-input v-model="form.port" placeholder="请输入端口号" />
+                    <el-col :span="24">
+                        <el-form-item label="状态" prop="validFlag">
+                            <el-radio-group v-model="form.validFlag">
+                                <el-radio :label="true">启用</el-radio>
+                                <el-radio :label="false">禁用</el-radio>
+                            </el-radio-group>
                         </el-form-item>
                     </el-col>
                 </el-row>
 
                 <el-row :gutter="20">
                     <el-col :span="24">
-                        <el-form-item label="数据连接描述" prop="description">
+                        <el-form-item label="描述" prop="description">
                             <el-input
                                 type="textarea"
                                 :min-height="192"
                                 v-model="form.description"
-                                placeholder="请输入数据连接描述"
+                                placeholder="请输入描述"
+                                :maxlength="500"
+                                show-word-limit
                             />
                         </el-form-item>
                     </el-col>
@@ -397,6 +420,8 @@
                                 v-model="form.remark"
                                 placeholder="请输入备注"
                                 :min-height="192"
+                                :maxlength="500"
+                                show-word-limit
                             />
                         </el-form-item>
                     </el-col>
@@ -404,6 +429,7 @@
             </el-form>
             <template #footer>
                 <div class="dialog-footer">
+                    <el-button type="primary" size="mini" @click="handleTestConnection(form.value,'dialog')">测试连接</el-button>
                     <el-button size="mini" @click="cancel">取 消</el-button>
                     <el-button type="primary" size="mini" @click="submitForm">确 定</el-button>
                 </div>
@@ -414,7 +440,7 @@
         <el-dialog
             :title="title"
             v-model="openDetail"
-            width="800px"
+            width="1000px"
             :append-to="$refs['app-container']"
             draggable
         >
@@ -427,29 +453,29 @@
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="数据连接名称" prop="datasourceName">
-                            <div>
-                                {{ form.datasourceName }}
-                            </div>
+                            <el-input :value="form.datasourceName" disabled />
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="数据源类型" prop="datasourceType">
-                            <dict-tag :options="datasource_type" :value="form.datasourceType" />
+                            <div style="display: flex; align-items: center; border: 1px solid var(--el-input-border-color, #e4e7ed); border-radius: 2px; padding: 1px 11px; background-color: var(--el-fill-color-light, #f5f7fa); height: 32px; width: 100%;">
+                                <el-tag size="small">
+                                    {{ getDatasourceLabel(form.datasourceType) }}
+                                </el-tag>
+                            </div>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="账号" prop="username">
-                            <div>
-                                {{ form.username }}
-                            </div>
+                            <el-input :value="form.username" disabled />
                         </el-form-item>
                     </el-col>
 
                     <el-col :span="12">
                         <el-form-item label="密码" prop="password">
-                            <div>***********</div>
+                            <el-input :value="'***********'" disabled />
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -457,9 +483,7 @@
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="数据库名称" prop="dbname">
-                            <div>
-                                {{ form.dbname }}
-                            </div>
+                            <el-input :value="form.dbname" disabled />
                         </el-form-item>
                     </el-col>
 
@@ -468,36 +492,38 @@
                         v-if="form.datasourceType !== 'DM8' && form.datasourceType !== null"
                     >
                         <el-form-item label="模式" prop="sid">
-                            <div>
-                                {{ form.sid }}
-                            </div>
+                            <el-input :value="form.sid" disabled />
                         </el-form-item>
                     </el-col>
                 </el-row>
 
                 <el-row :gutter="20">
                     <el-col :span="12">
-                        <el-form-item label="数据库IP" prop="ip">
-                            <div>
-                                {{ form.ip }}
-                            </div>
+                        <el-form-item label="IP" prop="ip">
+                            <el-input :value="form.ip" disabled />
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="端口号" prop="port">
-                            <div>
-                                {{ form.port }}
-                            </div>
+                            <el-input :value="form.port" disabled />
                         </el-form-item>
                     </el-col>
                 </el-row>
 
+            <el-row :gutter="20">
+                <el-col :span="12">
+                    <el-form-item label="状态" prop="validFlag">
+                        <el-tag :type="form.validFlag ? 'primary' : 'danger'">
+                            {{ form.validFlag ? '启用' : '禁用' }}
+                        </el-tag>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+
                 <el-row :gutter="20">
                     <el-col :span="24">
-                        <el-form-item label="数据连接描述" prop="description">
-                            <div>
-                                {{ form.description }}
-                            </div>
+                        <el-form-item label="描述" prop="description">
+                            <el-input type="textarea" :value="form.description || '-'" disabled class="no-resize-textarea" />
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -505,9 +531,7 @@
                 <el-row :gutter="20">
                     <el-col :span="24">
                         <el-form-item label="备注" prop="remark">
-                            <div>
-                                {{ form.remark }}
-                            </div>
+                            <el-input type="textarea" :value="form.remark || '-'" disabled class="no-resize-textarea" />
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -575,6 +599,7 @@
         listDaDatasource,
         getDaDatasource,
         clientsTest,
+        clientsTestWithForm,
         delDaDatasource,
         addDaDatasource,
         updateDaDatasource
@@ -585,20 +610,21 @@
     const { datasource_type } = proxy.useDict('datasource_type');
     const daDatasourceList = ref([]);
 
+    const getDatasourceLabel = (value) => {
+        const dict = datasource_type.value.find(item => item.value === value);
+        return dict ? dict.label : value;
+    };
+
     // 列显隐信息
     const columns = ref([
-        { key: 1, label: '数据连接名称', visible: true },
-        { key: 2, label: '数据源类型', visible: true },
-        { key: 3, label: '数据源配置(json字符串)', visible: true },
-        { key: 4, label: '数据库IP', visible: true },
-        { key: 5, label: '端口号', visible: true },
-        { key: 6, label: '数据库表数（预留）', visible: true },
-        { key: 7, label: '同步记录数（预留）', visible: true },
-        { key: 8, label: '同步数据量大小（预留）', visible: true },
-        { key: 9, label: '数据连接描述', visible: true },
-        { key: 11, label: '创建人', visible: true },
-        { key: 13, label: '创建时间', visible: true },
-        { key: 17, label: '备注', visible: true }
+        { key: 1, label: '编号', visible: true },
+        { key: 2, label: '数据连接名称', visible: true },
+        { key: 3, label: '描述', visible: true },
+        { key: 4, label: '数据连接类型', visible: true },
+        { key: 5, label: '状态', visible: true },
+        { key: 6, label: '创建人', visible: true },
+        { key: 7, label: '创建时间', visible: true },
+        { key: 8, label: '操作', visible: true }
     ]);
 
     const getColumnVisibility = (key) => {
@@ -651,15 +677,17 @@
             syncCount: null,
             dataSize: null,
             description: null,
-            createTime: null
+            createTime: null,
+            orderByColumn: "createTime",
+            isAsc: "desc",
         },
         rules: {
             datasourceName: [{ required: true, message: '数据连接名称不能为空', trigger: 'blur' }],
-            datasourceType: [{ required: true, message: '数据源类型不能为空', trigger: 'change' }],
+            datasourceType: [{ required: true, message: '数据连接类型不能为空', trigger: 'change' }],
             datasourceConfig: [
                 { required: true, message: '数据源配置(json字符串)不能为空', trigger: 'blur' }
             ],
-            ip: [{ required: true, message: '数据库IP不能为空', trigger: 'blur' }],
+            ip: [{ required: true, message: 'IP不能为空', trigger: 'blur' }],
             port: [{ required: true, message: '端口号不能为空', trigger: 'blur' }],
             username: [{ required: true, message: '账号不能为空', trigger: 'blur' }],
             password: [{ required: true, message: '密码不能为空', trigger: 'blur' }],
@@ -700,7 +728,7 @@
             syncCount: null,
             dataSize: null,
             description: null,
-            validFlag: null,
+            validFlag: false,
             createBy: null,
             creatorId: null,
             createTime: null,
@@ -742,7 +770,7 @@
     function handleAdd() {
         reset();
         open.value = true;
-        title.value = '添加数据源';
+        title.value = '新增数据源';
     }
 
     /** 修改按钮操作 */
@@ -783,14 +811,31 @@
         });
     }
 
-    /** 详情按钮操作 */
-    function handleTestConnection(row) {
-        reset();
-        const _id = row.id || ids.value;
-        clientsTest(_id).then((response) => {
-            console.log(response);
-            proxy.$modal.msgSuccess(response.msg);
-        });
+    /** 测试连接按钮操作 */
+    function handleTestConnection(row,type) {
+        if (type == 'dialog') {
+            proxy.$refs['daDatasourceRef'].validate((valid) => {
+                if (valid) {
+                    form.value.datasourceConfig = JSON.stringify({
+                        username: form.value.username,
+                        password: form.value.password,
+                        dbname: form.value.dbname,
+                        sid: form.value.sid
+                    });
+                    clientsTestWithForm(form.value).then((response) => {
+                        console.log(response);
+                        proxy.$modal.msgSuccess(response.msg);
+                    });
+                }
+            });
+        } else {
+            reset();
+            const _id = row.id || ids.value;
+            clientsTest(_id).then((response) => {
+                console.log(response);
+                proxy.$modal.msgSuccess(response.msg);
+            });
+        }
     }
 
     /** 提交按钮 */
@@ -828,6 +873,23 @@
                 }
             }
         });
+    }
+
+    /** 状态切换操作 */
+    function handleStatusChange(row) {
+        console.log(row,'rowcjyyyyy');
+        let text = row.validFlag === true ? "启用" : "禁用";
+        row.validFlag = row.validFlag === true ? true : false;
+        proxy.$modal
+            .confirm('确认要' + text + '"' + row.datasourceName + '"数据连接吗？')
+            .then(function () {
+                return updateDaDatasource(row);
+            })
+            .then(() => {
+                getList();
+                proxy.$modal.msgSuccess(text + '成功');
+            })
+            .catch(() => {});
     }
 
     /** 删除按钮操作 */
@@ -921,3 +983,19 @@
     queryParams.value.isAsc = defaultSort.value.order;
     getList();
 </script>
+<style scoped lang="scss">
+.card-button-group {
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+::v-deep .el-dialog__body {
+  height: auto !important;
+}
+
+::v-deep .no-resize-textarea textarea {
+  resize: none !important;
+}
+</style>
