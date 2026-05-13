@@ -185,7 +185,7 @@
         <el-table-column
           v-if="getColumnVisibility(1)"
           label="Bot 名称"
-          align="center"
+          align="left"
           prop="name"
           show-overflow-tooltip
           width="250"

@@ -97,9 +97,9 @@
            </el-button>
          </el-col>
          <el-col :span="1.5">
-           <el-button type="danger" icon="Delete" plain :disabled="multiple" @click="handleDelete" v-hasPermi="['kb:tool:tool:remove']"
+           <el-button type="danger" plain :disabled="multiple" @click="handleDelete" v-hasPermi="['kb:tool:tool:remove']"
                       @mousedown="(e) => e.preventDefault()">
-             删除
+             <i class="iconfont-mini icon-shanchu-huise mr5"></i> 删除
            </el-button>
          </el-col>
        </el-row>
@@ -110,7 +110,7 @@
      <el-table stripe height="58vh" v-loading="loading" :data="toolList" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
        <el-table-column type="selection" width="55" align="center" />
        <el-table-column v-if="getColumnVisibility(0)" label="编号" align="center" prop="id" width="55"  />
-       <el-table-column v-if="getColumnVisibility(2)" label="名称" align="center" prop="name">
+       <el-table-column v-if="getColumnVisibility(2)" label="名称" align="left" prop="name">
          <template #default="scope">
            {{ scope.row.name || '-' }}
          </template>
@@ -154,7 +154,7 @@
        </el-table-column>
        <el-table-column v-if="getColumnVisibility(11)" label="创建时间" align="center" prop="createTime" width="180" sortable="custom" :sort-orders="['descending', 'ascending']">
          <template #default="scope">
-           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
+           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}') }}</span>
          </template>
        </el-table-column>
        <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="240">
