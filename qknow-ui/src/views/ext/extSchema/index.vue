@@ -101,7 +101,6 @@
       </div>
       <el-table
         stripe
-        height="590px"
         v-loading="loading"
         :data="schemaList"
         @selection-change="handleSelectionChange"

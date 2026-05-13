@@ -64,13 +64,13 @@
 
 <template>
   <div class="app-container">
-    <div class="pagecont-top" v-if="!loading">
       <el-form
         ref="knowledgeBaseRef"
         :model="form"
         :rules="rules"
         label-width="auto"
         @submit.prevent
+        v-if="!loading"
       >
         <!-- 1. 检索方式区块 -->
         <div class="section-block">
@@ -208,7 +208,7 @@
         <!-- 2. 检索规则区块 -->
         <div
           class="section-block"
-          v-show="form.indexingTechnique !== 'economy'"
+          v-if="form.indexingTechnique !== 'economy'"
         >
           <div class="header-text">
             <div class="header-left">
@@ -682,7 +682,7 @@
         </div>
 
         <!-- 经济模式规则 -->
-        <div class="section-block" v-show="form.indexingTechnique == 'economy'">
+        <div class="section-block" v-if="form.indexingTechnique == 'economy'">
           <div class="header-text">
             <div class="header-left">
               <div class="blue-bar"></div>
@@ -721,7 +721,6 @@
           </div>
         </div>
       </el-form>
-    </div>
   </div>
 </template>
 
@@ -1364,8 +1363,6 @@ $underline-color: #f4f4f4;
 
 // 全局容器样式
 .app-container {
-  height: 801px;
-
   .pagecont-top {
     height: 100%;
     padding: 0;
@@ -1378,6 +1375,9 @@ $underline-color: #f4f4f4;
   margin-bottom: 10px;
   background-color: #ffffff;
   padding: 20px;
+  &:last-child {
+    margin-bottom: 0;
+  }
 
   .header-text {
     display: flex;

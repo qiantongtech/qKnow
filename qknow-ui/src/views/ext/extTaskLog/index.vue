@@ -117,7 +117,7 @@
           <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
         </div>
       </div>
-      <el-table stripe height="58vh" v-loading="loading" :data="taskLogList"
+      <el-table stripe   v-loading="loading" :data="taskLogList"
                 :default-sort="defaultSort" @sort-change="handleSortChange"
                 :tooltip-options="tooltipOptions"
       >
@@ -204,7 +204,7 @@
         </div>
       </div>
 
-      <el-table stripe height="58vh"
+      <el-table stripe  
                 v-loading="detailPageLoading"
                 :data="taskLogDetailList"
                 @sort-change="handleLogDetailSortChange"

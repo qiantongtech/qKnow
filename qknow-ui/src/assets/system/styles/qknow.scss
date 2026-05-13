@@ -1,9 +1,11 @@
 .app-container {
-  margin: 15px;
-  padding: 0px;
+  width: 100%;
   background-color: #f0f2f5;
-  // min-height: 86vh;
-  min-height: calc(100% - 30px);
+  height: 100%;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden auto;
   // 字体颜色
   --el-text-color-regular: #333;
   --el-text-color-primary: #333;

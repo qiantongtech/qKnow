@@ -1,14 +1,19 @@
 #app {
 
   .main-container {
+    position: relative;
+    width: 100%;
     height: 100%;
     transition: margin-left .28s;
     margin-left: $base-sidebar-width;
-    position: relative;
+    overflow: hidden;
   }
 
   .sidebarHide {
     margin-left: 0!important;
+    .app-main{
+        width: 100%;
+    }
   }
 
   .sidebar-container {

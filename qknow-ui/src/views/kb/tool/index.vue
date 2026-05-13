@@ -107,7 +107,7 @@
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
        </div>
      </div>
-     <el-table stripe height="58vh" v-loading="loading" :data="toolList" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
+     <el-table stripe   v-loading="loading" :data="toolList" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
        <el-table-column type="selection" width="55" align="center" />
        <el-table-column v-if="getColumnVisibility(0)" label="编号" align="center" prop="id" width="55"  />
        <el-table-column v-if="getColumnVisibility(2)" label="名称" align="center" prop="name">
