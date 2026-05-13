@@ -99,7 +99,7 @@
           <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
         </div>
       </div>
-      <el-table stripe height="590px" v-loading="loading" :data="configList" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
+      <el-table stripe  v-loading="loading" :data="configList" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
 <!--        <el-table-column type="selection" width="55" align="center" />-->
         <el-table-column label="序号" align="center" width="80">
           <template #default="{ $index }">

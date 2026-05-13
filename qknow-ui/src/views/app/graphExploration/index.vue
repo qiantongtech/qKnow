@@ -35,7 +35,6 @@
     class="app-container"
     ref="app-container"
     v-loading="appLoading"
-    style="height: calc(100vh - 30px)"
   >
     <div class="head-title">
       <div class="name">{{ taskInfo.name }}</div>
@@ -1488,10 +1487,6 @@ function previewRefactoring(row) {
 }
 
 .app-container {
-  height: calc(100% - 30px);
-  display: flex;
-  flex-direction: column;
-
   .head-title {
     height: 46px;
     background: #fff;
@@ -1499,6 +1494,7 @@ function previewRefactoring(row) {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-shrink: 0;
 
     .name {
       font-family: PingFang SC;

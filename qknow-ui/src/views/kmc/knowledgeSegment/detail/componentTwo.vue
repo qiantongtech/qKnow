@@ -85,7 +85,6 @@
   </div>
 
   <el-table
-      height="58vh"
       v-if="refreshTable"
       v-loading="loading"
       :data="detailsList"
