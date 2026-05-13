@@ -62,6 +62,6 @@
 
 weaviate:
   scheme: http
-  host: 114.66.57.2:18080
+  host: env.qiantong.tech:50018
   apiKey: WVF5YThaHlkYwhGUSmCRgsX3tD5ngdN8pkih
   className: SpringAiWeaviate # 必须是大驼峰

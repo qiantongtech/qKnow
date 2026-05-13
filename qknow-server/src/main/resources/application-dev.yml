@@ -40,9 +40,9 @@ spring:
       # 地址
       host: 127.0.0.1
       # 端口，默认为6379
-      port: 6379
+      port: 12138
       # 数据库索引
-      database: 1
+      database: 0
       # 密码
       password:
       # 连接超时时间
@@ -124,7 +124,7 @@ mysql:
   # 主库用户名
   username: root
   # 主库密码
-  password: admin
+  password:
 
 # 达梦配置文件
 dm8:
