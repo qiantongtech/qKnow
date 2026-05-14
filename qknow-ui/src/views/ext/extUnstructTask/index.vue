@@ -126,7 +126,7 @@
               <el-button
               type="danger"
               plain
-              @click="handleDel"
+              @click="handleDelete"
               :disabled="ids.length==0"
               @mousedown="(e) => e.preventDefault()"
             >
@@ -162,7 +162,7 @@
           v-if="getColumnVisibility(2)"
           label="任务名称"
           prop="name"
-          width="300"
+          width="250"
            align="left"
           show-overflow-tooltip
         >
@@ -296,7 +296,7 @@
                   icon="Edit"
                   @click="extraction(scope.row)"
                   v-hasPermi="['ext:extUnstructTask:unstructtask:edit']"
-                  style="padding-left: 14px"
+                  style="padding-left: 30px"
                 >
                   执行
                 </el-button>
@@ -307,7 +307,8 @@
                   icon="Edit"
                   @click="handleUpdate(scope.row)"
                   v-hasPermi="['ext:extUnstructTask:unstructtask:edit']"
-                  >编辑
+                  style="padding-left: 30px"
+                  >修改
                 </el-button>
 
                 <el-button
@@ -317,6 +318,7 @@
                   icon="Delete"
                   @click="handleDelete(scope.row)"
                   v-hasPermi="['ext:extUnstructTask:unstructtask:remove']"
+                  style="padding-left: 30px"
                   >删除
                 </el-button>
               </div>
@@ -362,7 +364,7 @@
         @submit.prevent
       >
         <el-row :gutter="20">
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="任务名称" prop="name">
               <el-input v-model="form.name" placeholder="请输入任务名称" />
             </el-form-item>
@@ -815,7 +817,7 @@ function handleAdd() {
   docTitles.value = null;
   form.value.docIds = null;
   docList.value = null;
-  title.value = "添加非结构化抽取任务";
+  title.value = "新增非结构化抽取任务";
 }
 
 /** 修改按钮操作 */
@@ -963,6 +965,31 @@ function handleDelete(row) {
     return;
   }
   const _ids = row.id || ids.value;
+  if (!row) {
+        
+                ElMessageBox.confirm(
+                    `可删除${canDeleteCount}个，不可删除${cannotDeleteCount}个，是否删除可删部分`,
+                    '系统提示',
+                    {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }
+                )
+                    .then(() => {
+                        if (!canDeleteCount) {
+                            ElMessage.success('删除成功');
+                            return;
+                        }
+                        return delUnstructTask(canDeleteIds);
+                    })
+                    .then((res) => {
+                        if (!res) return;
+                        ElMessage.success('删除成功');
+                        tableRef.value.getList();
+                    });
+            return;
+        }
   proxy.$modal
     .confirm('是否确认删除任务名称为"' + row.name + '"的数据项？')
     .then(function () {
