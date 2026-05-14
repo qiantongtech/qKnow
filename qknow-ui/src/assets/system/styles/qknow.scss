@@ -1,9 +1,11 @@
 .app-container {
-  margin: 15px;
-  padding: 0px;
+  width: 100%;
   background-color: #f0f2f5;
-  // min-height: 86vh;
-  min-height: calc(100% - 30px);
+  height: 100%;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden auto;
   // 字体颜色
   --el-text-color-regular: #333;
   --el-text-color-primary: #333;
@@ -801,7 +803,7 @@
   //组织树 背景颜色 及右边线颜色
   .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
     background-color: #d8e0f7 !important;
-    border-right: 2px solid #2666fb;
+    // border-right: 2px solid #2666fb;
   }
   // //按钮居右侧位置
   // .el-tree-node__expand-icon {

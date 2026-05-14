@@ -138,7 +138,7 @@
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
        </div>
      </div>
-     <el-table stripe height="590px" v-loading="loading" :data="datasourceList" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
+     <el-table stripe  v-loading="loading" :data="datasourceList" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
        <el-table-column type="selection" width="55" align="center" />
 <!--       <el-table-column v-if="getColumnVisibility(0)" label="ID" align="center" prop="id" />-->
        <el-table-column v-if="getColumnVisibility(1)" label="连接名称" align="center" prop="name">

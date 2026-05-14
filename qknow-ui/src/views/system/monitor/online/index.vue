@@ -65,7 +65,6 @@
       <div  class="pagecont-bottom">
 
          <el-table
-            height="58vh"
             stripe
             v-loading="loading"
             :data="onlineList.slice((pageNum - 1) * pageSize, pageNum * pageSize)"

@@ -111,9 +111,7 @@
           <div class="border-item-body">
             <el-table
               stripe
-              height="180px"
               :data="recallLogList"
-              max-height="100%"
             >
               <el-table-column label="文本" align="center" prop="query" />
               <el-table-column label="创建人" align="center" prop="createBy" />
@@ -1597,8 +1595,8 @@ init();
   font-family: PingFangSC, PingFang SC;
   display: flex;
   gap: 15px;
-  height: calc(100% - 30px);
   overflow: hidden;
+  height: 100%;
 
   :deep(.el-progress-bar__inner) {
     background: var(--el-color-primary);
@@ -1614,12 +1612,10 @@ init();
   gap: 20px;
   display: flex;
   flex-direction: column;
-  margin-left: 15px;
 }
 
 .right-container {
   flex: 1;
-  margin-right: 15px;
   .title {
     display: flex;
     align-items: center;

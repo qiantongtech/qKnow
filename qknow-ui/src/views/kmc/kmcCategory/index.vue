@@ -130,7 +130,6 @@
             </div>
             <el-table
                 v-if="refreshTable"
-                height="645px"
                 v-loading="loading"
                 :data="kmcCategoryList"
                 row-key="id"
