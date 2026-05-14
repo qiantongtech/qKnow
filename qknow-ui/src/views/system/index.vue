@@ -937,9 +937,6 @@ onMounted(() => {
 .stagingIndex {
   min-width: 1290px;
   max-width: 100%;
-  // width: 100%;
-  height: 100%;
-  // padding: 24px;
   background: #f0f2f5;
 
   ::v-deep .el-carousel {

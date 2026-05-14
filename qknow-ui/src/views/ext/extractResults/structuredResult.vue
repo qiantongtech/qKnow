@@ -1152,7 +1152,6 @@ const tripletDelete = (val) => {
 }
 
 .app-container {
-  height: calc(100% - 30px);
   display: flex;
   justify-content: space-between;
 

@@ -252,8 +252,7 @@ defineExpose({ resetTree });
 }
 
 .left-tree {
-  padding: 15px 15px 15px 15px;
-  max-height: 86vh; // 限制最大高度
+  padding: 15px;
   overflow-y: auto; // 超过高度时出现滚动条
   scrollbar-width: thin; // 火狐滚动条细一些
   -ms-overflow-style: none; // IE滚动条隐藏

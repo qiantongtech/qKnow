@@ -32,7 +32,7 @@
 
 <template>
   <!-- 页面内容 -->
-  <el-watermark style="position: ''" v-if="watermarkText" :font="config.font" :content="watermarkText" :gap="[200, 150]"
+  <el-watermark class="watermark" v-if="watermarkText" :font="config.font" :content="watermarkText" :gap="[200, 150]"
     :width="120" :height="80">
     <router-view />
   </el-watermark>
@@ -82,3 +82,12 @@ const createIco = () => {
   document.getElementsByTagName("head")[0].appendChild(link);
 };
 </script>
+
+<style scoped>
+.watermark {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+</style>

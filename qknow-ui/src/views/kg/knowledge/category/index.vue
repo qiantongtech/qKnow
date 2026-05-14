@@ -129,7 +129,6 @@
       </div>
       <el-table
         v-if="refreshTable"
-        height="58vh"
         v-loading="loading"
         :data="categoryList"
         row-key="id"

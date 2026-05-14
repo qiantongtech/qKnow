@@ -98,7 +98,7 @@
                 <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
             </div>
 
-            <el-table stripe height="60vh" v-loading="loading" :data="msgList">
+            <el-table stripe   v-loading="loading" :data="msgList">
                 <el-table-column
                     label="消息标题"
                     align="center"
