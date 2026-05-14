@@ -184,7 +184,6 @@
   <!-- 拖拽栏 -->
   <div class="resize-bar" @mousedown="startResize">
     <div class="resize-handle-sx">
-      <span class="zjsx"></span>
       <el-icon
         v-if="leftWidth == 0"
         @click.stop="toggleCollapse"
