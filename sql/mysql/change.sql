@@ -363,14 +363,9 @@ INSERT INTO system_dict_type VALUES (39, '结构化抽取更新类型', 'ext_upd
 INSERT INTO system_dict_data VALUES (122, 2, '全量更新', '0', 'ext_update_type', NULL, 'default', 'N', '0', '吴同', '2026-04-24 10:01:38', '', NULL, NULL);
 INSERT INTO system_dict_data VALUES (123, 2, '增量更新', '1', 'ext_update_type', NULL, 'default', 'N', '0', '吴同', '2026-04-24 10:01:38', '', NULL, NULL);
 
--- 2026.0514 bot 管理拆分
-UPDATE system_menu SET menu_name='Bot 管理', parent_id=2057, order_num=1, `path`='bot', component='kb/bot/index', query='', route_name='', is_frame=1, is_cache=0, menu_type='M', visible='0', status='0', perms='kb:bot:bot:list', icon='ai-generate-3d-fill', create_by='吴同', create_time='2026-04-13 10:38:02', update_by='小桐', update_time='2026-05-13 17:20:53', remark='' WHERE menu_id=2335;
-
-INSERT INTO system_menu VALUES(2402, '工作流', 2335, 1, 'workflow', 'kb/bot/index', '{"botType":0}', '', 1, 0, 'C', '0', '0', '', '#', '小桐', '2026-05-13 17:22:28', '小桐', '2026-05-14 14:10:12', '');
-INSERT INTO system_menu VALUES(2403, 'chatflow', 2335, 2, 'chatflow', 'kb/bot/index', '{"botType":1}', '', 1, 0, 'C', '0', '0', '', '#', '小桐', '2026-05-14 09:22:25', '小桐', '2026-05-14 09:26:26', '');
-INSERT INTO system_menu VALUES(2404, 'agent', 2335, 3, 'agent', 'kb/bot/index', '{"botType":2}', '', 1, 0, 'C', '0', '0', '', '#', '小桐', '2026-05-14 09:22:48', '小桐', '2026-05-14 09:31:26', '');
 
 
+----------------------------------------
 # 2026-05-13
 INSERT INTO system_menu VALUES (2402, '知识资产看板', 2061, 3, 'knowledgeAsset', 'kd/knowledgeAsset/index', NULL, '', 1, 0, 'C', '0', '0', NULL, '#', '小桐', '2026-05-13 10:34:41', '', NULL, '');
 INSERT INTO system_menu VALUES (2403, 'Bot运营看板', 2061, 4, 'botOperation', 'kd/botOperation/index', NULL, '', 1, 0, 'C', '0', '0', NULL, '#', '小桐', '2026-05-13 10:43:41', '', NULL, '');
@@ -406,3 +401,24 @@ INSERT INTO kmc_category VALUES (15, 1001, 5, 1, '疾病预防', 2, '0,5', 1, 0,
 
 INSERT INTO kmc_document VALUES (9, 1001, 2, 1, NULL, '药物与治疗', '心血管介入治疗器械.txt', '/2026/05/14/6a053715dcf17570f4d68768.txt', '心血管介入治疗器械', 0, 0, 2, 'custom', 'paragraph', 1, 0, '50', 1024, '\n\n', 512, '\n', 'text_model', 'Chinese', NULL, NULL, 1, 0, '小桐', 1, '2026-05-14 10:44:42', '小桐', NULL, '2026-05-14 10:54:21', NULL);
 INSERT INTO kmc_document VALUES (10, 1001, 2, 1, NULL, '药物与治疗', '常见药物.txt', '/2026/05/14/6a05472ddcf17570f4d6876c.txt', '常见药物', 0, 0, 2, 'custom', 'paragraph', 1, 0, '50', 1024, '\n\n', 512, '\n', 'text_model', 'Chinese', NULL, NULL, 1, 0, '小桐', 1, '2026-05-14 11:53:20', '小桐', NULL, '2026-05-14 11:53:45', NULL);
+
+
+-- 2026.0514 bot 管理拆分
+UPDATE system_menu SET menu_name='Bot 管理', parent_id=2057, order_num=1, `path`='bot', component='kb/bot/index', query='', route_name='', is_frame=1, is_cache=0, menu_type='M', visible='0', status='0', perms='kb:bot:bot:list', icon='ai-generate-3d-fill', create_by='吴同', create_time='2026-04-13 10:38:02', update_by='小桐', update_time='2026-05-13 17:20:53', remark='' WHERE menu_id=2335;
+
+INSERT INTO system_menu VALUES(2412, '工作流', 2335, 1, 'workflow', 'kb/bot/index', '{"botType":0}', '', 1, 0, 'C', '0', '0', '', '#', '小桐', '2026-05-13 17:22:28', '小桐', '2026-05-14 14:10:12', '');
+INSERT INTO system_menu VALUES(2413, 'chatflow', 2335, 2, 'chatflow', 'kb/bot/index', '{"botType":1}', '', 1, 0, 'C', '0', '0', '', '#', '小桐', '2026-05-14 09:22:25', '小桐', '2026-05-14 09:26:26', '');
+INSERT INTO system_menu VALUES(2414, 'agent', 2335, 3, 'agent', 'kb/bot/index', '{"botType":2}', '', 1, 0, 'C', '0', '0', '', '#', '小桐', '2026-05-14 09:22:48', '小桐', '2026-05-14 09:31:26', '');
+
+
+
+INSERT INTO system_dict_type VALUES (100, '抽取日志类型', 'ext_task_log_type', '0', '小桐', '2026-05-14 11:08:02', '', NULL, NULL);
+INSERT INTO system_dict_data VALUES (178, 0, '结构化', '0', 'ext_task_log_type', NULL, 'primary', 'N', '0', '小桐', '2026-05-14 11:08:45', '', NULL, NULL);
+INSERT INTO system_dict_data VALUES (179, 1, '非结构化', '1', 'ext_task_log_type', NULL, 'primary', 'N', '0', '小桐', '2026-05-14 11:08:55', '', NULL, NULL);
+
+UPDATE system_menu SET `menu_name` = '数据连接' WHERE `menu_id` = 2047;
+INSERT INTO kg_knowledge_document VALUES (1, 1001, 1, '疾病与诊断', '疾病与诊断：医学实践的核心要素.docx', '/2026/05/14/6a0544aab3541c9296b057dc.docx', NULL, 1, 0, '小桐', 1, '2026-05-14 11:42:38', '小桐', NULL, '2026-05-14 11:42:38', NULL);
+INSERT INTO kg_knowledge_document VALUES (2, 1001, 2, '治疗与干预', '疾病治疗与干预综合指南.docx', '/2026/05/14/6a0544e9b3541c9296b057de.docx', NULL, 1, 0, '小桐', 1, '2026-05-14 11:43:39', '小桐', NULL, '2026-05-14 11:43:39', NULL);
+INSERT INTO kg_knowledge_document VALUES (3, 1001, 3, '药物与器械', '药物与医疗器械应用指南.docx', '/2026/05/14/6a0544f3b3541c9296b057df.docx', NULL, 1, 0, '小桐', 1, '2026-05-14 11:43:48', '小桐', NULL, '2026-05-14 11:43:48', NULL);
+INSERT INTO kg_knowledge_document VALUES (4, 1001, 5, '人员与机构', '医疗体系中的人力资源与机构组织.docx', '/2026/05/14/6a054501b3541c9296b057e0.docx', NULL, 1, 0, '小桐', 1, '2026-05-14 11:44:03', '小桐', NULL, '2026-05-14 11:44:03', NULL);
+INSERT INTO kg_knowledge_document VALUES (5, 1001, 4, '人体与功能', '医学与健康科学综合文档.docx', '/2026/05/14/6a05451ab3541c9296b057e1.docx', NULL, 1, 0, '小桐', 1, '2026-05-14 11:44:27', '小桐', NULL, '2026-05-14 11:44:27', NULL);

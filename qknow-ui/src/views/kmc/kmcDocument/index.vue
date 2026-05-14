@@ -63,26 +63,27 @@
 -->
 
 <template>
-    <div class="app-container" ref="app-container">
-      <GuideTip tip-id="kmc/kmcDocument.list" />
-      <el-container>
-            <!-- 左侧可调整的部分 -->
-            <DeptTree ref="deptTreeRef" :deptOptions="KcOptions"
+  <div class="app-container" ref="app-container">
+    <GuideTip tip-id="kmc/kmcDocument.list" />
+    <el-container>
+      <!-- 左侧可调整的部分 -->
+      <DeptTree
+        ref="deptTreeRef"
+        :deptOptions="KcOptions"
         :leftWidth="leftWidth"
-        ref="DeptTreeRef"
         :placeholder="'请输入分类名称'"
         @node-click="handleNodeClick"
       />
       <el-main>
         <div class="pagecont-top" v-show="showSearch">
           <el-form
-            class="btn-style"
-            :model="queryParams"
             ref="queryRef"
             :inline="true"
             label-width="75px"
             v-show="showSearch"
             @submit.prevent
+            class="btn-style"
+            :model="queryParams"
           >
             <el-form-item label="文件名称" prop="name">
               <el-input
@@ -151,12 +152,12 @@
           <el-table
             stripe
             v-loading="loading"
-                        :data="documentList"
-                        @selection-change="handleSelectionChange"
-                        :default-sort="defaultSort"
-                        @sort-change="handleSortChange"
-                    >
-                        <el-table-column type="selection" width="55" align="center" />
+            :data="documentList"
+            @selection-change="handleSelectionChange"
+            :default-sort="defaultSort"
+            @sort-change="handleSortChange"
+          >
+            <el-table-column type="selection" width="55" align="center" />
             <el-table-column
               v-if="getColumnVisibility(1)"
               label="编号"
@@ -358,7 +359,7 @@ const { proxy } = getCurrentInstance();
 const { document_sync_status } = proxy.useDict("document_sync_status");
 
 const deptTreeRef = ref(null);
-    const documentList = ref([]);
+const documentList = ref([]);
 
 const defaultSort = ref({ prop: "createTime", order: "desc" });
 
@@ -575,11 +576,11 @@ function handleQuery() {
 
 /** 重置按钮操作 */
 function resetQuery() {
-  if(deptTreeRef.value) {
-            deptTreeRef.value.resetTree();
-        }
-        const preservedKnowledgeBaseId = queryParams.value.knowledgeBaseId;
-        proxy.resetForm("queryRef");
+  if (deptTreeRef.value) {
+    deptTreeRef.value.resetTree();
+  }
+  const preservedKnowledgeBaseId = queryParams.value.knowledgeBaseId;
+  proxy.resetForm("queryRef");
   //不重置知识库id
   queryParams.value.knowledgeBaseId = preservedKnowledgeBaseId;
   selectedNodeId.value = null;
