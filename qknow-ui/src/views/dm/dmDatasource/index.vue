@@ -119,7 +119,6 @@
             </div>
             <el-table
                 stripe
-                height="590px"
                 v-loading="loading"
                 :data="daDatasourceList"
                 @selection-change="handleSelectionChange"

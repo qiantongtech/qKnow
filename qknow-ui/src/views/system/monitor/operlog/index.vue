@@ -149,7 +149,7 @@
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
          </div>
 
-         <el-table stripe height="544px"  ref="operlogRef" v-loading="loading" :data="operlogList" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
+         <el-table stripe   ref="operlogRef" v-loading="loading" :data="operlogList" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
             <el-table-column type="selection" width="50" align="center" />
             <el-table-column label="日志编号" align="center" prop="operId" />
             <el-table-column label="系统模块" align="center" prop="title" :show-overflow-tooltip="true" />

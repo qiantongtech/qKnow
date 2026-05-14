@@ -130,7 +130,6 @@
             </div>
             <el-table
                 stripe
-                height="590px"
                 v-loading="loading"
                 v-if="model === 'text_model' || model === 'qa_model'"
                 :data="knowledgeSegmentList"
@@ -252,7 +251,7 @@
             </el-table>
             <el-table
                 v-if="model === 'hierarchical_model'"
-                height="58vh"
+                 
                 v-loading="loading"
                 :data="knowledgeSegmentList"
                 row-key="id"

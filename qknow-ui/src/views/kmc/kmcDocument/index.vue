@@ -67,7 +67,7 @@
       <GuideTip tip-id="kmc/kmcDocument.list" />
       <el-container>
             <!-- 左侧可调整的部分 -->
-            <DeptTree :deptOptions="KcOptions" :leftWidth="leftWidth" :placeholder="'请输入分类名称'"
+            <DeptTree ref="deptTreeRef" :deptOptions="KcOptions" :leftWidth="leftWidth" :placeholder="'请输入分类名称'"
                     @node-click="handleNodeClick" />
             <el-main>
                 <div class="pagecont-top" v-show="showSearch">
@@ -135,7 +135,6 @@
                     </div>
                     <el-table
                         stripe
-                        height="58vh"
                         v-loading="loading"
                         :data="documentList"
                         @selection-change="handleSelectionChange"
@@ -296,6 +295,7 @@
 
     const { document_sync_status } = proxy.useDict('document_sync_status');
 
+    const deptTreeRef = ref(null);
     const documentList = ref([]);
 
     const defaultSort = ref({ prop: 'createTime', order: 'desc' });
@@ -500,6 +500,9 @@
 
     /** 重置按钮操作 */
     function resetQuery() {
+        if(deptTreeRef.value) {
+            deptTreeRef.value.resetTree();
+        }
         const preservedKnowledgeBaseId = queryParams.value.knowledgeBaseId;
         proxy.resetForm('queryRef');
         //不重置知识库id

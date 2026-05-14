@@ -686,7 +686,6 @@ proxy.$tab.closeAllPage();
 
 <style scoped lang="scss">
 .app-container {
-  padding-bottom: 40px;
 }
 .pagecont-bottom {
   //display: flex;

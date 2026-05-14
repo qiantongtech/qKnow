@@ -58,41 +58,16 @@ const tagsViewStore = useTagsViewStore();
 </script>
 
 <style lang="scss" scoped>
-// .app-main {
-//   /* 50= navbar  50  */
-//   //min-height: calc(100vh - 50px);
-//   //width: 100%;
-//   //position: relative;
-//   //overflow: hidden;
-//   background-color: #F0F2F5;
-//   min-height: calc(100vh) !important;
-//   width: 100%;
-//   position: relative;
-//   overflow-y: auto;
-//   overflow-x: hidden;
-//   .app-main-inner{
-//     width: 100%;
-//     height: 100%;
-//   }
-// }
-
 .app-main {
-  /* 50= navbar  50  */
-  //min-height: calc(100vh - 50px);
-  //width: 100%;
-  //position: relative;
-  //overflow: hidden;
   background-color: #f0f2f5;
-  // min-height: calc(100vh - 100px) !important;
-  height: 100vh !important;
-  max-height: 100vh !important;
-  width: 100%;
-  overflow: hidden auto;
+  width: calc(100% - 210px);
+  height: 100%;
+  overflow: hidden;
   .app-main-inner {
     position: relative;
     width: 100%;
     height: 100%;
-    overflow: hidden auto;
+    overflow: hidden;
   }
 }
 
@@ -103,7 +78,7 @@ const tagsViewStore = useTagsViewStore();
 .hasTagsView {
   .app-main {
     /* 84 = navbar + tags-view = 60 + 34 */
-    min-height: calc(100vh - 94px);
+    min-height: calc(100% - 94px);
   }
 
   .fixed-header + .app-main {

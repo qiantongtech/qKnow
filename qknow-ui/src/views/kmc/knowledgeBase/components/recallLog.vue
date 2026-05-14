@@ -93,7 +93,7 @@
           <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
         </div>
       </div>
-      <el-table stripe height="58vh" v-loading="loading" :data="logList" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
+      <el-table stripe   v-loading="loading" :data="logList" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
         <el-table-column v-if="getColumnVisibility(3)" label="问题" align="center" prop="query">
           <template #default="scope">
             {{ scope.row.query || '-' }}
