@@ -67,6 +67,15 @@ export function clientsTest(id) {
   })
 }
 
+// 测试连接(表单数据)
+export function clientsTestWithForm(data) {
+  return request({
+    url: '/dm/dmDatasource/clientsTestWithForm',
+    method: 'post',
+    data: data
+  })
+}
+
 // 新增数据源
 export function addDaDatasource(data) {
   return request({

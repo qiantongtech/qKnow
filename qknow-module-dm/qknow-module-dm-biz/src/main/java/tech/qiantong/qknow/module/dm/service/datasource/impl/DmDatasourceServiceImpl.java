@@ -258,6 +258,25 @@ public class DmDatasourceServiceImpl extends ServiceImpl<DmDatasourceMapper, DmD
 
     }
 
+    @Override
+    public AjaxResult clientsTestWithForm(DmDatasourceRespVO reqVO) {
+        DbQuery dbQuery = this.buildDbQueryWithForm(reqVO);
+        if (dbQuery.valid()) {
+            return AjaxResult.success("数据库连接成功");
+        }
+        return AjaxResult.error("数据库连接失败");
+    }
+
+    public DbQuery buildDbQueryWithForm(DmDatasourceRespVO reqVO) {
+        DbQueryProperty dbQueryProperty = new DbQueryProperty(
+                reqVO.getDatasourceType(),
+                reqVO.getIp(),
+                reqVO.getPort(),
+                reqVO.getDatasourceConfig()
+        );
+        return dataSourceFactory.createDbQuery(dbQueryProperty);
+    }
+
     public DbQuery buildDbQuery(Long id) {
         DmDatasourceDO daDatasourceBy = this.getDaDatasourceById(id);
         if (daDatasourceBy == null) {

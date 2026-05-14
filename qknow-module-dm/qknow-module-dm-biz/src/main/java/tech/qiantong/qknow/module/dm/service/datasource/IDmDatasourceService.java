@@ -138,6 +138,8 @@ public interface IDmDatasourceService extends IService<DmDatasourceDO> {
 
     AjaxResult clientsTest(Long id);
 
+    AjaxResult clientsTestWithForm(DmDatasourceRespVO reqVO);
+
     /**
      * 获取数据库表信息
      * @param id  数据源id
