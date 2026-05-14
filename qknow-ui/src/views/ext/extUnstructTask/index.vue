@@ -123,6 +123,15 @@
             >
               <i class="iconfont-mini icon-xinzeng mr5"></i>新增
             </el-button>
+              <el-button
+              type="danger"
+              plain
+              @click="handleDel"
+              :disabled="ids.length==0"
+              @mousedown="(e) => e.preventDefault()"
+            >
+              <i class="iconfont-mini icon-shanchu-huise mr5"></i>删除
+            </el-button>
           </el-col>
         </el-row>
         <div class="justify-end top-right-btn">
@@ -138,20 +147,23 @@
         v-loading="loading"
         :data="unstructTaskList"
         @selection-change="handleSelectionChange"
-        :default-sort="defaultSort"
         @sort-change="handleSortChange"
       >
+       <el-table-column type="selection" :selectable="selectable" width="55" />
         <el-table-column
           v-if="getColumnVisibility(1)"
-          label="ID"
+          label="编号"
           align="center"
           prop="id"
+           sortable="custom"
+          :sort-orders="['descending', 'ascending']"
         />
         <el-table-column
           v-if="getColumnVisibility(2)"
           label="任务名称"
           prop="name"
           width="300"
+           align="left"
           show-overflow-tooltip
         >
           <template #default="scope">
@@ -524,7 +536,7 @@ const selectOptions = ref([]);
 
 // 列显隐信息
 const columns = ref([
-  { key: 1, label: "ID", visible: true },
+  { key: 1, label: "编号", visible: true },
   { key: 2, label: "任务名称", visible: true },
   { key: 3, label: "任务状态", visible: true },
   { key: 4, label: "发布状态", visible: true },
@@ -675,6 +687,9 @@ function addItem() {
 function relationConfirm(val) {
   form.value.tableData = val;
   form.value.relationIds = val.map((e) => e.id).join(",");
+}
+function handleDel(){
+  // 多选删除
 }
 
 /** 查询概念全部数据 */
