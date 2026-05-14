@@ -32,7 +32,7 @@
 
 <template>
   <!-- 上次登录用户登录页面登录页面样式二 -->
-  <div class="app-container login-two sysInfo sysInfo-wrap" ref="app-container">
+  <div class="login-two sysInfo sysInfo-wrap" ref="app-container">
     <div class="left-content">
       <div class="swiper leftSwiper">
         <div class="swiper-wrapper">
