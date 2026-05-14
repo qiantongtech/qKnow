@@ -241,16 +241,21 @@ public class AiModelServiceImpl extends ServiceImpl<AiModelMapper, AiModelDO> im
     public JSONArray getModelDict(Integer type) {
         LambdaQueryWrapper<AiModelDO> queryWrapper = Wrappers.<AiModelDO>lambdaQuery()
                 .eq(AiModelDO::getType, type);
-        if (Objects.equals(type, AiModelTypeEnum.RERANK.getType())){
+        if (Objects.equals(type, AiModelTypeEnum.RERANK.getType())) {
             queryWrapper.eq(AiModelDO::getPlatform, AiPlatformEnum.TONG_YI.getPlatform());
         }
+        Map<Long, String> apiKeyMap = apiKeyMapper.selectList().stream()
+                .collect(Collectors.toMap(AiApiKeyDO::getId, AiApiKeyDO::getName));
         List<AiModelDO> modelDOList = baseMapper.selectList(queryWrapper);
         JSONArray result = new JSONArray();
         Map<JSONObject, List<JSONObject>> resultMap = new HashMap<>();
         for (AiModelDO aiModelDO : modelDOList) {
             JSONObject key = new JSONObject();
-            AiPlatformEnum platform = AiPlatformEnum.validatePlatform(aiModelDO.getPlatform());
-            key.put("label", Map.of("zh_Hans", platform.getName()));
+            String label = apiKeyMap.get(aiModelDO.getKeyId());
+            if (StrUtil.isBlank(label)) {
+                continue;
+            }
+            key.put("label", Map.of("zh_Hans", label));
             key.put("provider", aiModelDO.getKeyId());
             List<JSONObject> valueList = resultMap.get(key);
             if (CollUtil.isEmpty(valueList)) {
@@ -322,10 +327,10 @@ public class AiModelServiceImpl extends ServiceImpl<AiModelMapper, AiModelDO> im
                     .eq(AiApiKeyDO::getId, aiApiKeyDO.getId())
                     .set(AiApiKeyDO::getStatus, ApiKeyStatus.SYNC.getCode());
             apiKeyMapper.update(updateWrapper);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new ServiceException("同步模型数据失败");
-        }finally {
+        } finally {
             redisService.delete("redisLock");
         }
 

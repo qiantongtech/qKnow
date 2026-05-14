@@ -50,7 +50,7 @@ export default {
       const { path, query } = obj
       router.replace({
         path: '/redirect' + path,
-        query: query
+        query: JSON.parse(query)
       })
     })
   },

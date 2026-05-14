@@ -1543,7 +1543,12 @@ const startFieldTypeOptions = [
   },
 ];
 function routerView() {
-  router.push("/kb/bot");
+  // todo 根据类型进行判断
+  if (workflowType.value == 0){// 工作流
+    router.push("/kb/bot/workflow?botType=0");
+  }else if (workflowType.value == 1) {// Chatflow
+    router.push("/kb/bot/chatflow?botType=1");
+  }
 }
 
 function toggleChatflowDebugSections() {

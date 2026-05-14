@@ -76,8 +76,8 @@ export default defineComponent({
 }
 
 .svg-icon {
-  width: 1em;
-  height: 1em;
+  width: 1.2em;
+  height: 1.2em;
   position: relative;
   fill: currentColor;
   vertical-align: -2px;
