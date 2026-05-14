@@ -292,22 +292,22 @@
     //   border: 1px solid #5185FC!important;
     // }
     //删除
-    .el-button--danger {
-      background: #ffeded !important;
-      border-radius: 2px 2px 2px 2px;
-      border: 1px solid #ec544d !important;
-      color: #ec544d !important;
-    }
-    .el-button--danger:focus {
-      background: #ec544d !important;
-      border-radius: 2px 2px 2px 2px;
-      border: 1px solid #ec544d !important;
-      color: #ffffff !important;
-    }
-    .el-button--danger:hover {
-      background: #ec544d !important;
-      color: #ffffff !important;
-    }
+    // .el-button--danger {
+    //   background: #ffeded !important;
+    //   border-radius: 2px 2px 2px 2px;
+    //   border: 1px solid #ec544d !important;
+    //   color: #ec544d !important;
+    // }
+    // .el-button--danger:focus {
+    //   background: #ec544d !important;
+    //   border-radius: 2px 2px 2px 2px;
+    //   border: 1px solid #ec544d !important;
+    //   color: #ffffff !important;
+    // }
+    // .el-button--danger:hover {
+    //   background: #ec544d !important;
+    //   color: #ffffff !important;
+    // }
     //导出
     // .el-button--warning {
     //   background: #ffedd7 !important;
@@ -727,7 +727,8 @@
   //小弹窗高度
   .smallwindow {
     .el-dialog .el-dialog__body {
-      height: 550px;
+      height: auto !important;
+    max-height: 80vh;
     }
   }
 
@@ -1111,7 +1112,8 @@
 
     .el-dialog__body {
       overflow: auto;
-      height: 550px;
+     height: auto !important;
+    max-height: 80vh;
       padding: 20px 40px !important;
       // border: 1px solid red;
     }
