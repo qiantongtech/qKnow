@@ -122,7 +122,7 @@ mysql:
   # 主库JDBC连接URL
   url: jdbc:mysql://127.0.0.1:3306/qknow_pro?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
   # 主库用户名
-  username:
+  username: root
   # 主库密码
   password:
 

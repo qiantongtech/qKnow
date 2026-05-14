@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>progress-6-fill</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#8DCBFD" offset="0.0851077633%"></stop>
+            <stop stop-color="#0578FF" offset="100%"></stop>
+        </linearGradient>
+        <path d="M8,14.6666667 C11.6818667,14.6666667 14.6666667,11.6818667 14.6666667,8 C14.6666667,4.3181 11.6818667,1.33333333 8,1.33333333 C4.3181,1.33333333 1.33333333,4.3181 1.33333333,8 C1.33333333,11.6818667 4.3181,14.6666667 8,14.6666667 Z M12,8 C12,10.2091333 10.2091333,12 8,12 C5.79086,12 4,10.2091333 4,8 L8,8 L8,4 C10.2091333,4 12,5.79086 12,8 Z" id="path-2"></path>
+    </defs>
+    <g id="后台管理系统" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="qKnow切图" transform="translate(-204, -686)">
+            <g id="progress-6-fill" transform="translate(204, 686)">
+
+                <g id="形状" fill-rule="nonzero">
+                    <use fill="#1D2945" xlink:href="#path-2"></use>
+                    <use fill="url(#linearGradient-1)" xlink:href="#path-2"></use>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
