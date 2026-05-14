@@ -278,7 +278,7 @@
           <el-col :span="24">
             <el-form-item
               class="status-form-item"
-              label="状态:"
+              label="状态"
               prop="validFlag"
               style="display: flex; align-items: center"
             >

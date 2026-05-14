@@ -142,6 +142,7 @@
         row-key="id"
         :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
         :default-expand-all="isExpandAll"
+        @sort-change="handleSortChange"
       >
         <el-table-column
           v-if="getColumnVisibility(1)"
@@ -190,6 +191,8 @@
           align="center"
           prop="createTime"
           width="180"
+          sortable="custom"
+          :sort-orders="['descending', 'ascending']"
         >
           <template #default="scope">
             <span>{{
@@ -584,7 +587,6 @@ watch(
   },
   { immediate: true } // 确保初始值也会触发
 );
-
 /** 查询知识分类列表 */
 function getList() {
   loading.value = true;

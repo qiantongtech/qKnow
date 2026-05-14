@@ -64,18 +64,21 @@ const usePermissionStore = defineStore(
       setSidebarRouters(routes) {
         this.sidebarRouters = routes
       },
-      generateRoutes(roles) {
+      generateRoutes: function (roles) {
         return new Promise(resolve => {
           // 向后端请求路由数据
           getRouters().then(res => {
-            const sdata = JSON.parse(JSON.stringify(res.data))
-            const rdata = JSON.parse(JSON.stringify(res.data))
-            const defaultData = JSON.parse(JSON.stringify(res.data))
+            const data = setActiveMenu(res.data);
+            const sdata = JSON.parse(JSON.stringify(data))
+            const rdata = JSON.parse(JSON.stringify(data))
+            const defaultData = JSON.parse(JSON.stringify(data))
             const sidebarRoutes = filterAsyncRouter(sdata)
             const rewriteRoutes = filterAsyncRouter(rdata, false, true)
             const defaultRoutes = filterAsyncRouter(defaultData)
             const asyncRoutes = filterDynamicRoutes(dynamicRoutes)
-            asyncRoutes.forEach(route => { router.addRoute(route) })
+            asyncRoutes.forEach(route => {
+              router.addRoute(route)
+            })
             this.setRoutes(rewriteRoutes)
             this.setSidebarRouters(constantRoutes.concat(sidebarRoutes))
             this.setDefaultRoutes(sidebarRoutes)
@@ -141,6 +144,23 @@ function filterChildren(childrenMap, lastRouter = false) {
     children = children.concat(el)
   })
   return children
+}
+// 设置activeMenu, 解决:${参数}菜单无法高亮
+function setActiveMenu(data, parentPath = '') {
+  data.forEach(route => {
+    if (route.children && route.children.length) {
+      if (route.path.indexOf('/') === route.path.length - 1) {
+        setActiveMenu(route.children, parentPath + route.path)
+      } else {
+        setActiveMenu(route.children, parentPath + route.path + "/")
+      }
+    }
+    route.meta = {
+      ...route.meta,
+      activeMenu: parentPath + route.path
+    }
+  })
+  return data
 }
 
 // 动态路由遍历，验证是否具备权限

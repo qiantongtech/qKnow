@@ -73,9 +73,9 @@
       class="drawer-bg"
       @click="handleClickOutside"
     />
-    <sidebar class="sidebar-container" />
+    <sidebar v-if="!sidebarHide" class="sidebar-container" />
     <div
-      :class="{ hasTagsView: needTagsView, sidebarHide: sidebar.hide }"
+      :class="{ hasTagsView: needTagsView, sidebarHide: sidebarHide }"
       class="main-container"
     >
       <div :class="{ 'fixed-header': fixedHeader }">
@@ -96,15 +96,31 @@ import defaultSettings from "@/settings";
 
 import useAppStore from "@/store/system/app";
 import useSettingsStore from "@/store/system/settings";
+import usePermissionStore from "@/store/system/permission";
 import { nextTick, computed, watch, watchEffect, ref } from "vue";
 
 const settingsStore = useSettingsStore();
+const permissionStore = usePermissionStore();
 const theme = computed(() => settingsStore.theme);
 const sideTheme = computed(() => settingsStore.sideTheme);
 const sidebar = computed(() => useAppStore().sidebar);
 const device = computed(() => useAppStore().device);
 const needTagsView = computed(() => settingsStore.tagsView);
 const fixedHeader = computed(() => settingsStore.fixedHeader);
+
+// 是否隐藏侧边栏：防止首次加载闪烁
+const sidebarHide = computed(() => {
+  const path = route.path;
+  // 1. 如果是明确不需要侧边栏的页面（如配置中的 Logo 路由），直接隐藏
+  const navbarLogoRoutes = defaultSettings.navbarLogoRoutes || [];
+  if (navbarLogoRoutes.some((p) => path.startsWith(p))) return true;
+  // 2. 如果已经有菜单数据了，按数据来
+  if (permissionStore.sidebarRouters.length > 0) return false;
+  // 3. 如果当前路由不是首页且有二级匹配，先假设有侧边栏，防止初始渲染时 v-if 销毁组件
+  if (path !== "/index" && route.matched.length > 1) return false;
+
+  return true;
+});
 
 const route = useRoute();
 const { width, height } = useWindowSize();
@@ -237,9 +253,6 @@ function setLayout() {
 
 .sidebarHide .fixed-header {
   width: 100%;
-  .navbar {
-    margin-left: 210px;
-  }
 }
 
 .mobile .fixed-header {
