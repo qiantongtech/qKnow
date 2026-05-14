@@ -32,6 +32,7 @@
 
 <template>
   <div class="app-container" ref="app-container">
+    <GuideTip tip-id="kg/relation.list" />
     <div class="pagecont-top" v-show="showSearch">
       <el-form class="btn-style" :model="queryParams" ref="queryRef" :inline="true" label-width="45px" v-show="showSearch" @submit.prevent>
         <el-form-item label="起点" prop="startSchemaId">
@@ -258,7 +259,8 @@
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item label="备注" prop="remark">
-              <el-input v-model="form.remark" type="textarea" placeholder="请输入备注" />
+              <el-input v-model="form.remark" type="textarea" placeholder="请输入备注"   maxlength="500"
+                show-word-limit />
             </el-form-item>
           </el-col>
         </el-row>
