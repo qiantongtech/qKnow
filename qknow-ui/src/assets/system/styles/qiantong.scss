@@ -70,7 +70,8 @@
 .el-dialog.scrollbar .el-dialog__body {
 	overflow: auto;
 	overflow-x: hidden;
-	max-height: 70vh;
+	height: auto !important;
+    max-height: 80vh;
 	padding: 10px 20px 0;
 }
 
