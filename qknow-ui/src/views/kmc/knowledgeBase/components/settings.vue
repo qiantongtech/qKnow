@@ -910,6 +910,7 @@ watchEffect(() => {
   if (!selectedModel) return;
   for (const group of rerankingModel.value) {
     const found = group.models.find((item) => item.model === selectedModel);
+    console.log("found", found);
     if (found) {
       form.value.rerankingProviderName = group.provider;
       return;
@@ -1040,7 +1041,10 @@ function submitForm() {
     form.value.vectorWeight = mixData.value.vectorWeight;
     form.value.rerankingMode = mixData.value.rerankingMode;
   }
-
+  const matchedItem = embeddingModel.value.find((item) =>
+    item.models.some((modelObj) => modelObj.model === form.value.embeddingModel)
+  );
+  form.value.rerankingProviderName = matchedItem ? matchedItem.provider : null;
   // 表单验证与提交
   proxy.$refs["knowledgeBaseRef"].validate((valid) => {
     if (valid) {
@@ -1127,9 +1131,6 @@ function back() {
 
 // 初始化模型数据
 function init() {
-  getTextEmbedding().then((response) => {
-    embeddingModel.value = response.data;
-  });
   getRerank().then((response) => {
     rerankingModel.value = response.data;
     if (rerankingModel.value.length) {
@@ -1141,6 +1142,9 @@ function init() {
       fullTextData.value.rerankingEnable = false;
       mixData.value.rerankingEnable = true;
     }
+  });
+  getTextEmbedding().then((response) => {
+    embeddingModel.value = response.data;
   });
 }
 
@@ -1168,7 +1172,6 @@ init();
 
 // 全局容器样式
 .app-container {
-  height: 801px;
   .pagecont-top {
     padding: 15px;
     height: 100%;

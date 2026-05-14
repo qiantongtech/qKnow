@@ -73,7 +73,7 @@ export default {
    * 导航栏中需要显示 Logo 的路由路径
    * 当访问这些路径时，会在导航栏左侧动态插入 Logo（占用 200px 宽度）
    */
-  navbarLogoRoutes: ['/kmc/knowledgeBase',],
+  navbarLogoRoutes: ['/kmc/knowledgeBase','user/profile'],
 
   /**
    * @type {string | array} 'production' | ['production', 'development']

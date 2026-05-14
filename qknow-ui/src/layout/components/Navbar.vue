@@ -32,6 +32,12 @@
 
 <template>
   <div class="navbar" ref="navbar">
+    <logo
+      v-if="appStore.sidebar.hide && isOnlyLogoRoute"
+      :collapse="false"
+      class="navbar-logo"
+      :current-route="route.path"
+    />
     <hamburger
       id="hamburger-container"
       :is-active="appStore.sidebar.opened"
@@ -48,7 +54,7 @@
       @getRouter="getRouter"
       class="topmenu-container"
       v-if="settingsStore.topNav"
-      :style="{ left: sidebar.hide ? '0' : '50px' }"
+      :class="{ 'has-navbar-logo': appStore.sidebar.hide && isOnlyLogoRoute }"
     />
 
     <div class="right-menu">
@@ -218,19 +224,16 @@
           </template>
         </el-popover>
 
-        <div @click="handleRefreshClick" class="right-menu-item hover-effect">
-          <!--                    <el-icon size="22">-->
-          <!--                        <Refresh/>-->
-          <!--                    </el-icon>-->
+        <!-- <div @click="handleRefreshClick" class="right-menu-item hover-effect">
           <i
             class="iconfont icon-a-shuaxinxianxing"
             style="font-size: 20px"
           ></i>
-        </div>
+        </div> -->
 
         <header-search id="header-search" class="right-menu-item" />
 
-        <screenfull id="screenfull" class="right-menu-item hover-effect" />
+        <!-- <screenfull id="screenfull" class="right-menu-item hover-effect" /> -->
 
         <!-- <el-tooltip content="布局大小" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
@@ -543,6 +546,8 @@ import useAppStore from "@/store/system/app";
 import useUserStore from "@/store/system/user";
 import useSettingsStore from "@/store/system/settings";
 import useTagsViewStore from "@/store/system/tagsView";
+import defaultSettings from "@/settings";
+import Logo from "./Sidebar/Logo";
 import {
   getNum,
   listMessage,
@@ -567,7 +572,11 @@ const userStore = useUserStore();
 const settingsStore = useSettingsStore();
 const { proxy } = getCurrentInstance();
 const visitedViews = computed(() => useTagsViewStore().visitedViews);
-const sidebar = computed(() => useAppStore().sidebar);
+const isOnlyLogoRoute = computed(() => {
+  const navbarLogoRoutes = defaultSettings.navbarLogoRoutes || [];
+  console.log("navbarLogoRoutes", navbarLogoRoutes);
+  return navbarLogoRoutes.some((logoPath) => route.path.startsWith(logoPath));
+});
 
 // 默认选择的消息类型
 const activeMsg = ref("first");
@@ -597,7 +606,7 @@ function knowledgeBaseIdChange(value) {
   //   })
   // }
   const obj = {
-    path: "/kmc/" + value + "/kmcCategory",
+    path: "/kmc/" + value + "/kmcDocument",
   };
   proxy.$tab.openPage(obj);
   proxy.$tab.closeOtherPage(obj);
@@ -1158,6 +1167,23 @@ function clearNotification() {
   text-align: center;
   line-height: 60px;
 
+  .navbar-logo {
+    float: left;
+    width: 200px !important;
+    height: 100% !important;
+    background-color: transparent !important;
+
+    ::v-deep.sidebar-logo-link {
+      background-color: transparent !important;
+    }
+
+    ::v-deep.sidebar-logo {
+      height: 48px !important;
+      margin-top: 6px !important;
+      transform: none !important;
+    }
+  }
+
   ::v-deep .size-icon--style {
     line-height: 60px;
   }
@@ -1182,6 +1208,9 @@ function clearNotification() {
   .topmenu-container {
     position: absolute;
     left: 50px;
+    &.has-navbar-logo {
+      left: 200px;
+    }
   }
 
   .errLog-container {
