@@ -362,3 +362,10 @@ INSERT INTO system_dict_data VALUES (96, 0, '解析失败', '3', 'document_sync_
 INSERT INTO system_dict_type VALUES (39, '结构化抽取更新类型', 'ext_update_type', '0', '吴同', '2026-04-24 10:01:38', '', NULL, '结构化抽取更新类型列表');
 INSERT INTO system_dict_data VALUES (122, 2, '全量更新', '0', 'ext_update_type', NULL, 'default', 'N', '0', '吴同', '2026-04-24 10:01:38', '', NULL, NULL);
 INSERT INTO system_dict_data VALUES (123, 2, '增量更新', '1', 'ext_update_type', NULL, 'default', 'N', '0', '吴同', '2026-04-24 10:01:38', '', NULL, NULL);
+
+-- 2026.0514 bot 管理拆分
+UPDATE system_menu SET menu_name='Bot 管理', parent_id=2057, order_num=1, `path`='bot', component='kb/bot/index', query='', route_name='', is_frame=1, is_cache=0, menu_type='M', visible='0', status='0', perms='kb:bot:bot:list', icon='ai-generate-3d-fill', create_by='吴同', create_time='2026-04-13 10:38:02', update_by='小桐', update_time='2026-05-13 17:20:53', remark='' WHERE menu_id=2335;
+
+INSERT INTO system_menu VALUES(2402, '工作流', 2335, 1, 'workflow', 'kb/bot/index', '{"botType":0}', '', 1, 0, 'C', '0', '0', '', '#', '小桐', '2026-05-13 17:22:28', '小桐', '2026-05-14 14:10:12', '');
+INSERT INTO system_menu VALUES(2403, 'chatflow', 2335, 2, 'chatflow', 'kb/bot/index', '{"botType":1}', '', 1, 0, 'C', '0', '0', '', '#', '小桐', '2026-05-14 09:22:25', '小桐', '2026-05-14 09:26:26', '');
+INSERT INTO system_menu VALUES(2404, 'agent', 2335, 3, 'agent', 'kb/bot/index', '{"botType":2}', '', 1, 0, 'C', '0', '0', '', '#', '小桐', '2026-05-14 09:22:48', '小桐', '2026-05-14 09:31:26', '');
