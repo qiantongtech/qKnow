@@ -155,10 +155,11 @@
         :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
         :default-expand-all="isExpandAll"
         @selection-change="handleSelectionChange"
+        @sort-change="handleSortChange"
       >
         <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column
-          v-if="getColumnVisibility(3)"
+          v-if="getColumnVisibility(1)"
           label="分类名称"
           prop="name"
           :show-overflow-tooltip="true"
@@ -168,7 +169,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          v-if="getColumnVisibility(4)"
+          v-if="getColumnVisibility(2)"
           label="显示顺序"
           align="center"
           prop="orderNum"
@@ -178,7 +179,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          v-if="getColumnVisibility(5)"
+          v-if="getColumnVisibility(3)"
           label="备注"
           width="200"
           align="left"
@@ -190,7 +191,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          v-if="getColumnVisibility(6)"
+          v-if="getColumnVisibility(4)"
           label="创建人"
           align="center"
           prop="createBy"
@@ -200,7 +201,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          v-if="getColumnVisibility(10)"
+          v-if="getColumnVisibility(5)"
           label="创建时间"
           align="center"
           prop="createTime"
@@ -208,11 +209,12 @@
         >
           <template #default="scope">
             <span>{{
-              parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}:{s}")
+              parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}")
             }}</span>
           </template>
         </el-table-column>
         <el-table-column
+          v-if="getColumnVisibility(6)"
           label="操作"
           align="center"
           class-name="small-padding fixed-width"
@@ -363,10 +365,12 @@ const graphList = ref([]);
 
 // 列显隐信息
 const columns = ref([
-  { key: 3, label: "分类名称", visible: true },
-  { key: 4, label: "显示顺序", visible: true },
-  { key: 10, label: "创建时间", visible: true },
-  { key: 14, label: "备注", visible: true },
+  { key: 1, label: "分类名称", visible: true },
+  { key: 2, label: "显示顺序", visible: true },
+  { key: 3, label: "备注", visible: true },
+  { key: 4, label: "创建人", visible: true },
+  { key: 5, label: "创建时间", visible: true },
+  { key: 6, label: "操作", visible: true },
 ]);
 
 const getColumnVisibility = (key) => {
@@ -404,6 +408,8 @@ const data = reactive({
     orderNum: null,
     ancestors: null,
     createTime: null,
+    orderByColumn: "orderNum",
+    isAsc: "ascending",
   },
   rules: {
     name: [{ required: true, message: "分类名称不能为空", trigger: "blur" }],
@@ -474,6 +480,13 @@ function handleQueryAdd() {
   });
   // 清空已选的上级信息
   form.value.parentId = null;
+}
+
+/** 排序触发事件 */
+function handleSortChange(column) {
+  queryParams.value.orderByColumn = column.prop;
+  queryParams.value.isAsc = column.order;
+  getList();
 }
 /** 重置按钮操作 */
 function resetQuery() {
@@ -594,3 +607,23 @@ function toggleExpandAll() {
 
 getList();
 </script>
+<style scoped lang="scss">
+/* 表格单元格悬浮提示样式 - 多行显示 */
+::v-deep .el-table .cell.el-tooltip {
+  display: -webkit-box !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical !important;
+  white-space: normal;
+}
+
+::v-deep .el-popper.is-light {
+    box-shadow: 0px 2px 8px 1px rgba(0, 0, 0, 0.15);
+    max-width: 600px;
+    font-size: 14px;
+    padding: 16px;
+    line-height: 22px;
+}
+</style>

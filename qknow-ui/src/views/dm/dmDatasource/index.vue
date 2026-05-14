@@ -32,6 +32,7 @@
 
 <template>
     <div class="app-container" ref="app-container">
+        <GuideTip tip-id="kg/dm/dmDatasource.list" />
         <div class="pagecont-top" v-show="showSearch">
             <el-form
                 class="btn-style"
@@ -191,6 +192,18 @@
                 </el-table-column>
                 <el-table-column
                     v-if="getColumnVisibility(6)"
+                    label="备注"
+                    align="left"
+                    prop="remark"
+                    width="240"
+                    show-overflow-tooltip
+                >
+                    <template #default="scope">
+                        {{ scope.row.remark || '-' }}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    v-if="getColumnVisibility(7)"
                     label="创建人"
                     align="center"
                     prop="description"
@@ -201,7 +214,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                    v-if="getColumnVisibility(7)"
+                    v-if="getColumnVisibility(8)"
                     label="创建时间"
                     align="center"
                     prop="createTime"
@@ -216,7 +229,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    v-if="getColumnVisibility(8)"
+                    v-if="getColumnVisibility(9)"
                     label="操作"
                     align="center"
                     class-name="small-padding fixed-width"
@@ -407,7 +420,7 @@
                                 :min-height="192"
                                 v-model="form.description"
                                 placeholder="请输入描述"
-                                :maxlength="500"
+                                :maxlength="512"
                                 show-word-limit
                             />
                         </el-form-item>
@@ -422,7 +435,7 @@
                                 v-model="form.remark"
                                 placeholder="请输入备注"
                                 :min-height="192"
-                                :maxlength="500"
+                                :maxlength="512"
                                 show-word-limit
                             />
                         </el-form-item>
@@ -617,9 +630,10 @@
         { key: 3, label: '描述', visible: true },
         { key: 4, label: '数据连接类型', visible: true },
         { key: 5, label: '状态', visible: true },
-        { key: 6, label: '创建人', visible: true },
-        { key: 7, label: '创建时间', visible: true },
-        { key: 8, label: '操作', visible: true }
+        { key: 6, label: '备注', visible: true },
+        { key: 7, label: '创建人', visible: true },
+        { key: 8, label: '创建时间', visible: true },
+        { key: 9, label: '操作', visible: true }
     ]);
 
     const getColumnVisibility = (key) => {
@@ -687,7 +701,7 @@
             username: [{ required: true, message: '账号不能为空', trigger: 'blur' }],
             password: [{ required: true, message: '密码不能为空', trigger: 'blur' }],
             dbname: [{ required: true, message: '数据库名称不能为空', trigger: 'blur' }],
-            // sid: [{ required: true, message: '模式不能为空', trigger: 'blur' }]
+            validFlag: [{ required: true, message: '模式不能为空', trigger: 'blur' }]
         }
     });
 
