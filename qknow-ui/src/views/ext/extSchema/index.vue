@@ -588,7 +588,7 @@ function handleAdd() {
   console.log("------------a-a-a-a-", form.value.color);
   reset();
   open.value = true;
-  title.value = "添加概念配置";
+  title.value = "新增概念配置";
 }
 
 /** 修改按钮操作 */
