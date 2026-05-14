@@ -32,6 +32,7 @@
 
 <template>
   <div class="app-container" ref="app-container">
+     <GuideTip tip-id="kg/ext/unstructTask.list" />
     <div class="pagecont-top" v-show="showSearch">
       <el-form
         class="btn-style"
@@ -126,7 +127,7 @@
               <el-button
               type="danger"
               plain
-              @click="handleDelete"
+              @click="handleDelete()"
               :disabled="ids.length==0"
               @mousedown="(e) => e.preventDefault()"
             >
@@ -265,6 +266,7 @@
           class-name="small-padding fixed-width"
           fixed="right"
           width="280"
+          v-if="getColumnVisibility(17)"
         >
           <template #default="scope">
             <el-button
@@ -479,6 +481,8 @@
                 v-model="form.remark"
                 type="textarea"
                 placeholder="请输入内容"
+                  maxlength="500"
+                show-word-limit
               />
             </el-form-item>
           </el-col>
@@ -548,6 +552,7 @@ const columns = ref([
   { key: 10, label: "创建人", visible: true },
   { key: 12, label: "创建时间", visible: true },
   { key: 16, label: "备注", visible: true },
+  { key: 17, label: "操作", visible: true },
 ]);
 
 const getColumnVisibility = (key) => {
@@ -562,6 +567,7 @@ const openDetail = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
 const ids = ref([]);
+const selectedRows = ref([]);
 const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
@@ -799,6 +805,7 @@ function resetQuery() {
 // 多选框选中数据
 function handleSelectionChange(selection) {
   ids.value = selection.map((item) => item.id);
+  selectedRows.value = selection;
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
@@ -959,41 +966,48 @@ function extraction(row) {
 }
 
 /** 删除按钮操作 */
+function canDeleteTask(row) {
+  return ![1, 4].includes(Number(row.status));
+}
+
 function handleDelete(row) {
-  if (row.status == 1) {
-    proxy.$modal.msgError("任务执行中");
+  if (row) {
+    if (!canDeleteTask(row)) {
+      proxy.$modal.msgError(row.status == 4 ? "任务已在队列中" : "任务执行中");
+      return;
+    }
+
+    proxy.$modal
+      .confirm('是否确认删除任务名称为"' + row.name + '"的数据项？')
+      .then(function () {
+        return delUnstructTask(row.id);
+      })
+      .then(() => {
+        getList();
+        proxy.$modal.msgSuccess("删除成功");
+      })
+      .catch(() => {});
     return;
   }
-  const _ids = row.id || ids.value;
-  if (!row) {
-        
-                ElMessageBox.confirm(
-                    `可删除${canDeleteCount}个，不可删除${cannotDeleteCount}个，是否删除可删部分`,
-                    '系统提示',
-                    {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }
-                )
-                    .then(() => {
-                        if (!canDeleteCount) {
-                            ElMessage.success('删除成功');
-                            return;
-                        }
-                        return delUnstructTask(canDeleteIds);
-                    })
-                    .then((res) => {
-                        if (!res) return;
-                        ElMessage.success('删除成功');
-                        tableRef.value.getList();
-                    });
-            return;
-        }
+
+  const canDeleteRows = selectedRows.value.filter(canDeleteTask);
+  const canDeleteIds = canDeleteRows.map((item) => item.id);
+  const canDeleteCount = canDeleteRows.length;
+  const cannotDeleteCount = selectedRows.value.length - canDeleteCount;
+
+  if (!canDeleteCount) {
+    proxy.$modal.msgWarning("选中的任务为进行中或队列中，无法删除");
+    return;
+  }
+
+  const confirmText = cannotDeleteCount
+    ? `可删除${canDeleteCount}个，不可删除${cannotDeleteCount}个，是否删除可删部分？`
+    : `是否确认删除选中的${canDeleteCount}个任务？`;
+
   proxy.$modal
-    .confirm('是否确认删除任务名称为"' + row.name + '"的数据项？')
+    .confirm(confirmText)
     .then(function () {
-      return delUnstructTask(_ids);
+      return delUnstructTask(canDeleteIds);
     })
     .then(() => {
       getList();

@@ -488,6 +488,8 @@
                 v-model="form.remark"
                 type="textarea"
                 placeholder="请输入备注"
+                  maxlength="500"
+                show-word-limit
               />
             </el-form-item>
           </el-col>
