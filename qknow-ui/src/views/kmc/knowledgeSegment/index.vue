@@ -206,14 +206,16 @@
         <el-table-column
           v-if="getColumnVisibility(7)"
           label="创建时间"
-          align="left"
+          align="center"
           prop="createTime"
-          width="130"
+          width="160"
           sortable="custom"
           :sort-orders="['descending', 'ascending']"
         >
           <template #default="scope">
-            <span>{{ parseTime(scope.row.createTime, "{y}-{m}-{d}") }}</span>
+            <span>{{
+              parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}:{s}")
+            }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -313,14 +315,16 @@
         <el-table-column
           v-if="getColumnVisibility(7)"
           label="创建时间"
-          align="left"
+          align="center"
           prop="createTime"
-          width="130"
+          width="160"
           sortable="custom"
           :sort-orders="['descending', 'ascending']"
         >
           <template #default="scope">
-            <span>{{ parseTime(scope.row.createTime, "{y}-{m}-{d}") }}</span>
+            <span>{{
+              parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}:{s}")
+            }}</span>
           </template>
         </el-table-column>
         <el-table-column
