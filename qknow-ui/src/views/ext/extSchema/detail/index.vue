@@ -143,6 +143,15 @@
             >
               <i class="iconfont-mini icon-xinzeng mr5"></i>新增
             </el-button>
+                  <el-button
+              type="danger"
+              plain
+              @click="handleDelete"
+              :disabled="ids.length==0"
+              @mousedown="(e) => e.preventDefault()"
+            >
+              <i class="iconfont-mini icon-shanchu-huise mr5"></i>删除
+            </el-button>
             <el-button icon="Back" @click="close()">返回</el-button>
           </el-col>
           <!--          <el-col :span="1.5">-->
@@ -180,15 +189,14 @@
       </div>
       <el-table
         stripe
-        height="590px"
         v-loading="loading"
         :data="attributeList"
         @selection-change="handleSelectionChange"
         :default-sort="defaultSort"
         @sort-change="handleSortChange"
       >
-        <!--        <el-table-column type="selection" width="55" align="center" />-->
-        <!--        <el-table-column v-if="getColumnVisibility(0)" label="ID" align="center" prop="id" />-->
+               <el-table-column type="selection" width="55" align="center" />
+               <el-table-column width="80" v-if="getColumnVisibility(0)" label="编号" align="center" prop="id" />
         <!--        <el-table-column v-if="getColumnVisibility(1)" label="工作区id" align="center" prop="workspaceId">-->
         <!--          <template #default="scope">-->
         <!--            {{ scope.row.workspaceId || '-' }}-->
@@ -207,8 +215,9 @@
         <el-table-column
           v-if="getColumnVisibility(4)"
           label="属性名"
-          align="center"
+          align="left"
           prop="name"
+          :show-overflow-tooltip="{ effect: 'light' }"
         >
           <template #default="scope">
             {{ scope.row.name || "-" }}
@@ -217,8 +226,9 @@
         <el-table-column
           v-if="getColumnVisibility(5)"
           label="属性代码"
-          align="center"
+          align="left"
           prop="nameCode"
+          :show-overflow-tooltip="{ effect: 'light' }"
         >
           <template #default="scope">
             {{ scope.row.nameCode || "-" }}
@@ -274,9 +284,11 @@
         >
           <template #default="scope">
             <dict-tag
+            v-if="scope.row.validateType"
               :options="ext_data_check"
               :value="scope.row.validateType"
             />
+            <span v-else>-</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -284,6 +296,7 @@
           align="center"
           prop="id"
           v-if="getColumnVisibility(10)"
+          :show-overflow-tooltip="{ effect: 'light' }"
         >
           <template #default="scope">
             <span v-if="scope.row.validateType === 0">不可重复</span>
@@ -311,8 +324,9 @@
         <el-table-column
           v-if="getColumnVisibility(20)"
           label="备注"
-          align="center"
+          align="left"
           prop="remark"
+          :show-overflow-tooltip="{ effect: 'light' }"
         >
           <template #default="scope">
             {{ scope.row.remark || "-" }}
@@ -377,26 +391,26 @@
         ref="attributeRef"
         :model="form"
         :rules="rules"
-        label-width="130px"
-        label-position="left"
+        label-width="80px"
+        label-position="right"
         @submit.prevent
       >
         <el-row :gutter="20">
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="属性名" prop="name">
               <el-input v-model="form.name" placeholder="请输入属性名" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="属性代码" prop="nameCode">
               <el-input v-model="form.nameCode" placeholder="请输入属性代码" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="是否必填" prop="requireFlag">
               <el-radio-group v-model="form.requireFlag">
                 <el-radio :label="1">是</el-radio>
@@ -406,7 +420,7 @@
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="数据类型" prop="dataType">
               <el-select
                 v-model="form.dataType"
@@ -424,7 +438,7 @@
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="单/多值" prop="multipleFlag">
               <el-radio-group v-model="form.multipleFlag">
                 <el-radio :label="0">单值</el-radio>
@@ -434,11 +448,11 @@
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="校验方式" prop="validateType">
               <el-select
                 v-model="form.validateType"
-                placeholder="请选择数据类型"
+                placeholder="请选择校验方式"
                 clearable
               >
                 <el-option
@@ -451,7 +465,7 @@
           </el-col>
         </el-row>
         <el-row :gutter="20" v-if="form.validateType === 2">
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="最小值" prop="minValue">
               <el-input v-model="form.minValue" placeholder="请输入最小值" />
             </el-form-item>
@@ -461,7 +475,7 @@
           :gutter="20"
           v-if="form.validateType === 2 || form.validateType === 1"
         >
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="最大值" prop="maxValue">
               <el-input v-model="form.maxValue" placeholder="请输入最大值" />
             </el-form-item>
@@ -473,7 +487,7 @@
               <el-input
                 v-model="form.remark"
                 type="textarea"
-                placeholder="请输入内容"
+                placeholder="请输入备注"
               />
             </el-form-item>
           </el-col>
@@ -679,6 +693,7 @@ const attributeList = ref([]);
 
 // 列显隐信息
 const columns = ref([
+  { key: 0, label: "编号", visible: true },
   { key: 4, label: "属性名", visible: true },
   { key: 5, label: "属性代码", visible: true },
   { key: 6, label: "是否必填", visible: true },
@@ -823,7 +838,9 @@ function getList() {
     loading.value = false;
   });
 }
+function handleDel(){
 
+}
 // 取消按钮
 function cancel() {
   open.value = false;
@@ -965,7 +982,7 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const _ids = row.id || ids.value;
-  const name = row.name;
+  const name = row.name || ids.value;
   proxy.$modal
     .confirm('是否确认删除概念属性名为"' + name + '"的数据项？')
     .then(function () {
