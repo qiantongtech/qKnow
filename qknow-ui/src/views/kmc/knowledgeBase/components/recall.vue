@@ -112,6 +112,8 @@
             <el-table
               stripe
               :data="recallLogList"
+              max-height="100%"
+              @sort-change="handleSortChange"
             >
               <el-table-column label="文本" align="center" prop="query" />
               <el-table-column label="创建人" align="center" prop="createBy" />
@@ -120,6 +122,8 @@
                 align="center"
                 prop="createTime"
                 width="180"
+                sortable="custom"
+                :sort-orders="['descending', 'ascending']"
               >
                 <template #default="scope">
                   <span>{{
@@ -165,573 +169,569 @@
       <!-- 检索设置弹窗：完全对齐原页面样式 -->
       <el-dialog
         v-model="drawer"
-        title="检索设置"
         width="55%"
-        height="50%"
         :before-close="handleClose"
         class="search-setting-dialog"
+        draggable
       >
-        <div class="app-container">
-          <div class="pagecont-top" v-if="!loading">
-            <el-form
-              ref="knowledgeBaseRef"
-              :model="knowledgeBase"
-              :rules="rules"
-              label-width="auto"
-              @submit.prevent
-            >
-              <!-- 1. 检索方式区块：对齐原页面样式 -->
-              <div class="section-block">
-                <div class="header-text">
-                  <div class="header-left">
-                    <div class="blue-bar"></div>
-                    检索方式
-                  </div>
-                </div>
-                <div class="search-method-group">
-                  <!-- 向量检索 -->
-                  <div class="search-method-row">
-                    <div
-                      class="search-method-item"
-                      @click="knowledgeBase.searchMethod = 'semantic_search'"
-                      v-show="knowledgeBase.indexingTechnique !== 'economy'"
-                    >
-                      <el-radio
-                        v-model="knowledgeBase.searchMethod"
-                        label="semantic_search"
-                        class="radio-label-hidden"
-                      />
-                      <div class="search-title">
-                        <span>向量检索</span>
-                      </div>
-                    </div>
-                    <div
-                      v-show="knowledgeBase.indexingTechnique !== 'economy'"
-                      class="search-desc"
-                    >
-                      <el-icon class="desc-icon">
-                        <WarningFilled />
-                      </el-icon>
-                      通过生成查询嵌入并查询与其向量表示最相似的文本分段。
-                    </div>
-                  </div>
-                  <!-- 全文检索 -->
-                  <div class="search-method-row">
-                    <div
-                      class="search-method-item"
-                      @click="knowledgeBase.searchMethod = 'full_text_search'"
-                    >
-                      <el-radio
-                        v-model="knowledgeBase.searchMethod"
-                        label="full_text_search"
-                        class="radio-label-hidden"
-                      />
-                      <div class="search-title">
-                        <span>全文检索</span>
-                      </div>
-                    </div>
-                    <div class="search-desc">
-                      <el-icon class="desc-icon">
-                        <WarningFilled />
-                      </el-icon>
-                      索引文档中的所有词汇，从而允许用户查询任意词汇，并返回包含这些词汇的文本片段。
-                    </div>
-                  </div>
-
-                  <!-- 混合检索 -->
-                  <div class="search-method-row">
-                    <div
-                      class="search-method-item"
-                      @click="knowledgeBase.searchMethod = 'hybrid_search'"
-                      v-show="knowledgeBase.indexingTechnique !== 'economy'"
-                    >
-                      <el-radio
-                        v-model="knowledgeBase.searchMethod"
-                        label="hybrid_search"
-                        class="radio-label-hidden"
-                      />
-                      <div class="search-title">
-                        <div class="search-recommend">
-                          <span>混合检索</span>
-                          <!--                          <el-tag size="small" type="primary" class="recommend-tag">推荐</el-tag>-->
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      v-show="knowledgeBase.indexingTechnique !== 'economy'"
-                      class="search-desc"
-                    >
-                      <el-icon class="desc-icon">
-                        <WarningFilled />
-                      </el-icon>
-                      同时执行全文检案和向量检索，并应用重排序步骤，从查询结果中选择匹配用户问题的最佳结果，用户可以选择设置权重或配置重新排序模型。
-                    </div>
-                  </div>
-                </div>
+        <template #header="{ close, titleId, titleClass }">
+          <span role="heading" aria-level="2" class="el-dialog__title">
+            检索设置
+          </span>
+        </template>
+        <!-- <div class="app-container">
+          <div class="pagecont-top" v-if="!loading"> -->
+        <el-form
+          ref="knowledgeBaseRef"
+          :model="knowledgeBase"
+          :rules="rules"
+          label-width="auto"
+          @submit.prevent
+          v-if="!loading"
+        >
+          <!-- 1. 检索方式区块：对齐原页面样式 -->
+          <div class="section-block">
+            <div class="header-text">
+              <div class="header-left">
+                <div class="blue-bar"></div>
+                检索方式
               </div>
-              <el-divider></el-divider>
-              <!-- 2. 检索规则区块：非经济模式 -->
-              <div class="section-block section-block-rule">
-                <div class="header-text">
-                  <div class="header-left">
-                    <div class="blue-bar"></div>
-                    检索规则
+            </div>
+            <div class="search-method-group">
+              <!-- 向量检索 -->
+              <div class="search-method-row">
+                <div
+                  class="search-method-item"
+                  @click="knowledgeBase.searchMethod = 'semantic_search'"
+                  v-show="knowledgeBase.indexingTechnique !== 'economy'"
+                >
+                  <el-radio
+                    v-model="knowledgeBase.searchMethod"
+                    label="semantic_search"
+                    class="radio-label-hidden"
+                  />
+                  <div class="search-title">
+                    <span>向量检索</span>
                   </div>
                 </div>
                 <div
-                  class="search-rule-card"
-                  :class="{
-                    'no-border': knowledgeBase.searchMethod === 'hybrid_search',
-                  }"
+                  v-show="knowledgeBase.indexingTechnique !== 'economy'"
+                  class="search-desc"
                 >
-                  <!-- 向量检索规则 -->
-                  <div
-                    v-show="knowledgeBase.searchMethod === 'semantic_search'"
-                    class="query-rule"
-                  >
-                    <el-form-item class="form-item-inline">
-                      <div class="option-label">Rerank模型启用状态:</div>
-                      <el-switch v-model="vectorData.rerankingEnable" />
-                    </el-form-item>
-                    <el-form-item class="form-item-inline">
-                      <div class="option-label">Rerank模型:</div>
-                      <el-select
-                        v-model="vectorData.rerankingModelName"
-                        placeholder="请选择Rerank模型"
-                        :disabled="!vectorData.rerankingEnable"
-                        class="select-short"
-                      >
-                        <el-option-group
-                          v-for="group in rerankingModel"
-                          :key="group.label.zh_Hans"
-                          :label="group.label.zh_Hans"
-                        >
-                          <el-option
-                            v-for="item in group.models"
-                            :key="item.model"
-                            :label="item.model"
-                            :value="item.model"
-                          />
-                        </el-option-group>
-                      </el-select>
-                    </el-form-item>
-
-                    <el-form-item
-                      class="form-item-inline"
-                      prop="scoreThreshold"
-                    >
-                      <div class="label-input-icon">
-                        <div class="label-input">
-                          <div class="option-label">Score阈值:</div>
-                          <el-input
-                            v-model="vectorData.scoreThreshold"
-                            :min="0"
-                            :max="1"
-                            :step="0.1"
-                            type="number"
-                            class="select-short"
-                            placeholder="请输入0-1的小数"
-                            :disabled="!vectorData.scoreThresholdEnabled"
-                          />
-                        </div>
-                        <div class="icon-text icon-margin">
-                          <el-icon class="desc-icon">
-                            <WarningFilled />
-                          </el-icon>
-                          设置相似度分数的最小阈值
-                        </div>
-                      </div>
-                    </el-form-item>
-
-                    <el-form-item
-                      class="form-item-inline topk-rule-posi-"
-                      prop="topK"
-                    >
-                      <div class="label-input-icon" style="margin-left: 37px">
-                        <div class="label-input">
-                          <div class="option-label">Top K:</div>
-                          <el-input
-                            v-model="vectorData.topK"
-                            class="select-short"
-                            type="number"
-                            :min="1"
-                            :max="10"
-                            placeholder="请输入1-10的数字"
-                          />
-                        </div>
-                        <div class="icon-text">
-                          <el-icon class="desc-icon">
-                            <WarningFilled />
-                          </el-icon>
-                          选择返回的相似文本数量
-                        </div>
-                      </div>
-                    </el-form-item>
-
-                    <el-form-item class="form-item-inline">
-                      <div class="option-label">Score阈值启用状态:</div>
-                      <el-switch
-                        v-model="vectorData.scoreThresholdEnabled"
-                        class="switch-margin"
-                      />
-                    </el-form-item>
-                  </div>
-
-                  <!-- 全文检索规则 -->
-                  <div
-                    v-show="knowledgeBase.searchMethod === 'full_text_search'"
-                    class="query-rule"
-                  >
-                    <el-form-item class="form-item-inline">
-                      <div class="option-label">Rerank模型启用状态:</div>
-                      <el-switch v-model="fullTextData.rerankingEnable" />
-                    </el-form-item>
-                    <el-form-item class="form-item-inline">
-                      <div class="option-label">Rerank模型:</div>
-                      <el-select
-                        v-model="fullTextData.rerankingModelName"
-                        placeholder="请选择Rerank模型"
-                        :disabled="!fullTextData.rerankingEnable"
-                        class="select-short"
-                      >
-                        <el-option-group
-                          v-for="group in rerankingModel"
-                          :key="group.label.zh_Hans"
-                          :label="group.label.zh_Hans"
-                        >
-                          <el-option
-                            v-for="item in group.models"
-                            :key="item.model"
-                            :label="item.model"
-                            :value="item.model"
-                          />
-                        </el-option-group>
-                      </el-select>
-                    </el-form-item>
-
-                    <el-form-item
-                      class="form-item-inline"
-                      prop="scoreThreshold"
-                    >
-                      <div class="label-input-icon">
-                        <div class="label-input">
-                          <div class="option-label">Score阈值:</div>
-                          <el-input
-                            v-model="fullTextData.scoreThreshold"
-                            :min="0"
-                            :max="1"
-                            :step="0.1"
-                            class="select-short"
-                            placeholder="请输入0-1的小数"
-                            type="number"
-                            :disabled="!fullTextData.scoreThresholdEnabled"
-                          />
-                        </div>
-                        <div class="icon-text icon-margin">
-                          <el-icon class="desc-icon">
-                            <WarningFilled />
-                          </el-icon>
-                          设置相似度分数的最小阈值
-                        </div>
-                      </div>
-                    </el-form-item>
-                    <el-form-item
-                      class="form-item-inline topk-rule-posi-"
-                      prop="topK"
-                    >
-                      <div class="label-input-icon" style="margin-left: 37px">
-                        <div class="label-input">
-                          <div class="option-label">Top K:</div>
-                          <el-input
-                            v-model="fullTextData.topK"
-                            :min="1"
-                            :max="10"
-                            class="select-short"
-                            placeholder="请输入1-10的数字"
-                          />
-                        </div>
-                        <div class="icon-text">
-                          <el-icon class="desc-icon">
-                            <WarningFilled />
-                          </el-icon>
-                          选择返回的相似文本数量
-                        </div>
-                      </div>
-                    </el-form-item>
-
-                    <el-form-item class="form-item-inline">
-                      <div class="option-label">Score阈值启用状态:</div>
-                      <el-switch
-                        v-model="fullTextData.scoreThresholdEnabled"
-                        class="switch-margin"
-                      />
-                    </el-form-item>
-                  </div>
-
-                  <!-- 混合检索规则 -->
-                  <div v-show="knowledgeBase.searchMethod === 'hybrid_search'">
-                    <el-form-item class="form-item-inline">
-                      <div class="quan-rerank">
-                        <div
-                          @click="mixData.rerankingMode = 'weighted_score'"
-                          class="label-input-query"
-                        >
-                          <div class="search-method-row-mix">
-                            <div class="label-input">
-                              <el-radio
-                                v-model="mixData.rerankingMode"
-                                label="weighted_score"
-                                class="radio-label-hidden"
-                              ></el-radio>
-                              <div class="mode-title">权重设置</div>
-                            </div>
-
-                            <div class="icon-text">
-                              <el-icon class="desc-icon">
-                                <WarningFilled />
-                              </el-icon>
-                              通过调整分配的权重，重新排序策略确定是优先进行语义匹配还是关键字匹配。
-                            </div>
-                          </div>
-
-                          <div class="query-rule-mix">
-                            <el-form-item
-                              class="form-item-inline"
-                              :prop="
-                                mixData.rerankingMode === 'weighted_score'
-                                  ? 'weightAllocation'
-                                  : ''
-                              "
-                            >
-                              <div class="option-label">权重分配:</div>
-                              <el-input
-                                v-model="mixData.keywordWeight"
-                                :min="0"
-                                :max="1.0"
-                                :step="0.1"
-                                class="select-short"
-                                placeholder="请输入0-1的小数"
-                                type="number"
-                                :disabled="
-                                  mixData.rerankingMode === 'reranking_model'
-                                "
-                              ></el-input>
-                            </el-form-item>
-
-                            <el-form-item class="form-item-inline">
-                              <div class="option-label">Score阈值启用状态:</div>
-                              <el-switch
-                                v-model="mixData.weightedScoreThresholdEnabled"
-                                class="switch-margin"
-                                :disabled="
-                                  mixData.rerankingMode === 'reranking_model'
-                                "
-                              />
-                            </el-form-item>
-
-                            <el-form-item
-                              class="form-item-inline topk-margin-r"
-                              :prop="
-                                mixData.rerankingMode === 'weighted_score'
-                                  ? 'topK'
-                                  : ''
-                              "
-                            >
-                              <div class="option-label">Top K:</div>
-                              <el-input
-                                v-model="mixData.weightedTopK"
-                                :min="1"
-                                :max="10"
-                                controls-position="right"
-                                class="select-short"
-                                :disabled="
-                                  mixData.rerankingMode === 'reranking_model'
-                                "
-                              />
-                              <div class="icon-text" style="margin-left: 52px">
-                                <el-icon class="desc-icon">
-                                  <WarningFilled />
-                                </el-icon>
-                                选择返回的相似文本数量
-                              </div>
-                            </el-form-item>
-
-                            <el-form-item
-                              class="form-item-inline score-rule-posi-mix"
-                              style="margin-left: -28px"
-                              :prop="
-                                mixData.rerankingMode === 'weighted_score'
-                                  ? 'scoreThreshold'
-                                  : ''
-                              "
-                            >
-                              <div class="option-label score-margin">
-                                Score阈值:
-                              </div>
-                              <el-input
-                                v-model="mixData.weightedScoreThreshold"
-                                :min="0"
-                                :max="1"
-                                :step="0.1"
-                                controls-position="right"
-                                class="select-short"
-                                placeholder="请输入0-1的小数"
-                                type="number"
-                                :disabled="
-                                  !mixData.weightedScoreThresholdEnabled ||
-                                  mixData.rerankingMode === 'reranking_model'
-                                "
-                              />
-                              <div class="icon-text" style="margin-left: 108px">
-                                <el-icon class="desc-icon">
-                                  <WarningFilled />
-                                </el-icon>
-                                设置相似度分数的最小阈值
-                              </div>
-                            </el-form-item>
-                          </div>
-                        </div>
-
-                        <div
-                          @click="mixData.rerankingMode = 'reranking_model'"
-                          class="label-input-query"
-                        >
-                          <div class="search-method-row-mix">
-                            <div class="label-input">
-                              <el-radio
-                                v-model="mixData.rerankingMode"
-                                label="reranking_model"
-                                class="radio-label-hidden"
-                              ></el-radio>
-                              <div class="mode-title mode-titlelon">
-                                Rerank模型
-                              </div>
-                            </div>
-
-                            <div class="icon-text">
-                              <el-icon class="desc-icon">
-                                <WarningFilled />
-                              </el-icon>
-                              重排序模型将根据候选文档列表与用户问题语义匹配度进行重新排序。
-                            </div>
-                          </div>
-
-                          <div class="query-rule-mix">
-                            <el-form-item class="form-item-inline">
-                              <div class="option-label">Rerank模型:</div>
-                              <el-select
-                                v-model="mixData.rerankingModelName"
-                                placeholder="请选择模型"
-                                :disabled="
-                                  mixData.rerankingMode === 'weighted_score' ||
-                                  !mixData.rerankingEnable
-                                "
-                                class="select-short"
-                              >
-                                <el-option-group
-                                  v-for="group in rerankingModel"
-                                  :key="group.label.zh_Hans"
-                                  :label="group.label.zh_Hans"
-                                >
-                                  <el-option
-                                    v-for="item in group.models"
-                                    :key="item.model"
-                                    :label="item.model"
-                                    :value="item.model"
-                                  />
-                                </el-option-group>
-                              </el-select>
-                            </el-form-item>
-
-                            <el-form-item class="form-item-inline">
-                              <div class="option-label">Score阈值启用状态:</div>
-                              <el-switch
-                                v-model="mixData.rerankScoreThresholdEnabled"
-                                class="switch-margin"
-                                :disabled="
-                                  mixData.rerankingMode === 'weighted_score'
-                                "
-                              />
-                            </el-form-item>
-                            <el-form-item
-                              class="form-item-inline topk-margin"
-                              :prop="
-                                mixData.rerankingMode === 'reranking_model'
-                                  ? 'topK'
-                                  : ''
-                              "
-                            >
-                              <div class="option-label">Top K:</div>
-                              <el-input
-                                v-model="mixData.rerankTopK"
-                                :min="1"
-                                :max="10"
-                                controls-position="right"
-                                class="select-short"
-                                :disabled="
-                                  mixData.rerankingMode === 'weighted_score'
-                                "
-                              />
-                              <div class="icon-text" style="margin-left: 52px">
-                                <el-icon class="desc-icon">
-                                  <WarningFilled />
-                                </el-icon>
-                                选择返回的相似文本数量
-                              </div>
-                            </el-form-item>
-
-                            <el-form-item
-                              class="form-item-inline score-rule-posi-mix"
-                              style="margin-left: -28px"
-                              :prop="
-                                mixData.rerankingMode === 'reranking_model'
-                                  ? 'scoreThreshold'
-                                  : ''
-                              "
-                            >
-                              <div class="option-label score-margin">
-                                Score阈值:
-                              </div>
-                              <el-input
-                                v-model="mixData.rerankScoreThreshold"
-                                :min="0"
-                                :max="1"
-                                :step="0.1"
-                                controls-position="right"
-                                class="select-short"
-                                placeholder="请输入0-1的小数"
-                                type="number"
-                                :disabled="
-                                  !mixData.rerankScoreThresholdEnabled ||
-                                  mixData.rerankingMode === 'weighted_score'
-                                "
-                              />
-                              <div class="icon-text" style="margin-left: 108px">
-                                <el-icon class="desc-icon">
-                                  <WarningFilled />
-                                </el-icon>
-                                设置相似度分数的最小阈值
-                              </div>
-                            </el-form-item>
-                          </div>
-                        </div>
-                      </div>
-                    </el-form-item>
-                  </div>
-                </div>
-                <!-- 底部操作按钮 -->
-                <div class="dialog-footer">
-                  <el-button type="default" size="small" plain @click="cancel">
-                    取消
-                  </el-button>
-                  <el-button type="primary" @click="submitForm">
-                    确定
-                  </el-button>
+                  <el-icon class="desc-icon">
+                    <WarningFilled />
+                  </el-icon>
+                  通过生成查询嵌入并查询与其向量表示最相似的文本分段。
                 </div>
               </div>
-            </el-form>
+              <!-- 全文检索 -->
+              <div class="search-method-row">
+                <div
+                  class="search-method-item"
+                  @click="knowledgeBase.searchMethod = 'full_text_search'"
+                >
+                  <el-radio
+                    v-model="knowledgeBase.searchMethod"
+                    label="full_text_search"
+                    class="radio-label-hidden"
+                  />
+                  <div class="search-title">
+                    <span>全文检索</span>
+                  </div>
+                </div>
+                <div class="search-desc">
+                  <el-icon class="desc-icon">
+                    <WarningFilled />
+                  </el-icon>
+                  索引文档中的所有词汇，从而允许用户查询任意词汇，并返回包含这些词汇的文本片段。
+                </div>
+              </div>
+
+              <!-- 混合检索 -->
+              <div class="search-method-row">
+                <div
+                  class="search-method-item"
+                  @click="knowledgeBase.searchMethod = 'hybrid_search'"
+                  v-show="knowledgeBase.indexingTechnique !== 'economy'"
+                >
+                  <el-radio
+                    v-model="knowledgeBase.searchMethod"
+                    label="hybrid_search"
+                    class="radio-label-hidden"
+                  />
+                  <div class="search-title">
+                    <div class="search-recommend">
+                      <span>混合检索</span>
+                      <!--                          <el-tag size="small" type="primary" class="recommend-tag">推荐</el-tag>-->
+                    </div>
+                  </div>
+                </div>
+                <div
+                  v-show="knowledgeBase.indexingTechnique !== 'economy'"
+                  class="search-desc"
+                >
+                  <el-icon class="desc-icon">
+                    <WarningFilled />
+                  </el-icon>
+                  同时执行全文检案和向量检索，并应用重排序步骤，从查询结果中选择匹配用户问题的最佳结果，用户可以选择设置权重或配置重新排序模型。
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+          <el-divider></el-divider>
+          <!-- 2. 检索规则区块：非经济模式 -->
+          <div class="section-block section-block-rule">
+            <div class="header-text">
+              <div class="header-left">
+                <div class="blue-bar"></div>
+                检索规则
+              </div>
+            </div>
+            <div
+              class="search-rule-card"
+              :class="{
+                'no-border': knowledgeBase.searchMethod === 'hybrid_search',
+              }"
+            >
+              <!-- 向量检索规则 -->
+              <div
+                v-show="knowledgeBase.searchMethod === 'semantic_search'"
+                class="query-rule"
+              >
+                <el-form-item class="form-item-inline">
+                  <div class="option-label">Rerank模型启用状态:</div>
+                  <el-switch v-model="vectorData.rerankingEnable" />
+                </el-form-item>
+                <el-form-item class="form-item-inline">
+                  <div class="option-label">Rerank模型:</div>
+                  <el-select
+                    v-model="vectorData.rerankingModelName"
+                    placeholder="请选择Rerank模型"
+                    :disabled="!vectorData.rerankingEnable"
+                    class="select-short"
+                  >
+                    <el-option-group
+                      v-for="group in rerankingModel"
+                      :key="group.label.zh_Hans"
+                      :label="group.label.zh_Hans"
+                    >
+                      <el-option
+                        v-for="item in group.models"
+                        :key="item.model"
+                        :label="item.model"
+                        :value="item.model"
+                      />
+                    </el-option-group>
+                  </el-select>
+                </el-form-item>
+
+                <el-form-item class="form-item-inline" prop="scoreThreshold">
+                  <div class="label-input-icon">
+                    <div class="label-input">
+                      <div class="option-label">Score阈值:</div>
+                      <el-input
+                        v-model="vectorData.scoreThreshold"
+                        :min="0"
+                        :max="1"
+                        :step="0.1"
+                        type="number"
+                        class="select-short"
+                        placeholder="请输入0-1的小数"
+                        :disabled="!vectorData.scoreThresholdEnabled"
+                      />
+                    </div>
+                    <div class="icon-text icon-margin">
+                      <el-icon class="desc-icon">
+                        <WarningFilled />
+                      </el-icon>
+                      设置相似度分数的最小阈值
+                    </div>
+                  </div>
+                </el-form-item>
+
+                <el-form-item
+                  class="form-item-inline topk-rule-posi-"
+                  prop="topK"
+                >
+                  <div class="label-input-icon" style="margin-left: 37px">
+                    <div class="label-input">
+                      <div class="option-label">Top K:</div>
+                      <el-input
+                        v-model="vectorData.topK"
+                        class="select-short"
+                        type="number"
+                        :min="1"
+                        :max="10"
+                        placeholder="请输入1-10的数字"
+                      />
+                    </div>
+                    <div class="icon-text">
+                      <el-icon class="desc-icon">
+                        <WarningFilled />
+                      </el-icon>
+                      选择返回的相似文本数量
+                    </div>
+                  </div>
+                </el-form-item>
+
+                <el-form-item class="form-item-inline">
+                  <div class="option-label">Score阈值启用状态:</div>
+                  <el-switch
+                    v-model="vectorData.scoreThresholdEnabled"
+                    class="switch-margin"
+                  />
+                </el-form-item>
+              </div>
+
+              <!-- 全文检索规则 -->
+              <div
+                v-show="knowledgeBase.searchMethod === 'full_text_search'"
+                class="query-rule"
+              >
+                <el-form-item class="form-item-inline">
+                  <div class="option-label">Rerank模型启用状态:</div>
+                  <el-switch v-model="fullTextData.rerankingEnable" />
+                </el-form-item>
+                <el-form-item class="form-item-inline">
+                  <div class="option-label">Rerank模型:</div>
+                  <el-select
+                    v-model="fullTextData.rerankingModelName"
+                    placeholder="请选择Rerank模型"
+                    :disabled="!fullTextData.rerankingEnable"
+                    class="select-short"
+                  >
+                    <el-option-group
+                      v-for="group in rerankingModel"
+                      :key="group.label.zh_Hans"
+                      :label="group.label.zh_Hans"
+                    >
+                      <el-option
+                        v-for="item in group.models"
+                        :key="item.model"
+                        :label="item.model"
+                        :value="item.model"
+                      />
+                    </el-option-group>
+                  </el-select>
+                </el-form-item>
+
+                <el-form-item class="form-item-inline" prop="scoreThreshold">
+                  <div class="label-input-icon">
+                    <div class="label-input">
+                      <div class="option-label">Score阈值:</div>
+                      <el-input
+                        v-model="fullTextData.scoreThreshold"
+                        :min="0"
+                        :max="1"
+                        :step="0.1"
+                        class="select-short"
+                        placeholder="请输入0-1的小数"
+                        type="number"
+                        :disabled="!fullTextData.scoreThresholdEnabled"
+                      />
+                    </div>
+                    <div class="icon-text icon-margin">
+                      <el-icon class="desc-icon">
+                        <WarningFilled />
+                      </el-icon>
+                      设置相似度分数的最小阈值
+                    </div>
+                  </div>
+                </el-form-item>
+                <el-form-item
+                  class="form-item-inline topk-rule-posi-"
+                  prop="topK"
+                >
+                  <div class="label-input-icon" style="margin-left: 37px">
+                    <div class="label-input">
+                      <div class="option-label">Top K:</div>
+                      <el-input
+                        v-model="fullTextData.topK"
+                        :min="1"
+                        :max="10"
+                        class="select-short"
+                        placeholder="请输入1-10的数字"
+                      />
+                    </div>
+                    <div class="icon-text">
+                      <el-icon class="desc-icon">
+                        <WarningFilled />
+                      </el-icon>
+                      选择返回的相似文本数量
+                    </div>
+                  </div>
+                </el-form-item>
+
+                <el-form-item class="form-item-inline">
+                  <div class="option-label">Score阈值启用状态:</div>
+                  <el-switch
+                    v-model="fullTextData.scoreThresholdEnabled"
+                    class="switch-margin"
+                  />
+                </el-form-item>
+              </div>
+
+              <!-- 混合检索规则 -->
+              <div v-show="knowledgeBase.searchMethod === 'hybrid_search'">
+                <el-form-item class="form-item-inline">
+                  <div class="quan-rerank">
+                    <div
+                      @click="mixData.rerankingMode = 'weighted_score'"
+                      class="label-input-query"
+                    >
+                      <div class="search-method-row-mix">
+                        <div class="label-input">
+                          <el-radio
+                            v-model="mixData.rerankingMode"
+                            label="weighted_score"
+                            class="radio-label-hidden"
+                          ></el-radio>
+                          <div class="mode-title">权重设置</div>
+                        </div>
+
+                        <div class="icon-text">
+                          <el-icon class="desc-icon">
+                            <WarningFilled />
+                          </el-icon>
+                          通过调整分配的权重，重新排序策略确定是优先进行语义匹配还是关键字匹配。
+                        </div>
+                      </div>
+
+                      <div class="query-rule-mix">
+                        <el-form-item
+                          class="form-item-inline"
+                          :prop="
+                            mixData.rerankingMode === 'weighted_score'
+                              ? 'weightAllocation'
+                              : ''
+                          "
+                        >
+                          <div class="option-label">权重分配:</div>
+                          <el-input
+                            v-model="mixData.keywordWeight"
+                            :min="0"
+                            :max="1.0"
+                            :step="0.1"
+                            class="select-short"
+                            placeholder="请输入0-1的小数"
+                            type="number"
+                            :disabled="
+                              mixData.rerankingMode === 'reranking_model'
+                            "
+                          ></el-input>
+                        </el-form-item>
+
+                        <el-form-item class="form-item-inline">
+                          <div class="option-label">Score阈值启用状态:</div>
+                          <el-switch
+                            v-model="mixData.weightedScoreThresholdEnabled"
+                            class="switch-margin"
+                            :disabled="
+                              mixData.rerankingMode === 'reranking_model'
+                            "
+                          />
+                        </el-form-item>
+
+                        <el-form-item
+                          class="form-item-inline topk-margin-r"
+                          :prop="
+                            mixData.rerankingMode === 'weighted_score'
+                              ? 'topK'
+                              : ''
+                          "
+                        >
+                          <div class="option-label">Top K:</div>
+                          <el-input
+                            v-model="mixData.weightedTopK"
+                            :min="1"
+                            :max="10"
+                            controls-position="right"
+                            class="select-short"
+                            :disabled="
+                              mixData.rerankingMode === 'reranking_model'
+                            "
+                          />
+                          <div class="icon-text" style="margin-left: 52px">
+                            <el-icon class="desc-icon">
+                              <WarningFilled />
+                            </el-icon>
+                            选择返回的相似文本数量
+                          </div>
+                        </el-form-item>
+
+                        <el-form-item
+                          class="form-item-inline score-rule-posi-mix"
+                          style="margin-left: -28px"
+                          :prop="
+                            mixData.rerankingMode === 'weighted_score'
+                              ? 'scoreThreshold'
+                              : ''
+                          "
+                        >
+                          <div class="option-label score-margin">
+                            Score阈值:
+                          </div>
+                          <el-input
+                            v-model="mixData.weightedScoreThreshold"
+                            :min="0"
+                            :max="1"
+                            :step="0.1"
+                            controls-position="right"
+                            class="select-short"
+                            placeholder="请输入0-1的小数"
+                            type="number"
+                            :disabled="
+                              !mixData.weightedScoreThresholdEnabled ||
+                              mixData.rerankingMode === 'reranking_model'
+                            "
+                          />
+                          <div class="icon-text" style="margin-left: 108px">
+                            <el-icon class="desc-icon">
+                              <WarningFilled />
+                            </el-icon>
+                            设置相似度分数的最小阈值
+                          </div>
+                        </el-form-item>
+                      </div>
+                    </div>
+
+                    <div
+                      @click="mixData.rerankingMode = 'reranking_model'"
+                      class="label-input-query"
+                    >
+                      <div class="search-method-row-mix">
+                        <div class="label-input">
+                          <el-radio
+                            v-model="mixData.rerankingMode"
+                            label="reranking_model"
+                            class="radio-label-hidden"
+                          ></el-radio>
+                          <div class="mode-title mode-titlelon">Rerank模型</div>
+                        </div>
+
+                        <div class="icon-text">
+                          <el-icon class="desc-icon">
+                            <WarningFilled />
+                          </el-icon>
+                          重排序模型将根据候选文档列表与用户问题语义匹配度进行重新排序。
+                        </div>
+                      </div>
+
+                      <div class="query-rule-mix">
+                        <el-form-item class="form-item-inline">
+                          <div class="option-label">Rerank模型:</div>
+                          <el-select
+                            v-model="mixData.rerankingModelName"
+                            placeholder="请选择模型"
+                            :disabled="
+                              mixData.rerankingMode === 'weighted_score' ||
+                              !mixData.rerankingEnable
+                            "
+                            class="select-short"
+                          >
+                            <el-option-group
+                              v-for="group in rerankingModel"
+                              :key="group.label.zh_Hans"
+                              :label="group.label.zh_Hans"
+                            >
+                              <el-option
+                                v-for="item in group.models"
+                                :key="item.model"
+                                :label="item.model"
+                                :value="item.model"
+                              />
+                            </el-option-group>
+                          </el-select>
+                        </el-form-item>
+
+                        <el-form-item class="form-item-inline">
+                          <div class="option-label">Score阈值启用状态:</div>
+                          <el-switch
+                            v-model="mixData.rerankScoreThresholdEnabled"
+                            class="switch-margin"
+                            :disabled="
+                              mixData.rerankingMode === 'weighted_score'
+                            "
+                          />
+                        </el-form-item>
+                        <el-form-item
+                          class="form-item-inline topk-margin"
+                          :prop="
+                            mixData.rerankingMode === 'reranking_model'
+                              ? 'topK'
+                              : ''
+                          "
+                        >
+                          <div class="option-label">Top K:</div>
+                          <el-input
+                            v-model="mixData.rerankTopK"
+                            :min="1"
+                            :max="10"
+                            controls-position="right"
+                            class="select-short"
+                            :disabled="
+                              mixData.rerankingMode === 'weighted_score'
+                            "
+                          />
+                          <div class="icon-text" style="margin-left: 52px">
+                            <el-icon class="desc-icon">
+                              <WarningFilled />
+                            </el-icon>
+                            选择返回的相似文本数量
+                          </div>
+                        </el-form-item>
+
+                        <el-form-item
+                          class="form-item-inline score-rule-posi-mix"
+                          style="margin-left: -28px"
+                          :prop="
+                            mixData.rerankingMode === 'reranking_model'
+                              ? 'scoreThreshold'
+                              : ''
+                          "
+                        >
+                          <div class="option-label score-margin">
+                            Score阈值:
+                          </div>
+                          <el-input
+                            v-model="mixData.rerankScoreThreshold"
+                            :min="0"
+                            :max="1"
+                            :step="0.1"
+                            controls-position="right"
+                            class="select-short"
+                            placeholder="请输入0-1的小数"
+                            type="number"
+                            :disabled="
+                              !mixData.rerankScoreThresholdEnabled ||
+                              mixData.rerankingMode === 'weighted_score'
+                            "
+                          />
+                          <div class="icon-text" style="margin-left: 108px">
+                            <el-icon class="desc-icon">
+                              <WarningFilled />
+                            </el-icon>
+                            设置相似度分数的最小阈值
+                          </div>
+                        </el-form-item>
+                      </div>
+                    </div>
+                  </div>
+                </el-form-item>
+              </div>
+            </div>
+          </div>
+        </el-form>
+        <template #footer>
+          <div class="dialog-footer">
+            <el-button size="mini" @click="cancel">取 消</el-button>
+            <el-button type="primary" size="mini" @click="submitForm"
+              >确 定</el-button
+            >
+          </div>
+        </template>
+        <!-- </div>
+        </div> -->
       </el-dialog>
     </div>
   </div>
@@ -1174,14 +1174,23 @@ function getRecall() {
     });
 }
 
-function getLogList() {
+/** 排序触发事件 */
+function handleSortChange(column, prop, order) {
+  const queryParams = {
+    orderByColumn: column.prop,
+    isAsc: column.order,
+  };
+  getLogList(queryParams);
+}
+
+function getLogList(queryParams) {
   listLog({
     knowledgeId: route.params.kbId,
     creatorId: userStore.id,
     pageNum: 1,
     pageSize: 5,
-    orderByColumn: "createTime",
-    isAsc: "desc",
+    orderByColumn: queryParams ? queryParams.orderByColumn : "createTime",
+    isAsc: queryParams ? queryParams.isAsc : "desc",
   }).then((res) => {
     recallLogList.value = res.data.list;
   });
@@ -1250,8 +1259,6 @@ init();
 
 <style scoped lang="scss">
 .app-container {
-  margin: 0px;
-
   .pagecont-top {
     padding: 0px;
     //background-color: #f0f2f5;
@@ -1287,10 +1294,6 @@ init();
       line-height: 24px;
       font-family: PingFangSC-Medium-;
     }
-  }
-
-  .section-block-rule {
-    height: 580px;
   }
 }
 
@@ -1361,8 +1364,8 @@ init();
   border: 1px solid #e6e6e6;
   border-radius: 4px;
   padding: 0px 19px 23px 19px;
-  margin: 10px 20px 0px 0px;
-  height: 500px;
+  margin: 10px 13px 0px 0px;
+  // height: 490px;
 
   .query-rule-mix {
     padding: 20px 0px 10px 15px;
@@ -1569,12 +1572,6 @@ init();
   display: flex;
   justify-content: flex-end;
   margin: 10px 10px 10px 0px;
-
-  .el-button {
-    height: 28px;
-    width: 80px;
-    font-size: 12px !important;
-  }
 }
 
 .radio-label-hidden {

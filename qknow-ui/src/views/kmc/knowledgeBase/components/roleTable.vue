@@ -65,27 +65,59 @@
 <template>
   <div class="app-container" ref="app-container">
     <div class="pagecont-bottom">
-      <div class="header-left">
-        <div class="blue-bar"></div>
-        权限设置
+      <div class="justify-between mb15">
+        <div class="header-left">
+          <div class="blue-bar"></div>
+          权限设置
+        </div>
+        <div class="justify-end top-right-btn">
+          <right-toolbar
+            v-model:showSearch="showSearch"
+            @queryTable="getList"
+            :columns="columns"
+          ></right-toolbar>
+        </div>
       </div>
       <!-- 表格数据 -->
-      <el-table stripe   v-loading="loading" :data="roleList">
+      <el-table stripe   v-loading="loading"
+        :data="roleList"
+        :default-sort="defaultSort"
+      >
         <!--        <el-table-column type="selection" width="55" align="center" />-->
-        <el-table-column label="角色编码" prop="roleId" align="center" />
         <el-table-column
-          label="角色名称"
-          prop="roleName"
+          label="编号"
+          prop="roleId"
           align="center"
-          :show-overflow-tooltip="true"
+          sortable="custom"
+          width="80"
+          v-if="getColumnVisibility(1)"
         />
         <el-table-column
+          v-if="getColumnVisibility(2)"
+          label="角色名称"
+          prop="roleName"
+          align="left"
+          width="200"
+          :show-overflow-tooltip="{ effect: 'light' }"
+        />
+        <el-table-column
+          v-if="getColumnVisibility(3)"
           label="权限字符"
           prop="roleKey"
           align="center"
-          :show-overflow-tooltip="true"
+          :show-overflow-tooltip="{ effect: 'light' }"
         />
-        <el-table-column label="状态" align="center">
+        <el-table-column
+          label="显示顺序"
+          prop="roleSort"
+          align="center"
+          v-if="getColumnVisibility(4)"
+        />
+        <el-table-column
+          label="状态"
+          align="center"
+          v-if="getColumnVisibility(5)"
+        >
           <template #default="scope">
             <el-switch
               :model-value="
@@ -97,12 +129,23 @@
             ></el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="显示顺序" prop="roleSort" align="center" />
+
+        <el-table-column
+          v-if="getColumnVisibility(6)"
+          label="创建人"
+          align="center"
+          prop="createBy"
+        >
+          <template #default="scope">
+            {{ scope.row.createBy || "-" }}
+          </template>
+        </el-table-column>
         <el-table-column
           label="创建时间"
           align="center"
           prop="createTime"
           width="160"
+          v-if="getColumnVisibility(7)"
         >
           <template #default="scope">
             <span>{{ parseTime(scope.row.createTime) }}</span>
@@ -137,6 +180,24 @@ const dateRange = ref([]);
 const kmcId = route.params.kbId;
 const selectedRoleIds = ref([]);
 const isInitializing = ref(true); // 新增：初始化标志位
+
+// 列显隐信息
+const columns = ref([
+  { key: 1, label: "编号", visible: true },
+  { key: 2, label: "角色名称", visible: true },
+  { key: 3, label: "权限字符", visible: true },
+  { key: 4, label: "显示顺序", visible: true },
+  { key: 5, label: "状态", visible: true },
+  { key: 6, label: "创建人", visible: true },
+  { key: 7, label: "创建时间", visible: true },
+]);
+const getColumnVisibility = (key) => {
+  const column = columns.value.find((col) => col.key === key);
+  // 如果没有找到对应列配置，默认显示
+  if (!column) return true;
+  // 如果找到对应列配置，根据visible属性来控制显示
+  return column.visible;
+};
 
 const handleSwitchUpdate = (roleId, value) => {
   if (isInitializing.value) return;
@@ -182,13 +243,12 @@ function handleStatusChange() {
 }
 getList();
 </script>
-<style scoped>
+<style scoped lang="scss">
 .app-container {
   .pagecont-bottom {
     .header-left {
       display: flex;
       align-items: center;
-      margin-bottom: 15px;
       .blue-bar {
         background-color: #2666fb;
         width: 6px;
