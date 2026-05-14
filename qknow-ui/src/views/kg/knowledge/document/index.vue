@@ -518,7 +518,13 @@ function getList() {
 /** 查询部门下拉树结构 */
 function getCategoryTree() {
   getFileTypes().then((response) => {
-    KcOptions.value = response.data;
+    KcOptions.value = [{
+      id: 0,
+      name: '知识分类',
+      children: response.data,
+      count: response.data.length,
+      totalCount: response.data.reduce((sum, item) => sum + item.totalCount, 0)
+    }];
   });
 }
 
