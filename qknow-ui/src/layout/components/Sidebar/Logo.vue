@@ -74,7 +74,7 @@
 <script setup>
 import variables from "@/assets/system/styles/variables.module.scss";
 import logo from "@/assets/system/logo/logo.png";
-import logo2 from "@/assets/system/logo/logo.png";
+import logo2 from "@/assets/system/logo/logo2.png";
 import simpLogo from "@/assets/system/logo/simpLogo.png";
 
 import useSettingsStore from "@/store/system/settings";
@@ -115,7 +115,7 @@ const displaySimpLogo = computed(() => {
   const isSpecialRoute = navbarLogoRoutes.some((logoPath) =>
     route.path.startsWith(logoPath)
   );
-  return isSpecialRoute ? logo2 : refSimpLogo.value;
+  return isSpecialRoute ? logo : refSimpLogo.value;
 });
 onMounted(() => {
   fetchContent();
@@ -174,6 +174,8 @@ const sideTheme = computed(() => settingsStore.sideTheme);
       margin-left: -32px;
     }
 
+    
+
     & .sidebar-title {
       display: inline-block;
       margin: 0;
@@ -184,6 +186,10 @@ const sideTheme = computed(() => settingsStore.sideTheme);
       font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
       vertical-align: middle;
     }
+  }
+
+  &.navbar-logo{
+    background-color: #fff !important;
   }
 
   &.collapse {

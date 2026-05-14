@@ -49,21 +49,14 @@
               </div>
             </div>
             <div class="info-btns">
-              <!-- <a href="/user/profile" class=""> -->
-              <el-button
-                type="primary"
-                class="info-btn-dft"
-                plain
-                size="large"
-                @click="goprofile"
-              >
+              <el-button type="primary" class="info-btn-dft" plain size="large" @click="goprofile"
+                style="background: #135afb; color: #fff; font-size: 14px">
                 个人中心
               </el-button>
-              <!-- </a> -->
-
-              <!--                            <el-button type="primary" class="info-btn-dft" plain size="large">
-                                退出登录
-                            </el-button>-->
+              <el-button auto-insert-space @click="logout" type="primary" class="info-btn-dft info-btn-dfts" plain
+                size="large" style="color: #135afb">
+                退出登录
+              </el-button>
             </div>
           </div>
         </div>
@@ -74,14 +67,15 @@
                     <img src="@/assets/system/images/index/weather.png" alt="" srcset="" />
                 </div> -->
         <div class="module-2">
-          <iframe
+          <!-- <iframe
             width="100%"
             scrolling="no"
             height="150"
             frameborder="0"
             allowtransparency="true"
             src="https://i.tianqi.com?c=code&id=21&icon=1&site=12"
-          ></iframe>
+          ></iframe> -->
+          <Weather />
         </div>
       </el-col>
 
@@ -113,7 +107,7 @@
           </div>
         </div>
 
-        <el-row :gutter="20">
+        <el-row :gutter="15">
           <el-col :xs="24" :sm="24" :md="12" :lg="12">
             <!-- 模块4 饼图 -->
             <div class="module-4 border-item">
@@ -249,6 +243,7 @@
 <script setup name="Index">
 import useUserStore from "@/store/system/user";
 import { listNotice } from "@/api/system/system/notice.js";
+import Weather from "@/components/Weather/index.vue";
 import * as echarts from "echarts";
 // eslint-disable-next-line no-unused-vars
 import {
@@ -377,15 +372,15 @@ const xljtcont = ref("");
 function getxljtcont() {
   let num = Math.floor(Math.random() * 9);
   let xljtlist = [
-    { value: "起风的日子，学会依风起舞，下雨的是时候，学会为自己撑伞。" },
-    { value: "别让鸡零狗碎的破事，耗尽你对美好生活的所有向往。" },
-    { value: "管好身体，照顾好父母和老婆孩子，要自己感受生活的美好。" },
-    { value: "我希望你过普通的生活，有稳定的收入平凡的爱人。" },
-    { value: "一定要努力赚钱，好好经营自己。" },
-    { value: "我们穷极一生追求的幸福，眼中景，盘中餐，身边人。" },
-    { value: "日出有盼，日落有思，平平安安，所遇皆甜。" },
-    { value: "不要慌，太阳下山有月光。" },
-    { value: "几经波折见风雪，再见是我也非我。" },
+    { value: "知识是照亮前路的灯塔，每一次学习都是点亮一盏明灯。" },
+    { value: "数据是新时代的金矿，用心挖掘就能发现无尽的价值。" },
+    { value: "AI赋能，让知识管理更智能，让工作效率倍增。" },
+    { value: "构建知识图谱，连接万物智慧，让信息不再孤岛。" },
+    { value: "文档管理井然有序，工作生活从容不迫。" },
+    { value: "每一次对话都是思想的碰撞，每一次搜索都是知识的探索。" },
+    { value: "系统稳定运行，服务永不止步，我们一直在路上。" },
+    { value: "知识积累如滴水成河，终能汇聚成智慧的海洋。" },
+    { value: "用科技赋能知识，让智慧触手可及。" },
   ];
   xljtcont.value = xljtlist[num].value;
 }
@@ -1080,7 +1075,7 @@ onMounted(() => {
 .userInfo .info-main .info-btns .info-btn-dft {
   width: 100px;
   height: 40px;
-  border-radius: 4px !important;
+  border-radius: 2px !important;
   margin-left: 20px;
 }
 
@@ -1234,11 +1229,12 @@ onMounted(() => {
 }
 
 .border-item .border-item-head .head-title {
-  font-size: 16px;
-  color: var(--el-color-primary);
-  font-weight: 700;
-  display: flex;
-  align-items: center;
+    font-size: 16px;
+    color: #000000d9;
+    display: flex;
+    align-items: center;
+    font-family: PingFang SC;
+    font-weight: 500;
 }
 .border-item .border-item-head .head-title-seach {
   cursor: pointer;
@@ -1249,13 +1245,13 @@ onMounted(() => {
 }
 
 .border-item .border-item-head .head-title:before {
-  display: inline-block;
-  content: "";
-  width: 6px;
-  height: 16px;
-  border-radius: 2px 2px 2px 2px;
-  background: var(--el-color-primary);
-  margin-right: 10px;
+    display: inline-block;
+    content: "";
+    width: 6px;
+    height: 16px;
+    border-radius: 3px;
+    background: var(--el-color-primary);
+    margin-right: 8px;
 }
 
 .border-item .border-item-body {

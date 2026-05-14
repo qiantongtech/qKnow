@@ -218,19 +218,16 @@
           </template>
         </el-popover>
 
-        <div @click="handleRefreshClick" class="right-menu-item hover-effect">
-          <!--                    <el-icon size="22">-->
-          <!--                        <Refresh/>-->
-          <!--                    </el-icon>-->
+        <!-- <div @click="handleRefreshClick" class="right-menu-item hover-effect">
           <i
             class="iconfont icon-a-shuaxinxianxing"
             style="font-size: 20px"
           ></i>
-        </div>
+        </div> -->
 
         <header-search id="header-search" class="right-menu-item" />
 
-        <screenfull id="screenfull" class="right-menu-item hover-effect" />
+        <!-- <screenfull id="screenfull" class="right-menu-item hover-effect" /> -->
 
         <!-- <el-tooltip content="布局大小" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
