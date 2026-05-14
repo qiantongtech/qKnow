@@ -278,7 +278,7 @@
           <el-col :span="24">
             <el-form-item
               class="status-form-item"
-              label="状态:"
+              label="状态"
               prop="validFlag"
               style="display: flex; align-items: center"
             >
@@ -686,7 +686,6 @@ proxy.$tab.closeAllPage();
 
 <style scoped lang="scss">
 .app-container {
-  padding-bottom: 40px;
 }
 .pagecont-bottom {
   //display: flex;

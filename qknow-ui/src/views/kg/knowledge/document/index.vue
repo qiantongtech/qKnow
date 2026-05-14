@@ -72,6 +72,7 @@
         :leftWidth="leftWidth"
         :placeholder="'请输入分类名称'"
         @node-click="handleNodeClick"
+        ref="deptTreeRef"
       />
       <el-main>
         <div class="pagecont-top" v-show="showSearch">
@@ -136,7 +137,6 @@
           </div>
           <el-table
             stripe
-            height="58vh"
             v-loading="loading"
             :data="documentList"
             @selection-change="handleSelectionChange"
@@ -383,6 +383,7 @@ import FileUpload from "@/components/FileUpload2/index.vue";
 
 const { proxy } = getCurrentInstance();
 
+const deptTreeRef = ref(null);
 const documentList = ref([]);
 
 // 列显隐信息
@@ -532,6 +533,10 @@ function handleQuery() {
 
 /** 重置按钮操作 */
 function resetQuery() {
+    console.log('1-----',deptTreeRef.value);
+    if(deptTreeRef.value){
+      deptTreeRef.value?.resetTree();
+    }
   proxy.resetForm("queryRef");
   //不重置知识库id
   selectedNodeId.value = null;

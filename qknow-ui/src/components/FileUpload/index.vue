@@ -49,17 +49,27 @@
       :drag="dragFlag"
     >
       <!-- 上传按钮 -->
-      <el-button type="primary" size="mini" icon="Upload" plain>上传附件</el-button>
+      <el-button type="primary" size="mini" icon="Upload" plain
+        >上传附件</el-button
+      >
     </el-upload>
     <!-- 上传提示 -->
     <div class="el-upload__tip" v-if="showTip">
       请上传
-      <template v-if="fileSize"> 大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b> </template>
-      <template v-if="fileType"> 格式为 <b style="color: #f56c6c">{{ fileType.join("/") }}</b> </template>
+      <template v-if="fileSize">
+        大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b>
+      </template>
+      <template v-if="fileType">
+        格式为 <b style="color: #f56c6c">{{ fileType.join("/") }}</b>
+      </template>
       的文件
     </div>
     <!-- 文件列表 -->
-    <transition-group class="upload-file-list el-upload-list el-upload-list--text" name="el-fade-in-linear" tag="ul">
+    <transition-group
+      class="upload-file-list el-upload-list el-upload-list--text"
+      name="el-fade-in-linear"
+      tag="ul"
+    >
       <!-- <li :key="file.uid" class="el-upload-list__item ele-upload-list__item-content" v-for="(file, index) in fileList">
         <el-link :href="`${baseUrl}${file.url}`" :underline="false" target="_blank">
           <span class="el-icon-document"> {{ getFileName(file.name) }} </span>
@@ -69,12 +79,18 @@
           <el-link :underline="false" @click="handleDelete(index)" type="danger">删除</el-link>
         </div>
       </li> -->
-      <li :key="file.uid" class="filelistcont" v-for="(file, index) in fileList">
+      <li
+        :key="file.uid"
+        class="filelistcont"
+        v-for="(file, index) in fileList"
+      >
         <div class="filelistcont-name">
           <span class="el-icon-document"> {{ getFileName(file.name) }} </span>
         </div>
         <div class="ele-upload-list__item-content-action">
-          <el-link :underline="false" @click="handleDelete(index)" type="danger">删除</el-link>
+          <el-link :underline="false" @click="handleDelete(index)" type="danger"
+            >删除</el-link
+          >
         </div>
       </li>
     </transition-group>
@@ -104,18 +120,18 @@ const props = defineProps({
   // 是否显示提示
   isShowTip: {
     type: Boolean,
-    default: true
+    default: true,
   },
   // platform参数
   platForm: {
     type: String,
-    default: null
+    default: null,
   },
   // 是否支持拖拽上传
   dragFlag: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 
 const { proxy } = getCurrentInstance();
@@ -127,40 +143,46 @@ const uploadFileUrl = ref(import.meta.env.VITE_APP_BASE_API + "/upload"); // 上
 const headers = ref({ Authorization: "Bearer " + getToken() });
 const fileList = ref([]);
 const uploadData = ref({
-  platForm: props.platForm
+  platForm: props.platForm,
 });
 const showTip = computed(
   () => props.isShowTip && (props.fileType || props.fileSize)
 );
 
-watch(() => props.modelValue, val => {
-  if (val) {
-    let temp = 1;
-    // 首先将值转为数组
-    const list = Array.isArray(val) ? val : props.modelValue.split(',');
-    // 然后将数组转为对象数组
-    fileList.value = list.map(item => {
-      if (typeof item === "string") {
-        item = { name: item, url: item };
-      }
-      item.uid = item.uid || new Date().getTime() + temp++;
-      return item;
-    });
-  } else {
-    fileList.value = [];
-    return [];
-  }
-},{ deep: true, immediate: true });
+watch(
+  () => props.modelValue,
+  (val) => {
+    if (val) {
+      let temp = 1;
+      // 首先将值转为数组
+      const list = Array.isArray(val) ? val : props.modelValue.split(",");
+      // 然后将数组转为对象数组
+      fileList.value = list.map((item) => {
+        if (typeof item === "string") {
+          item = { name: item, url: item };
+        }
+        item.uid = item.uid || new Date().getTime() + temp++;
+        return item;
+      });
+    } else {
+      fileList.value = [];
+      return [];
+    }
+  },
+  { deep: true, immediate: true }
+);
 
 // 上传前校检格式和大小
 function handleBeforeUpload(file) {
   // 校检文件类型
   if (props.fileType.length) {
-    const fileName = file.name.split('.');
+    const fileName = file.name.split(".");
     const fileExt = fileName[fileName.length - 1];
     const isTypeOk = props.fileType.indexOf(fileExt) >= 0;
     if (!isTypeOk) {
-      proxy.$modal.msgError(`文件格式不正确, 请上传${props.fileType.join("/")}格式文件!`);
+      proxy.$modal.msgError(
+        `文件格式不正确, 请上传${props.fileType.join("/")}格式文件!`
+      );
       return false;
     }
   }
@@ -190,12 +212,15 @@ function handleUploadError(err) {
 // 上传成功回调
 function handleUploadSuccess(res, file) {
   if (res.url) {
-    uploadList.value.push({ name: '/profile/' + res.path + res.filename, url: res.url });
+    uploadList.value.push({
+      name: "/profile/" + res.path + res.filename,
+      url: res.url,
+    });
     if (res.size) {
-      emit("update:fileSize", res.size);  // 更新文件大小
+      emit("update:fileSize", res.size); // 更新文件大小
     }
     if (res.ext) {
-      emit("update:fileExt", res.ext);  // 更新文件后缀名
+      emit("update:fileExt", res.ext); // 更新文件后缀名
     }
     uploadedSuccessfully();
   } else {
@@ -216,7 +241,9 @@ function handleDelete(index) {
 // 上传结束处理
 function uploadedSuccessfully() {
   if (number.value > 0 && uploadList.value.length === number.value) {
-    fileList.value = fileList.value.filter(f => f.url !== undefined).concat(uploadList.value);
+    fileList.value = fileList.value
+      .filter((f) => f.url !== undefined)
+      .concat(uploadList.value);
     uploadList.value = [];
     number.value = 0;
     emit("update:modelValue", listToString(fileList.value));
@@ -243,7 +270,7 @@ function listToString(list, separator) {
       strs += list[i].url + separator;
     }
   }
-  return strs != '' ? strs.substr(0, strs.length - 1) : '';
+  return strs != "" ? strs.substr(0, strs.length - 1) : "";
 }
 </script>
 
@@ -266,10 +293,10 @@ function listToString(list, separator) {
 // .ele-upload-list__item-content-action .el-link {
 //   margin-right: 10px;
 // }
-.filelistcont{
+.filelistcont {
   display: flex;
   align-items: center;
-  .filelistcont-name{
+  .filelistcont-name {
     margin-right: 10px;
   }
 }

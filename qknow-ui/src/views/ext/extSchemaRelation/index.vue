@@ -121,7 +121,7 @@
           <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
         </div>
       </div>
-      <el-table stripe height="590px" v-loading="loading" :data="relationList" @selection-change="handleSelectionChange"  @sort-change="handleSortChange">
+      <el-table stripe  v-loading="loading" :data="relationList" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
 <!--        <el-table-column type="selection" width="55" align="center" />-->
          <el-table-column type="selection" :selectable="selectable" width="55" />
        <el-table-column v-if="getColumnVisibility(0)"width="80" label="编号"  sortable="custom"

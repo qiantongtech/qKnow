@@ -109,7 +109,9 @@
                     class="stat-icon"
                   />
                 </el-tooltip>
-                <span class="card-bottom-text-name">{{ item.fileCount }} 个</span>
+                <span class="card-bottom-text-name"
+                  >{{ item.fileCount }} 个</span
+                >
               </div>
               <div class="card-bottom-text">
                 <el-tooltip
@@ -125,7 +127,7 @@
                   />
                 </el-tooltip>
                 <span class="card-bottom-text-name">
-                  {{ getDictLabel(item.indexingTechnique)  }}
+                  {{ getDictLabel(item.indexingTechnique) }}
                 </span>
               </div>
               <div class="card-bottom-text">
@@ -188,9 +190,7 @@ const { proxy } = getCurrentInstance();
 const router = useRouter();
 
 defineEmits(["handleDataScope"]);
-const { kmc_know_index } = proxy.useDict(
-  "kmc_know_index"
-);
+const { kmc_know_index } = proxy.useDict("kmc_know_index");
 
 const getDictLabel = (dictValue) => {
   // 安全地获取字典数组
@@ -232,7 +232,7 @@ function getImage(row) {
 // 查看详情
 function handleDetail(row) {
   router.push({
-    path: "/kmc/" + row.id + "/kmcCategory",
+    path: "/kmc/" + row.id + "/kmcDocument",
   });
 }
 </script>

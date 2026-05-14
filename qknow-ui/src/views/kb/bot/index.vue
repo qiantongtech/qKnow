@@ -70,34 +70,33 @@
         :model="queryParams"
         ref="queryRef"
         :inline="true"
-        label-width="75px"
         v-show="showSearch"
         @submit.prevent
       >
-        <el-form-item label="Bot 名称" prop="name">
+        <el-form-item label="名称" prop="name">
           <el-input
             class="el-form-input-width"
             v-model="queryParams.name"
-            placeholder="请输入 Bot 名称"
+            placeholder="请输入名称"
             clearable
             @keyup.enter="handleQuery"
           />
         </el-form-item>
-        <el-form-item label="类型" prop="type">
-          <el-select
-            v-model="queryParams.type"
-            placeholder="请选择类型"
-            clearable
-            class="el-form-input-width"
-          >
-            <el-option
-              v-for="dict in kg_bot_type"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            />
-          </el-select>
-        </el-form-item>
+<!--        <el-form-item label="类型" prop="type">-->
+<!--          <el-select-->
+<!--            v-model="queryParams.type"-->
+<!--            placeholder="请选择类型"-->
+<!--            clearable-->
+<!--            class="el-form-input-width"-->
+<!--          >-->
+<!--            <el-option-->
+<!--              v-for="dict in kg_bot_type"-->
+<!--              :key="dict.value"-->
+<!--              :label="dict.label"-->
+<!--              :value="dict.value"-->
+<!--            />-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
         <el-form-item label="是否内置" prop="builtinFlag">
           <el-select
             v-model="queryParams.builtinFlag"
@@ -167,7 +166,6 @@
       </div>
       <el-table
         stripe
-        height="58vh"
         v-loading="loading"
         :data="botList"
         :default-sort="defaultSort"
@@ -184,8 +182,8 @@
         />
         <el-table-column
           v-if="getColumnVisibility(1)"
-          label="Bot 名称"
-          align="center"
+          label="名称"
+          align="left"
           prop="name"
           show-overflow-tooltip
           width="250"
@@ -285,6 +283,14 @@
         >
           <template #default="scope">
             <el-button
+                link
+                type="primary"
+                icon="Operation"
+                @click="handleDetail(scope.row)"
+                v-hasPermi="['kb:bot:bot:query']"
+            >构建
+            </el-button>
+            <el-button
               link
               type="primary"
               icon="Edit"
@@ -302,14 +308,15 @@
               v-hasPermi="['kb:bot:bot:remove']"
               >删除
             </el-button>
-            <el-button
-              link
-              type="primary"
-              icon="view"
-              @click="handleDetail(scope.row)"
-              v-hasPermi="['kb:bot:bot:query']"
-              >详情
-            </el-button>
+<!--            <el-button-->
+<!--              link-->
+<!--              type="primary"-->
+<!--              icon="view"-->
+<!--              @click="handleDetail(scope.row)"-->
+<!--              v-hasPermi="['kb:bot:bot:query']"-->
+<!--              >详情-->
+<!--            </el-button>-->
+
           </template>
         </el-table-column>
 
@@ -352,41 +359,41 @@
       >
         <el-row :gutter="20">
           <el-col :span="24">
-            <el-form-item label="Bot 名称" prop="name">
-              <el-input v-model="form.name" placeholder="请输入 Bot 名称" />
+            <el-form-item label="名称" prop="name">
+              <el-input v-model="form.name" placeholder="请输入名称" />
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="20">
-          <el-col :span="24">
-            <el-form-item label="类型" prop="type">
-              <div class="default-wrap">
-                <el-select
-                  v-model="form.type"
-                  placeholder="请选择类型"
-                  class="el-form-input-width"
-                  :disabled="title.includes('修改')"
-                  style="width: 100%"
-                >
-                  <el-option
-                    v-for="dict in kg_bot_type"
-                    :key="dict.value"
-                    :label="dict.label"
-                    :value="dict.value"
-                  />
-                </el-select>
-                <div class="tip-content">
-                  <el-icon>
-                    <InfoFilled />
-                  </el-icon>
-                  <span>
-                    工作流：面向单轮自动化任务的编排工作流；Chatflow：支持记忆的复杂多轮对话工作流；Agent：具备推理与自主工具调用的智能助手
-                  </span>
-                </div>
-              </div>
-            </el-form-item>
-          </el-col>
-        </el-row>
+<!--        <el-row :gutter="20">-->
+<!--          <el-col :span="24">-->
+<!--            <el-form-item label="类型" prop="type">-->
+<!--              <div class="default-wrap">-->
+<!--                <el-select-->
+<!--                  v-model="form.type"-->
+<!--                  placeholder="请选择类型"-->
+<!--                  class="el-form-input-width"-->
+<!--                  :disabled="title.includes('修改')"-->
+<!--                  style="width: 100%"-->
+<!--                >-->
+<!--                  <el-option-->
+<!--                    v-for="dict in kg_bot_type"-->
+<!--                    :key="dict.value"-->
+<!--                    :label="dict.label"-->
+<!--                    :value="dict.value"-->
+<!--                  />-->
+<!--                </el-select>-->
+<!--                <div class="tip-content">-->
+<!--                  <el-icon>-->
+<!--                    <InfoFilled />-->
+<!--                  </el-icon>-->
+<!--                  <span>-->
+<!--                    工作流：面向单轮自动化任务的编排工作流；Chatflow：支持记忆的复杂多轮对话工作流；Agent：具备推理与自主工具调用的智能助手-->
+<!--                  </span>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item label="描述" prop="description">
@@ -429,7 +436,7 @@
 <script setup name="Bot">
 import { listBot, getBot, delBot, addBot, updateBot } from "@/api/kb/bot/bot";
 import { getToken } from "@/utils/auth.js";
-import { useRouter } from "vue-router";
+import { useRoute,useRouter } from "vue-router";
 
 const { proxy } = getCurrentInstance();
 const { kg_bot_type, sys_is_or_not } = proxy.useDict(
@@ -442,7 +449,7 @@ const botList = ref([]);
 // 列显隐信息
 const columns = ref([
   { key: 0, label: "编号", visible: true },
-  { key: 1, label: "Bot 名称", visible: true },
+  { key: 1, label: "名称", visible: true },
   { key: 2, label: "描述", visible: true },
   { key: 3, label: "类型", visible: true },
   { key: 4, label: "是否内置", visible: true },
@@ -469,6 +476,9 @@ const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
 const defaultSort = ref({ prop: "createTime", order: "desc" });
+const botType = ref(0);
+const botTypeName = ref("");
+
 
 /*** 用户导入参数 */
 const upload = reactive({
@@ -500,15 +510,31 @@ const data = reactive({
     isAsc: "descending",
   },
   rules: {
-    name: [{ required: true, message: "Bot 名称不能为空", trigger: "blur" }],
+    name: [{ required: true, message: "名称不能为空", trigger: "blur" }],
     type: [{ required: true, message: "类型不能为空", trigger: "change" }],
   },
 });
 
 const { queryParams, form, rules } = toRefs(data);
+const route = useRoute()
 
+watch(()=> route.fullPath,
+    ()=>{
+  console.log(route.query.botType)
+// 获取 id
+  botType.value = Number(route.query.botType)
+  if (botType.value === 0){
+    botTypeName.value = '工作流'
+  }else if (botType.value === 1){
+    botTypeName.value = 'chatflow'
+  }else {
+    botTypeName.value = 'agent'
+  }
+  console.log(botType.value)
+},{ immediate: true })
 /** 查询bot 管理列表 */
 function getList() {
+queryParams.value.type = botType.value
   loading.value = true;
   listBot(queryParams.value).then((response) => {
     botList.value = response.data.rows;
@@ -576,7 +602,7 @@ function handleSortChange(column, prop, order) {
 function handleAdd() {
   reset();
   open.value = true;
-  title.value = "新增 Bot";
+  title.value = "新增";
 }
 
 /** 修改按钮操作 */
@@ -587,27 +613,46 @@ function handleUpdate(row) {
     form.value = response.data;
     form.value.type = String(form.value.type);
     open.value = true;
-    title.value = "修改 Bot";
+    title.value = "修改";
   });
 }
 
 /** 详情按钮操作 */
 function handleDetail(row) {
+  let path = '';
+  let title = '';
+  let activeMenu = '';
+
+  if (row.type === 0){
+    path='/kb/bot/processflow';
+    title='构建工作流';
+    activeMenu='/kb/bot/workflow';
+  }else if(row.type === 1){
+    path='/kb/bot/processflow';
+    title='构建chatFlow';
+    activeMenu='/kb/bot/chatflow';
+  }else {
+    path='/kb/bot/agent/detail';
+  }
+
   router.push({
-    path:
-      row.type === 2
-        ? "/kb/bot/agent"
-        : row.type === 3
-        ? "/system/bot/codeNative"
-        : "/kb/bot/processflow",
+    path:path,
     query: {
       id: row.id,
     },
   });
+
+  router.afterEach((to) => {
+    if (to.path === '/kb/bot/processflow'){
+      to.meta.title = title
+      to.meta.activeMenu = activeMenu
+    }
+  })
 }
 
 /** 提交按钮 */
 function submitForm() {
+  form.value.type = botType.value;
   proxy.$refs["botRef"].validate((valid) => {
     if (valid) {
       if (form.value.id != null) {

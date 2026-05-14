@@ -89,7 +89,7 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
       </div>
 
-      <el-table  stripe height="60vh" v-loading="loading" :data="certList" @selection-change="handleSelectionChange">
+      <el-table  stripe   v-loading="loading" :data="certList" @selection-change="handleSelectionChange">
         <el-table-column label="ID" align="center" prop="id" />
         <el-table-column label="名称" align="center" prop="name"  :show-overflow-tooltip="true" />
         <el-table-column label="主体名称" align="center" prop="subjectName"  :show-overflow-tooltip="true" />

@@ -132,7 +132,7 @@
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
          </div>
 
-         <el-table stripe height="60vh" v-loading="loading" :data="jobList" @selection-change="handleSelectionChange">
+         <el-table stripe   v-loading="loading" :data="jobList" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55" align="center" />
             <el-table-column label="任务编号" width="100" align="center" prop="jobId" />
             <el-table-column label="任务名称" align="center" prop="jobName" :show-overflow-tooltip="true" />

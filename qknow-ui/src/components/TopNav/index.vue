@@ -196,7 +196,7 @@ const activeMenu = computed(() => {
 function calculateVisibleMenus() {
   const bodyWidth = document.body.getBoundingClientRect().width;
   const leftWidth = 210 + 50; // Logo + 小图标，左边最大宽度
-  const rightWidth = 606; // 右侧功能区，右边最大宽度
+  const rightWidth = 198; // 右侧功能区，右边最大宽度
   const menuWidth = 124; // 每个菜单项宽度
 
   const availableWidth = bodyWidth - leftWidth - rightWidth;

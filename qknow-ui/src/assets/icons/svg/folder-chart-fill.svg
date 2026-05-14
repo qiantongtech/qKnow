@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>folder-chart-fill</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#8DCBFD" offset="0.0851077633%"></stop>
+            <stop stop-color="#0578FF" offset="100%"></stop>
+        </linearGradient>
+        <path d="M8.27613333,3.33333333 L14,3.33333333 C14.3682,3.33333333 14.6666667,3.63181333 14.6666667,4 L14.6666667,13.3333333 C14.6666667,13.7015333 14.3682,14 14,14 L2,14 C1.63181333,14 1.33333333,13.7015333 1.33333333,13.3333333 L1.33333333,2.66666667 C1.33333333,2.29848 1.63181333,2 2,2 L6.9428,2 L8.27613333,3.33333333 Z M7.33333333,6 L7.33333333,11.3333333 L8.66666667,11.3333333 L8.66666667,6 L7.33333333,6 Z M10,8 L10,11.3333333 L11.3333333,11.3333333 L11.3333333,8 L10,8 Z M4.66666667,9.33333333 L4.66666667,11.3333333 L6,11.3333333 L6,9.33333333 L4.66666667,9.33333333 Z" id="path-2"></path>
+    </defs>
+    <g id="后台管理系统" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="qKnow切图" transform="translate(-465, -376)">
+            <g id="folder-chart-fill" transform="translate(465, 376)">
+
+                <g id="形状" fill-rule="nonzero">
+                    <use fill="#1D2945" xlink:href="#path-2"></use>
+                    <use fill="url(#linearGradient-1)" xlink:href="#path-2"></use>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

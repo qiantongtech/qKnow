@@ -113,10 +113,30 @@
               <i class="iconfont-mini icon-xinzeng mr5"></i>新增
             </el-button>
           </el-col>
-          <el-col :span="1.5">
-            <el-button type="info" plain icon="Sort" @click="toggleExpandAll"
-              >展开/折叠</el-button
+          <!-- <el-col :span="1.5">
+            <el-button
+              type="danger"
+              plain
+              :disabled="multiple"
+              @click="handleDelete"
+              icon="Delete"
+              v-hasPermi="['kg:knowledge:category:remove']"
+              @mousedown="(e) => e.preventDefault()"
             >
+              删除
+            </el-button>
+          </el-col> -->
+          <el-col :span="1.5">
+            <el-button
+              class="toggle-expand-all"
+              type="primary"
+              plain
+              @click="toggleExpandAll"
+            >
+              <svg-icon v-if="isExpandAll" icon-class="toggle" />
+              <svg-icon v-else icon-class="expand" />
+              <span>{{ isExpandAll ? "折叠" : "展开" }}</span>
+            </el-button>
           </el-col>
         </el-row>
         <div class="justify-end top-right-btn">
@@ -129,13 +149,14 @@
       </div>
       <el-table
         v-if="refreshTable"
-        height="58vh"
         v-loading="loading"
         :data="categoryList"
         row-key="id"
         :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
         :default-expand-all="isExpandAll"
+        @selection-change="handleSelectionChange"
       >
+        <!-- <el-table-column type="selection" width="55" align="center" /> -->
         <el-table-column
           v-if="getColumnVisibility(3)"
           label="分类名称"
@@ -157,6 +178,28 @@
           </template>
         </el-table-column>
         <el-table-column
+          v-if="getColumnVisibility(5)"
+          label="备注"
+          width="200"
+          align="left"
+          prop="remark"
+          :show-overflow-tooltip="{ effect: 'light' }"
+        >
+          <template #default="scope">
+            {{ scope.row.remark || "-" }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          v-if="getColumnVisibility(6)"
+          label="创建人"
+          align="center"
+          prop="createBy"
+        >
+          <template #default="scope">
+            {{ scope.row.createBy || "-" }}
+          </template>
+        </el-table-column>
+        <el-table-column
           v-if="getColumnVisibility(10)"
           label="创建时间"
           align="center"
@@ -167,16 +210,6 @@
             <span>{{
               parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}:{s}")
             }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="getColumnVisibility(14)"
-          label="备注"
-          align="center"
-          prop="remark"
-        >
-          <template #default="scope">
-            {{ scope.row.remark || "-" }}
           </template>
         </el-table-column>
         <el-table-column
@@ -349,6 +382,8 @@ const openDetail = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
 const ids = ref([]);
+const single = ref(true);
+const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
 const categoryOptions = ref([]);
@@ -446,6 +481,13 @@ function resetQuery() {
   handleQuery();
 }
 
+// 多选框选中数据
+function handleSelectionChange(selection) {
+  ids.value = selection.map((item) => item.id);
+  single.value = selection.length != 1;
+  multiple.value = !selection.length;
+}
+
 /** 新增按钮操作 */
 function handleAdd(row) {
   reset();
@@ -510,7 +552,7 @@ function handleDelete(row) {
   const name = row.name;
 
   // 获取该分类下的文档列表
-  listDocument({ categoryId: row.id }).then((res) => {
+  listDocument({ ids: _ids }).then((res) => {
     console.log(res.data.total);
 
     // 判断该分类下是否存在文件

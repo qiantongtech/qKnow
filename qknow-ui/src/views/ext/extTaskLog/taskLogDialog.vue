@@ -76,7 +76,7 @@
                          :search="false"></right-toolbar>
         </div>
       </div>
-      <el-table stripe height="58vh"
+      <el-table stripe  
                 v-loading="loading"
                 :data="taskLogList"
                 :default-sort="defaultSort"
@@ -154,7 +154,7 @@
         </div>
       </div>
 
-      <el-table stripe height="58vh"
+      <el-table stripe  
                 v-loading="detailPageLoading"
                 :data="taskLogDetailList"
                 @sort-change="handleLogDetailSortChange"
