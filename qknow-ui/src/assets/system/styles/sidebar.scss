@@ -27,6 +27,10 @@
     -webkit-box-shadow: 2px 0 6px rgba(0,21,41,.35);
     box-shadow: 2px 0 6px rgba(0,21,41,.35);
 
+    &.navbar-logo{
+        box-shadow: none;
+    }
+
     // reset element-ui css
     .horizontal-collapse-transition {
       transition: 0s width ease-in-out, 0s padding-left ease-in-out, 0s padding-right ease-in-out;

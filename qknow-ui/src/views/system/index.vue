@@ -49,21 +49,14 @@
               </div>
             </div>
             <div class="info-btns">
-              <!-- <a href="/user/profile" class=""> -->
-              <el-button
-                type="primary"
-                class="info-btn-dft"
-                plain
-                size="large"
-                @click="goprofile"
-              >
+              <el-button type="primary" class="info-btn-dft" plain size="large" @click="goprofile"
+                style="background: #135afb; color: #fff; font-size: 14px">
                 个人中心
               </el-button>
-              <!-- </a> -->
-
-              <!--                            <el-button type="primary" class="info-btn-dft" plain size="large">
-                                退出登录
-                            </el-button>-->
+              <el-button auto-insert-space @click="logout" type="primary" class="info-btn-dft info-btn-dfts" plain
+                size="large" style="color: #135afb">
+                退出登录
+              </el-button>
             </div>
           </div>
         </div>
@@ -1085,7 +1078,7 @@ onMounted(() => {
 .userInfo .info-main .info-btns .info-btn-dft {
   width: 100px;
   height: 40px;
-  border-radius: 4px !important;
+  border-radius: 2px !important;
   margin-left: 20px;
 }
 
