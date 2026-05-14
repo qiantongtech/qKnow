@@ -121,55 +121,69 @@
                 :default-sort="defaultSort" @sort-change="handleSortChange"
                 :tooltip-options="tooltipOptions"
       >
-        <el-table-column v-if="getColumnVisibility(0)" label="ID" align="center" prop="id"/>
-        <el-table-column v-if="getColumnVisibility(1)" label="抽取任务名称" align="center" prop="taskName">
+        <el-table-column v-if="getColumnVisibility(1)" 
+                    label="编号" 
+                    align="center" 
+                    prop="id" 
+                    width="100"                     
+                    sortable="custom"
+                    :sort-orders="['descending', 'ascending']"
+                    show-overflow-tooltip
+                    />
+        <el-table-column v-if="getColumnVisibility(2)" label="任务名称" align="left" prop="taskName" width="400">
           <template #default="scope">
             {{ scope.row.taskName || '-' }}
           </template>
         </el-table-column>
-<!--        <el-table-column v-if="getColumnVisibility(2)" label="抽取任务类型" align="center" prop="taskType">-->
-<!--          <template #default="scope">-->
-<!--            <div>-->
-<!--              <dict-tag :options="ext_task_type" :value="scope.row.taskType"/>-->
-<!--            </div>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-        <el-table-column v-if="getColumnVisibility(3)" label="最终执行状态" align="center" prop="status">
+        <el-table-column v-if="getColumnVisibility(3)" label="执行类型" align="center" prop="taskType" width="150">
+          <template #default="scope">
+            <div>
+              <dict-tag :options="ext_task_log_type" :value="scope.row.taskType"/>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column v-if="getColumnVisibility(4)" label="执行状态" align="center" prop="status">
           <template #default="scope">
             <div>
               <dict-tag :options="ext_log_status" :value="scope.row.status"/>
             </div>
           </template>
         </el-table-column>
-        <el-table-column v-if="getColumnVisibility(5)" label="执行开始时间" align="center" prop="startTime" width="180"
+        <el-table-column v-if="getColumnVisibility(5)" label="开始时间" align="center" prop="startTime" width="160"
                          sortable="custom" :sort-orders="['descending', 'ascending']">
           <template #default="scope">
-            <span>{{ parseTime(scope.row.startTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+            <span>{{ parseTime(scope.row.startTime, '{y}-{m}-{d} {h}:{i}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="getColumnVisibility(6)" label="执行结束时间" align="center" prop="endTime" width="180"
+        <el-table-column v-if="getColumnVisibility(6)" label="结束时间" align="center" prop="endTime" width="160"
                          sortable="custom" :sort-orders="['descending', 'ascending']">
           <template #default="scope">
-            <span>{{ parseTime(scope.row.endTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+            <span>{{ parseTime(scope.row.endTime, '{y}-{m}-{d} {h}:{i}') }}</span>
           </template>
         </el-table-column>
-<!--        <el-table-column v-if="getColumnVisibility(7)" label="备注" align="center" prop="remark">-->
-<!--          <template #default="scope">-->
-<!--            {{ scope.row.remark || '-' }}-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-        <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="240">
+        <el-table-column v-if="getColumnVisibility(7)" label="创建人" align="center" prop="createBy" width="180">
           <template #default="scope">
-            <el-button link type="primary" icon="view"
+            {{ scope.row.createUser || '-' }}
+          </template>
+        </el-table-column>
+        <el-table-column v-if="getColumnVisibility(8)" label="创建时间" align="center" prop="createTime" width="160"
+                  sortable="custom" :sort-orders="['descending', 'ascending']">
+          <template #default="scope">
+            <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column v-if="getColumnVisibility(9)" label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="200">
+          <template #default="scope">
+            <!-- <el-button link type="primary" icon="view"
                        @click="handleDetail(scope.row)"
                        v-if="scope.row.errorMsg"
             >查看错误日志
-            </el-button>
+            </el-button> -->
 
             <el-button link type="primary"
                        icon="view"
                        @click="showLogDetail(scope.row)"
-            >查看具体步骤
+            >查看步骤
             </el-button>
           </template>
         </el-table-column>
@@ -195,21 +209,21 @@
     <el-dialog v-model="open" width="800px" :append-to="$refs['app-container']" draggable>
       <template #header="{ close, titleId, titleClass }">
         <span role="heading" aria-level="2" class="el-dialog__title">
-          操作步骤
+          抽取步骤
         </span>
       </template>
-      <div class="justify-between mb15">
-        <div class="justify-end top-right-btn">
-          <right-toolbar v-model:showSearch="showSearch" @queryTable="showLogDetail()" :search="false"></right-toolbar>
-        </div>
-      </div>
 
-      <el-table stripe height="58vh"
+      <el-table stripe height="48vh"
                 v-loading="detailPageLoading"
                 :data="taskLogDetailList"
                 @sort-change="handleLogDetailSortChange"
       >
-        <el-table-column label="执行步骤" align="center" prop="step">
+        <el-table-column type="index" label="编号" align="center" prop="id" width="60">
+          <template #default="scope">
+            {{ scope.$index+1 || '-' }}
+          </template>
+        </el-table-column>
+        <el-table-column label="执行步骤" align="left" prop="step">
           <template #default="scope">
             <span>{{ scope.row.step || '-' }}</span>
           </template>
@@ -217,7 +231,7 @@
         <el-table-column label="执行时间" align="center" prop="createTime"
                          sortable="custom" :sort-orders="['descending', 'ascending']">
           <template #default="scope">
-            <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+            <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}') }}</span>
           </template>
         </el-table-column>
 
@@ -237,7 +251,7 @@
       />
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" size="mini" @click="cancel">关 闭</el-button>
+          <el-button size="mini" @click="cancel">关 闭</el-button>
         </div>
       </template>
     </el-dialog>
@@ -258,7 +272,7 @@
       </div>
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" size="mini" @click="centerDialogVisible=false">关 闭</el-button>
+          <el-button size="mini" @click="centerDialogVisible=false">关 闭</el-button>
         </div>
       </template>
     </el-dialog>
@@ -273,17 +287,19 @@ const {proxy} = getCurrentInstance();
 
 const taskLogList = ref([]);
 const taskLogDetailList = ref([]);
-const {ext_task_type, ext_log_status} = proxy.useDict('ext_task_type', 'ext_log_status');
+const {ext_task_log_type, ext_log_status} = proxy.useDict('ext_task_log_type', 'ext_log_status');
 
 // 列显隐信息
 const columns = ref([
-  {key: 0, label: "id", visible: true},
-  {key: 1, label: "抽取任务名称", visible: true},
-  {key: 2, label: "抽取任务类型", visible: true},
-  {key: 3, label: "最终执行状态", visible: true},
-  {key: 5, label: "执行开始时间", visible: true},
-  {key: 6, label: "执行结束时间", visible: true},
-  {key: 7, label: "备注", visible: true},
+  {key: 1, label: "编号", visible: true},
+  {key: 2, label: "任务名称", visible: true},
+  {key: 3, label: "执行类型", visible: true},
+  {key: 4, label: "执行状态", visible: true},
+  {key: 5, label: "开始时间", visible: true},
+  {key: 6, label: "结束时间", visible: true},
+  {key: 7, label: "创建人", visible: true},
+  {key: 8, label: "创建时间", visible: true},
+  {key: 9, label: "操作", visible: true},
 ]);
 
 const getColumnVisibility = (key) => {
