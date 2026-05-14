@@ -70,7 +70,7 @@
         权限设置
       </div>
       <!-- 表格数据 -->
-      <el-table stripe height="60vh" v-loading="loading" :data="roleList">
+      <el-table stripe   v-loading="loading" :data="roleList">
         <!--        <el-table-column type="selection" width="55" align="center" />-->
         <el-table-column label="角色编码" prop="roleId" align="center" />
         <el-table-column
@@ -184,7 +184,6 @@ getList();
 </script>
 <style scoped>
 .app-container {
-  height: 800px;
   .pagecont-bottom {
     .header-left {
       display: flex;

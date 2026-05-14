@@ -167,7 +167,6 @@
       </div>
       <el-table
         stripe
-        height="58vh"
         v-loading="loading"
         :data="botList"
         :default-sort="defaultSort"

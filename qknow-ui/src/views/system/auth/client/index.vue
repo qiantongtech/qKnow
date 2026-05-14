@@ -79,7 +79,7 @@
             <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </div>
 
-      <el-table stripe height="60vh"  v-loading="loading" :data="clientList" @selection-change="handleSelectionChange">
+      <el-table stripe    v-loading="loading" :data="clientList" @selection-change="handleSelectionChange">
         <el-table-column label="应用ID" align="center" prop="id" />
         <el-table-column label="应用秘钥" align="center" prop="secretKey"  width="300"/>
         <el-table-column label="应用名称" align="center" prop="name" width="120"/>

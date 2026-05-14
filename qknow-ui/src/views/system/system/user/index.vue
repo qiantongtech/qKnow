@@ -216,7 +216,7 @@
                            :columns="columns"></right-toolbar>
           </div>
 
-          <el-table stripe height="544px" v-loading="loading" :data="userList"
+          <el-table stripe  v-loading="loading" :data="userList"
                     @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="50" align="center"/>
             <el-table-column label="用户编号" align="center" key="userId" prop="userId"

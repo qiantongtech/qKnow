@@ -121,7 +121,7 @@
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
          </div>
 
-         <el-table stripe height="60vh" v-loading="loading" :data="postList" @selection-change="handleSelectionChange" >
+         <el-table stripe   v-loading="loading" :data="postList" @selection-change="handleSelectionChange" >
             <el-table-column type="selection" width="55" align="center" />
             <el-table-column label="岗位编号" align="center" prop="postId" />
             <el-table-column label="岗位编码" align="center" prop="postCode" />

@@ -1168,7 +1168,6 @@ init();
 
 // 全局容器样式
 .app-container {
-  height: 801px;
   .pagecont-top {
     padding: 15px;
     height: 100%;

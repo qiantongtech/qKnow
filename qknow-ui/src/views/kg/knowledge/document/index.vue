@@ -136,7 +136,6 @@
           </div>
           <el-table
             stripe
-            height="58vh"
             v-loading="loading"
             :data="documentList"
             @selection-change="handleSelectionChange"

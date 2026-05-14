@@ -90,7 +90,6 @@
 
          <el-table
             v-if="refreshTable"
-            height="60vh"
             v-loading="loading"
             :data="deptList"
             row-key="deptId"

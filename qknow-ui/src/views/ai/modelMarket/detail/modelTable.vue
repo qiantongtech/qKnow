@@ -1,5 +1,5 @@
 <template>
-  <el-table stripe height="58vh"
+  <el-table stripe  
             v-loading="loading"
             :data="modelList">
     <el-table-column type="index" label="编号" align="center" prop="name" width="60">
