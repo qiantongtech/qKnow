@@ -125,6 +125,7 @@
                 @selection-change="handleSelectionChange"
                 :default-sort="defaultSort"
                 @sort-change="handleSortChange"
+                :tooltip-options="{ effect: 'light' }"
             >
                 <el-table-column
                     v-if="getColumnVisibility(1)"
@@ -211,7 +212,7 @@
                 >
                     <template #default="scope">
                         <span>{{
-                            parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}:{s}')
+                            parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}')
                         }}</span>
                     </template>
                 </el-table-column>
@@ -256,6 +257,7 @@
                                     @click="handleUpdate(scope.row)"
                                     v-hasPermi="['dm:datasource:datasource:edit']"
                                     style="margin-left: 28px"
+                                    :disabled="scope.row.validFlag"
                                 >
                                     <template #icon><el-icon :size="14"><Edit /></el-icon></template>
                                     修改
@@ -266,6 +268,7 @@
                                     @click="handleDelete(scope.row)"
                                     v-hasPermi="['dm:datasource:datasource:remove']"
                                     style="margin-left: 28px"
+                                    :disabled="scope.row.validFlag"
                                 >
                                     <template #icon><el-icon :size="14"><Delete /></el-icon></template>
                                     删除
@@ -468,37 +471,6 @@
                 </el-row>
                 <el-row :gutter="20">
                     <el-col :span="12">
-                        <el-form-item label="账号" prop="username">
-                            <el-input :value="form.username" disabled />
-                        </el-form-item>
-                    </el-col>
-
-                    <el-col :span="12">
-                        <el-form-item label="密码" prop="password">
-                            <el-input :value="'***********'" disabled />
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-
-                <el-row :gutter="20">
-                    <el-col :span="12">
-                        <el-form-item label="数据库名称" prop="dbname">
-                            <el-input :value="form.dbname" disabled />
-                        </el-form-item>
-                    </el-col>
-
-                    <el-col
-                        :span="12"
-                        v-if="form.datasourceType !== 'DM8' && form.datasourceType !== null"
-                    >
-                        <el-form-item label="模式" prop="sid">
-                            <el-input :value="form.sid" disabled />
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-
-                <el-row :gutter="20">
-                    <el-col :span="12">
                         <el-form-item label="IP" prop="ip">
                             <el-input :value="form.ip" disabled />
                         </el-form-item>
@@ -509,17 +481,42 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-
-            <el-row :gutter="20">
-                <el-col :span="12">
-                    <el-form-item label="状态" prop="validFlag">
-                        <el-tag :type="form.validFlag ? 'primary' : 'danger'">
-                            {{ form.validFlag ? '启用' : '禁用' }}
-                        </el-tag>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                        <el-form-item label="账号" prop="username">
+                            <el-input :value="form.username" disabled />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="密码" prop="password">
+                            <el-input :value="'***********'" disabled />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                    <el-col :span="12" v-if="form.datasourceType !== null">
+                        <el-form-item label="数据库名称" prop="dbname">
+                            <el-input :value="form.dbname" disabled />
+                        </el-form-item>
+                    </el-col>
+                    <el-col
+                        :span="12"
+                        v-if="form.datasourceType !== null && form.datasourceType !== 'DM8' && form.datasourceType !== 'MySql'"
+                    >
+                        <el-form-item label="模式" prop="sid">
+                            <el-input :value="form.sid" disabled />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                    <el-col :span="24">
+                        <el-form-item label="状态" prop="validFlag">
+                            <el-tag :type="form.validFlag ? 'primary' : 'danger'">
+                                {{ form.validFlag ? '启用' : '禁用' }}
+                            </el-tag>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
                 <el-row :gutter="20">
                     <el-col :span="24">
                         <el-form-item label="描述" prop="description">
@@ -527,7 +524,6 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-
                 <el-row :gutter="20">
                     <el-col :span="24">
                         <el-form-item label="备注" prop="remark">
@@ -997,5 +993,24 @@
 
 ::v-deep .no-resize-textarea textarea {
   resize: none !important;
+}
+
+/* 表格单元格悬浮提示样式 - 多行显示 */
+::v-deep .el-table .cell.el-tooltip {
+  display: -webkit-box !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical !important;
+  white-space: normal;
+}
+
+::v-deep .el-popper.is-light {
+    box-shadow: 0px 2px 8px 1px rgba(0, 0, 0, 0.15);
+    max-width: 600px;
+    font-size: 14px;
+    padding: 16px;
+    line-height: 22px;
 }
 </style>
