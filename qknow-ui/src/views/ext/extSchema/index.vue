@@ -110,7 +110,6 @@
       </div>
       <el-table
         stripe
-        height="590px"
         v-loading="loading"
         :data="schemaList"
         @selection-change="handleSelectionChange"
@@ -133,6 +132,7 @@
           width="150"
           align="left"
           prop="name"
+          :show-overflow-tooltip="{ effect: 'light' }"
         >
           <template #default="scope">
             {{ scope.row.name || "-" }}
@@ -144,6 +144,7 @@
           label="概念描述"
           align="left"
           prop="description"
+          :show-overflow-tooltip="{ effect: 'light' }"
         >
           <template #default="scope">
             {{ scope.row.description || "-" }}
@@ -178,9 +179,10 @@
         <el-table-column
           v-if="getColumnVisibility(8)"
           label="创建时间"
-          align="center"
+          align="left"
           prop="createTime"
-          
+           sortable="custom"
+          :sort-orders="['descending', 'ascending']"
         >
           <template #default="scope">
             <span>{{

@@ -142,20 +142,23 @@
         v-loading="loading"
         :data="extStructList"
         @selection-change="handleSelectionChange"
-        :default-sort="defaultSort"
         @sort-change="handleSortChange"
       >
+       <el-table-column type="selection" :selectable="selectable" width="55" />
         <el-table-column
           v-if="getColumnVisibility(1)"
-          label="ID"
+          label="编号"
           align="center"
           prop="id"
+           sortable="custom"
+          :sort-orders="['descending', 'ascending']"
         />
         <el-table-column
           v-if="getColumnVisibility(2)"
           label="任务名称"
           prop="name"
           width="200"
+           align="left"
           show-overflow-tooltip
         >
           <template #default="scope">

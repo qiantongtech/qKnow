@@ -82,6 +82,15 @@
                        @mousedown="(e) => e.preventDefault()">
               <i class="iconfont-mini icon-xinzeng mr5"></i>新增
             </el-button>
+              <el-button
+              type="danger"
+              plain
+              @click="handleDel"
+              :disabled="ids.length==0"
+              @mousedown="(e) => e.preventDefault()"
+            >
+              <i class="iconfont-mini icon-shanchu-huise mr5"></i>删除
+            </el-button>
           </el-col>
 <!--          <el-col :span="1.5">-->
 <!--            <el-button type="primary" plain :disabled="single" @click="handleUpdate" v-hasPermi="['ext:extSchemaRelation:relation:edit']"-->
@@ -112,25 +121,28 @@
           <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
         </div>
       </div>
-      <el-table stripe height="590px" v-loading="loading" :data="relationList" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
+      <el-table stripe height="590px" v-loading="loading" :data="relationList" @selection-change="handleSelectionChange"  @sort-change="handleSortChange">
 <!--        <el-table-column type="selection" width="55" align="center" />-->
-<!--        <el-table-column v-if="getColumnVisibility(0)" label="ID" align="center" prop="id" />-->
+         <el-table-column type="selection" :selectable="selectable" width="55" />
+       <el-table-column v-if="getColumnVisibility(0)"width="80" label="编号"  sortable="custom"
+          :sort-orders="['descending', 'ascending']" align="center" prop="id" />
 <!--        <el-table-column v-if="getColumnVisibility(1)" label="工作区id" align="center" prop="workspaceId">-->
 <!--          <template #default="scope">-->
 <!--            {{ scope.row.workspaceId || '-' }}-->
 <!--          </template>-->
 <!--        </el-table-column>-->
-        <el-table-column v-if="getColumnVisibility(2)" label="起点" align="center" prop="startSchemaId">
+        
+        <el-table-column v-if="getColumnVisibility(2)" label="起点" align="left" prop="startSchemaId">
           <template #default="scope">
             {{ getLabelByValue(scope.row.startSchemaId) || '-' }}
           </template>
         </el-table-column>
-        <el-table-column v-if="getColumnVisibility(3)" label="关系" align="center" prop="relation">
+        <el-table-column v-if="getColumnVisibility(3)" label="关系" align="left" prop="relation">
           <template #default="scope">
             {{ scope.row.relation || '-' }}
           </template>
         </el-table-column>
-        <el-table-column v-if="getColumnVisibility(4)" label="终点" align="center" prop="endSchemaId">
+        <el-table-column v-if="getColumnVisibility(4)" label="终点" align="left" prop="endSchemaId">
           <template #default="scope">
             {{ getLabelByValue(scope.row.endSchemaId) || '-' }}
           </template>
@@ -150,7 +162,7 @@
 <!--            <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>-->
 <!--          </template>-->
 <!--        </el-table-column>-->
-        <el-table-column v-if="getColumnVisibility(14)" label="备注" align="center" prop="remark">
+        <el-table-column v-if="getColumnVisibility(14)" label="备注" align="left" prop="remark">
           <template #default="scope">
             {{ scope.row.remark || '-' }}
           </template>
@@ -372,6 +384,7 @@ const relationList = ref([]);
 
 // 列显隐信息
 const columns = ref([
+  { key: 0, label: "编号", visible: true },
   { key: 2, label: "起点", visible: true },
   { key: 3, label: "关系", visible: true },
   { key: 4, label: "终点", visible: true },
@@ -452,6 +465,9 @@ function getList() {
     total.value = response.data.total;
     loading.value = false;
   });
+}
+function handleDel(){
+  // 多选删除
 }
 
 /** 查询概念全部数据 */
