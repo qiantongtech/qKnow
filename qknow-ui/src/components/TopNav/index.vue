@@ -60,7 +60,7 @@
       v-if="topMenus.length > visibleNumber"
     >
       <template #title>
-        <svg-icon icon-class="tree-table" />
+        <svg-icon icon-class="menu" />
         更多菜单</template
       >
       <template v-for="(item, index) in topMenus">

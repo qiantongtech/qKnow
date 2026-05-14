@@ -89,9 +89,9 @@ export default [
         children: [
             {
                 name: 'agent',
-                path: 'bot/agent',
+                path: 'bot/agent/detail',
                 component: () => import('@/views/kb/agent/index.vue'),
-                meta: { title: 'Agent编排', activeMenu: '/kb/bot'  }
+                meta: { title: 'Agent编排', activeMenu: '/kb/bot/agent'  }
             }
         ]
     },
