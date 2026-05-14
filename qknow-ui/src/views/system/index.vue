@@ -49,14 +49,14 @@
               </div>
             </div>
             <div class="info-btns">
-              <el-button type="primary" class="info-btn-dft" plain size="large" @click="goprofile"
-                style="background: #135afb; color: #fff; font-size: 14px">
-                个人中心
-              </el-button>
-              <el-button auto-insert-space @click="logout" type="primary" class="info-btn-dft info-btn-dfts" plain
-                size="large" style="color: #135afb">
-                退出登录
-              </el-button>
+              <div class="info-btn" @click="goprofile">
+                <div class="icon"></div>
+                <span>个人中心</span>
+              </div>
+              <div class="info-btn btn-dft" @click="logout">
+                <div class="icon"></div>
+                <span>退出登录</span>
+              </div>
             </div>
           </div>
         </div>
@@ -196,7 +196,7 @@
         <div class="module-8 border-item">
           <div class="border-item-head">
             <span class="head-title">近半年实体新增趋势 </span>
-            <el-link type="primary" :underline="false">查看更多 </el-link>
+            <!-- <el-link type="primary" :underline="false">查看更多 </el-link> -->
           </div>
           <div class="border-item-body">
             <div class="chart-container" ref="module8ChartRef"></div>
@@ -208,30 +208,39 @@
         <div class="module-9 border-item">
           <div class="border-item-head">
             <span class="head-title">抽取任务 </span>
-            <el-link type="primary" :underline="false">查看更多 </el-link>
+            <!-- <el-link type="primary" :underline="false">查看更多 </el-link> -->
           </div>
           <div class="border-item-body">
             <el-table :data="module9" style="width: 100%" height="100%">
               <el-table-column
                 fixed
                 prop="id"
-                label="id"
+                label="编号"
                 align="center"
                 width="80"
+                sortable
               >
                 <template #default="scope">
                   <div class="table-column-code">{{ scope.row.id }}</div>
                 </template>
               </el-table-column>
-              <el-table-column prop="name" label="任务名称" width="300" />
-              <el-table-column prop="status" align="center" label="任务状态" />
+              <el-table-column prop="name" label="任务名称" width="300" :show-overflow-tooltip="{ effect: 'light' }"  />
+              <el-table-column prop="status" align="center" label="任务状态">
+                <template #default="scope">
+                  <dict-tag :options="ext_task_status" :value="scope.row.status" />
+                </template>
+              </el-table-column>
               <el-table-column
                 prop="publishStatus"
                 align="center"
                 label="发布状态"
-              />
+              >
+                <template #default="scope">
+                  <dict-tag :options="publish_status" :value="scope.row.publishStatus" />
+                </template>
+              </el-table-column>
               <el-table-column prop="publishBy" align="center" label="发布人" />
-              <el-table-column prop="createTime" label="创建时间" width="180" />
+              <el-table-column prop="createTime" sortable align="center" label="发布时间" width="180" />
             </el-table>
           </div>
         </div>
@@ -255,6 +264,10 @@ import {
 } from "vue";
 
 let { proxy } = getCurrentInstance();
+const { ext_task_status,publish_status } = proxy.useDict(
+  "ext_task_status",
+  "publish_status"
+);
 const router = useRouter();
 const { sys_notice_type } = proxy.useDict("sys_notice_type");
 const getAssetsFile = (url) => {
@@ -347,6 +360,29 @@ function goprofile() {
   proxy.$router.push("/user/profile"); // 内部页面路径
 }
 
+// 认证模式
+const authType = import.meta.env.VITE_APP_AUTH_TYPE;
+function logout() {
+  ElMessageBox.confirm("确定注销并退出系统吗？", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(() => {
+      userStore.logOut().then(() => {
+        if (authType === "sso") {
+          // 退出统一认证中心的登录状态
+          loginOut(userStore.userId).then(() => {
+            location.href = "/index";
+          });
+        } else {
+          location.href = "/index";
+        }
+      });
+    })
+    .catch(() => {});
+}
+
 async function routeTo(link, query = {}) {
   if (link && link.indexOf("http") !== -1) {
     window.location.href = link;
@@ -370,18 +406,18 @@ async function routeTo(link, query = {}) {
 //获取心灵鸡汤内容
 const xljtcont = ref("");
 function getxljtcont() {
-  let num = Math.floor(Math.random() * 9);
   let xljtlist = [
-    { value: "知识是照亮前路的灯塔，每一次学习都是点亮一盏明灯。" },
-    { value: "数据是新时代的金矿，用心挖掘就能发现无尽的价值。" },
-    { value: "AI赋能，让知识管理更智能，让工作效率倍增。" },
-    { value: "构建知识图谱，连接万物智慧，让信息不再孤岛。" },
-    { value: "文档管理井然有序，工作生活从容不迫。" },
-    { value: "每一次对话都是思想的碰撞，每一次搜索都是知识的探索。" },
-    { value: "系统稳定运行，服务永不止步，我们一直在路上。" },
-    { value: "知识积累如滴水成河，终能汇聚成智慧的海洋。" },
-    { value: "用科技赋能知识，让智慧触手可及。" },
+    { value: "从知识图谱到智能应用，构建企业AI大脑。" },
+    // { value: "数据是新时代的金矿，用心挖掘就能发现无尽的价值。" },
+    // { value: "AI赋能，让知识管理更智能，让工作效率倍增。" },
+    // { value: "构建知识图谱，连接万物智慧，让信息不再孤岛。" },
+    // { value: "文档管理井然有序，工作生活从容不迫。" },
+    // { value: "每一次对话都是思想的碰撞，每一次搜索都是知识的探索。" },
+    // { value: "系统稳定运行，服务永不止步，我们一直在路上。" },
+    // { value: "知识积累如滴水成河，终能汇聚成智慧的海洋。" },
+    // { value: "用科技赋能知识，让智慧触手可及。" },
   ];
+  let num = Math.floor(Math.random() * xljtlist.length);
   xljtcont.value = xljtlist[num].value;
 }
 
@@ -815,42 +851,42 @@ const module9 = ref([
   {
     id: "1",
     name: "《2030年知识经济预测模型》",
-    status: "进行中",
-    publishStatus: "已发布",
+    status: "1",
+    publishStatus: "1",
     publishBy: "千知",
-    createTime: "2025-05-01 11:23:43",
+    createTime: "2025-05-01 11:23",
   },
   {
     id: "2",
     name: "《金融知识图谱构建与风险预警白皮书》",
-    status: "已完成",
-    publishStatus: "已发布",
+    status: "2",
+    publishStatus: "1",
     publishBy: "千知",
-    createTime: "2025-05-01 11:23:43",
+    createTime: "2025-05-01 11:23",
   },
   {
     id: "3",
     name: "《多模态知识融合算法白皮书》",
-    status: "进行中",
-    publishStatus: "已发布",
+    status: "1",
+    publishStatus: "1",
     publishBy: "千知",
-    createTime: "2025-05-01 11:23:43",
+    createTime: "2025-05-01 11:23",
   },
   {
     id: "4",
     name: "《智慧城市知识管理解决方案》",
-    status: "已完成",
-    publishStatus: "未发布",
+    status: "2",
+    publishStatus: "0",
     publishBy: "千知",
-    createTime: "2025-05-01 11:23:43",
+    createTime: "2025-05-01 11:23",
   },
   {
     id: "5",
     name: "《智能教育平台知识点分类体系》",
-    status: "进行中",
-    publishStatus: "已发布",
+    status: "1",
+    publishStatus: "1",
     publishBy: "千知",
-    createTime: "2025-05-01 11:23:43",
+    createTime: "2025-05-01 11:23",
   },
 ]);
 
@@ -1024,6 +1060,7 @@ onMounted(() => {
   display: flex;
   position: relative;
   flex-shrink: 0;
+  align-items: center;
 }
 
 .userInfo .info-main .avatar {
@@ -1056,28 +1093,50 @@ onMounted(() => {
   font-weight: 400;
 }
 
-.userInfo .info-main .info-btns {
-  position: absolute;
-  top: 18px;
-  right: 0;
-  font-family: PingFang SC;
-  font-size: 14px;
-  font-weight: 500;
+.info-btns {
+    position: absolute;
+    right: 0px;
+    font-family: PingFang SC;
+    font-size: 14px;
+    font-weight: 500;
+
+    img {
+    margin-right: 5px;
+    }
+
+    .info-btn {
+    cursor: pointer;
+    color: #fff;
+    width: 100px;
+    height: 40px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    background: var(--el-color-primary);
+
+    .icon {
+        width: 15px;
+        height: 15px;
+        background: url("@/assets/system/images/index/user-icon.png") no-repeat;
+        margin-right: 5px;
+    }
+    }
+
+    .btn-dft {
+    color: var(--el-color-primary);
+    border: 1px solid var(--el-color-primary);
+    background: transparent;
+    margin-left: 20px;
+
+    .icon {
+        width: 16px;
+        height: 13px;
+        background: url("@/assets/system/images/index/logout-icon.png") no-repeat;
+    }
+    }
 }
 
-.userInfo .info-main .info-btns .info-btn {
-  width: 100px;
-  height: 40px;
-  border-radius: 4px !important;
-  border: none !important;
-}
-
-.userInfo .info-main .info-btns .info-btn-dft {
-  width: 100px;
-  height: 40px;
-  border-radius: 2px !important;
-  margin-left: 20px;
-}
 
 .module-2 {
   height: 150px;
@@ -1454,24 +1513,10 @@ onMounted(() => {
   //         background-color: #fff !important;
   //     }
   // }
-  ::v-deep {
-    // 列表表头
-    .el-table thead {
-      height: 53px;
-      .el-table__cell.is-leaf {
-        background: rgba(19, 90, 251, 0.04) !important;
-        // border-radius: 4px 4px 0px 0px;
-      }
-    }
-  }
 }
 .module-9 {
   .border-item-body {
     padding: 15px 34px 15px 34px;
-  }
-  .table-column-code {
-    font-size: 14px;
-    color: #135afb;
   }
 }
 </style>
