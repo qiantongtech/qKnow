@@ -89,6 +89,15 @@
             >
               <i class="iconfont-mini icon-xinzeng mr5"></i>新增
             </el-button>
+             <el-button
+              type="danger"
+              plain
+              @click="handleDel"
+              :disabled="ids.length==0"
+              @mousedown="(e) => e.preventDefault()"
+            >
+              <i class="iconfont-mini icon-shanchu-huise mr5"></i>删除
+            </el-button>
           </el-col>
         </el-row>
         <div class="justify-end top-right-btn">
@@ -104,22 +113,44 @@
         v-loading="loading"
         :data="schemaList"
         @selection-change="handleSelectionChange"
-        :default-sort="defaultSort"
         @sort-change="handleSortChange"
       >
+      <el-table-column type="selection" :selectable="selectable" width="55" />
+       <el-table-column
+        width="80"
+          v-if="getColumnVisibility(4)"
+          label="编号"
+          align="center"
+          sortable="custom"
+          :sort-orders="['descending', 'ascending']"
+          prop="id"
+        >
+        </el-table-column>
         <el-table-column
           v-if="getColumnVisibility(2)"
           label="概念名称"
-          align="center"
+          width="150"
+          align="left"
           prop="name"
         >
           <template #default="scope">
             {{ scope.row.name || "-" }}
           </template>
         </el-table-column>
+              <el-table-column
+              width="250"
+          v-if="getColumnVisibility(3)"
+          label="概念描述"
+          align="left"
+          prop="description"
+        >
+          <template #default="scope">
+            {{ scope.row.description || "-" }}
+          </template>
+        </el-table-column>
         <el-table-column
           v-if="getColumnVisibility(1)"
-          width="80"
+          
           label="概念颜色"
           align="center"
           prop="color"
@@ -131,16 +162,7 @@
             ></div>
           </template>
         </el-table-column>
-        <el-table-column
-          v-if="getColumnVisibility(3)"
-          label="概念描述"
-          align="center"
-          prop="description"
-        >
-          <template #default="scope">
-            {{ scope.row.description || "-" }}
-          </template>
-        </el-table-column>
+  
         <el-table-column
           v-if="getColumnVisibility(6)"
           label="创建人"
@@ -151,18 +173,17 @@
             {{ scope.row.createBy || "-" }}
           </template>
         </el-table-column>
+        
         <el-table-column
           v-if="getColumnVisibility(8)"
           label="创建时间"
           align="center"
           prop="createTime"
-          width="180"
-          sortable="custom"
-          :sort-orders="['descending', 'ascending']"
+          
         >
           <template #default="scope">
             <span>{{
-              parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}:{s}")
+              parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}")
             }}</span>
           </template>
         </el-table-column>
@@ -180,7 +201,7 @@
               icon="Edit"
               @click="handleUpdate(scope.row)"
               v-hasPermi="['ext:extSchema:schema:edit']"
-              >编辑</el-button
+              >修改</el-button
             >
             <el-button
               link
@@ -240,12 +261,15 @@
         @submit.prevent
       >
         <el-row :gutter="20">
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="概念名称" prop="name">
               <el-input v-model="form.name" placeholder="请输入概念名称" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+        </el-row>
+           <el-row :gutter="20">
+         
+          <el-col :span="24">
             <el-form-item label="概念颜色" prop="color">
               <!--              <el-color-picker v-model="form.color"></el-color-picker>-->
               <el-color-picker
@@ -261,7 +285,10 @@
               <el-input
                 v-model="form.description"
                 type="textarea"
-                placeholder="请输入内容"
+                placeholder="请输入概念描述"
+                :min-height="192"
+                :maxlength="500"
+                show-word-limit
               />
             </el-form-item>
           </el-col>
@@ -407,6 +434,7 @@ const schemaList = ref([]);
 
 // 列显隐信息
 const columns = ref([
+  { key: 4, label: "编号", visible: true },
   { key: 2, label: "概念名称", visible: true },
   { key: 1, label: "概念颜色", visible: true },
   { key: 3, label: "概念描述", visible: true },
@@ -432,7 +460,6 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
-const defaultSort = ref({ prop: "createTime", order: "desc" });
 const router = useRouter();
 const route = useRoute();
 
@@ -492,6 +519,9 @@ function getList() {
     total.value = response.data.total;
     loading.value = false;
   });
+}
+function handleDel(){
+  // 多选删除
 }
 
 // 取消按钮

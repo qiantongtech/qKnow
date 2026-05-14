@@ -433,7 +433,8 @@ function handleFPCodeClick(){
   }
 
   .el-dialog__body{
-    height: 316px !important;
+   height: auto !important;
+    max-height: 80vh;
   }
 
   .el-button{
