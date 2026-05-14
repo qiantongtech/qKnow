@@ -74,7 +74,7 @@
 <script setup>
 import variables from "@/assets/system/styles/variables.module.scss";
 import logo from "@/assets/system/logo/logo.png";
-import logo2 from "@/assets/system/logo/logo.png";
+import logo2 from "@/assets/system/logo/logo2.png";
 import simpLogo from "@/assets/system/logo/simpLogo.png";
 
 import useSettingsStore from "@/store/system/settings";
