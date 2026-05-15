@@ -141,5 +141,11 @@ public interface IAiModelService extends IService<AiModelDO> {
      */
     DashScopeRerankModel getRerankModel(Long keyId, String modelName);
 
+    /**
+     * 获取模型分页列表
+     *
+     * @param modelPage 模型分页参数
+     * @return 模型列表
+     */
     PageResult<AiModelDO> getModelPage(AiModelPageReqVO modelPage);
 }
