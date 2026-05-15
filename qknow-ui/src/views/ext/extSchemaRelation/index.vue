@@ -125,7 +125,7 @@
       <el-table stripe  v-loading="loading" :data="relationList" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
 <!--        <el-table-column type="selection" width="55" align="center" />-->
          <el-table-column type="selection" :selectable="selectable" width="55" />
-       <el-table-column v-if="getColumnVisibility(0)"width="80" label="编号"  sortable="custom"
+       <el-table-column v-if="getColumnVisibility(0)" width="80" label="编号"  sortable="custom"
           :sort-orders="['descending', 'ascending']" align="center" prop="id" />
 <!--        <el-table-column v-if="getColumnVisibility(1)" label="工作区id" align="center" prop="workspaceId">-->
 <!--          <template #default="scope">-->
@@ -148,6 +148,11 @@
             {{ getLabelByValue(scope.row.endSchemaId) || '-' }}
           </template>
         </el-table-column>
+         <el-table-column v-if="getColumnVisibility(8)" label="描述" width="250" align="left" prop="description" :show-overflow-tooltip="{ effect: 'light' }">
+          <template #default="scope">
+            {{ getRelationDescription(scope.row) }}
+          </template>
+        </el-table-column>
         <el-table-column v-if="getColumnVisibility(5)" label="是否可逆" align="center" prop="inverseFlag">
           <template #default="scope">
             {{ scope.row.inverseFlag === 1 ? '是' : (scope.row.inverseFlag === 0 ? '否' : '-') }}
@@ -163,12 +168,12 @@
            <span>{{ parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}") }}</span>
          </template>
        </el-table-column>
-        <el-table-column v-if="getColumnVisibility(14)" label="备注" align="left" prop="remark" :show-overflow-tooltip="{ effect: 'light' }">
+        <el-table-column v-if="getColumnVisibility(14)" label="备注" width="200" align="left" prop="remark" :show-overflow-tooltip="{ effect: 'light' }">
           <template #default="scope">
             {{ scope.row.remark || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="240" v-if="getColumnVisibility(15)">
+        <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="200" v-if="getColumnVisibility(15)">
           <template #default="scope">
             <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
                        v-hasPermi="['ext:extSchemaRelation:relation:edit']">修改</el-button>
@@ -390,6 +395,7 @@ const columns = ref([
   { key: 2, label: "起点", visible: true },
   { key: 3, label: "关系", visible: true },
   { key: 4, label: "终点", visible: true },
+   { key: 8, label: "描述", visible: true },
   { key: 5, label: "是否可逆", visible: true },
   { key: 6, label: "创建人", visible: true },
   { key: 7, label: "创建时间", visible: true },
@@ -490,6 +496,27 @@ const getLabelByValue = (value) => {
   const selectedOption = selectOptions.value.find(item => item.value === value);
   return selectedOption ? selectedOption.label : '';
 };
+
+const relationDescriptionMap = {
+  "人物|创作|歌曲": "表示人物创作歌曲，用于记录创作者与音乐作品之间的创作关系。",
+  "人物|所属|国家": "表示人物所属国家，用于描述人物与国家之间的归属关系。",
+  "城市|所属|国家": "表示城市所属国家，用于建立城市与国家之间的行政归属关系。",
+  "企业|所属|城市": "表示企业所属城市，用于说明企业注册、办公或经营所在地。",
+  "器械|使用|材料": "表示器械使用材料，用于描述器械制造或组成所依赖的材料。",
+  "器械|具有|功能": "表示器械具有功能，用于说明器械具备的能力或用途。",
+  "器械|属于|器械类别": "表示器械属于某一器械类别，用于对器械进行分类管理。",
+  "歌曲|所属|人物": "表示歌曲所属人物，用于关联歌曲与演唱者、作者或相关人物。",
+  "功能|使用|器械": "表示功能使用器械，用于描述实现某项功能所依赖的器械。",
+  "角色|所属|人物": "表示角色所属人物，用于关联角色与对应人物主体。",
+  "企业|所属|用户": "表示企业所属用户，用于描述企业与平台用户之间的归属关系。",
+};
+
+function getRelationDescription(row) {
+  const startName = getLabelByValue(row.startSchemaId);
+  const endName = getLabelByValue(row.endSchemaId);
+  const key = [startName, String(row.relation || "").trim(), endName].join("|");
+  return relationDescriptionMap[key] || "-";
+}
 
 // 取消按钮
 function cancel() {
