@@ -337,6 +337,7 @@ defineExpose({
   justify-content: center;
   color: #333 !important;
   padding: 0 23px !important;
+  border-bottom: 0;
 }
 
 /* sub-menu item */
