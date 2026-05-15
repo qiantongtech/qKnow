@@ -78,6 +78,18 @@
         />
       </el-menu>
     </el-scrollbar>
+
+    <div :class="['help', { collapse: isCollapse }]">
+        <div @click="handleHelp" class="help-btn">
+          <svg-icon class="img" icon-class="help" style="width: 12px !important; height: 12px !important; margin-right: 6px;" />
+          <span>帮助中心</span>
+        </div>
+        <div class="help-second">
+          <span @click="handleFAQ">FAQ</span>
+          <span class="line"></span>
+          <span @click="handleAbout">关于</span>
+        </div>
+      </div>
   </div>
 </template>
 
@@ -123,6 +135,16 @@ const displayLogo = computed(() => {
   );
   return isSpecialRoute;
 });
+
+const handleFAQ = () => {
+  window.open("https://qknow.qiantong.tech/docs/others/faq.html", "_blank");
+};
+const handleAbout = () => {
+  window.open("https://qknow.qiantong.tech/", "_blank");
+};
+const handleHelp = () => {
+  window.open("http://114.66.57.2:8089/docs/start/introduction.html", "_blank");
+};
 </script>
 
 <style lang="scss" scoped>
@@ -143,5 +165,93 @@ const displayLogo = computed(() => {
   // background-color: #fff !important;
   // webkit-box-shadow: 2px 0 6px rgb(255 255 255 / 35%) !important;
   // box-shadow: 2px 0 6px rgb(255 255 255 / 35%) !important;
+}
+
+::v-deep(.el-scrollbar) {
+    height: calc(100% - 146px) !important;
+    background: transparent;
+}
+
+.help {
+  height: 86px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .help-btn {
+    cursor: pointer;
+    width: 153px;
+    height: 30px;
+    background: linear-gradient(90deg, #5d90f9 0%, #2c6fff 100%);
+    border-radius: 2px 2px 2px 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+
+    .img {
+      width: 15px !important;
+      height: 15px !important;
+      margin-right: 10px;
+    }
+
+    span {
+      font-family: PingFang SC;
+      font-weight: 400;
+      font-size: 12px;
+      color: #ffffff;
+    }
+  }
+
+  .help-second {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: PingFang SC;
+    font-size: 12px;
+    color: #a8b2bc;
+
+    span {
+      cursor: pointer;
+    }
+
+    .line {
+      cursor: default;
+      width: 1px;
+      height: 8px;
+      background: #a8b2bc;
+      margin: 0 15px;
+    }
+  }
+
+  &.collapse {
+    .help-btn {
+      width: 30px;
+      height: 30px;
+
+      .img {
+        margin: 0 !important;
+      }
+
+      span {
+        display: none;
+      }
+    }
+
+    .help-second {
+      display: flex;
+      flex-direction: column;
+
+      span {
+        font-size: 10px;
+      }
+
+      .line {
+        width: 10px;
+        height: 1px;
+        margin: 2px 0;
+      }
+    }
+  }
 }
 </style>

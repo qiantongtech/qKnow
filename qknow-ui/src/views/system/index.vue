@@ -167,7 +167,6 @@
               </div>
               <div
                 class="border-item-body"
-                style="padding-top: 8px; padding-left: 5px"
               >
                 <div class="all-entrance">
                   <div
@@ -178,10 +177,7 @@
                     @click="routeTo(item.path, item.query)"
                   >
                     <div class="image">
-                      <div class="icon-background" :class="item.color">
-                        <svg-icon :icon-class="item.icon" class="icon" />
-                        <!--                        <i class="icon iconfont">&#xe6d6;</i>-->
-                      </div>
+                        <img :src="item.iconPath" class="icon" />
                     </div>
                     <div class="name">{{ item.name }}</div>
                   </div>
@@ -274,39 +270,75 @@ const getAssetsFile = (url) => {
   return new URL(`../../assets/system/images/index/${url}`, import.meta.url)
     .href;
 };
+const getEntranceIcon = (url) => {
+  return new URL(`../../assets/system/images/entrance/${url}`, import.meta.url)
+    .href;
+};
 
 const entranceList = [
   {
-    name: "文件管理",
-    path: "/kg/kmc/kmcDocument",
+    name: "Bot管理",
+    path: "/kb/bot/workflow?botType=0",
     query: {},
-    perm: ["kmcDocument:kmcDocument:document:list"],
-    icon: "知识中心",
+    perm: [""],
+    iconPath: getEntranceIcon("bot.png"),
     color: "color-primary",
-  },
-  {
-    name: "非结构化抽取",
-    path: "/kg/ext/unstructTask",
-    query: {},
-    icon: "知识抽取",
-    perm: ["ext:extUnstructTask:unstructtask:list"],
-    color: "color-pale-blue",
-  },
-  {
-    name: "结构化抽取",
-    path: "/kg/ext/extStructTask",
-    query: {},
-    icon: "知识推理",
-    perm: ["ext:extStructTask:struct:list"],
-    color: "color-orange",
   },
   {
     name: "图谱探索",
     path: "/kg/app/graphExploration",
     query: {},
-    icon: "知识应用",
     perm: [""],
+    iconPath: getEntranceIcon("graph.png"),
+    color: "color-pale-blue",
+  },
+  {
+    name: "概念配置",
+    path: "/kg/ext/schema",
+    query: {},
+    perm: [""],
+    iconPath: getEntranceIcon("concept.png"),
+    color: "color-orange",
+  },
+  {
+    name: "非结构化抽取",
+    path: "/kg/ext/unstructTask",
+    query: {},
+    perm: ["ext:extUnstructTask:unstructtask:list"],
+    iconPath: getEntranceIcon("unstruct.png"),
     color: "color-pink",
+  },
+  {
+    name: "结构化抽取",
+    path: "/kg/ext/extStructTask",
+    query: {},
+    perm: ["ext:extStructTask:struct:list"],
+    iconPath: getEntranceIcon("struct.png"),
+    color: "color-green",
+  },
+  {
+    name: "应用中心",
+    path: "/app",
+    query: {},
+    perm: [""],
+    iconPath: getEntranceIcon("app.png"),
+    color: "color-purple",
+  },
+  {
+    name: "知识库",
+    path: "/kmc/knowledgeBase",
+    query: {},
+    perm: [""],
+    iconPath: getEntranceIcon("kb.png"),
+    color: "color-yellow",
+  },
+  {
+    name: "插件中心",
+    path: "/system/plugin",
+    query: {},
+    perm: [""],
+    iconPath: getEntranceIcon("plugin.png"),
+    color: "color-red",
   },
 ];
 
@@ -1413,7 +1445,9 @@ onMounted(() => {
     height: 245px;
 
     .border-item-body {
-      display: block;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .toAll {
@@ -1428,20 +1462,21 @@ onMounted(() => {
     }
 
     .all-entrance {
+        width: 100%;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
 
       .entrance-item {
-        padding: 7px;
+        padding: 14px 4px;
         text-align: center;
-
+        font-size: 14px;
         .name {
           margin-top: 5px;
           color: #5a5e66;
         }
 
         .image {
-          height: 44px;
+          height: 40px;
           display: flex;
           justify-content: center;
 
