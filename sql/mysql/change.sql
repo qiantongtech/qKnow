@@ -365,16 +365,14 @@ INSERT INTO system_dict_data VALUES (123, 2, '增量更新', '1', 'ext_update_ty
 
 
 
-----------------------------------------
+----------------------------------------页面标准化以后更新的数据-----------------------------------------------------
 # 2026-05-13
 INSERT INTO system_menu VALUES (2402, '知识资产看板', 2061, 3, 'knowledgeAsset', 'kd/knowledgeAsset/index', NULL, '', 1, 0, 'C', '0', '0', NULL, '#', '小桐', '2026-05-13 10:34:41', '', NULL, '');
 INSERT INTO system_menu VALUES (2403, 'Bot运营看板', 2061, 4, 'botOperation', 'kd/botOperation/index', NULL, '', 1, 0, 'C', '0', '0', NULL, '#', '小桐', '2026-05-13 10:43:41', '', NULL, '');
 INSERT INTO system_menu VALUES (2404, '应用运营看板', 2061, 5, 'appOperations', 'kd/appOperations/index', NULL, '', 1, 0, 'C', '0', '0', NULL, '#', '小桐', '2026-05-13 10:44:06', '', NULL, '');
-INSERT INTO system_menu VALUES (2405, '概览', 2063, 0, 'overview', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', NULL, '#', '小桐', '2026-05-13 13:42:03', '', NULL, '');
-INSERT INTO system_menu VALUES (2406, '解决方案', 2063, 1, 'solution', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', '', '#', '小桐', '2026-05-13 13:42:40', '小桐', '2026-05-13 13:43:35', '');
+INSERT INTO system_menu VALUES (2405, '概览', 2063, 0, 'overview', 'kac/overview/index', NULL, '', 1, 0, 'C', '0', '0', NULL, '#', '小桐', '2026-05-13 13:42:03', '', NULL, '');
 INSERT INTO system_menu VALUES (2407, '横向通用应用', 2063, 2, 'horizontal', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', '', '#', '小桐', '2026-05-13 13:42:58', '小桐', '2026-05-13 13:43:31', '');
 INSERT INTO system_menu VALUES (2408, '纵向行业应用', 2063, 3, 'vertical', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', NULL, '#', '小桐', '2026-05-13 13:43:26', '', NULL, '');
-INSERT INTO system_menu VALUES (2409, '我的解决方案', 2063, 4, 'mySolution', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', '', '#', '小桐', '2026-05-13 13:43:58', '小桐', '2026-05-13 13:44:05', '');
 INSERT INTO system_menu VALUES (2410, '我的应用', 2063, 5, 'myApp', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', NULL, '#', '小桐', '2026-05-13 13:44:26', '', NULL, '');
 INSERT INTO system_menu VALUES (2411, '插件管理', 2064, 0, 'plugin', 'system/developing/index', NULL, '', 1, 0, 'C', '0', '0', NULL, '#', '小桐', '2026-05-13 13:45:32', '', NULL, '');
 
@@ -383,21 +381,21 @@ UPDATE system_menu SET `menu_name` = '知识文件', `parent_id` = 2223, `order_
 UPDATE system_menu SET `menu_name` = '知识分类', `parent_id` = 2000, `order_num` = 2, `path` = ':kbId/kmcCategory', `component` = 'kmc/kmcCategory/index', `query` = '', `route_name` = NULL, `is_frame` = 1, `is_cache` = 0, `menu_type` = 'C', `visible` = '0', `status` = '0', `perms` = 'kmc:kmcCategory:kmcCategory:list', `icon` = '#', `create_by` = '小桐', `create_time` = '2026-04-20 09:32:54', `update_by` = '小桐', `update_time` = '2026-05-13 17:32:20', `remark` = '' WHERE `menu_id` = 2001;
 UPDATE system_menu SET `menu_name` = '知识文件', `parent_id` = 2000, `order_num` = 1, `path` = ':kbId/kmcDocument', `component` = 'kmc/kmcDocument/index', `query` = '', `route_name` = NULL, `is_frame` = 1, `is_cache` = 0, `menu_type` = 'C', `visible` = '0', `status` = '0', `perms` = 'kmcDocument:kmcDocument:document:list', `icon` = '#', `create_by` = '小桐', `create_time` = '2026-04-20 09:32:54', `update_by` = '小桐', `update_time` = '2026-05-13 17:32:26', `remark` = '' WHERE `menu_id` = 2008;
 
-INSERT INTO kmc_category VALUES (1, 1001, 0, 1, '疾病与症状', 1, '0', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', NULL);
-INSERT INTO kmc_category VALUES (2, 1001, 0, 1, '药物与治疗', 2, '0', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', NULL);
-INSERT INTO kmc_category VALUES (3, 1001, 0, 1, '检查与诊断', 3, '0', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', NULL);
-INSERT INTO kmc_category VALUES (4, 1001, 0, 1, '人体结构与功能', 4, '0', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', NULL);
-INSERT INTO kmc_category VALUES (5, 1001, 0, 1, '健康管理与预防', 5, '0', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', NULL);
-INSERT INTO kmc_category VALUES (6, 1001, 1, 1, '常见疾病', 1, '0,1', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', NULL);
-INSERT INTO kmc_category VALUES (7, 1001, 1, 1, '典型症状', 2, '0,1', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', NULL);
-INSERT INTO kmc_category VALUES (8, 1001, 2, 1, '常用药物', 1, '0,2', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', NULL);
-INSERT INTO kmc_category VALUES (9, 1001, 2, 1, '治疗方案', 2, '0,2', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', NULL);
-INSERT INTO kmc_category VALUES (10, 1001, 3, 1, '影像检查', 1, '0,3', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', NULL);
-INSERT INTO kmc_category VALUES (11, 1001, 3, 1, '实验室检查', 2, '0,3', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', NULL);
-INSERT INTO kmc_category VALUES (12, 1001, 4, 1, '器官系统', 1, '0,4', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', NULL);
-INSERT INTO kmc_category VALUES (13, 1001, 4, 1, '生理功能', 2, '0,4', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', NULL);
-INSERT INTO kmc_category VALUES (14, 1001, 5, 1, '健康生活方式', 1, '0,5', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', NULL);
-INSERT INTO kmc_category VALUES (15, 1001, 5, 1, '疾病预防', 2, '0,5', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', NULL);
+INSERT INTO kmc_category VALUES (1, 1001, 0, 1, '疾病与症状', 1, '0', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', '顶级分类：疾病与症状');
+INSERT INTO kmc_category VALUES (2, 1001, 0, 1, '药物与治疗', 2, '0', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', '顶级分类：药物与治疗');
+INSERT INTO kmc_category VALUES (3, 1001, 0, 1, '检查与诊断', 3, '0', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', '顶级分类：检查与诊断');
+INSERT INTO kmc_category VALUES (4, 1001, 0, 1, '人体结构与功能', 4, '0', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', '顶级分类：人体结构与功能');
+INSERT INTO kmc_category VALUES (5, 1001, 0, 1, '健康管理与预防', 5, '0', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', '顶级分类：健康管理与预防');
+INSERT INTO kmc_category VALUES (6, 1001, 1, 1, '常见疾病', 1, '0,1', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', '常见疾病的分类，如感冒、高血压等');
+INSERT INTO kmc_category VALUES (7, 1001, 1, 1, '典型症状', 2, '0,1', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', '疾病相关的典型表现，如发热、疼痛等');
+INSERT INTO kmc_category VALUES (8, 1001, 2, 1, '常用药物', 1, '0,2', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', '临床常用药品及OTC药物');
+INSERT INTO kmc_category VALUES (9, 1001, 2, 1, '治疗方案', 2, '0,2', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', '各类疾病的治疗方法和方案');
+INSERT INTO kmc_category VALUES (10, 1001, 3, 1, '影像检查', 1, '0,3', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', '放射、超声、CT、MRI等影像学检查');
+INSERT INTO kmc_category VALUES (11, 1001, 3, 1, '实验室检查', 2, '0,3', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', '血液、尿液、病理等检验项目');
+INSERT INTO kmc_category VALUES (12, 1001, 4, 1, '器官系统', 1, '0,4', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', '心、肝、肺、肾等主要器官及相关系统');
+INSERT INTO kmc_category VALUES (13, 1001, 4, 1, '生理功能', 2, '0,4', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', '机体正常的生理过程和机能');
+INSERT INTO kmc_category VALUES (14, 1001, 5, 1, '健康生活方式', 1, '0,5', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', '饮食、运动、作息等健康习惯指导');
+INSERT INTO kmc_category VALUES (15, 1001, 5, 1, '疾病预防', 2, '0,5', 1, 0, '小桐', 1, '2026-04-21 13:57:08', '小桐', 1, '2026-04-21 13:57:08', '疫苗接种、筛查、风险评估等预防措施');
 
 INSERT INTO kmc_document VALUES (9, 1001, 2, 1, NULL, '药物与治疗', '心血管介入治疗器械.txt', '/2026/05/14/6a053715dcf17570f4d68768.txt', '心血管介入治疗器械', 0, 0, 2, 'custom', 'paragraph', 1, 0, '50', 1024, '\n\n', 512, '\n', 'text_model', 'Chinese', NULL, NULL, 1, 0, '小桐', 1, '2026-05-14 10:44:42', '小桐', NULL, '2026-05-14 10:54:21', NULL);
 INSERT INTO kmc_document VALUES (10, 1001, 2, 1, NULL, '药物与治疗', '常见药物.txt', '/2026/05/14/6a05472ddcf17570f4d6876c.txt', '常见药物', 0, 0, 2, 'custom', 'paragraph', 1, 0, '50', 1024, '\n\n', 512, '\n', 'text_model', 'Chinese', NULL, NULL, 1, 0, '小桐', 1, '2026-05-14 11:53:20', '小桐', NULL, '2026-05-14 11:53:45', NULL);
@@ -422,6 +420,12 @@ INSERT INTO kg_knowledge_document VALUES (2, 1001, 2, '治疗与干预', '疾病
 INSERT INTO kg_knowledge_document VALUES (3, 1001, 3, '药物与器械', '药物与医疗器械应用指南.docx', '/2026/05/14/6a0544f3b3541c9296b057df.docx', NULL, 1, 0, '小桐', 1, '2026-05-14 11:43:48', '小桐', NULL, '2026-05-14 11:43:48', NULL);
 INSERT INTO kg_knowledge_document VALUES (4, 1001, 5, '人员与机构', '医疗体系中的人力资源与机构组织.docx', '/2026/05/14/6a054501b3541c9296b057e0.docx', NULL, 1, 0, '小桐', 1, '2026-05-14 11:44:03', '小桐', NULL, '2026-05-14 11:44:03', NULL);
 INSERT INTO kg_knowledge_document VALUES (5, 1001, 4, '人体与功能', '医学与健康科学综合文档.docx', '/2026/05/14/6a05451ab3541c9296b057e1.docx', NULL, 1, 0, '小桐', 1, '2026-05-14 11:44:27', '小桐', NULL, '2026-05-14 11:44:27', NULL);
+
+# 2025-05-15
+INSERT INTO system_dict_type VALUES (57, '应用插件状态', 'kac_horizontal_status', '0', '吴同', '2026-04-23 19:35:19', '', NULL, NULL);
+INSERT INTO system_dict_data VALUES (null, 0, '停用', '0', 'kac_horizontal_status', NULL, 'warning', 'N', '0', '吴同', '2026-04-23 19:35:48', '吴同', '2026-04-23 19:36:17', NULL);
+INSERT INTO system_dict_data VALUES (null, 1, '正常', '1', 'kac_horizontal_status', NULL, 'primary', 'N', '0', '吴同', '2026-04-23 19:36:08', '', NULL, NULL);
+
 
 -- 修改菜单名
 UPDATE system_menu SET menu_name='Chatflow' WHERE menu_id=2413;
