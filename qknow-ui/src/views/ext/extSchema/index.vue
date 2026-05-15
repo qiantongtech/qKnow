@@ -153,7 +153,7 @@
         </el-table-column>
         <el-table-column
           v-if="getColumnVisibility(1)"
-          
+          width="80"
           label="概念颜色"
           align="center"
           prop="color"
@@ -163,6 +163,36 @@
               class="color-box"
               :style="{ backgroundColor: scope.row.color }"
             ></div>
+          </template>
+        </el-table-column>
+             <el-table-column
+          v-if="getColumnVisibility(1)"
+          label="结构化任务数量"
+          align="center"
+          prop="color"
+        >
+          <template #default="scope">
+          
+          </template>
+        </el-table-column> 
+             <el-table-column
+          v-if="getColumnVisibility(1)"
+          label="非结构化任务数量"
+          align="center"
+          prop="color"
+        >
+          <template #default="scope">
+          
+          </template>
+        </el-table-column>
+             <el-table-column
+          v-if="getColumnVisibility(1)"
+          label="属性数量"
+          align="center"
+          prop="color"
+        >
+          <template #default="scope">
+          
           </template>
         </el-table-column>
   
@@ -199,7 +229,17 @@
           fixed="right"
           width="240"
         >
+        
           <template #default="scope">
+              <el-button
+              link
+              type="primary"
+              icon="view"
+              @click="
+                routeTo('/kg/ext/extSchemaDetail/schemaDetail', scope.row)
+              "
+              >详情</el-button
+            >
             <el-button
               link
               type="primary"
@@ -208,15 +248,7 @@
               v-hasPermi="['ext:extSchema:schema:edit']"
               >修改</el-button
             >
-            <el-button
-              link
-              type="primary"
-              icon="view"
-              @click="
-                routeTo('/kg/ext/extSchemaDetail/schemaDetail', scope.row)
-              "
-              >属性</el-button
-            >
+          
             <el-button
               link
               type="danger"
