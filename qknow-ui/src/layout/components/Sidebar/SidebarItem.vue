@@ -78,7 +78,7 @@
       >
         <el-menu-item
           :index="resolvePath(onlyOneChild.path)"
-          :class="{ 'submenu-title-noDropdown': !isNest }"
+          :class="{ 'submenu-title-noDropdown': !isNest, 'nest-menu': props.isNest }"
         >
           <svg-icon
             :style="getTitleStyle(onlyOneChild.meta.title)"
@@ -249,3 +249,5 @@ function handleMenuClick(onlyOneChild) {
   router.push(targetPath);
 }
 </script>
+
+<style></style>
