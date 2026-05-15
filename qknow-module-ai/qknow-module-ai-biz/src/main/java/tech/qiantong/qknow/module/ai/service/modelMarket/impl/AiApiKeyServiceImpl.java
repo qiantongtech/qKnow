@@ -328,6 +328,7 @@ public class AiApiKeyServiceImpl extends ServiceImpl<AiApiKeyMapper, AiApiKeyDO>
                 // 获取需要新增的
                 AiApiKeyDO keyDO = BeanUtils.toBean(vo, AiApiKeyDO.class);
                 keyDO.setWorkspaceId(workSpaceId);
+                keyDO.setStatus(ApiKeyStatus.CONFIG.getCode());
                 saveList.add(keyDO);
                 continue;
             }

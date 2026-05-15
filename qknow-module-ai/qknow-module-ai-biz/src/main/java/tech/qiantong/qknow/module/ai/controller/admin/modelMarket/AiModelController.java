@@ -65,27 +65,24 @@
 package tech.qiantong.qknow.module.ai.controller.admin.modelMarket;
 
 import com.alibaba.fastjson2.JSONArray;
-
-import java.util.List;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import tech.qiantong.qknow.ai.enums.model.AiModelTypeEnum;
 import tech.qiantong.qknow.common.annotation.Log;
-
 import tech.qiantong.qknow.common.core.controller.BaseController;
 import tech.qiantong.qknow.common.core.domain.CommonResult;
+import tech.qiantong.qknow.common.core.page.PageResult;
+import tech.qiantong.qknow.common.core.utils.object.BeanUtils;
 import tech.qiantong.qknow.common.enums.BusinessType;
-
-
-import tech.qiantong.qknow.module.ai.controller.admin.modelMarket.vo.AiModelRespVO;
+import tech.qiantong.qknow.module.ai.controller.admin.modelMarket.vo.AiModelPageReqVO;
 import tech.qiantong.qknow.module.ai.controller.admin.modelMarket.vo.AiModelSaveReqVO;
+import tech.qiantong.qknow.module.ai.dal.dataobject.modelMarket.AiModelDO;
 import tech.qiantong.qknow.module.ai.service.modelMarket.IAiModelService;
-
-import jakarta.annotation.Resource;
-import jakarta.validation.Valid;
 
 /**
  * AI 模型Controller
@@ -126,11 +123,10 @@ public class AiModelController extends BaseController {
     }
 
     @Operation(summary = "获取平台下模型列表")
-    @PreAuthorize("@ss.hasPermi('ai:modelMarket:key:edit')")
-    @GetMapping("getModelList/{keyId}")
-    public CommonResult<List<AiModelRespVO>> getModelList(@PathVariable Long keyId) {
-        List<AiModelRespVO> result = aiModelService.queryModelList(keyId);
-        return CommonResult.success(result);
+    @GetMapping("/getModelPage")
+    public CommonResult<PageResult<AiModelPageReqVO>> getModelPage(AiModelPageReqVO modelPage) {
+        PageResult<AiModelDO> page = aiModelService.getModelPage(modelPage);
+        return CommonResult.success(BeanUtils.toBean(page, AiModelPageReqVO.class));
     }
 
     @Operation(summary = "获取模型字典")

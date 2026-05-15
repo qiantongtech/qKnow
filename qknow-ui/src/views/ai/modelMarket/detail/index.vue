@@ -3,9 +3,25 @@
     <div class="pagecont-top" v-show="showSearch" style="padding-bottom:15px">
       <div class="infotop">
         <div class="infotop-title mb15">
+          <span style="margin-left: 8px">
           {{ modelDetail.name }}
+          </span>
+          <el-row :gutter="15" class="btn-style" style="margin-left: auto">
+            <el-col :span="1.5">
+              <el-button
+                  type="primary"
+                  size="small"
+                  class="fhbtn"
+                  plain
+                  @click="handleReturn"
+                  @mousedown="(e) => e.preventDefault()"
+              >
+                <svg-icon style="width: 1em;height: 1em; margin-right: 3px;" :iconClass="'fhs'" /> 返回
+              </el-button>
+            </el-col>
+          </el-row>
         </div>
-        <el-row :gutter="20">
+        <el-row :gutter="3" style="margin-bottom: 3px;">
           <el-col :span="8">
             <div class="infotop-row border-top">
               <div class="infotop-row-lable">模型名称</div>
@@ -14,7 +30,6 @@
               </div>
             </div>
           </el-col>
-
           <el-col :span="8">
             <div class="infotop-row border-top">
               <div class="infotop-row-lable">支持语言</div>
@@ -23,7 +38,6 @@
               </div>
             </div>
           </el-col>
-
           <el-col :span="8">
             <div class="infotop-row border-top">
               <div class="infotop-row-lable">模型提供方</div>
@@ -32,11 +46,10 @@
               </div>
             </div>
           </el-col>
-
         </el-row>
 
-        <el-row :gutter="20">
-          <el-col :span="24">
+        <el-row>
+          <el-col :span="24" >
             <div class="infotop-row border-top">
               <div class="infotop-row-lable">描述</div>
               <div class="infotop-row-value">
@@ -55,7 +68,6 @@
       </el-tabs>
       <ModelTable :keyId=keyId />
     </div>
-
 
   </div>
 </template>
@@ -120,7 +132,36 @@ function tabChange() {
   keyId = activeName.value
 }
 
+function handleReturn() {
+  const path = route.path;
+  if (path.indexOf('/system/ai/myModel/detail') > -1) {
+    proxy.$router.push({
+      path: '/system/ai/myModel',
+    });
+  }else {
+    proxy.$router.push({
+      path: '/system/ai/modelMarket',
+    });
+  }
+
+}
+
 queryByPlatform(platform);
 queryInfoByPlatform(platform)
 
 </script>
+<style lang="scss" scoped>
+.fhbtn {
+  .svg-icon {
+    font-size: 12px;
+    margin-right: 3px;
+    vertical-align: middle;
+    margin-top: -3px;
+  }
+  &:hover {
+    .svg-icon {
+      filter: brightness(0) invert(1) !important;
+    }
+  }
+}
+</style>

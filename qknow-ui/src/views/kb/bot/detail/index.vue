@@ -65,8 +65,8 @@
   <div ref="appContainerRef" class="app-container workflow-editor">
     <div class="toolbar">
       <div class="toolbar-left">
-        <span class="toolbar-title"
-          >{{ flowName || "-" }}
+        <span class="toolbar-title">
+          <span class="title" style="">{{ flowName || "-" }}</span>
           <el-tag type="primary" v-if="workflowType !== null">
             {{
               (workflowType == 1 && "Chatflow") ||
@@ -1560,8 +1560,6 @@ function showCopyDialog() {
   title.value = "复制Bot";
   reset();
   form.value = { ...botDetail.value };
-  console.log(form.value);
-  console.log(botDetail.value);
   form.value.name = botDetail.value.name + "（副本）";
   open.value = true;
 }
@@ -5693,6 +5691,12 @@ function exportFlow() {
       font-size: 20px;
       font-weight: 600;
       color: #111827;
+      .title{
+        width: 500px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
       .el-tag {
         margin-left: 10px;
       }

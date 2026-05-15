@@ -1,14 +1,5 @@
 import request from '@/utils/request'
 
-// 获取平台下模型列表
-export function getModelList(keyId) {
-    return request({
-        url: '/ai/model/getModelList/' + keyId,
-        method: 'get',
-        timeout: 40 * 1000
-    })
-}
-
 // 更改模型是否启用
 export function changeModelEnable(data) {
     return request({
