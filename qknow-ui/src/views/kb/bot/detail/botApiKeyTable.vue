@@ -90,7 +90,8 @@
             v-loading="loading"
             :data="botApiKeyList"
             @sort-change="handleSortChange">
-    <el-table-column label="编号" align="center" width="55">
+    <el-table-column label="编号" prop="id" align="center" width="85" sortable="custom"
+                     :sort-orders="sortOrders">
       <template #default="scope">
         <span>{{ scope.row.id }}</span>
       </template>
@@ -111,10 +112,10 @@
         {{ scope.row.createBy || '-' }}
       </template>
     </el-table-column>
-    <el-table-column label="创建时间" align="center" prop="runtime" width="250" sortable="custom"
+    <el-table-column label="创建时间" align="center" prop="createTime" width="250" sortable="custom"
                      :sort-orders="sortOrders">
       <template #default="scope">
-        {{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}:{s}') }}
+        {{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}') }}
       </template>
     </el-table-column>
     <el-table-column label="操作" align="center" width="300" class-name="small-padding fixed-width">
