@@ -1,10 +1,13 @@
 <template>
-  <el-table stripe  
+  <el-table stripe
             v-loading="loading"
-            :data="modelList">
-    <el-table-column type="index" label="编号" align="center" prop="name" width="60">
+            :data="modelList"
+            @sort-change="handleSortChange"
+            :default-sort="defaultSort">
+    <el-table-column label="编号" align="center" prop="id" width="85" sortable="custom"
+                     :sort-orders="['descending', 'ascending']">
       <template #default="scope">
-        {{ scope.$index+1 || '-' }}
+        {{ scope.row.id || '-' }}
       </template>
     </el-table-column>
     <el-table-column label="模型名称" align="center" prop="name">
@@ -35,7 +38,7 @@
         <el-button link type="danger"
                    icon="Delete"
                    :disabled=true
-                   >删除
+        >删除
         </el-button>
       </template>
     </el-table-column>
@@ -46,14 +49,38 @@
       </div>
     </template>
   </el-table>
+
+  <pagination
+      v-show="total > 0"
+      :total="total"
+      v-model:page="queryParams.pageNum"
+      v-model:limit="queryParams.pageSize"
+      @pagination="showModelList"
+  />
 </template>
 
 <script setup>
-import {getModelList,changeModelEnable} from "@/api/ai/myModel/myModel";
+import {changeModelEnable, getModelPage} from "@/api/ai/myModel/myModel";
 
 const loading = ref(true);
 const data = reactive({
   modelList: [],
+  queryParams: {
+    pageNum: 1,
+    pageSize: 10,
+    workspaceId: null,
+    code: null,
+    name: null,
+    description: null,
+    createTime: null,
+    orderByColumn: "createTime",
+    isAsc: "desc",
+  },
+  rules: {
+    code: [{required: true, message: "标识不能为空", trigger: "blur"}],
+    name: [{required: true, message: "名称不能为空", trigger: "blur"}],
+    // description: [{ required: true, message: "描述不能为空", trigger: "blur" }],
+  },
 });
 const {proxy} = getCurrentInstance();
 const {
@@ -61,6 +88,10 @@ const {
 } = proxy.useDict('ai_model_tag');
 
 const {modelList} = toRefs(data);
+const total = ref(0);
+const {queryParams, form, rules} = toRefs(data);
+const keyId = ref(0);
+const defaultSort = ref({prop: "createTime", order: "desc"});
 
 const props = defineProps({
   keyId: {
@@ -72,10 +103,12 @@ const props = defineProps({
 /** 模型管理操作 */
 function showModelList(id) {
   loading.value = true;
-  getModelList(id).then(response => {
+  queryParams.value.keyId = keyId.value;
+  getModelPage(queryParams.value).then(response => {
     loading.value = false;
-    modelList.value = response.data;
-  }).catch(()=> {
+    modelList.value = response.data.list;
+    total.value = response.data.total;
+  }).catch(() => {
     loading.value = false;
   });
 }
@@ -89,7 +122,7 @@ function changeModel(isEnable, row) {
   let data = {
     "keyId": props.keyId,
     "name": row.name,
-    "status":isEnable
+    "status": isEnable
   }
 
   const text = isEnable === 0 ? "关闭" : "启用";
@@ -102,11 +135,19 @@ function changeModel(isEnable, row) {
   });
 }
 
+/** 排序触发事件 */
+function handleSortChange(column, prop, order) {
+  queryParams.value.orderByColumn = column.prop;
+  queryParams.value.isAsc = column.order;
+  showModelList();
+}
+
 watch(
     () => props.keyId,
     (val) => {
       if (val) {
-        showModelList(val);
+        keyId.value = val;
+        showModelList();
       }
     },
     {immediate: true}

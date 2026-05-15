@@ -178,15 +178,17 @@
           label="编号"
           align="center"
           prop="id"
-          width="55"
+          width="85"
+          sortable="custom"
+          :sort-orders="['descending', 'ascending']"
         />
         <el-table-column
           v-if="getColumnVisibility(1)"
           label="名称"
           align="left"
           prop="name"
-          show-overflow-tooltip
           width="250"
+          :show-overflow-tooltip="{ effect: 'light' }"
         >
           <template #default="scope">
             {{ scope.row.name || "-" }}
@@ -197,7 +199,7 @@
           label="描述"
           align="left"
           prop="description"
-          show-overflow-tooltip
+          :show-overflow-tooltip="{ effect: 'light' }"
         >
           <template #default="scope">
             {{ scope.row.description || "-" }}
@@ -277,6 +279,7 @@
         <el-table-column
           label="操作"
           align="center"
+          v-if="getColumnVisibility(8)"
           class-name="small-padding fixed-width"
           fixed="right"
           width="240"
@@ -456,6 +459,7 @@ const columns = ref([
   { key: 5, label: "创建人", visible: true },
   { key: 6, label: "创建时间", visible: true },
   { key: 7, label: "最后更新时间", visible: true },
+  { key: 8, label: "操作", visible: true },
 ]);
 
 const getColumnVisibility = (key) => {
@@ -520,7 +524,6 @@ const route = useRoute()
 
 watch(()=> route.fullPath,
     ()=>{
-  console.log(route.query.botType)
 // 获取 id
   botType.value = Number(route.query.botType)
   if (botType.value === 0){
@@ -530,7 +533,6 @@ watch(()=> route.fullPath,
   }else {
     botTypeName.value = 'agent'
   }
-  console.log(botType.value)
 },{ immediate: true })
 /** 查询bot 管理列表 */
 function getList() {
@@ -602,7 +604,7 @@ function handleSortChange(column, prop, order) {
 function handleAdd() {
   reset();
   open.value = true;
-  title.value = "新增";
+  title.value = "新增"+botTypeName.value;
 }
 
 /** 修改按钮操作 */
@@ -613,7 +615,7 @@ function handleUpdate(row) {
     form.value = response.data;
     form.value.type = String(form.value.type);
     open.value = true;
-    title.value = "修改";
+    title.value = "修改"+botTypeName.value;
   });
 }
 

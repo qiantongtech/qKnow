@@ -110,11 +110,14 @@
       label="编号"
       align="center"
       prop="id"
+      width="85"
+      sortable="custom"
+      :sort-orders="['descending', 'ascending']"
     />
     <el-table-column
       v-if="getColumnVisibility(3)"
       label="唯一标识"
-      align="center"
+      align="left"
       prop="code"
       min-width="120"
     >
@@ -125,7 +128,7 @@
     <el-table-column
       v-if="getColumnVisibility(4)"
       label="名称"
-      align="center"
+      align="left"
       prop="name"
       min-width="150"
     >
@@ -177,7 +180,7 @@
       :sort-orders="['descending', 'ascending']"
     >
       <template #default="scope">
-        <span>{{ parseTime(scope.row.createTime, "{y}-{m}-{d}") }}</span>
+        <span>{{ parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}") }}</span>
       </template>
     </el-table-column>
     <el-table-column
@@ -186,6 +189,7 @@
       class-name="small-padding fixed-width"
       fixed="right"
       width="240"
+      v-if="getColumnVisibility(16)"
     >
       <template #default="scope">
         <el-button
@@ -313,12 +317,14 @@ const props = defineProps({
 
 // 列显隐信息
 const columns = ref([
+  { key: 0, label: "编号", visible: true },
   { key: 3, label: "唯一标识", visible: true },
   { key: 4, label: "名称", visible: true },
   { key: 5, label: "描述", visible: true },
   { key: 14, label: "备注", visible: true },
   { key: 8, label: "创建人", visible: true },
   { key: 10, label: "创建时间", visible: true },
+  { key: 16, label: "操作", visible: true },
 ]);
 
 const getColumnVisibility = (key) => {

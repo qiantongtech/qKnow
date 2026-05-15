@@ -109,7 +109,10 @@
      </div>
      <el-table stripe   v-loading="loading" :data="toolList" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
        <el-table-column type="selection" width="55" align="center" />
-       <el-table-column v-if="getColumnVisibility(0)" label="编号" align="center" prop="id" width="55"  />
+       <el-table-column v-if="getColumnVisibility(0)" label="编号" align="center" prop="id"
+                        width="85"
+                        sortable="custom"
+                        :sort-orders="['descending', 'ascending']"/>
        <el-table-column v-if="getColumnVisibility(2)" label="名称" align="left" prop="name">
          <template #default="scope">
            {{ scope.row.name || '-' }}
@@ -157,7 +160,7 @@
            <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}') }}</span>
          </template>
        </el-table-column>
-       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="240">
+       <el-table-column label="操作" v-if="getColumnVisibility(16)" align="center" class-name="small-padding fixed-width" fixed="right" width="240">
          <template #default="scope">
            <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
                       v-hasPermi="['kb:tool:tool:edit']">修改</el-button>
@@ -284,6 +287,7 @@
             { key: 15, label: "备注", visible: true },
             { key: 9, label: "创建人", visible: true },
             { key: 11, label: "创建时间", visible: true },
+            { key: 16, label: "操作", visible: true },
   ]);
 
   const getColumnVisibility = (key) => {

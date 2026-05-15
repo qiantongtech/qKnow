@@ -64,15 +64,14 @@
 
 package tech.qiantong.qknow.module.ai.service.modelMarket;
 
-import java.util.List;
-
 import com.alibaba.cloud.ai.dashscope.rerank.DashScopeRerankModel;
 import com.alibaba.fastjson2.JSONArray;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.embedding.EmbeddingModel;
+import tech.qiantong.qknow.common.core.page.PageResult;
+import tech.qiantong.qknow.module.ai.controller.admin.modelMarket.vo.AiModelPageReqVO;
 import tech.qiantong.qknow.module.ai.controller.admin.modelMarket.vo.AiModelSaveReqVO;
-import tech.qiantong.qknow.module.ai.controller.admin.modelMarket.vo.AiModelRespVO;
 import tech.qiantong.qknow.module.ai.dal.dataobject.modelMarket.AiModelDO;
 
 
@@ -99,14 +98,6 @@ public interface IAiModelService extends IService<AiModelDO> {
      * @param modelName 模型名称
      */
     int removeAiModel(Long keyId, String modelName);
-
-    /**
-     * 获取平台中所有模型列表
-     *
-     * @param keyId 密钥对象id
-     * @return
-     */
-    List<AiModelRespVO> queryModelList(Long keyId);
 
     /**
      * 更改模型的启用状态
@@ -149,4 +140,6 @@ public interface IAiModelService extends IService<AiModelDO> {
      * @return 重排序模型
      */
     DashScopeRerankModel getRerankModel(Long keyId, String modelName);
+
+    PageResult<AiModelDO> getModelPage(AiModelPageReqVO modelPage);
 }
