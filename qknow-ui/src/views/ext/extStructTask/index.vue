@@ -205,7 +205,7 @@
           v-if="getColumnVisibility(4)"
           label="更新频率"
           align="center"
-          width="80"
+          width="100"
           prop="updateFrequency"
         >
           <template #default="scope">
@@ -289,7 +289,7 @@
         <el-table-column
           v-if="getColumnVisibility(14)"
           label="创建时间"
-          align="left"
+          align="center"
           prop="createTime"
           width="140"
           sortable="custom"

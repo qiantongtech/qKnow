@@ -210,7 +210,7 @@
         <el-table-column
           v-if="getColumnVisibility(8)"
           label="创建时间"
-          align="left"
+          align="center"
           prop="createTime"
            sortable="custom"
           :sort-orders="['descending', 'ascending']"

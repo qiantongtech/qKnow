@@ -84,7 +84,7 @@
                 @selection-change="handleSelectionChange"
                 @sort-change="handleSortChange"
       >
-        <el-table-column v-if="getColumnVisibility(0)" label="ID" align="center" prop="id"/>
+        <el-table-column v-if="getColumnVisibility(0)" label="编号" align="center" prop="id"/>
         <el-table-column v-if="getColumnVisibility(3)" label="执行状态" align="center" prop="status">
           <template #default="scope">
             <div>
