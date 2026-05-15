@@ -318,7 +318,7 @@ const entranceList = [
   },
   {
     name: "应用中心",
-    path: "/app",
+    path: "/kac/overview",
     query: {},
     perm: [""],
     iconPath: getEntranceIcon("app.png"),
@@ -334,7 +334,7 @@ const entranceList = [
   },
   {
     name: "插件中心",
-    path: "/system/plugin",
+    path: "/plugin/plugin",
     query: {},
     perm: [""],
     iconPath: getEntranceIcon("plugin.png"),
