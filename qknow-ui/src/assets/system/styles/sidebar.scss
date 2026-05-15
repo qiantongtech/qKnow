@@ -95,9 +95,11 @@
 
       .sidebar-item{
         margin-bottom: 15px;
+        &>.el-sub-menu,
         &>a{
             padding: 0 15px;
         }
+        
 
         .el-sub-menu__title {
             &:hover{

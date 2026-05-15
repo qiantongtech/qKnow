@@ -85,6 +85,7 @@
             :icon-class="
               onlyOneChild.meta.icon || (item.meta && item.meta.icon)
             "
+            v-if="!props.isNest"
           />
           <template #title
             ><span
@@ -171,6 +172,11 @@ const getTitleStyle = (title) => {
     height: "19px !important",
   };
 };
+
+const demo = (e)=>{
+    console.log(e,props.isNest,111111);
+    return props.isNest ? 1 :2
+}
 
 function hasOneShowingChild(children = [], parent) {
   if (!children) {
