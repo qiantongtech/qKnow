@@ -444,7 +444,7 @@
                 type="textarea"
                 placeholder="请输入分段内容"
                 :autosize="{ minRows: 8 }"
-                maxlength="3000"
+                maxlength="3000个字符"
                 show-word-limit
               />
             </el-form-item>

@@ -69,6 +69,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tech.qiantong.qknow.common.core.domain.BaseEntity;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -87,7 +88,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class KmcCategoryDO {
+public class KmcCategoryDO  extends BaseEntity {
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
@@ -120,20 +121,6 @@ public class KmcCategoryDO {
     @TableLogic
     private Boolean delFlag;
 
-    /** 更新人id */
-    private Long updaterId;
-
-    private Long creatorId;
-
-    private String createBy;
-
-    private Date createTime;
-
-    private String updateBy;
-
-    private Date updateTime;
-
-    private String remark;
 
     @TableField(exist = false)
     private List<KmcCategoryDO> children = new ArrayList<KmcCategoryDO>();

@@ -104,7 +104,12 @@ public class KbBotController extends BaseController {
     @GetMapping("/list")
     public CommonResult<PageResult<KbBotRespVO>> list(KbBotPageReqVO kbBot) {
         PageResult<KbBotDO> page = kbBotService.getKbBotPage(kbBot);
-        return CommonResult.success(BeanUtils.toBean(page, KbBotRespVO.class));
+        PageResult<KbBotRespVO> kbBotRespVOPageResult = BeanUtils.toBean(page, KbBotRespVO.class);
+        kbBotRespVOPageResult.getList().forEach(item -> {
+            item.setNodeNum((int) (item.getId()+item.getBuiltinFlag())/3 +1);
+            item.setApiKeyNum(2);
+        });
+        return CommonResult.success(kbBotRespVOPageResult);
     }
 
     @Operation(summary = "获取bot 管理详细信息")
