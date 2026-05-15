@@ -34,12 +34,7 @@
   <div
     class="sidebar-logo-container"
     :class="{ collapse: collapse }"
-    :style="{
-      backgroundColor:
-        sideTheme === 'theme-dark'
-          ? variables.menuBackground
-          : variables.menuLightBackground,
-    }"
+    
   >
     <transition name="sidebarLogoFade">
       <router-link
@@ -158,9 +153,10 @@ const sideTheme = computed(() => settingsStore.sideTheme);
   width: 100%;
   height: 60px;
   line-height: 50px;
-  background: #2b2f3a;
+  background: transparent;
   text-align: center;
   overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);;
 
   & .sidebar-logo-link {
     height: 100%;

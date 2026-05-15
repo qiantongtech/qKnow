@@ -1168,10 +1168,19 @@ function clearNotification() {
   height: 60px;
   overflow: hidden;
   position: relative;
-  background: #fff;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   text-align: center;
   line-height: 60px;
+  background: url(@/assets/system/images/layout/navbar_bg.png) no-repeat center center;
+  background-size: cover;
+
+  ::v-deep(.el-menu) {
+    background-color:transparent;
+    padding-top: 0;
+    padding-bottom: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+  }
 
   .navbar-logo {
     float: left;

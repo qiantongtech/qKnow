@@ -331,12 +331,12 @@ defineExpose({
 .topmenu-container.el-menu--horizontal > .el-menu-item {
   font-size: 16px;
   float: left;
-  height: 40px !important;
-  line-height: 40px !important;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #333 !important;
-  padding: 0 15px !important;
-  margin: 0 10px !important;
-  border-radius: 5px;
+  padding: 0 23px !important;
 }
 
 /* sub-menu item */
@@ -354,16 +354,16 @@ defineExpose({
 .topmenu-container.el-menu--horizontal > .el-menu-item.is-active,
 .el-menu--horizontal > .el-sub-menu.is-active .el-submenu__title,
 .el-menu--horizontal > .el-sub-menu.is-active .el-sub-menu__title {
-  background: #{"var(--theme)"} !important;
-  color: #fff !important;
+  background: rgba(19,90,251,0.06) !important;
+  color: #{"var(--theme)"} !important;
 }
 
 /* 背景色隐藏 */
 .topmenu-container.el-menu--horizontal > .el-menu-item:not(.is-disabled):focus,
 .topmenu-container.el-menu--horizontal > .el-menu-item:not(.is-disabled):hover,
 .topmenu-container.el-menu--horizontal > .el-submenu .el-submenu__title:hover {
-  background: #{"var(--theme)"} !important;
-  color: #fff !important;
+  background: rgba(19,90,251,0.06) !important;
+  color: #{"var(--theme)"} !important;
 }
 
 /* 图标右间距 */

@@ -71,6 +71,7 @@
       >
         <sidebar-item
           :style="{ '--bgColor': theme }"
+          class="sidebar-item"
           v-for="(route, index) in sidebarRouters"
           :key="route.path + index"
           :item="route"
@@ -80,14 +81,23 @@
     </el-scrollbar>
 
     <div :class="['help', { collapse: isCollapse }]">
-        <div @click="handleHelp" class="help-btn">
-          <svg-icon class="img" icon-class="help" style="width: 12px !important; height: 12px !important; margin-right: 6px;" />
-          <span>帮助中心</span>
-        </div>
-        <div class="help-second">
-          <span @click="handleFAQ">FAQ</span>
-          <span class="line"></span>
-          <span @click="handleAbout">关于</span>
+        <div class="wrap">
+            <div class="help-head">
+                <div class="help-title">
+                    <svg-icon class="img" icon-class="help-title" />
+                    <span>帮助与支持</span>
+                </div>
+                <div class="help-desc">使用帮助、常见问题解答</div>
+            </div>
+            <div @click="handleHelp" class="help-btn">
+                <svg-icon class="img" icon-class="help" style="width: 12px !important; height: 12px !important; margin-right: 6px;"  />
+                <span>帮助中心</span>
+            </div>
+            <div class="help-second">
+                <span @click="handleFAQ">FAQ</span>
+                <span class="line"></span>
+                <span @click="handleAbout">关于</span>
+            </div>
         </div>
       </div>
   </div>
@@ -151,7 +161,7 @@ const handleHelp = () => {
 /* 子菜单颜色 */
 .theme-dark {
   ::v-deep .nest-menu li {
-    background-color: #0c2135 !important;
+    // background-color: #0c2135 !important;
   }
 }
 
@@ -168,15 +178,40 @@ const handleHelp = () => {
 }
 
 ::v-deep(.el-scrollbar) {
-    height: calc(100% - 146px) !important;
+    height: calc(100% - 220px) !important;
     background: transparent;
+    padding: 20px 0;
 }
+
+
 
 .help {
   height: 86px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 0 20px;
+
+  .wrap{
+    background: rgba(255,255,255,0.06);
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 12px;
+  }
+
+  .help-head{
+        margin-bottom: 20px;
+        color: #fff;
+        .svg-icon{
+            width: 17px;
+            margin-right: 10px !important;
+        }
+
+        .help-desc{
+            color: rgba(255,255,255,0.75);
+            font-size: 12px;
+        }
+    }
 
   .help-btn {
     cursor: pointer;
@@ -201,6 +236,15 @@ const handleHelp = () => {
       font-size: 12px;
       color: #ffffff;
     }
+  }
+
+  .help-title{
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 500;
+    font-size: 14px;
+    color: #FFFFFF;
+    line-height: 20px;
+    margin-bottom: 10px;
   }
 
   .help-second {
