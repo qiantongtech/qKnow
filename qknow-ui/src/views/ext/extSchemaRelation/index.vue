@@ -32,8 +32,9 @@
 
 <template>
   <div class="app-container" ref="app-container">
+    <GuideTip tip-id="kg/relation.list" />
     <div class="pagecont-top" v-show="showSearch">
-      <el-form class="btn-style" :model="queryParams" ref="queryRef" :inline="true" label-width="75px" v-show="showSearch" @submit.prevent>
+      <el-form class="btn-style" :model="queryParams" ref="queryRef" :inline="true" label-width="45px" v-show="showSearch" @submit.prevent>
         <el-form-item label="起点" prop="startSchemaId">
           <el-select v-model="queryParams.startSchemaId" placeholder="请选择" filterable style="width: 200px">
             <el-option
@@ -137,7 +138,7 @@
             {{ getLabelByValue(scope.row.startSchemaId) || '-' }}
           </template>
         </el-table-column>
-        <el-table-column v-if="getColumnVisibility(3)" label="关系" align="left" prop="relation">
+        <el-table-column v-if="getColumnVisibility(3)" label="关系" align="left" prop="relation" :show-overflow-tooltip="{ effect: 'light' }">
           <template #default="scope">
             {{ scope.row.relation || '-' }}
           </template>
@@ -152,22 +153,22 @@
             {{ scope.row.inverseFlag === 1 ? '是' : (scope.row.inverseFlag === 0 ? '否' : '-') }}
           </template>
         </el-table-column>
-<!--        <el-table-column v-if="getColumnVisibility(8)" label="创建人" align="center" prop="createBy">-->
-<!--          <template #default="scope">-->
-<!--            {{ scope.row.createBy || '-' }}-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-<!--        <el-table-column v-if="getColumnVisibility(10)" label="创建时间" align="center" prop="createTime" width="180" sortable="custom" :sort-orders="['descending', 'ascending']">-->
-<!--          <template #default="scope">-->
-<!--            <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-        <el-table-column v-if="getColumnVisibility(14)" label="备注" align="left" prop="remark">
+       <el-table-column v-if="getColumnVisibility(6)" label="创建人" align="center" prop="createBy">
+         <template #default="scope">
+           {{ scope.row.createBy || '-' }}
+         </template>
+       </el-table-column>
+       <el-table-column v-if="getColumnVisibility(7)" label="创建时间" align="left" prop="createTime" width="180" sortable="custom" :sort-orders="['descending', 'ascending']">
+         <template #default="scope">
+           <span>{{ parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}") }}</span>
+         </template>
+       </el-table-column>
+        <el-table-column v-if="getColumnVisibility(14)" label="备注" align="left" prop="remark" :show-overflow-tooltip="{ effect: 'light' }">
           <template #default="scope">
             {{ scope.row.remark || '-' }}
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="240">
+        <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="240" v-if="getColumnVisibility(15)">
           <template #default="scope">
             <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
                        v-hasPermi="['ext:extSchemaRelation:relation:edit']">修改</el-button>
@@ -211,9 +212,9 @@
 <!--              <el-input v-model="form.workspaceId" placeholder="请输入工作区id" />-->
 <!--            </el-form-item>-->
 <!--          </el-col>-->
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="起点" prop="startSchemaId">
-              <el-select v-model="form.startSchemaId" placeholder="请选择" filterable>
+              <el-select v-model="form.startSchemaId" placeholder="请选择起点" filterable>
                 <el-option
                     v-for="item in selectOptions"
                     :key="item.value"
@@ -225,16 +226,16 @@
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="关系" prop="relation">
               <el-input v-model="form.relation" placeholder="请输入关系" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="终点" prop="endSchemaId">
-              <el-select v-model="form.endSchemaId" placeholder="请选择" filterable>
+              <el-select v-model="form.endSchemaId" placeholder="请选择终点" filterable>
                 <el-option
                     v-for="item in selectOptions"
                     :key="item.value"
@@ -246,7 +247,7 @@
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="是否可逆" prop="inverseFlag">
               <el-radio-group v-model="form.inverseFlag">
                 <el-radio :label="1">是</el-radio>
@@ -258,7 +259,8 @@
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item label="备注" prop="remark">
-              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+              <el-input v-model="form.remark" type="textarea" placeholder="请输入备注"   maxlength="500"
+                show-word-limit />
             </el-form-item>
           </el-col>
         </el-row>
@@ -389,7 +391,10 @@ const columns = ref([
   { key: 3, label: "关系", visible: true },
   { key: 4, label: "终点", visible: true },
   { key: 5, label: "是否可逆", visible: true },
-  { key: 14, label: "备注", visible: true }
+  { key: 6, label: "创建人", visible: true },
+  { key: 7, label: "创建时间", visible: true },
+  { key: 14, label: "备注", visible: true },
+    { key: 15, label: "操作", visible: true }
 ]);
 
 const getColumnVisibility = (key) => {
@@ -546,7 +551,7 @@ function handleSortChange(column, prop, order) {
 function handleAdd() {
   reset();
   open.value = true;
-  title.value = "添加关系配置";
+  title.value = "新增关系配置";
 }
 
 /** 修改按钮操作 */

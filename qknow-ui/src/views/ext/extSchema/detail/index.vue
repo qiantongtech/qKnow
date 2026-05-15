@@ -488,6 +488,8 @@
                 v-model="form.remark"
                 type="textarea"
                 placeholder="请输入备注"
+                  maxlength="500"
+                show-word-limit
               />
             </el-form-item>
           </el-col>
@@ -906,7 +908,7 @@ function handleSortChange(column, prop, order) {
 function handleAdd() {
   reset();
   open.value = true;
-  title.value = "添加概念属性";
+  title.value = "新增概念属性";
 }
 
 /** 修改按钮操作 */

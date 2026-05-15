@@ -98,6 +98,7 @@
 .butgdlist {
     display: flex;
     flex-direction: column;
+   justify-content: center;
     gap: 8px;
     .el-button+.el-button {
         margin-left: 0;

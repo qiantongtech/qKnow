@@ -114,7 +114,8 @@
     <el-row :gutter="20">
       <el-col :span="24">
         <el-form-item label="备注" prop="remark">
-          <el-input type="textarea" v-model="formData.remark" :rows="2" />
+          <el-input type="textarea" v-model="formData.remark" :rows="2"   maxlength="500"
+                show-word-limit/>
         </el-form-item>
       </el-col>
     </el-row>

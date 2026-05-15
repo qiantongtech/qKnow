@@ -126,6 +126,19 @@
                   <i class="iconfont-mini icon-xinzeng mr5"></i>新增
                 </el-button>
               </el-col>
+              <el-col :span="1.5">
+                <el-button
+                  type="danger"
+                  plain
+                  :disabled="multiple"
+                  @click="handleDelete"
+                  icon="Delete"
+                  v-hasPermi="['kg:knowledge:document:remove']"
+                  @mousedown="(e) => e.preventDefault()"
+                >
+                  删除
+                </el-button>
+              </el-col>
             </el-row>
             <div class="justify-end top-right-btn">
               <right-toolbar
@@ -143,11 +156,20 @@
             :default-sort="defaultSort"
             @sort-change="handleSortChange"
           >
+            <el-table-column type="selection" width="55" align="center" />
+            <el-table-column
+              v-if="getColumnVisibility(1)"
+              label="编号"
+              align="center"
+              prop="id"
+              width="80"
+              sortable="custom"
+            />
             <el-table-column
               v-if="getColumnVisibility(4)"
               label="文件名称"
               prop="name"
-              width="300px"
+              width="220px"
               :show-overflow-tooltip="{ effect: 'light' }"
             >
               <template #default="scope">
@@ -159,11 +181,35 @@
               label="文件描述"
               align="left"
               prop="description"
-              width="350px"
+              width="240px"
               :show-overflow-tooltip="{ effect: 'light' }"
             >
               <template #default="scope">
                 {{ scope.row.description || "-" }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              v-if="getColumnVisibility(4)"
+              label="分类"
+              align="left"
+              prop="categoryName"
+              width="120px"
+              :show-overflow-tooltip="{ effect: 'light' }"
+            >
+              <template #default="scope">
+                {{ scope.row.categoryName || "-" }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              v-if="getColumnVisibility(6)"
+              label="备注"
+              align="left"
+              prop="remark"
+              width="280px"
+              :show-overflow-tooltip="{ effect: 'light' }"
+            >
+              <template #default="scope">
+                {{ scope.row.remark || "-" }}
               </template>
             </el-table-column>
             <el-table-column
@@ -181,13 +227,13 @@
               label="创建时间"
               align="center"
               prop="createTime"
-              width="160"
+              width="180"
               sortable="custom"
               :sort-orders="['descending', 'ascending']"
             >
               <template #default="scope">
                 <span>{{
-                  parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}:{s}")
+                  parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}")
                 }}</span>
               </template>
             </el-table-column>
@@ -196,17 +242,9 @@
               align="center"
               class-name="small-padding fixed-width"
               fixed="right"
-              width="320"
+              width="240"
             >
               <template #default="scope">
-                <el-button
-                  link
-                  type="primary"
-                  icon="Edit"
-                  @click="handleUpdate(scope.row)"
-                  v-hasPermi="['kg:knowledge:document:edit']"
-                  >修改</el-button
-                >
                 <el-button
                   v-track="{
                     type: 'preview',
@@ -231,14 +269,34 @@
                   @click="handleDownload(scope.row)"
                   >下载</el-button
                 >
-                <el-button
-                  link
-                  type="danger"
-                  icon="Delete"
-                  @click="handleDelete(scope.row)"
-                  v-hasPermi="['kg:knowledge:document:remove']"
-                  >删除</el-button
-                >
+                <el-popover placement="bottom" :width="150" trigger="click">
+                  <template #reference>
+                    <el-button type="primary" link @click.stop>
+                      <template #icon><el-icon :size="14"><ArrowDown /></el-icon></template>
+                      更多
+                    </el-button>
+                  </template>
+                  <div class="card-button-group">
+                    <el-button
+                      link
+                      type="primary"
+                      @click="handleUpdate(scope.row)"
+                      v-hasPermi="['kg:knowledge:document:edit']"
+                    >
+                      <template #icon><el-icon :size="14"><Edit /></el-icon></template>
+                      修改
+                    </el-button>
+                    <el-button
+                      link
+                      type="danger"
+                      @click="handleDelete(scope.row)"
+                      v-hasPermi="['kg:knowledge:document:remove']"
+                    >
+                      <template #icon><el-icon :size="14"><Delete /></el-icon></template>
+                      删除
+                    </el-button>
+                  </div>
+                </el-popover>
               </template>
             </el-table-column>
 
@@ -378,6 +436,7 @@ import {
 } from "@/api/kg/knowledge/document";
 import { ref } from "vue";
 import { ElMessage } from "element-plus";
+import { ArrowDown, Edit, Delete } from "@element-plus/icons-vue";
 import { filePreview } from "@/utils/kkFileView.js";
 import FileUpload from "@/components/FileUpload2/index.vue";
 
@@ -459,7 +518,13 @@ function getList() {
 /** 查询部门下拉树结构 */
 function getCategoryTree() {
   getFileTypes().then((response) => {
-    KcOptions.value = response.data;
+    KcOptions.value = [{
+      id: 0,
+      name: '知识分类',
+      children: response.data,
+      count: response.data.length,
+      totalCount: response.data.reduce((sum, item) => sum + item.totalCount, 0)
+    }];
   });
 }
 
@@ -624,6 +689,7 @@ function handleDelete(row) {
       return delDocument(_ids);
     })
     .then(() => {
+      getCategoryTree();
       getList();
       proxy.$modal.msgSuccess("删除成功");
     })
@@ -786,5 +852,30 @@ getCategoryTree();
 }
 .mr0 {
   margin-right: 0px !important;
+}
+.card-button-group {
+  display: flex;
+  flex-direction: column;
+  button {
+    margin-left: 0;
+  }
+}
+/* 表格单元格悬浮提示样式 - 多行显示 */
+::v-deep .el-table .cell.el-tooltip {
+  display: -webkit-box !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical !important;
+  white-space: normal;
+}
+
+::v-deep .el-popper.is-light {
+    box-shadow: 0px 2px 8px 1px rgba(0, 0, 0, 0.15);
+    max-width: 600px;
+    font-size: 14px;
+    padding: 16px;
+    line-height: 22px;
 }
 </style>

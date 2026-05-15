@@ -126,6 +126,15 @@
             >
               <i class="iconfont-mini icon-xinzeng mr5"></i>新增
             </el-button>
+             <el-button
+              type="danger"
+              plain
+              @click="handleDelete()"
+              :disabled="ids.length==0"
+              @mousedown="(e) => e.preventDefault()"
+            >
+              <i class="iconfont-mini icon-shanchu-huise mr5"></i>删除
+            </el-button>
           </el-col>
         </el-row>
         <div class="justify-end top-right-btn">
@@ -246,11 +255,11 @@
         <el-table-column
           v-if="getColumnVisibility(9)"
           label="发布时间"
-          align="center"
+          align="left"
           prop="publishTime"
           sortable="custom"
           :sort-orders="['descending', 'ascending']"
-          width="180"
+          width="160"
         >
           <template #default="scope">
             <span>{{
@@ -260,17 +269,7 @@
             }}</span>
           </template>
         </el-table-column>
-        <el-table-column
-          v-if="getColumnVisibility(18)"
-          label="备注"
-          align="center"
-          prop="remark"
-          show-overflow-tooltip
-        >
-          <template #default="scope">
-            {{ scope.row.remark || "-" }}
-          </template>
-        </el-table-column>
+  
         <el-table-column
           v-if="getColumnVisibility(12)"
           label="创建人"
@@ -284,9 +283,9 @@
         <el-table-column
           v-if="getColumnVisibility(14)"
           label="创建时间"
-          align="center"
+          align="left"
           prop="createTime"
-          width="180"
+          width="160"
           sortable="custom"
           :sort-orders="['descending', 'ascending']"
         >
@@ -296,9 +295,21 @@
             }}</span>
           </template>
         </el-table-column>
+      <el-table-column
+          v-if="getColumnVisibility(18)"
+          label="备注"
+          align="left"
+          prop="remark"
+         :show-overflow-tooltip="{ effect: 'light' }"
 
+        >
+          <template #default="scope">
+            {{ scope.row.remark || "-" }}
+          </template>
+        </el-table-column>
         <el-table-column
           label="操作"
+            v-if="getColumnVisibility(15)"
           align="center"
           class-name="small-padding fixed-width"
           fixed="right"
@@ -353,7 +364,7 @@
                     icon="Edit"
                     @click="routeTo(`/kg/ext/editStructTask`, scope.row)"
                     v-hasPermi="['ext:extStructTask:struct:edit']"
-                    >编辑
+                    >修改
                   </el-button>
                   <el-button
                     link
@@ -446,7 +457,7 @@ const taskVisible = ref(true);
 
 // 列显隐信息
 const columns = ref([
-  { key: 1, label: "ID", visible: true },
+  { key: 1, label: "编号", visible: true },
   { key: 2, label: "任务名称", visible: true },
   { key: 3, label: "更新类型", visible: true },
   { key: 4, label: "更新频率", visible: true },
@@ -461,6 +472,7 @@ const columns = ref([
   { key: 12, label: "创建人", visible: true },
   { key: 14, label: "创建时间", visible: true },
   { key: 18, label: "备注", visible: true },
+   { key: 15, label: "操作", visible: true },
 ]);
 
 const getColumnVisibility = (key) => {
@@ -476,6 +488,7 @@ const openDetail = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
 const ids = ref([]);
+const selectedRows = ref([]);
 const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
@@ -647,6 +660,7 @@ function resetQuery() {
 // 多选框选中数据
 function handleSelectionChange(selection) {
   ids.value = selection.map((item) => item.id);
+  selectedRows.value = selection;
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
@@ -744,16 +758,48 @@ const struckOk = (val) => {
 };
 
 /** 删除按钮操作 */
+function canDeleteTask(row) {
+  return ![1, 4].includes(Number(row.status));
+}
+
 function handleDelete(row) {
-  if (row.status == 1) {
-    proxy.$modal.msgWarning("任务执行中");
+  if (row) {
+    if (!canDeleteTask(row)) {
+      proxy.$modal.msgWarning(row.status == 4 ? "任务已在队列中" : "任务执行中");
+      return;
+    }
+
+    proxy.$modal
+      .confirm('是否确认删除任务名称为"' + row.name + '"的数据项？')
+      .then(function () {
+        return delExtStruct(row.id);
+      })
+      .then(() => {
+        getList();
+        proxy.$modal.msgSuccess("删除成功");
+      })
+      .catch(() => {});
     return;
   }
-  const _ids = row.id || ids.value;
+
+  const canDeleteRows = selectedRows.value.filter(canDeleteTask);
+  const canDeleteIds = canDeleteRows.map((item) => item.id);
+  const canDeleteCount = canDeleteRows.length;
+  const cannotDeleteCount = selectedRows.value.length - canDeleteCount;
+
+  if (!canDeleteCount) {
+    proxy.$modal.msgWarning("选中的任务为进行中或队列中，无法删除");
+    return;
+  }
+
+  const confirmText = cannotDeleteCount
+    ? `可删除${canDeleteCount}个，不可删除${cannotDeleteCount}个，是否删除可删部分？`
+    : `是否确认删除选中的${canDeleteCount}个任务？`;
+
   proxy.$modal
-    .confirm('是否确认删除任务名称为"' + row.name + '"的数据项？')
+    .confirm(confirmText)
     .then(function () {
-      return delExtStruct(_ids);
+      return delExtStruct(canDeleteIds);
     })
     .then(() => {
       getList();

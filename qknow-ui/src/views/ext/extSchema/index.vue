@@ -32,6 +32,7 @@
 
 <template>
   <div class="app-container" ref="app-container">
+    <GuideTip tip-id="kg/schema.list" />
     <div class="pagecont-top" v-show="showSearch">
       <el-form
         class="btn-style"
@@ -191,6 +192,7 @@
           </template>
         </el-table-column>
         <el-table-column
+        v-if="getColumnVisibility(9)"
           label="操作"
           align="center"
           class-name="small-padding fixed-width"
@@ -289,8 +291,8 @@
                 v-model="form.description"
                 type="textarea"
                 placeholder="请输入概念描述"
-                :min-height="192"
-                :maxlength="500"
+                :rows="4"
+                maxlength="256"
                 show-word-limit
               />
             </el-form-item>
@@ -443,6 +445,7 @@ const columns = ref([
   { key: 3, label: "概念描述", visible: true },
   { key: 6, label: "创建人", visible: true },
   { key: 8, label: "创建时间", visible: true },
+   { key: 9, label: "操作", visible: true },
   // { key: 12, label: "备注", visible: true }
 ]);
 
@@ -588,7 +591,7 @@ function handleAdd() {
   console.log("------------a-a-a-a-", form.value.color);
   reset();
   open.value = true;
-  title.value = "添加概念配置";
+  title.value = "新增概念配置";
 }
 
 /** 修改按钮操作 */
