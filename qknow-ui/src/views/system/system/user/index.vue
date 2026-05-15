@@ -34,62 +34,14 @@
   <div class="app-container" ref="app-container">
     <el-container style="90%">
       <!-- 左侧可调整的部分 -->
-      <el-aside
-          :style="{ width: `${leftWidth}px` }"
-          class="left-pane"
-      >
-        <div class="left-tree">
-          <div class="head-container">
-            <el-input
-                v-model="deptName"
-                placeholder="请输入部门名称"
-                clearable
-                prefix-icon="Search"
-                style="margin-bottom: 20px"
-            />
-          </div>
-          <div class="head-container">
-            <el-tree
-                :data="deptOptions"
-                :props="{ label: 'label', children: 'children' }"
-                :filter-node-method="filterNode"
-                ref="deptTreeRef"
-                node-key="id"
-                highlight-current
-                default-expand-all
-                @node-click="handleNodeClick"
-            >
-              <template #default="{ node,data }">
-                     <span class="custom-tree-node">
-                        <!-- 第一级 -->
-                        <el-icon class="colorwxz iconfont-mini icon-a-shuxingjiegouxianxing"
-                                 v-if="node.expanded && node.level === 1"><FolderOpened/></el-icon>
-                        <el-icon class="colorxz iconfont-mini icon-a-shuxingjiegouxianxing"
-                                 v-if="!node.expanded && node.level === 1"><Folder/></el-icon>
-                       <!-- 第二级 -->
-                        <el-icon class="iconfont-mini icon-a-shuxingjiegouxianxing colorwxz"
-                                 v-if="node.expanded &&node.childNodes.length && node.level == 2"><FolderOpened/></el-icon>
-                        <el-icon class="iconfont-mini icon-a-shuxingjiegouxianxing colorxz"
-                                 v-if="!node.expanded &&node.childNodes.length && node.level == 2"><Folder/></el-icon>
-                       <!-- 子级 -->
-                        <el-icon class="iconfont-mini icon-a-baogongxianxing colorwxz"
-                                 v-show="!node.isCurrent && node.level == 3"><Tickets/></el-icon>
-                        <el-icon class="iconfont-mini icon-a-baogongxianxing colorxz"
-                                 v-show="node.isCurrent && node.level == 3"><Tickets/></el-icon>
-
-                        <span class="treelable" @click="getNode(node)">{{ node.label }}</span>
-                     </span>
-              </template>
-            </el-tree>
-          </div>
-        </div>
-      </el-aside>
-      <!-- 拖拽条 -->
-      <div class="resize-bar" @mousedown="startResize">
-        <div class="resize-handle-sx">
-          <span class="zjsx"></span>
-        </div>
-      </div>
+      <DeptTree
+        :deptOptions="treeDeptOptions"
+        :leftWidth="leftWidth"
+        :placeholder="'请输入部门名称'"
+        :defaultExpand="true"
+        @node-click="handleNodeClick"
+        ref="deptTreeRef"
+      />
 
       <!-- 右侧部分 -->
       <el-main>
@@ -467,6 +419,7 @@
 <script setup name="User">
 import {getToken} from "@/utils/auth.js";
 import Cookies from "js-cookie";
+import DeptTree from "@/components/DeptTree";
 import {
   changeUserStatus,
   listUser,
@@ -482,6 +435,7 @@ const router = useRouter();
 const {proxy} = getCurrentInstance();
 const {sys_normal_disable, sys_user_sex} = proxy.useDict("sys_normal_disable", "sys_user_sex");
 
+const deptTreeRef = ref(null);
 const userList = ref([]);
 const open = ref(false);
 const loading = ref(true);
@@ -492,41 +446,12 @@ const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
 const dateRange = ref([]);
-const deptName = ref("");
-const deptOptions = ref(undefined);
+const deptOptions = ref(undefined); // 用于表单的 el-tree-select
+const treeDeptOptions = ref(undefined); // 用于 DeptTree 组件
 const initPassword = ref(undefined);
 const postOptions = ref([]);
 const roleOptions = ref([]);
-
-const leftWidth = ref(300);  // 初始左侧宽度
-const isResizing = ref(false); // 判断是否正在拖拽
-let startX = 0;  // 鼠标按下时的初始位置
-
-const startResize = (event) => {
-  isResizing.value = true;
-  startX = event.clientX;
-  // 使用 requestAnimationFrame 减少重绘频率
-  document.addEventListener('mousemove', updateResize);
-  document.addEventListener('mouseup', stopResize);
-};
-
-const updateResize = (event) => {
-  if (isResizing.value) {
-    const delta = event.clientX - startX; // 计算鼠标移动距离
-    leftWidth.value += delta; // 修改左侧宽度
-    startX = event.clientX; // 更新起始位置
-    // 使用 requestAnimationFrame 来减少页面重绘频率
-    requestAnimationFrame(() => {
-
-    });
-  }
-};
-
-const stopResize = () => {
-  isResizing.value = false;
-  document.removeEventListener('mousemove', updateResize);
-  document.removeEventListener('mouseup', stopResize);
-};
+const leftWidth = ref(300);
 
 /*** 用户导入参数 */
 const upload = reactive({
@@ -616,21 +541,21 @@ const data = reactive({
 
 const {queryParams, form, rules} = toRefs(data);
 
-/** 通过条件过滤节点  */
-const filterNode = (value, data) => {
-  if (!value) return true;
-  return data.label.indexOf(value) !== -1;
-};
-
-/** 根据名称筛选部门树 */
-watch(deptName, val => {
-  proxy.$refs["deptTreeRef"].filter(val);
-});
-
 /** 查询部门下拉树结构 */
 function getDeptTree() {
   deptTreeSelect().then(response => {
+    // 保存原始数据用于表单的 el-tree-select（使用 label 字段）
     deptOptions.value = response.data;
+    
+    // 将 label 字段转换为 name 字段，适配 DeptTree 组件
+    const transformData = (items) => {
+      return items.map(item => ({
+        ...item,
+        name: item.label,
+        children: item.children ? transformData(item.children) : []
+      }));
+    };
+    treeDeptOptions.value = transformData(response.data);
   });
 };
 
@@ -644,30 +569,11 @@ function getList() {
   });
 };
 
-// // 自定义渲染内容的函数
-// const renderContent = (h, { node }) => {
-//    console.log(node.level,node.label,"===========node.level")
-//   // 判断节点类型，选择不同的图标
-// //   const icon = node.level === 1 ? 'el-icon-folder' : 'el-icon-document';
-// //   return (
-// //     <span>
-// //     <i class={icon}></i>
-// //       {node.label}
-// //     </span>
-// //   );
-// };
-
 /** 节点单击事件 */
 function handleNodeClick(data) {
   queryParams.value.deptId = data.id;
   handleQuery();
 };
-
-
-function getNode(node) {
-  console.log(node, "============node")
-};
-
 
 /** 搜索按钮操作 */
 function handleQuery() {
@@ -680,7 +586,9 @@ function resetQuery() {
   dateRange.value = [];
   proxy.resetForm("queryRef");
   queryParams.value.deptId = undefined;
-  proxy.$refs.deptTreeRef.setCurrentKey(null);
+  if(deptTreeRef.value){
+    deptTreeRef.value?.resetTree();
+  }
   handleQuery();
 };
 
@@ -910,80 +818,12 @@ getList();
   }
 }
 
-
-.left-pane {
-  background-color: #ffffff;
-  overflow: hidden;
-  transition: width 0s; /* 可以根据需要调整过渡时间 */
-}
-
-.resize-bar {
-  cursor: ew-resize;
-  background-color: #f0f2f5;
-  height: 86vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.resize-handle-sx {
-  width: 15px;
-  text-align: center;
-  //   cursor:pointer
-}
-
-.zjsx {
-  display: inline-block;
-  width: 5px;
-  height: 50px;
-  border-left: 1px solid #ccc;
-  border-right: 1px solid #ccc;
-}
-
 .el-main {
   padding: 2px 0px;
-  // box-shadow: 1px 1px 3px rgba(0, 0, 0, .2);
-}
-
-.el-aside {
-  padding: 2px 0px;
-  margin-bottom: 0px;
-  background-color: #f0f2f5;
-}
-
-.custom-tree-node {
-  display: flex;
-  align-items: center;
-}
-
-.treelable {
-  margin-left: 5px;
-}
-
-.zjiconimg {
-  font-size: 12px;
-}
-
-.colorxz {
-  color: var(--el-color-primary);
-  font-size: 16px;
-}
-
-.colorwxz {
-  color: var(--el-color-primary-light-6);
-  font-size: 16px;
-}
-
-.iconimg {
-  font-size: 15px;
-
 }
 
 //上传附件样式调整
 :deep {
-  // .el-upload-list{
-  //    display: flex;
-  // }
   .el-upload-list__item {
     width: 100%;
     height: 25px;

@@ -440,6 +440,7 @@ const xljtcont = ref("");
 function getxljtcont() {
   let xljtlist = [
     { value: "从知识图谱到智能应用，构建企业AI大脑。" },
+    { value: "重塑企业知识力，构建 AI 落地新范式。" },
     // { value: "数据是新时代的金矿，用心挖掘就能发现无尽的价值。" },
     // { value: "AI赋能，让知识管理更智能，让工作效率倍增。" },
     // { value: "构建知识图谱，连接万物智慧，让信息不再孤岛。" },
@@ -885,7 +886,7 @@ const module9 = ref([
     name: "《2030年知识经济预测模型》",
     status: "1",
     publishStatus: "1",
-    publishBy: "千知",
+    publishBy: "小桐",
     createTime: "2025-05-01 11:23",
   },
   {
@@ -893,7 +894,7 @@ const module9 = ref([
     name: "《金融知识图谱构建与风险预警白皮书》",
     status: "2",
     publishStatus: "1",
-    publishBy: "千知",
+    publishBy: "小桐",
     createTime: "2025-05-01 11:23",
   },
   {
@@ -901,7 +902,7 @@ const module9 = ref([
     name: "《多模态知识融合算法白皮书》",
     status: "1",
     publishStatus: "1",
-    publishBy: "千知",
+    publishBy: "小桐",
     createTime: "2025-05-01 11:23",
   },
   {
@@ -909,7 +910,7 @@ const module9 = ref([
     name: "《智慧城市知识管理解决方案》",
     status: "2",
     publishStatus: "0",
-    publishBy: "千知",
+    publishBy: "小桐",
     createTime: "2025-05-01 11:23",
   },
   {
@@ -917,7 +918,7 @@ const module9 = ref([
     name: "《智能教育平台知识点分类体系》",
     status: "1",
     publishStatus: "1",
-    publishBy: "千知",
+    publishBy: "小桐",
     createTime: "2025-05-01 11:23",
   },
 ]);
