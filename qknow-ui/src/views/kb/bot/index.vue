@@ -66,59 +66,59 @@
   <div class="app-container" ref="app-container">
     <div class="pagecont-top" v-show="showSearch">
       <el-form
-        class="btn-style"
-        :model="queryParams"
-        ref="queryRef"
-        :inline="true"
-        v-show="showSearch"
-        @submit.prevent
+          class="btn-style"
+          :model="queryParams"
+          ref="queryRef"
+          :inline="true"
+          v-show="showSearch"
+          @submit.prevent
       >
         <el-form-item label="名称" prop="name">
           <el-input
-            class="el-form-input-width"
-            v-model="queryParams.name"
-            placeholder="请输入名称"
-            clearable
-            @keyup.enter="handleQuery"
+              class="el-form-input-width"
+              v-model="queryParams.name"
+              placeholder="请输入名称"
+              clearable
+              @keyup.enter="handleQuery"
           />
         </el-form-item>
-<!--        <el-form-item label="类型" prop="type">-->
-<!--          <el-select-->
-<!--            v-model="queryParams.type"-->
-<!--            placeholder="请选择类型"-->
-<!--            clearable-->
-<!--            class="el-form-input-width"-->
-<!--          >-->
-<!--            <el-option-->
-<!--              v-for="dict in kg_bot_type"-->
-<!--              :key="dict.value"-->
-<!--              :label="dict.label"-->
-<!--              :value="dict.value"-->
-<!--            />-->
-<!--          </el-select>-->
-<!--        </el-form-item>-->
+        <!--        <el-form-item label="类型" prop="type">-->
+        <!--          <el-select-->
+        <!--            v-model="queryParams.type"-->
+        <!--            placeholder="请选择类型"-->
+        <!--            clearable-->
+        <!--            class="el-form-input-width"-->
+        <!--          >-->
+        <!--            <el-option-->
+        <!--              v-for="dict in kg_bot_type"-->
+        <!--              :key="dict.value"-->
+        <!--              :label="dict.label"-->
+        <!--              :value="dict.value"-->
+        <!--            />-->
+        <!--          </el-select>-->
+        <!--        </el-form-item>-->
         <el-form-item label="是否内置" prop="builtinFlag">
           <el-select
-            v-model="queryParams.builtinFlag"
-            placeholder="请选择是否内置"
-            clearable
-            class="el-form-input-width"
+              v-model="queryParams.builtinFlag"
+              placeholder="请选择是否内置"
+              clearable
+              class="el-form-input-width"
           >
             <el-option
-              v-for="dict in sys_is_or_not"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
+                v-for="dict in sys_is_or_not"
+                :key="dict.value"
+                :label="dict.label"
+                :value="dict.value"
             />
           </el-select>
         </el-form-item>
 
         <el-form-item>
           <el-button
-            plain
-            type="primary"
-            @click="handleQuery"
-            @mousedown="(e) => e.preventDefault()"
+              plain
+              type="primary"
+              @click="handleQuery"
+              @mousedown="(e) => e.preventDefault()"
           >
             <i class="iconfont-mini icon-a-zu22377 mr5"></i>查询
           </el-button>
@@ -134,23 +134,23 @@
         <el-row :gutter="15" class="btn-style">
           <el-col :span="1.5">
             <el-button
-              type="primary"
-              plain
-              @click="handleAdd"
-              v-hasPermi="['kb:bot:bot:add']"
-              @mousedown="(e) => e.preventDefault()"
+                type="primary"
+                plain
+                @click="handleAdd"
+                v-hasPermi="['kb:bot:bot:add']"
+                @mousedown="(e) => e.preventDefault()"
             >
               <i class="iconfont-mini icon-xinzeng mr5"></i>新增
             </el-button>
           </el-col>
           <el-col :span="1.5">
             <el-button
-              type="danger"
-              plain
-              :disabled="multiple"
-              @click="handleDelete"
-              v-hasPermi="['kb:bot:bot:remove']"
-              @mousedown="(e) => e.preventDefault()"
+                type="danger"
+                plain
+                :disabled="multiple"
+                @click="handleDelete"
+                v-hasPermi="['kb:bot:bot:remove']"
+                @mousedown="(e) => e.preventDefault()"
             >
               <i class="iconfont-mini icon-shanchu-huise mr5"></i>删除
             </el-button>
@@ -158,131 +158,131 @@
         </el-row>
         <div class="justify-end top-right-btn">
           <right-toolbar
-            v-model:showSearch="showSearch"
-            @queryTable="getList"
-            :columns="columns"
+              v-model:showSearch="showSearch"
+              @queryTable="getList"
+              :columns="columns"
           ></right-toolbar>
         </div>
       </div>
       <el-table
-        stripe
-        v-loading="loading"
-        :data="botList"
-        :default-sort="defaultSort"
-        @sort-change="handleSortChange"
-        @selection-change="handleSelectionChange"
+          stripe
+          v-loading="loading"
+          :data="botList"
+          :default-sort="defaultSort"
+          @sort-change="handleSortChange"
+          @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="55" align="center" />
+        <el-table-column type="selection" width="55" align="center"/>
         <el-table-column
-          v-if="getColumnVisibility(0)"
-          label="编号"
-          align="center"
-          prop="id"
-          width="85"
-          sortable="custom"
-          :sort-orders="['descending', 'ascending']"
+            v-if="getColumnVisibility(0)"
+            label="编号"
+            align="center"
+            prop="id"
+            width="85"
+            sortable="custom"
+            :sort-orders="['descending', 'ascending']"
         />
         <el-table-column
-          v-if="getColumnVisibility(1)"
-          label="名称"
-          align="left"
-          prop="name"
-          width="250"
-          :show-overflow-tooltip="{ effect: 'light' }"
+            v-if="getColumnVisibility(1)"
+            label="名称"
+            align="left"
+            prop="name"
+            width="250"
+            :show-overflow-tooltip="{ effect: 'light' }"
         >
           <template #default="scope">
             {{ scope.row.name || "-" }}
           </template>
         </el-table-column>
         <el-table-column
-          v-if="getColumnVisibility(2)"
-          label="描述"
-          align="left"
-          prop="description"
-          :show-overflow-tooltip="{ effect: 'light' }"
+            v-if="getColumnVisibility(2)"
+            label="描述"
+            align="left"
+            prop="description"
+            :show-overflow-tooltip="{ effect: 'light' }"
         >
           <template #default="scope">
             {{ scope.row.description || "-" }}
           </template>
         </el-table-column>
         <el-table-column
-          v-if="getColumnVisibility(3)"
-          label="类型"
-          align="center"
-          prop="type"
-          width="100"
+            v-if="getColumnVisibility(3)"
+            label="类型"
+            align="center"
+            prop="type"
+            width="100"
         >
           <template #default="scope">
             <div>
-              <dict-tag :options="kg_bot_type" :value="scope.row.type" />
+              <dict-tag :options="kg_bot_type" :value="scope.row.type"/>
             </div>
           </template>
         </el-table-column>
         <el-table-column
-          v-if="getColumnVisibility(4)"
-          label="是否内置"
-          align="center"
-          prop="type"
-          width="80"
+            v-if="getColumnVisibility(4)"
+            label="是否内置"
+            align="center"
+            prop="type"
+            width="80"
         >
           <template #default="scope">
             <div>
               <dict-tag
-                :options="sys_is_or_not"
-                :value="scope.row.builtinFlag"
+                  :options="sys_is_or_not"
+                  :value="scope.row.builtinFlag"
               />
             </div>
           </template>
         </el-table-column>
 
         <el-table-column
-          v-if="getColumnVisibility(5)"
-          label="创建人"
-          align="center"
-          prop="createBy"
-          width="100"
+            v-if="getColumnVisibility(5)"
+            label="创建人"
+            align="center"
+            prop="createBy"
+            width="100"
         >
           <template #default="scope">
             {{ scope.row.createBy || "-" }}
           </template>
         </el-table-column>
         <el-table-column
-          v-if="getColumnVisibility(6)"
-          label="创建时间"
-          align="center"
-          prop="createTime"
-          width="180"
-          sortable="custom"
-          :sort-orders="['descending', 'ascending']"
+            v-if="getColumnVisibility(6)"
+            label="创建时间"
+            align="center"
+            prop="createTime"
+            width="180"
+            sortable="custom"
+            :sort-orders="['descending', 'ascending']"
         >
           <template #default="scope">
             <span>{{
-              parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}")
-            }}</span>
+                parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}")
+              }}</span>
           </template>
         </el-table-column>
         <el-table-column
-          v-if="getColumnVisibility(7)"
-          label="最后更新时间"
-          align="center"
-          prop="updateTime"
-          width="180"
-          sortable="custom"
-          :sort-orders="['descending', 'ascending']"
+            v-if="getColumnVisibility(7)"
+            label="最后更新时间"
+            align="center"
+            prop="updateTime"
+            width="180"
+            sortable="custom"
+            :sort-orders="['descending', 'ascending']"
         >
           <template #default="scope">
             <span>{{
-              parseTime(scope.row.updateTime, "{y}-{m}-{d} {h}:{i}")
-            }}</span>
+                parseTime(scope.row.updateTime, "{y}-{m}-{d} {h}:{i}")
+              }}</span>
           </template>
         </el-table-column>
         <el-table-column
-          label="操作"
-          align="center"
-          v-if="getColumnVisibility(8)"
-          class-name="small-padding fixed-width"
-          fixed="right"
-          width="240"
+            label="操作"
+            align="center"
+            v-if="getColumnVisibility(8)"
+            class-name="small-padding fixed-width"
+            fixed="right"
+            width="240"
         >
           <template #default="scope">
             <el-button
@@ -294,59 +294,59 @@
             >构建
             </el-button>
             <el-button
-              link
-              type="primary"
-              icon="Edit"
-              @click="handleUpdate(scope.row)"
-              :disabled="scope.row.builtinFlag === 1"
-              v-hasPermi="['kb:bot:bot:edit']"
-              >修改
+                link
+                type="primary"
+                icon="Edit"
+                @click="handleUpdate(scope.row)"
+                :disabled="scope.row.builtinFlag === 1"
+                v-hasPermi="['kb:bot:bot:edit']"
+            >修改
             </el-button>
             <el-button
-              link
-              type="danger"
-              icon="Delete"
-              @click="handleDelete(scope.row)"
-              :disabled="scope.row.builtinFlag === 1"
-              v-hasPermi="['kb:bot:bot:remove']"
-              >删除
+                link
+                type="danger"
+                icon="Delete"
+                @click="handleDelete(scope.row)"
+                :disabled="scope.row.builtinFlag === 1"
+                v-hasPermi="['kb:bot:bot:remove']"
+            >删除
             </el-button>
-<!--            <el-button-->
-<!--              link-->
-<!--              type="primary"-->
-<!--              icon="view"-->
-<!--              @click="handleDetail(scope.row)"-->
-<!--              v-hasPermi="['kb:bot:bot:query']"-->
-<!--              >详情-->
-<!--            </el-button>-->
+            <!--            <el-button-->
+            <!--              link-->
+            <!--              type="primary"-->
+            <!--              icon="view"-->
+            <!--              @click="handleDetail(scope.row)"-->
+            <!--              v-hasPermi="['kb:bot:bot:query']"-->
+            <!--              >详情-->
+            <!--            </el-button>-->
 
           </template>
         </el-table-column>
 
         <template #empty>
           <div class="emptyBg">
-            <img src="@/assets/system/images/no_data/noData.png" alt="" />
+            <img src="@/assets/system/images/no_data/noData.png" alt=""/>
             <p>暂无记录</p>
           </div>
         </template>
       </el-table>
 
       <pagination
-        v-show="total >= 0"
-        :total="total"
-        v-model:page="queryParams.pageNum"
-        v-model:limit="queryParams.pageSize"
-        @pagination="getList"
+          v-show="total >= 0"
+          :total="total"
+          v-model:page="queryParams.pageNum"
+          v-model:limit="queryParams.pageSize"
+          @pagination="getList"
       />
     </div>
 
     <!-- 添加或修改bot 管理对话框 -->
     <el-dialog
-      :title="title"
-      v-model="open"
-      width="800px"
-      :append-to="$refs['app-container']"
-      draggable
+        :title="title"
+        v-model="open"
+        width="800px"
+        :append-to="$refs['app-container']"
+        draggable
     >
       <template #header="{ close, titleId, titleClass }">
         <span role="heading" aria-level="2" class="el-dialog__title">
@@ -354,58 +354,58 @@
         </span>
       </template>
       <el-form
-        ref="botRef"
-        :model="form"
-        :rules="rules"
-        label-width="80px"
-        @submit.prevent
+          ref="botRef"
+          :model="form"
+          :rules="rules"
+          label-width="80px"
+          @submit.prevent
       >
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item label="名称" prop="name">
-              <el-input v-model="form.name" placeholder="请输入名称" />
+              <el-input v-model="form.name" placeholder="请输入名称"/>
             </el-form-item>
           </el-col>
         </el-row>
-<!--        <el-row :gutter="20">-->
-<!--          <el-col :span="24">-->
-<!--            <el-form-item label="类型" prop="type">-->
-<!--              <div class="default-wrap">-->
-<!--                <el-select-->
-<!--                  v-model="form.type"-->
-<!--                  placeholder="请选择类型"-->
-<!--                  class="el-form-input-width"-->
-<!--                  :disabled="title.includes('修改')"-->
-<!--                  style="width: 100%"-->
-<!--                >-->
-<!--                  <el-option-->
-<!--                    v-for="dict in kg_bot_type"-->
-<!--                    :key="dict.value"-->
-<!--                    :label="dict.label"-->
-<!--                    :value="dict.value"-->
-<!--                  />-->
-<!--                </el-select>-->
-<!--                <div class="tip-content">-->
-<!--                  <el-icon>-->
-<!--                    <InfoFilled />-->
-<!--                  </el-icon>-->
-<!--                  <span>-->
-<!--                    工作流：面向单轮自动化任务的编排工作流；Chatflow：支持记忆的复杂多轮对话工作流；Agent：具备推理与自主工具调用的智能助手-->
-<!--                  </span>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </el-form-item>-->
-<!--          </el-col>-->
-<!--        </el-row>-->
+        <!--        <el-row :gutter="20">-->
+        <!--          <el-col :span="24">-->
+        <!--            <el-form-item label="类型" prop="type">-->
+        <!--              <div class="default-wrap">-->
+        <!--                <el-select-->
+        <!--                  v-model="form.type"-->
+        <!--                  placeholder="请选择类型"-->
+        <!--                  class="el-form-input-width"-->
+        <!--                  :disabled="title.includes('修改')"-->
+        <!--                  style="width: 100%"-->
+        <!--                >-->
+        <!--                  <el-option-->
+        <!--                    v-for="dict in kg_bot_type"-->
+        <!--                    :key="dict.value"-->
+        <!--                    :label="dict.label"-->
+        <!--                    :value="dict.value"-->
+        <!--                  />-->
+        <!--                </el-select>-->
+        <!--                <div class="tip-content">-->
+        <!--                  <el-icon>-->
+        <!--                    <InfoFilled />-->
+        <!--                  </el-icon>-->
+        <!--                  <span>-->
+        <!--                    工作流：面向单轮自动化任务的编排工作流；Chatflow：支持记忆的复杂多轮对话工作流；Agent：具备推理与自主工具调用的智能助手-->
+        <!--                  </span>-->
+        <!--                </div>-->
+        <!--              </div>-->
+        <!--            </el-form-item>-->
+        <!--          </el-col>-->
+        <!--        </el-row>-->
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item label="描述" prop="description">
               <el-input
-                v-model="form.description"
-                type="textarea"
-                placeholder="请输入描述"
-                maxlength="256"
-                show-word-limit
+                  v-model="form.description"
+                  type="textarea"
+                  placeholder="请输入描述"
+                  maxlength="256"
+                  show-word-limit
               />
             </el-form-item>
           </el-col>
@@ -414,11 +414,11 @@
           <el-col :span="24">
             <el-form-item label="备注" prop="remark">
               <el-input
-                v-model="form.remark"
-                type="textarea"
-                placeholder="请输入备注"
-                maxlength="512"
-                show-word-limit
+                  v-model="form.remark"
+                  type="textarea"
+                  placeholder="请输入备注"
+                  maxlength="512"
+                  show-word-limit
               />
             </el-form-item>
           </el-col>
@@ -428,7 +428,7 @@
         <div class="dialog-footer">
           <el-button size="mini" @click="cancel">取 消</el-button>
           <el-button type="primary" size="mini" @click="submitForm"
-            >确 定
+          >确 定
           </el-button>
         </div>
       </template>
@@ -437,29 +437,29 @@
 </template>
 
 <script setup name="Bot">
-import { listBot, getBot, delBot, addBot, updateBot } from "@/api/kb/bot/bot";
-import { getToken } from "@/utils/auth.js";
-import { useRoute,useRouter } from "vue-router";
+import {listBot, getBot, delBot, addBot, updateBot} from "@/api/kb/bot/bot";
+import {getToken} from "@/utils/auth.js";
+import {useRoute, useRouter} from "vue-router";
 
-const { proxy } = getCurrentInstance();
-const { kg_bot_type, sys_is_or_not } = proxy.useDict(
-  "kg_bot_type",
-  "sys_is_or_not"
+const {proxy} = getCurrentInstance();
+const {kg_bot_type, sys_is_or_not} = proxy.useDict(
+    "kg_bot_type",
+    "sys_is_or_not"
 );
 const router = useRouter();
 const botList = ref([]);
 
 // 列显隐信息
 const columns = ref([
-  { key: 0, label: "编号", visible: true },
-  { key: 1, label: "名称", visible: true },
-  { key: 2, label: "描述", visible: true },
-  { key: 3, label: "类型", visible: true },
-  { key: 4, label: "是否内置", visible: true },
-  { key: 5, label: "创建人", visible: true },
-  { key: 6, label: "创建时间", visible: true },
-  { key: 7, label: "最后更新时间", visible: true },
-  { key: 8, label: "操作", visible: true },
+  {key: 0, label: "编号", visible: true},
+  {key: 1, label: "名称", visible: true},
+  {key: 2, label: "描述", visible: true},
+  {key: 3, label: "类型", visible: true},
+  {key: 4, label: "是否内置", visible: true},
+  {key: 5, label: "创建人", visible: true},
+  {key: 6, label: "创建时间", visible: true},
+  {key: 7, label: "最后更新时间", visible: true},
+  {key: 8, label: "操作", visible: true},
 ]);
 
 const getColumnVisibility = (key) => {
@@ -479,7 +479,7 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
-const defaultSort = ref({ prop: "createTime", order: "desc" });
+const defaultSort = ref({prop: "createTime", order: "desc"});
 const botType = ref(0);
 const botTypeName = ref("");
 
@@ -495,7 +495,7 @@ const upload = reactive({
   // 是否更新已经存在的用户数据
   updateSupport: 0,
   // 设置上传的请求头部
-  headers: { Authorization: "Bearer " + getToken() },
+  headers: {Authorization: "Bearer " + getToken()},
   // 上传的地址
   url: import.meta.env.VITE_APP_BASE_API + "/kb/bot/importData",
 });
@@ -514,29 +514,43 @@ const data = reactive({
     isAsc: "descending",
   },
   rules: {
-    name: [{ required: true, message: "名称不能为空", trigger: "blur" }],
-    type: [{ required: true, message: "类型不能为空", trigger: "change" }],
+    name: [{required: true, message: "名称不能为空", trigger: "blur"}],
+    type: [{required: true, message: "类型不能为空", trigger: "change"}],
   },
 });
 
-const { queryParams, form, rules } = toRefs(data);
+const {queryParams, form, rules} = toRefs(data);
 const route = useRoute()
 
-watch(()=> route.fullPath,
-    ()=>{
-// 获取 id
-  botType.value = Number(route.query.botType)
-  if (botType.value === 0){
-    botTypeName.value = '工作流'
-  }else if (botType.value === 1){
-    botTypeName.value = 'chatflow'
-  }else {
-    botTypeName.value = 'agent'
-  }
-},{ immediate: true })
+watch(() => route.fullPath,
+    () => {
+      // 获取 id
+      botType.value = Number(route.query.botType)
+      let path = '';
+      if (botType.value === 0) {
+        botTypeName.value = '工作流'
+        path = '/kb/bot/workflow'
+
+      } else if (botType.value === 1) {
+        botTypeName.value = 'chatflow'
+        path = '/kb/bot/chatflow'
+      } else if (botType.value === 3) {
+        botTypeName.value = 'agent'
+        path = '/kb/bot/agent'
+      }else {
+        return
+      }
+      router.push({
+        path: path,
+        query: {
+          botType: botType.value,
+        },
+      });
+    }, {immediate: true})
+
 /** 查询bot 管理列表 */
 function getList() {
-queryParams.value.type = botType.value
+  queryParams.value.type = botType.value
   loading.value = true;
   listBot(queryParams.value).then((response) => {
     botList.value = response.data.rows;
@@ -604,7 +618,7 @@ function handleSortChange(column, prop, order) {
 function handleAdd() {
   reset();
   open.value = true;
-  title.value = "新增"+botTypeName.value;
+  title.value = "新增" + botTypeName.value;
 }
 
 /** 修改按钮操作 */
@@ -615,7 +629,7 @@ function handleUpdate(row) {
     form.value = response.data;
     form.value.type = String(form.value.type);
     open.value = true;
-    title.value = "修改"+botTypeName.value;
+    title.value = "修改" + botTypeName.value;
   });
 }
 
@@ -625,27 +639,27 @@ function handleDetail(row) {
   let title = '';
   let activeMenu = '';
 
-  if (row.type === 0){
-    path='/kb/bot/processflow';
-    title='构建工作流';
-    activeMenu='/kb/bot/workflow';
-  }else if(row.type === 1){
-    path='/kb/bot/processflow';
-    title='构建chatFlow';
-    activeMenu='/kb/bot/chatflow';
-  }else {
-    path='/kb/bot/agent/detail';
+  if (row.type === 0) {
+    path = '/kb/bot/processflow';
+    title = '构建工作流';
+    activeMenu = '/kb/bot/workflow';
+  } else if (row.type === 1) {
+    path = '/kb/bot/processflow';
+    title = '构建chatFlow';
+    activeMenu = '/kb/bot/chatflow';
+  } else {
+    path = '/kb/bot/agent/detail';
   }
 
   router.push({
-    path:path,
+    path: path,
     query: {
       id: row.id,
     },
   });
 
   router.afterEach((to) => {
-    if (to.path === '/kb/bot/processflow'){
+    if (to.path === '/kb/bot/processflow') {
       to.meta.title = title
       to.meta.activeMenu = activeMenu
     }
@@ -659,20 +673,22 @@ function submitForm() {
     if (valid) {
       if (form.value.id != null) {
         updateBot(form.value)
-          .then((response) => {
-            proxy.$modal.msgSuccess("修改成功");
-            open.value = false;
-            getList();
-          })
-          .catch((error) => {});
+            .then((response) => {
+              proxy.$modal.msgSuccess("修改成功");
+              open.value = false;
+              getList();
+            })
+            .catch((error) => {
+            });
       } else {
         addBot(form.value)
-          .then((response) => {
-            proxy.$modal.msgSuccess("新增成功");
-            open.value = false;
-            getList();
-          })
-          .catch((error) => {});
+            .then((response) => {
+              proxy.$modal.msgSuccess("新增成功");
+              open.value = false;
+              getList();
+            })
+            .catch((error) => {
+            });
       }
     }
   });
@@ -682,15 +698,16 @@ function submitForm() {
 function handleDelete(row) {
   const _ids = row.id || ids.value;
   proxy.$modal
-    .confirm('是否确认删除编号为"' + _ids + '"的数据项？')
-    .then(function () {
-      return delBot(_ids);
-    })
-    .then(() => {
-      getList();
-      proxy.$modal.msgSuccess("删除成功");
-    })
-    .catch(() => {});
+      .confirm('是否确认删除编号为"' + _ids + '"的数据项？')
+      .then(function () {
+        return delBot(_ids);
+      })
+      .then(() => {
+        getList();
+        proxy.$modal.msgSuccess("删除成功");
+      })
+      .catch(() => {
+      });
 }
 
 getList();
