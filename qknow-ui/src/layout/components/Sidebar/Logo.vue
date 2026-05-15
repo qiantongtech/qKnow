@@ -167,7 +167,7 @@ const sideTheme = computed(() => settingsStore.sideTheme);
       margin-top: 8px;
       vertical-align: middle;
       transform: scale(0.58);
-      margin-left: -32px;
+      margin-left:  -12px;
     }
 
     
