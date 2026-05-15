@@ -193,7 +193,7 @@
             <el-table-column
               v-if="getColumnVisibility(4)"
               label="分类"
-              align="center"
+              align="left"
               prop="categoryName"
               width="150px"
               :show-overflow-tooltip="{ effect: 'light' }"
@@ -216,7 +216,7 @@
                 />
               </template>
             </el-table-column>
-            <el-table-column
+            <!-- <el-table-column
               v-if="getColumnVisibility(6)"
               label="备注"
               width="200"
@@ -227,7 +227,7 @@
               <template #default="scope">
                 {{ scope.row.remark || "-" }}
               </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column
               v-if="getColumnVisibility(7)"
               label="创建人"
@@ -249,7 +249,7 @@
             >
               <template #default="scope">
                 <span>{{
-                  parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}:{s}")
+                  parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}")
                 }}</span>
               </template>
             </el-table-column>
@@ -361,7 +361,7 @@ const { document_sync_status } = proxy.useDict("document_sync_status");
 const deptTreeRef = ref(null);
 const documentList = ref([]);
 
-const defaultSort = ref({ prop: "createTime", order: "desc" });
+const defaultSort = ref({ prop: "createTime", order: "descending" });
 
 // 列显隐信息
 const columns = ref([
@@ -370,7 +370,7 @@ const columns = ref([
   { key: 3, label: "文件描述", visible: true },
   { key: 4, label: "分类", visible: true },
   { key: 5, label: "解析状态", visible: true },
-  { key: 6, label: "备注", visible: true },
+  // { key: 6, label: "备注", visible: true },
   { key: 7, label: "创建人", visible: true },
   { key: 8, label: "创建时间", visible: true },
   { key: 9, label: "操作", visible: true },
@@ -646,7 +646,7 @@ function handleDelete(row) {
   const _ids = row.id || ids.value;
   const name = row.name;
   proxy.$modal
-    .confirm('是否确认删除知识文件名称为"' + name + '"的数据项？')
+    .confirm('是否确认删除知识文件编号为"' + _ids + '"的数据项？')
     .then(function () {
       return delDocument(_ids);
     })

@@ -159,7 +159,7 @@ const activeMenu = computed(() => {
   const path = route.path;
   let activePath = path;
   emit("getRouter", path);
-
+  console.log("path", path);
   if (path === "/index") {
     const firstMenu = topMenus.value[0];
     if (firstMenu) activePath = firstMenu.path;

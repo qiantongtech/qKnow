@@ -113,9 +113,23 @@
               stripe
               :data="recallLogList"
               max-height="100%"
+              :default-sort="defaultSort"
               @sort-change="handleSortChange"
             >
-              <el-table-column label="文本" align="center" prop="query" />
+              <el-table-column
+                label="编号"
+                align="center"
+                prop="id"
+                sortable="custom"
+                width="80"
+              />
+              <el-table-column
+                label="文本"
+                align="left"
+                prop="query"
+                width="300"
+                :show-overflow-tooltip="{ effect: 'light' }"
+              />
               <el-table-column label="创建人" align="center" prop="createBy" />
               <el-table-column
                 label="创建时间"
@@ -127,7 +141,7 @@
               >
                 <template #default="scope">
                   <span>{{
-                    parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}:{s}")
+                    parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}")
                   }}</span>
                 </template>
               </el-table-column>
@@ -763,6 +777,8 @@ import { watchEffect } from "vue";
 const { proxy } = getCurrentInstance();
 const userStore = useUserStore();
 
+const defaultSort = ref({ prop: "createTime", order: "descending" });
+
 const drawer = ref(false);
 const loading = ref(false);
 const knowledgeBase = ref({
@@ -1188,7 +1204,7 @@ function getLogList(queryParams) {
     knowledgeId: route.params.kbId,
     creatorId: userStore.id,
     pageNum: 1,
-    pageSize: 5,
+    pageSize: 4,
     orderByColumn: queryParams ? queryParams.orderByColumn : "createTime",
     isAsc: queryParams ? queryParams.isAsc : "desc",
   }).then((res) => {
@@ -1723,9 +1739,9 @@ init();
   }
 }
 
-.module-2 {
-  height: calc(100% - 406px);
-}
+// .module-2 {
+//   height: calc(100% - 406px);
+// }
 
 %search-method {
   display: flex;

@@ -90,7 +90,7 @@
         >
           <el-row :gutter="20">
             <el-col :span="13">
-              <el-form-item label="名称:" prop="name" class="name-form-item">
+              <el-form-item label="名称" prop="name" class="name-form-item">
                 <el-input v-model="form.name" placeholder="请输入名称" />
               </el-form-item>
             </el-col>
@@ -99,7 +99,7 @@
           <el-row :gutter="20">
             <el-col :span="24">
               <el-form-item
-                label="封面图:"
+                label="封面图"
                 prop="coverImage"
                 class="image-form-item"
               >
@@ -116,7 +116,7 @@
 
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-form-item label="标签:" prop="tags" class="tag-form-item">
+              <el-form-item label="标签" prop="tags" class="tag-form-item">
                 <div class="flex gap-2">
                   <el-tag
                     v-for="(tag, index) in form.items.row"
@@ -153,7 +153,7 @@
             <el-col :span="24">
               <el-form-item
                 class="status-form-item"
-                label="状态:"
+                label="状态"
                 prop="validFlag"
                 style="display: flex; align-items: center"
               >
@@ -173,7 +173,7 @@
           <el-row :gutter="20">
             <el-col :span="24">
               <el-form-item
-                label="描述:"
+                label="描述"
                 prop="description"
                 class="desc-form-item"
               >
@@ -194,7 +194,7 @@
           <el-row :gutter="20">
             <el-col :span="24">
               <el-form-item
-                label="索引方式:"
+                label="索引方式"
                 prop="indexingTechnique"
                 class="index-form-item"
               >
@@ -264,7 +264,7 @@
           <el-row :gutter="20">
             <el-col :span="13">
               <el-form-item
-                label="Embedding模型:"
+                label="Embedding模型"
                 prop="embeddingModel"
                 class="emdedding-form-item"
               >

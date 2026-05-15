@@ -126,7 +126,7 @@ const route = useRoute();
 const { width, height } = useWindowSize();
 const WIDTH = 992;
 
-const specialPaths = ["/kmc/knowledgeBase"];
+const specialPaths = ["/kmc/knowledgeBase", "/user/profile"];
 
 const isSpecialPath = computed(() => {
   console.log("isSpecialPath", specialPaths.includes(route.path));
