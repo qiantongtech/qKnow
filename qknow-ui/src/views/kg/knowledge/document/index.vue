@@ -165,12 +165,13 @@
               width="80"
               sortable="custom"
             />
-            <el-table-column
-              v-if="getColumnVisibility(4)"
+            <el-table-column 
+              v-if="getColumnVisibility(2)"
               label="文件名称"
               prop="name"
               align="left"
               width="200px"
+              :show-overflow-tooltip="{ effect: 'light' }"
             >
               <template #default="scope">
                 <div class="file-name-cell">
@@ -179,14 +180,14 @@
                     :src="getFileType(scope.row.name)"
                     class="file-type-icon"
                   />
-                  <span class="file-name-text line-clamp-2">{{
+                  <span class="file-name-text">{{
                     scope.row.name || "-"
                   }}</span>
                 </div>
               </template>
             </el-table-column>
             <el-table-column
-              v-if="getColumnVisibility(6)"
+              v-if="getColumnVisibility(3)"
               label="文件描述"
               align="left"
               prop="description"
@@ -210,7 +211,7 @@
               </template>
             </el-table-column>
             <el-table-column
-              v-if="getColumnVisibility(10)"
+              v-if="getColumnVisibility(5)"
               label="文件大小"
               align="center"
               prop="fileSize"
@@ -233,7 +234,7 @@
               </template>
             </el-table-column>
             <el-table-column
-              v-if="getColumnVisibility(9)"
+              v-if="getColumnVisibility(7)"
               label="创建人"
               align="center"
               prop="createBy"
@@ -243,7 +244,7 @@
               </template>
             </el-table-column>
             <el-table-column
-              v-if="getColumnVisibility(11)"
+              v-if="getColumnVisibility(8)"
               label="创建时间"
               align="center"
               prop="createTime"
@@ -258,6 +259,7 @@
               </template>
             </el-table-column>
             <el-table-column
+              v-if="getColumnVisibility(9)"
               label="操作"
               align="center"
               class-name="small-padding fixed-width"
@@ -473,11 +475,15 @@ const documentList = ref([]);
 
 // 列显隐信息
 const columns = ref([
-  { key: 4, label: "文件名称", visible: true },
-  { key: 6, label: "文件描述", visible: true },
-  // { key: 8, label: "同步状态", visible: true },
-  { key: 9, label: "创建人", visible: true },
-  { key: 11, label: "创建时间", visible: true },
+  { key: 1, label: "编号", visible: true },
+  { key: 2, label: "文件名称", visible: true },
+  { key: 3, label: "文件描述", visible: true },
+  { key: 4, label: "分类", visible: true },
+  { key: 5, label: "文件大小", visible: true },
+  { key: 6, label: "备注", visible: true },
+  { key: 7, label: "创建人", visible: true },
+  { key: 8, label: "创建时间", visible: true },
+  { key: 9, label: "操作", visible: true },
 ]);
 
 const getColumnVisibility = (key) => {
@@ -936,6 +942,17 @@ getCategoryTree();
     width: 20px;
     height: 20px;
     flex-shrink: 0;
+  }
+
+  .file-name-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
+    line-height: 1.5em;
+    max-height: 3em;
   }
 }
 </style>
