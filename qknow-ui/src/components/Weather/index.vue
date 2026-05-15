@@ -177,11 +177,13 @@
         .label {
             font-size: 16px;
             color: #555;
+            white-space: nowrap;
         }
 
         .value {
             font-weight: 600;
             color: #222;
+            white-space: nowrap;
         }
     }
 </style>
