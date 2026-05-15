@@ -1226,7 +1226,7 @@ function clearNotification() {
     position: absolute;
     left: 50px;
     &.has-navbar-logo {
-      left: 200px;
+      left: 240px;
     }
   }
 
