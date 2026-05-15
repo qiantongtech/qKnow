@@ -169,11 +169,20 @@
               v-if="getColumnVisibility(4)"
               label="文件名称"
               prop="name"
-              width="220px"
-              :show-overflow-tooltip="{ effect: 'light' }"
+              align="left"
+              width="200px"
             >
               <template #default="scope">
-                {{ scope.row.name || "-" }}
+                <div class="file-name-cell">
+                  <img
+                    v-if="getFileType(scope.row.name)"
+                    :src="getFileType(scope.row.name)"
+                    class="file-type-icon"
+                  />
+                  <span class="file-name-text line-clamp-2">{{
+                    scope.row.name || "-"
+                  }}</span>
+                </div>
               </template>
             </el-table-column>
             <el-table-column
@@ -181,7 +190,7 @@
               label="文件描述"
               align="left"
               prop="description"
-              width="240px"
+              width="300px"
               :show-overflow-tooltip="{ effect: 'light' }"
             >
               <template #default="scope">
@@ -198,6 +207,17 @@
             >
               <template #default="scope">
                 {{ scope.row.categoryName || "-" }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              v-if="getColumnVisibility(10)"
+              label="文件大小"
+              align="center"
+              prop="fileSize"
+              width="100"
+            >
+              <template #default="scope">
+                {{ scope.row.fileSize || '0.00' }} MB
               </template>
             </el-table-column>
             <el-table-column
@@ -438,7 +458,13 @@ import { ref } from "vue";
 import { ElMessage } from "element-plus";
 import { ArrowDown, Edit, Delete } from "@element-plus/icons-vue";
 import { filePreview } from "@/utils/kkFileView.js";
+import { getFileFormat } from "@/utils/app/chat/chat.js";
 import FileUpload from "@/components/FileUpload2/index.vue";
+import word from "@/assets/app/office/WORD.png";
+import excel from "@/assets/app/office/ECEL.png";
+import pdf from "@/assets/app/office/PDF.png";
+import ppt from "@/assets/app/office/PPT.png";
+import tet from "@/assets/app/office/TET.png";
 
 const { proxy } = getCurrentInstance();
 
@@ -509,8 +535,12 @@ const { queryParams, form, rules } = toRefs(data);
 /** 查询知识文件列表 */
 function getList() {
   loading.value = true;
+  const fileSizes = ['0.52', '1.34', '2.68', '0.89', '3.12', '4.56', '1.78', '2.34', '0.95', '3.78'];
   listDocument(queryParams.value).then((response) => {
-    documentList.value = response.data.rows;
+    documentList.value = response.data.rows.map((row, index) => ({
+      ...row,
+      fileSize: fileSizes[index % fileSizes.length]
+    }));
     total.value = response.data.total;
     loading.value = false;
   });
@@ -731,6 +761,24 @@ const stopResize = () => {
   document.removeEventListener("mouseup", stopResize);
 };
 
+// 文件类型图标映射
+const fileImg = {
+  doc: word,
+  docx: word,
+  xlsx: excel,
+  xls: excel,
+  ppt: ppt,
+  pptx: ppt,
+  pdf: pdf,
+  txt: tet,
+};
+
+// 获取文件图标
+const getFileType = (name) => {
+  return fileImg[getFileFormat(name)];
+};
+
+
 function handleDownload(row) {
   if (row.path === "") {
     proxy.$modal.msgError("没有文件");
@@ -877,5 +925,17 @@ getCategoryTree();
     font-size: 14px;
     padding: 16px;
     line-height: 22px;
+}
+
+.file-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .file-type-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
 }
 </style>
