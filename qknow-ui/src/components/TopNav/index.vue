@@ -349,6 +349,7 @@ defineExpose({
   padding: 0 15px !important;
   margin: 0 10px !important;
   border-radius: 5px;
+  border-bottom: 0;
 }
 
 .topmenu-container.el-menu--horizontal > .el-menu-item.is-active,
