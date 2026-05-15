@@ -88,12 +88,11 @@ import tech.qiantong.qknow.ai.enums.model.AiModelTypeEnum;
 import tech.qiantong.qknow.ai.enums.model.AiPlatformEnum;
 import tech.qiantong.qknow.ai.service.IChatModelService;
 import tech.qiantong.qknow.ai.service.IEmbeddingService;
+import tech.qiantong.qknow.common.core.page.PageResult;
 import tech.qiantong.qknow.common.exception.ServiceException;
 import tech.qiantong.qknow.common.utils.object.BeanUtils;
-import tech.qiantong.qknow.module.ai.controller.admin.modelMarket.vo.AiModelRespVO;
+import tech.qiantong.qknow.module.ai.controller.admin.modelMarket.vo.AiModelPageReqVO;
 import tech.qiantong.qknow.module.ai.controller.admin.modelMarket.vo.AiModelSaveReqVO;
-import tech.qiantong.qknow.module.ai.convert.modelMarket.AiModelConvert;
-import tech.qiantong.qknow.module.ai.convert.modelMarket.AiModelConvertImpl;
 import tech.qiantong.qknow.module.ai.dal.dataobject.modelMarket.AiApiKeyDO;
 import tech.qiantong.qknow.module.ai.dal.dataobject.modelMarket.AiModelDO;
 import tech.qiantong.qknow.module.ai.dal.enums.ApiKeyStatus;
@@ -159,30 +158,6 @@ public class AiModelServiceImpl extends ServiceImpl<AiModelMapper, AiModelDO> im
                 .eq(AiModelDO::getName, modelName);
         // 批量删除AI 模型
         return modelMapper.delete(queryWrapper);
-    }
-
-    /**
-     * 获取平台中所有模型列表
-     * <p>
-     * 首先先进行数据的同步，将平台中的所有模型都同步到表中，默认是启用的状态
-     *
-     * @param keyId 密钥对象id
-     * @return 可用的模型列表，已经存在的为 isEnable 字段
-     */
-    @Override
-    public List<AiModelRespVO> queryModelList(Long keyId) {
-        AiApiKeyDO aiApiKeyDO = apiKeyMapper.selectById(keyId);
-        // 需要同步数据
-        if (ApiKeyStatus.CONFIG.getCode().equals(aiApiKeyDO.getStatus())) {
-            // 首先进行数据同步
-            Boolean syncResult = syncModel(aiApiKeyDO);
-            if (!syncResult) {
-                throw new ServiceException("同步数据失败");
-            }
-        }
-        List<AiModelDO> aiModelDOList = this.queryListByKeyId(keyId);
-        AiModelConvert convert = new AiModelConvertImpl();
-        return convert.convertToRespVOList(aiModelDOList);
     }
 
     /**
@@ -289,6 +264,30 @@ public class AiModelServiceImpl extends ServiceImpl<AiModelMapper, AiModelDO> im
                 DashScopeApi.builder().apiKey(aiApiKeyDO.getApiKey()).build(),
                 DashScopeRerankOptions.builder().model(modelName).build()
         );
+    }
+
+    /**
+     * 获取模型分页列表
+     * 首先先进行数据的同步，将平台中的所有模型都同步到表中，默认是启用的状态
+     *
+     * @param modelPage 模型分页参数
+     * @return 模型分页结果
+     */
+    @Override
+    public PageResult<AiModelDO> getModelPage(AiModelPageReqVO modelPage) {
+        if (Objects.isNull(modelPage.getKeyId())) {
+            return new PageResult<>(0L);
+        }
+        AiApiKeyDO aiApiKeyDO = apiKeyMapper.selectById(modelPage.getKeyId());
+        // 需要同步数据
+        if (ApiKeyStatus.CONFIG.getCode().equals(aiApiKeyDO.getStatus())) {
+            // 首先进行数据同步
+            Boolean syncResult = syncModel(aiApiKeyDO);
+            if (!syncResult) {
+                throw new ServiceException("同步数据失败");
+            }
+        }
+        return baseMapper.selectPage(modelPage);
     }
 
     /**
