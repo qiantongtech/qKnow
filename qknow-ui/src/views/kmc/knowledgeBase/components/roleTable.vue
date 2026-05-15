@@ -79,7 +79,9 @@
         </div>
       </div>
       <!-- 表格数据 -->
-      <el-table stripe   v-loading="loading"
+      <el-table
+        stripe
+        v-loading="loading"
         :data="roleList"
         :default-sort="defaultSort"
       >
@@ -111,6 +113,7 @@
           label="显示顺序"
           prop="roleSort"
           align="center"
+          sortable="custom"
           v-if="getColumnVisibility(4)"
         />
         <el-table-column
@@ -145,10 +148,14 @@
           align="center"
           prop="createTime"
           width="160"
+          sortable="custom"
+          :sort-orders="['descending', 'ascending']"
           v-if="getColumnVisibility(7)"
         >
           <template #default="scope">
-            <span>{{ parseTime(scope.row.createTime) }}</span>
+            <span>{{
+              parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}")
+            }}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -180,6 +187,7 @@ const dateRange = ref([]);
 const kmcId = route.params.kbId;
 const selectedRoleIds = ref([]);
 const isInitializing = ref(true); // 新增：初始化标志位
+const defaultSort = ref({ prop: "createTime", order: "descending" });
 
 // 列显隐信息
 const columns = ref([

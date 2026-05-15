@@ -113,7 +113,19 @@
               <i class="iconfont-mini icon-xinzeng mr5"></i>新增
             </el-button>
           </el-col>
-
+          <el-col :span="1.5">
+            <el-button
+              type="danger"
+              plain
+              :disabled="multiple"
+              @click="handleDelete"
+              icon="Delete"
+              v-hasPermi="['kmc:knowledgeSegment:knowledgesegment:remove']"
+              @mousedown="(e) => e.preventDefault()"
+            >
+              删除
+            </el-button>
+          </el-col>
           <el-col :span="1.5">
             <el-button type="" @click="back">
               <i class="iconfont-mini icon-fanhui-baise mr5"></i>返回
@@ -131,13 +143,14 @@
       <el-table
         stripe
         v-loading="loading"
-                v-if="model === 'text_model' || model === 'qa_model'"
-                :data="knowledgeSegmentList"
-                @selection-change="handleSelectionChange"
-                :default-sort="defaultSort"
-                @sort-change="handleSortChange"
-            >
-                <el-table-column
+        v-if="model === 'text_model' || model === 'qa_model'"
+        :data="knowledgeSegmentList"
+        @selection-change="handleSelectionChange"
+        :default-sort="defaultSort"
+        @sort-change="handleSortChange"
+      >
+        <el-table-column type="selection" width="55" align="center" />
+        <el-table-column
           v-if="getColumnVisibility(1) && model !== 'qa_model'"
           label="编号"
           align="center"
@@ -254,16 +267,15 @@
           </template>
         </el-table-column>
 
-                <template #empty>
-                    <div class="emptyBg">
-                        <img src="@/assets/system/images/no_data/noData.png" alt="" />
-                        <p>暂无记录</p>
-                    </div>
-                </template>
-            </el-table>
-            <el-table
-                v-if="model === 'hierarchical_model'"
-
+        <template #empty>
+          <div class="emptyBg">
+            <img src="@/assets/system/images/no_data/noData.png" alt="" />
+            <p>暂无记录</p>
+          </div>
+        </template>
+      </el-table>
+      <el-table
+        v-if="model === 'hierarchical_model'"
         v-loading="loading"
         :data="knowledgeSegmentList"
         row-key="id"
@@ -323,7 +335,7 @@
         >
           <template #default="scope">
             <span>{{
-              parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}:{s}")
+              parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}")
             }}</span>
           </template>
         </el-table-column>
@@ -901,7 +913,7 @@ function submitForm() {
 function handleDelete(row) {
   const _ids = row.id || ids.value;
   proxy.$modal
-    .confirm('是否确认删除分段内容为"' + row.content + '"的数据项？')
+    .confirm('是否确认删除分段编号为"' + _ids + '"的数据项？')
     .then(function () {
       return delKnowledgeSegment(_ids);
     })

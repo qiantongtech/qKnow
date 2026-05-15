@@ -109,7 +109,8 @@
           ></right-toolbar>
         </div>
       </div>
-      <el-table stripe
+      <el-table
+        stripe
         v-loading="loading"
         :data="logList"
         @selection-change="handleSelectionChange"
@@ -118,8 +119,16 @@
       >
         <el-table-column
           v-if="getColumnVisibility(1)"
-          label="问题"
+          label="编号"
           align="center"
+          prop="id"
+          width="80"
+          sortable="custom"
+        />
+        <el-table-column
+          v-if="getColumnVisibility(2)"
+          label="问题"
+          align="left"
           prop="query"
           width="300"
           :show-overflow-tooltip="{ effect: 'light' }"
@@ -129,7 +138,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          v-if="getColumnVisibility(2)"
+          v-if="getColumnVisibility(3)"
           label="备注"
           align="left"
           prop="remark"
@@ -139,7 +148,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          v-if="getColumnVisibility(3)"
+          v-if="getColumnVisibility(4)"
           label="创建人"
           align="center"
           prop="createBy"
@@ -149,7 +158,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          v-if="getColumnVisibility(4)"
+          v-if="getColumnVisibility(5)"
           label="创建时间"
           align="center"
           prop="createTime"
@@ -158,11 +167,13 @@
           :sort-orders="['descending', 'ascending']"
         >
           <template #default="scope">
-            <span>{{ parseTime(scope.row.createTime, "{y}-{m}-{d}") }}</span>
+            <span>{{
+              parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}")
+            }}</span>
           </template>
         </el-table-column>
         <el-table-column
-          v-if="getColumnVisibility(5)"
+          v-if="getColumnVisibility(6)"
           label="更新人"
           align="center"
           prop="upadteBy"
@@ -172,7 +183,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          v-if="getColumnVisibility(6)"
+          v-if="getColumnVisibility(7)"
           label="更新时间"
           align="center"
           prop="updateTime"
@@ -181,7 +192,9 @@
           :sort-orders="['descending', 'ascending']"
         >
           <template #default="scope">
-            <span>{{ parseTime(scope.row.createTime, "{y}-{m}-{d}") }}</span>
+            <span>{{
+              parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}")
+            }}</span>
           </template>
         </el-table-column>
         <template #empty>
@@ -214,12 +227,13 @@ const logList = ref([]);
 
 // 列显隐信息
 const columns = ref([
-  { key: 1, label: "问题", visible: true },
-  { key: 2, label: "备注", visible: true },
-  { key: 3, label: "创建人", visible: true },
-  { key: 4, label: "创建时间", visible: true },
-  { key: 5, label: "更新人", visible: true },
-  { key: 6, label: "更新时间", visible: true },
+  { key: 1, label: "编号", visible: true },
+  { key: 2, label: "问题", visible: true },
+  { key: 3, label: "备注", visible: true },
+  { key: 4, label: "创建人", visible: true },
+  { key: 5, label: "创建时间", visible: true },
+  { key: 6, label: "更新人", visible: true },
+  { key: 7, label: "更新时间", visible: true },
 ]);
 
 const getColumnVisibility = (key) => {
@@ -236,7 +250,7 @@ const ids = ref([]);
 const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
-const defaultSort = ref({ prop: "createTime", order: "desc" });
+const defaultSort = ref({ prop: "createTime", order: "descending" });
 
 const data = reactive({
   queryParams: {
@@ -245,6 +259,8 @@ const data = reactive({
     knowledgeId: null,
     query: null,
     createTime: null,
+    orderByColumn: "createTime",
+    isAsc: "desc",
   },
 });
 

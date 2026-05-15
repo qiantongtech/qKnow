@@ -66,11 +66,12 @@
           <el-form
             class="btn-style"
             :model="route.params"
+            :rules="selectorRules"
             ref="queryRef"
             :inline="true"
             label-width="93px"
           >
-            <el-form-item label="" prop="kbId">
+            <el-form-item label="" prop="knowledgeBaseId">
               <el-select
                 style="width: 200px"
                 :fit-input-width="true"
@@ -617,6 +618,11 @@ function getKnowledgeBase() {
     knowledgeBaseOptions.value = res.data;
   });
 }
+const selectorRules = ref({
+  knowledgeBaseId: [
+    { required: true, message: "请选择知识库或知识图谱", trigger: "change" },
+  ],
+});
 
 //-----------------------以下报工内容-------------------------
 const data = reactive({

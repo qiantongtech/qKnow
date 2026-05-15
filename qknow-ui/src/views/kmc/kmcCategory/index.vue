@@ -138,10 +138,10 @@
       <el-table
         v-if="refreshTable"
         v-loading="loading"
-                :data="kmcCategoryList"
-                row-key="id"
-                :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-                :default-expand-all="isExpandAll"
+        :data="kmcCategoryList"
+        row-key="id"
+        :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+        :default-expand-all="isExpandAll"
         @sort-change="handleSortChange"
       >
         <el-table-column
@@ -170,6 +170,8 @@
           label="备注"
           align="left"
           prop="remark"
+          width="200px"
+          :show-overflow-tooltip="{ effect: 'light' }"
         >
           <template #default="scope">
             {{ scope.row.remark || "-" }}
@@ -191,12 +193,10 @@
           align="center"
           prop="createTime"
           width="180"
-          sortable="custom"
-          :sort-orders="['descending', 'ascending']"
         >
           <template #default="scope">
             <span>{{
-              parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}:{s}")
+              parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}")
             }}</span>
           </template>
         </el-table-column>
