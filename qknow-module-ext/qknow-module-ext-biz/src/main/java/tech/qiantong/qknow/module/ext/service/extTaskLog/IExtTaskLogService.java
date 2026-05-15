@@ -75,6 +75,8 @@ import tech.qiantong.qknow.module.ext.dal.dataobject.extTaskLog.ExtTaskLogDetail
 import tech.qiantong.qknow.module.ext.extEnum.ExtLogStatusEnum;
 import tech.qiantong.qknow.module.ext.extEnum.ExtTaskTypeEnum;
 
+import java.util.List;
+
 /**
  * 抽取任务执行日志Service接口
  *
@@ -144,4 +146,5 @@ public interface IExtTaskLogService extends IService<ExtTaskLogDO> {
     void endInvoke(Long logId, ExtLogStatusEnum status, String errorMsg);
 
 
+    Integer removeExtTaskById(List<Long> list);
 }

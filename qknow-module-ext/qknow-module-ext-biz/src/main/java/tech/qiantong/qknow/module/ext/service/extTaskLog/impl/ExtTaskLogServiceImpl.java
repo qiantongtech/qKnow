@@ -86,6 +86,7 @@ import tech.qiantong.qknow.module.ext.service.extTaskLog.IExtTaskLogService;
 
 import jakarta.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -197,6 +198,11 @@ public class ExtTaskLogServiceImpl extends ServiceImpl<ExtTaskLogMapper, ExtTask
                 .set(ExtTaskLogDO::getEndTime, new Date())
                 .eq(ExtTaskLogDO::getId, logId);
         super.update(updateWrapper);
+    }
+
+    @Override
+    public Integer removeExtTaskById(List<Long> list) {
+        return extTaskLogMapper.deleteByIds(list);
     }
 
     /**

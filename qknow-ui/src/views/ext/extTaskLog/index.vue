@@ -113,14 +113,30 @@
 
     <div class="pagecont-bottom">
       <div class="justify-between mb15">
+        <el-row :gutter="15" class="btn-style">
+          <el-col :span="1.5">
+            <el-button
+              type="danger"
+              plain
+              :disabled="multiple"
+              @click="handleDelete"
+              icon="Delete"
+              @mousedown="(e) => e.preventDefault()"
+            >
+              删除
+            </el-button>
+          </el-col>
+        </el-row>
         <div class="justify-end top-right-btn">
           <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
         </div>
       </div>
       <el-table stripe v-loading="loading" :data="taskLogList"
+                @selection-change="handleSelectionChange"
                 :default-sort="defaultSort" @sort-change="handleSortChange"
                 :tooltip-options="tooltipOptions"
       >
+        <el-table-column type="selection" width="55" align="center" />
         <el-table-column v-if="getColumnVisibility(1)" 
                     label="编号" 
                     align="center" 
@@ -130,7 +146,7 @@
                     :sort-orders="['descending', 'ascending']"
                     show-overflow-tooltip
                     />
-        <el-table-column v-if="getColumnVisibility(2)" label="任务名称" align="left" prop="taskName" width="400">
+        <el-table-column v-if="getColumnVisibility(2)" label="任务名称" align="left" prop="taskName" width="260">
           <template #default="scope">
             {{ scope.row.taskName || '-' }}
           </template>
@@ -161,9 +177,9 @@
             <span>{{ parseTime(scope.row.endTime, '{y}-{m}-{d} {h}:{i}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="getColumnVisibility(7)" label="创建人" align="center" prop="createBy" width="180">
+        <el-table-column v-if="getColumnVisibility(7)" label="创建人" align="center" prop="createBy" width="160">
           <template #default="scope">
-            {{ scope.row.createUser || '-' }}
+            {{ scope.row.createBy || '-' }}
           </template>
         </el-table-column>
         <el-table-column v-if="getColumnVisibility(8)" label="创建时间" align="center" prop="createTime" width="160"
@@ -281,7 +297,7 @@
 </template>
 
 <script setup name="ExtTaskLog">
-import {listTaskLog, getDetailPage} from "@/api/ext/extTaskLog/extTaskLog";
+import {listTaskLog, getDetailPage, delTaskLog} from "@/api/ext/extTaskLog/extTaskLog";
 
 const {proxy} = getCurrentInstance();
 
@@ -329,6 +345,10 @@ const logDetailParams = ref({
 });
 const tooltipOptions = ref({"effect": "light"});
 const router = useRouter();
+
+const ids = ref([]);
+const single = ref(true);
+const multiple = ref(true);
 
 const data = reactive({
   form: {},
@@ -434,6 +454,28 @@ function handleDetail(row) {
   console.log(row.errorMsg)
   errorMsg.value = row.errorMsg;
   centerDialogVisible.value = true;
+}
+
+// 多选框选中数据
+function handleSelectionChange(selection) {
+  ids.value = selection.map((item) => item.id);
+  single.value = selection.length != 1;
+  multiple.value = !selection.length;
+}
+
+/** 删除按钮操作 */
+function handleDelete(row) {
+  const _ids = row.id || ids.value;
+  proxy.$modal
+    .confirm('是否确认删除抽取日志编号为"' + _ids + '"的数据项？')
+    .then(function () {
+      return delTaskLog(_ids);
+    })
+    .then(() => {
+      getList();
+      proxy.$modal.msgSuccess("删除成功");
+    })
+    .catch(() => {});
 }
 
 getList();
