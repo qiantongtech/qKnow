@@ -295,7 +295,7 @@
                   link
                   type="primary"
                   :disabled="scope.row.publishStatus == 1"
-                  icon="Edit"
+                  icon="VideoPlay"
                   @click="extraction(scope.row)"
                   v-hasPermi="['ext:extUnstructTask:unstructtask:edit']"
                   style="padding-left: 30px"
