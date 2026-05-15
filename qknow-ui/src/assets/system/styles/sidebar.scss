@@ -20,7 +20,7 @@
     -webkit-transition: width .28s;
     transition: width 0.28s;
     width: $base-sidebar-width !important;
-    background-color: $base-menu-background;
+    background-color: transparent !important;
     height: 100%;
     position: fixed;
     font-size: 0px;
@@ -31,6 +31,8 @@
     overflow: hidden;
     -webkit-box-shadow: 2px 0 6px rgba(0,21,41,.35);
     box-shadow: 2px 0 6px rgba(0,21,41,.35);
+    background: url(@/assets/system/images/layout/sidebar_bg.png) no-repeat center center;
+    background-size: cover;
 
     &.navbar-logo{
         box-shadow: none;
@@ -74,15 +76,44 @@
     }
 
     .el-menu {
+      --el-menu-item-height:42px;
+      --el-menu-sub-item-height:42px;
       border: none;
       height: 100%;
       width: 100% !important;
+      background-color: transparent !important;
+
+      .nest-menu{
+        &>a{
+            padding: 0 15px 0 15px;
+        }
+        .el-menu-item{
+            
+        }
+      }
+      
+
+      .sidebar-item{
+        margin-bottom: 15px;
+        &>a{
+            padding: 0 15px;
+        }
+
+        .el-sub-menu__title {
+            &:hover{
+                background-color: transparent !important;
+            }
+        }
+      }
     }
 
     .el-menu-item, .menu-title {
       overflow: hidden !important;
       text-overflow: ellipsis !important;
       white-space: nowrap !important;
+      color: #fff;
+      font-weight: 500;
+      font-family: PingFangSC;
     }
 
     .el-menu-item .el-menu-tooltip__trigger {
@@ -91,7 +122,8 @@
 
      .el-menu-item {
         &.is-active {
-          background-color: #2666fb !important;
+          background: linear-gradient( 90deg, #4981FF 0%, #135AFB 100%);
+          border-radius: 4px;
           color: #fff !important;
           font-weight: bold;
           position: relative;
@@ -123,7 +155,7 @@
 
     & .nest-menu .el-sub-menu>.el-sub-menu__title,
     & .el-sub-menu .el-menu-item {
-      min-width: $base-sidebar-width !important;
+      min-width: 100% !important;
 
       &:hover {
         //background-color: rgba(0, 0, 0, 0.06) !important;
@@ -147,7 +179,7 @@
       }
     }
     & .theme-dark .el-sub-menu.is-active {
-      background-color: #0c2135 !important;
+    //   background-color: #0c2135 !important;
     }
   }
 
