@@ -62,31 +62,27 @@
  * 等法律法规，严厉追究违约与侵权责任。
  */
 
-package tech.qiantong.qknow.module.kb.dal.dataobject.runtime;
+package tech.qiantong.qknow.module.kb.dal.dataobject.bot;
 
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.*;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
 import tech.qiantong.qknow.common.core.domain.BaseEntity;
 
 /**
- * bot运行 DO 对象 kb_runtime
+ * bot访问密钥 DO 对象 kb_bot_apikey
  *
  * @author qknow
- * @date 2026-03-18
+ * @date 2026-04-24
  */
 @Data
-@TableName(value = "kb_runtime")
+@TableName(value = "kb_bot_apikey")
 // 用于 Oracle、PostgreSQL、Kingbase、DB2、H2 数据库的主键自增。如果是 MySQL 等数据库，可不写。
-// @KeySequence("kb_runtime_seq")
+// @KeySequence("kb_bot_apikey_seq")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class KbRuntimeDO extends BaseEntity {
+public class KbBotApikeyDO extends BaseEntity {
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
@@ -102,29 +98,14 @@ public class KbRuntimeDO extends BaseEntity {
     private Long workspaceId;
 
     /**
-     * botId
+     * apikey
+     */
+    private String apiKey;
+
+    /**
+     * botid
      */
     private Long botId;
-
-    /**
-     * 输入问题
-     */
-    private String input;
-
-    /**
-     * 输出结果
-     */
-    private String output;
-
-    /**
-     * 运行状态
-     */
-    private Integer status;
-
-    /**
-     * 运行时间(毫秒)
-     */
-    private Long runtime;
 
     /**
      * 是否有效

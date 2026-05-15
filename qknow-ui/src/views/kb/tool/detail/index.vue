@@ -206,6 +206,13 @@ function getTags(row) {
 }
 
 const handleReturn = () => {
+  router.push({
+    path: route.path+"/detail",
+    query: {
+      botId: row.id,
+      name: row.name,
+    },
+  });
   const obj = { path: `/kb/tool` };
   proxy.$tab.closeOpenPage(obj);
 };

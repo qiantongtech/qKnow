@@ -162,12 +162,12 @@
        </el-table-column>
        <el-table-column label="操作" v-if="getColumnVisibility(16)" align="center" class-name="small-padding fixed-width" fixed="right" width="240">
          <template #default="scope">
+           <el-button link type="primary" icon="view" @click="routeTo('/kb/tool/toolDetail',scope.row)"
+                      v-hasPermi="['kb:tool:tool:query']">详情</el-button>
            <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
                       v-hasPermi="['kb:tool:tool:edit']">修改</el-button>
            <el-button link type="danger" icon="Delete" @click="handleDelete(scope.row)"
                       v-hasPermi="['kb:tool:tool:remove']">删除</el-button>
-           <el-button link type="primary" icon="view" @click="routeTo('/kb/tool/toolDetail',scope.row)"
-                      v-hasPermi="['kb:tool:tool:query']">详情</el-button>
          </template>
        </el-table-column>
 
@@ -248,14 +248,14 @@
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item label="描述" prop="description">
-              <el-input v-model="form.description" placeholder="请输入描述" type="textarea" maxlength="512" show-word-limit />
+              <el-input v-model="form.description" placeholder="请输入描述" type="textarea" maxlength="512 字符" show-word-limit />
             </el-form-item>
           </el-col>
         </el-row>
           <el-row :gutter="20">
             <el-col :span="24">
               <el-form-item label="备注" prop="remark">
-                <el-input v-model="form.remark" type="textarea" placeholder="请输入备注" maxlength="512" show-word-limit />
+                <el-input v-model="form.remark" type="textarea" placeholder="请输入备注" maxlength="512 字符" show-word-limit />
               </el-form-item>
             </el-col>
             </el-row>

@@ -62,80 +62,65 @@
  * 等法律法规，严厉追究违约与侵权责任。
  */
 
-package tech.qiantong.qknow.module.kb.dal.dataobject.runtime;
+package tech.qiantong.qknow.module.kb.service.bot.impl;
 
-import lombok.*;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
-import tech.qiantong.qknow.common.core.domain.BaseEntity;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import tech.qiantong.qknow.common.core.domain.model.LoginUser;
+import tech.qiantong.qknow.common.core.page.PageResult;
+import tech.qiantong.qknow.common.utils.object.BeanUtils;
+import tech.qiantong.qknow.module.kb.controller.admin.bot.vo.KbBotApikeyPageReqVO;
+import tech.qiantong.qknow.module.kb.controller.admin.bot.vo.KbBotApikeySaveReqVO;
+import tech.qiantong.qknow.module.kb.dal.dataobject.bot.KbBotApikeyDO;
+import tech.qiantong.qknow.module.kb.dal.mapper.bot.KbBotApikeyMapper;
+import tech.qiantong.qknow.module.kb.service.bot.IKbBotApikeyService;
+
+import java.util.Collection;
+import java.util.UUID;
 
 /**
- * bot运行 DO 对象 kb_runtime
+ * bot访问密钥Service业务层处理
  *
  * @author qknow
- * @date 2026-03-18
+ * @date 2026-04-24
  */
-@Data
-@TableName(value = "kb_runtime")
-// 用于 Oracle、PostgreSQL、Kingbase、DB2、H2 数据库的主键自增。如果是 MySQL 等数据库，可不写。
-// @KeySequence("kb_runtime_seq")
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class KbRuntimeDO extends BaseEntity {
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
+@Slf4j
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class KbBotApikeyServiceImpl extends ServiceImpl<KbBotApikeyMapper, KbBotApikeyDO> implements IKbBotApikeyService {
+    @Resource
+    private KbBotApikeyMapper kbBotApikeyMapper;
+
+    private static final String API_KEY_FORMAT = "bot-{}";
+
+    @Override
+    public PageResult<KbBotApikeyDO> getKbBotApikeyPage(KbBotApikeyPageReqVO pageReqVO) {
+        return kbBotApikeyMapper.selectPage(pageReqVO);
+    }
+
+    @Override
+    public int removeKbBotApikey(Collection<Long> idList) {
+        // 批量删除bot访问密钥
+        return kbBotApikeyMapper.deleteByIds(idList);
+    }
 
     /**
-     * ID
+     * 生成bot访问密钥
+     *
+     * @param kbBotApikey bot访问密钥信息
+     * @param currentUser 当前用户
+     * @return 生成的bot访问密钥
      */
-    @TableId(type = IdType.AUTO)
-    private Long id;
-
-    /**
-     * 工作区id
-     */
-    private Long workspaceId;
-
-    /**
-     * botId
-     */
-    private Long botId;
-
-    /**
-     * 输入问题
-     */
-    private String input;
-
-    /**
-     * 输出结果
-     */
-    private String output;
-
-    /**
-     * 运行状态
-     */
-    private Integer status;
-
-    /**
-     * 运行时间(毫秒)
-     */
-    private Long runtime;
-
-    /**
-     * 是否有效
-     */
-    private Boolean validFlag;
-
-    /**
-     * 删除标志
-     */
-    @TableLogic
-    private Boolean delFlag;
-
+    @Override
+    public Boolean generate(KbBotApikeySaveReqVO kbBotApikey, LoginUser currentUser) {
+        KbBotApikeyDO kbBotApikeyDO = BeanUtils.toBean(kbBotApikey, KbBotApikeyDO.class);
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        kbBotApikeyDO.setApiKey(StrUtil.format(API_KEY_FORMAT,uuid));
+        return baseMapper.insert(kbBotApikeyDO) > 0;
+    }
 
 }

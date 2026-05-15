@@ -82,21 +82,6 @@
               @keyup.enter="handleQuery"
           />
         </el-form-item>
-        <!--        <el-form-item label="类型" prop="type">-->
-        <!--          <el-select-->
-        <!--            v-model="queryParams.type"-->
-        <!--            placeholder="请选择类型"-->
-        <!--            clearable-->
-        <!--            class="el-form-input-width"-->
-        <!--          >-->
-        <!--            <el-option-->
-        <!--              v-for="dict in kg_bot_type"-->
-        <!--              :key="dict.value"-->
-        <!--              :label="dict.label"-->
-        <!--              :value="dict.value"-->
-        <!--            />-->
-        <!--          </el-select>-->
-        <!--        </el-form-item>-->
         <el-form-item label="是否内置" prop="builtinFlag">
           <el-select
               v-model="queryParams.builtinFlag"
@@ -288,37 +273,45 @@
             <el-button
                 link
                 type="primary"
-                icon="Operation"
+                icon="view"
                 @click="handleDetail(scope.row)"
                 v-hasPermi="['kb:bot:bot:query']"
-            >构建
+            >详情
             </el-button>
             <el-button
                 link
                 type="primary"
-                icon="Edit"
-                @click="handleUpdate(scope.row)"
-                :disabled="scope.row.builtinFlag === 1"
-                v-hasPermi="['kb:bot:bot:edit']"
-            >修改
+                icon="Operation"
+                @click="handleBuild(scope.row)"
+                v-hasPermi="['kb:bot:bot:query']"
+            >构建
             </el-button>
-            <el-button
-                link
-                type="danger"
-                icon="Delete"
-                @click="handleDelete(scope.row)"
-                :disabled="scope.row.builtinFlag === 1"
-                v-hasPermi="['kb:bot:bot:remove']"
-            >删除
-            </el-button>
-            <!--            <el-button-->
-            <!--              link-->
-            <!--              type="primary"-->
-            <!--              icon="view"-->
-            <!--              @click="handleDetail(scope.row)"-->
-            <!--              v-hasPermi="['kb:bot:bot:query']"-->
-            <!--              >详情-->
-            <!--            </el-button>-->
+
+            <el-popover placement="bottom" :width="100" trigger="click">
+              <template #reference>
+                <el-button type="primary" icon="ArrowDown"  link @click.stop>更多</el-button>
+              </template>
+              <div class="card-button-group" >
+                <el-button
+                    link
+                    type="primary"
+                    icon="Edit"
+                    @click="handleUpdate(scope.row)"
+                    :disabled="scope.row.builtinFlag === 1"
+                    v-hasPermi="['kb:bot:bot:edit']"
+                >修改
+                </el-button>
+                <el-button
+                    link
+                    type="danger"
+                    icon="Delete"
+                    @click="handleDelete(scope.row)"
+                    :disabled="scope.row.builtinFlag === 1"
+                    v-hasPermi="['kb:bot:bot:remove']"
+                >删除
+                </el-button>
+              </div>
+            </el-popover>
 
           </template>
         </el-table-column>
@@ -367,36 +360,6 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <!--        <el-row :gutter="20">-->
-        <!--          <el-col :span="24">-->
-        <!--            <el-form-item label="类型" prop="type">-->
-        <!--              <div class="default-wrap">-->
-        <!--                <el-select-->
-        <!--                  v-model="form.type"-->
-        <!--                  placeholder="请选择类型"-->
-        <!--                  class="el-form-input-width"-->
-        <!--                  :disabled="title.includes('修改')"-->
-        <!--                  style="width: 100%"-->
-        <!--                >-->
-        <!--                  <el-option-->
-        <!--                    v-for="dict in kg_bot_type"-->
-        <!--                    :key="dict.value"-->
-        <!--                    :label="dict.label"-->
-        <!--                    :value="dict.value"-->
-        <!--                  />-->
-        <!--                </el-select>-->
-        <!--                <div class="tip-content">-->
-        <!--                  <el-icon>-->
-        <!--                    <InfoFilled />-->
-        <!--                  </el-icon>-->
-        <!--                  <span>-->
-        <!--                    工作流：面向单轮自动化任务的编排工作流；Chatflow：支持记忆的复杂多轮对话工作流；Agent：具备推理与自主工具调用的智能助手-->
-        <!--                  </span>-->
-        <!--                </div>-->
-        <!--              </div>-->
-        <!--            </el-form-item>-->
-        <!--          </el-col>-->
-        <!--        </el-row>-->
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item label="描述" prop="description">
@@ -530,7 +493,6 @@ watch(() => route.fullPath,
       if (botType.value === 0) {
         botTypeName.value = '工作流'
         path = '/kb/bot/workflow'
-
       } else if (botType.value === 1) {
         botTypeName.value = 'chatflow'
         path = '/kb/bot/chatflow'
@@ -556,6 +518,18 @@ function getList() {
     botList.value = response.data.rows;
     total.value = response.data.total;
     loading.value = false;
+  });
+}
+
+/** 详情按钮操作 */
+function handleDetail(row) {
+  reset();
+  router.push({
+    path: route.path+"/detail",
+    query: {
+      botId: row.id,
+      name: row.name,
+    },
   });
 }
 
@@ -634,7 +608,7 @@ function handleUpdate(row) {
 }
 
 /** 详情按钮操作 */
-function handleDetail(row) {
+function handleBuild(row) {
   let path = '';
   let title = '';
   let activeMenu = '';
@@ -648,7 +622,7 @@ function handleDetail(row) {
     title = '构建chatFlow';
     activeMenu = '/kb/bot/chatflow';
   } else {
-    path = '/kb/bot/agent/detail';
+    path = '/kb/bot/agent/build';
   }
 
   router.push({
@@ -748,5 +722,13 @@ getList();
 
 .el-form-item.is-error {
   padding-bottom: 16px;
+}
+
+.card-button-group {
+  display: flex;
+  flex-direction: column;
+  button{
+    margin-left: 0;
+  }
 }
 </style>

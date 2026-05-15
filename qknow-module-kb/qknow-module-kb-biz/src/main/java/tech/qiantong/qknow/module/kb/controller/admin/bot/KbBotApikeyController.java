@@ -62,80 +62,69 @@
  * 等法律法规，严厉追究违约与侵权责任。
  */
 
-package tech.qiantong.qknow.module.kb.dal.dataobject.runtime;
+package tech.qiantong.qknow.module.kb.controller.admin.bot;
 
-import lombok.*;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
-import tech.qiantong.qknow.common.core.domain.BaseEntity;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import tech.qiantong.qknow.common.annotation.Log;
+import tech.qiantong.qknow.common.core.controller.BaseController;
+import tech.qiantong.qknow.common.core.domain.CommonResult;
+import tech.qiantong.qknow.common.core.domain.model.LoginUser;
+import tech.qiantong.qknow.common.core.page.PageResult;
+import tech.qiantong.qknow.common.enums.BusinessType;
+import tech.qiantong.qknow.common.utils.object.BeanUtils;
+import tech.qiantong.qknow.module.kb.controller.admin.bot.vo.KbBotApikeyPageReqVO;
+import tech.qiantong.qknow.module.kb.controller.admin.bot.vo.KbBotApikeyRespVO;
+import tech.qiantong.qknow.module.kb.controller.admin.bot.vo.KbBotApikeySaveReqVO;
+import tech.qiantong.qknow.module.kb.dal.dataobject.bot.KbBotApikeyDO;
+import tech.qiantong.qknow.module.kb.service.bot.IKbBotApikeyService;
+
+import java.util.Arrays;
 
 /**
- * bot运行 DO 对象 kb_runtime
+ * bot访问密钥Controller
  *
  * @author qknow
- * @date 2026-03-18
+ * @date 2026-04-24
  */
-@Data
-@TableName(value = "kb_runtime")
-// 用于 Oracle、PostgreSQL、Kingbase、DB2、H2 数据库的主键自增。如果是 MySQL 等数据库，可不写。
-// @KeySequence("kb_runtime_seq")
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class KbRuntimeDO extends BaseEntity {
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
+@Tag(name = "bot访问密钥")
+@RestController
+@RequestMapping("/kb/apikey")
+@Validated
+public class KbBotApikeyController extends BaseController {
+    @Resource
+    private IKbBotApikeyService kbBotApikeyService;
 
-    /**
-     * ID
-     */
-    @TableId(type = IdType.AUTO)
-    private Long id;
+    @Operation(summary = "查询bot访问密钥列表")
+//    @PreAuthorize("@ss.hasPermi('kb:botApikey:apikey:list')")
+    @GetMapping("/list")
+    public CommonResult<PageResult<KbBotApikeyRespVO>> list(KbBotApikeyPageReqVO kbBotApikey) {
+        PageResult<KbBotApikeyDO> page = kbBotApikeyService.getKbBotApikeyPage(kbBotApikey);
+        return CommonResult.success(BeanUtils.toBean(page, KbBotApikeyRespVO.class));
+    }
 
-    /**
-     * 工作区id
-     */
-    private Long workspaceId;
+    @Operation(summary = "生成访问密钥")
+//    @PreAuthorize("@ss.hasPermi('kb:botApikey:apikey:add')")
+    @Log(title = "生成访问密钥", businessType = BusinessType.INSERT)
+    @PostMapping
+    public CommonResult<Boolean> generate(@Valid @RequestBody KbBotApikeySaveReqVO kbBotApikey) {
+        LoginUser currentUser = super.getLoginUser();
+        kbBotApikey.setCreatorId(getUserId());
+        kbBotApikey.setWorkspaceId(getWorkSpaceId());
 
-    /**
-     * botId
-     */
-    private Long botId;
+        return CommonResult.toAjax(kbBotApikeyService.generate(kbBotApikey,currentUser));
+    }
 
-    /**
-     * 输入问题
-     */
-    private String input;
-
-    /**
-     * 输出结果
-     */
-    private String output;
-
-    /**
-     * 运行状态
-     */
-    private Integer status;
-
-    /**
-     * 运行时间(毫秒)
-     */
-    private Long runtime;
-
-    /**
-     * 是否有效
-     */
-    private Boolean validFlag;
-
-    /**
-     * 删除标志
-     */
-    @TableLogic
-    private Boolean delFlag;
-
+    @Operation(summary = "删除bot访问密钥")
+//    @PreAuthorize("@ss.hasPermi('kb:botApikey:apikey:remove')")
+    @Log(title = "bot访问密钥", businessType = BusinessType.DELETE)
+    @DeleteMapping("/{ids}")
+    public CommonResult<Integer> remove(@PathVariable Long[] ids) {
+        return CommonResult.toAjax(kbBotApikeyService.removeKbBotApikey(Arrays.asList(ids)));
+    }
 
 }
