@@ -104,6 +104,14 @@ public class KbBotRespVO implements Serializable {
     @Schema(description = "描述", example = "")
     private String description;
 
+    @Excel(name = "节点数")
+    @Schema(description = "节点数", example = "")
+    private Integer nodeNum;
+
+    @Excel(name = "密钥数")
+    @Schema(description = "密钥数", example = "")
+    private Integer apiKeyNum;
+
     @Excel(name = "是否内置")
     @Schema(description = "是否内置", example = "")
     private Integer builtinFlag;

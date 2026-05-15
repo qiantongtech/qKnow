@@ -62,95 +62,46 @@
  * 等法律法规，严厉追究违约与侵权责任。
  */
 
-package tech.qiantong.qknow.module.kb.controller.admin.tool.vo;
+package tech.qiantong.qknow.module.kb.service.bot;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
-import io.swagger.v3.oas.annotations.media.Schema;
-import tech.qiantong.qknow.common.core.annotation.Excel;
-import java.util.Date;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.extension.service.IService;
+import tech.qiantong.qknow.common.core.domain.model.LoginUser;
+import tech.qiantong.qknow.common.core.page.PageResult;
+import tech.qiantong.qknow.module.kb.controller.admin.bot.vo.KbBotApikeyPageReqVO;
+import tech.qiantong.qknow.module.kb.controller.admin.bot.vo.KbBotApikeySaveReqVO;
+import tech.qiantong.qknow.module.kb.dal.dataobject.bot.KbBotApikeyDO;
+
+import java.util.Collection;
 
 /**
- * 工具管理 Response VO 对象 kb_tool
+ * bot访问密钥Service接口
  *
  * @author qknow
- * @date 2026-03-19
+ * @date 2026-04-24
  */
-@Schema(description = "工具管理 Response VO")
-@Data
-public class KbToolRespVO implements Serializable {
+public interface IKbBotApikeyService extends IService<KbBotApikeyDO> {
 
-    private static final long serialVersionUID = 1L;
+    /**
+     * 获得bot访问密钥分页列表
+     *
+     * @param pageReqVO 分页请求
+     * @return bot访问密钥分页列表
+     */
+    PageResult<KbBotApikeyDO> getKbBotApikeyPage(KbBotApikeyPageReqVO pageReqVO);
 
-    @Excel(name = "ID")
-    @Schema(description = "ID")
-    private Long id;
+    /**
+     * 删除bot访问密钥
+     *
+     * @param idList bot访问密钥编号
+     */
+    int removeKbBotApikey(Collection<Long> idList);
 
-    @Excel(name = "工作区id")
-    @Schema(description = "工作区id", example = "")
-    private Long workspaceId;
-
-    @Excel(name = "名称")
-    @Schema(description = "名称", example = "")
-    private String name;
-
-    @Excel(name = "描述")
-    @Schema(description = "描述", example = "")
-    private String description;
-
-    @Excel(name = "标签")
-    @Schema(description = "标签", example = "")
-    private String tags;
-
-    @Excel(name = "类型")
-    @Schema(description = "类型", example = "")
-    private Integer type;
-
-    @Excel(name = "来源")
-    @Schema(description = "来源", example = "")
-    private String source;
-
-    @Excel(name = "方法数")
-    @Schema(description = "方法数", example = "")
-    private Integer methodNum;
-
-    @Excel(name = "是否有效")
-    @Schema(description = "是否有效", example = "")
-    private Boolean validFlag;
-
-    @Excel(name = "删除标志")
-    @Schema(description = "删除标志", example = "")
-    private Boolean delFlag;
-
-    @Excel(name = "创建人")
-    @Schema(description = "创建人", example = "")
-    private String createBy;
-
-    @Excel(name = "创建人id")
-    @Schema(description = "创建人id", example = "")
-    private Long creatorId;
-
-    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建时间", example = "")
-    private Date createTime;
-
-    @Excel(name = "更新人")
-    @Schema(description = "更新人", example = "")
-    private String updateBy;
-
-    @Excel(name = "更新人id")
-    @Schema(description = "更新人id", example = "")
-    private Long updaterId;
-
-    @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "更新时间", example = "")
-    private Date updateTime;
-
-    @Excel(name = "备注")
-    @Schema(description = "备注", example = "")
-    private String remark;
-
+    /**
+     * 生成bot访问密钥
+     *
+     * @param kbBotApikey bot访问密钥信息
+     * @param currentUser 当前用户
+     * @return 生成的bot访问密钥
+     */
+    Boolean generate(KbBotApikeySaveReqVO kbBotApikey, LoginUser currentUser);
 }

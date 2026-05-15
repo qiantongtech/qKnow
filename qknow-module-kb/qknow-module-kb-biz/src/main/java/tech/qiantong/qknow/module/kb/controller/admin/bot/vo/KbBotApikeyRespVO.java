@@ -62,24 +62,25 @@
  * 等法律法规，严厉追究违约与侵权责任。
  */
 
-package tech.qiantong.qknow.module.kb.controller.admin.tool.vo;
+package tech.qiantong.qknow.module.kb.controller.admin.bot.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-import tech.qiantong.qknow.common.core.annotation.Excel;
-import java.util.Date;
+import lombok.Data;
+import tech.qiantong.qknow.common.annotation.Excel;
+
 import java.io.Serializable;
+import java.util.Date;
 
 /**
- * 工具管理 Response VO 对象 kb_tool
+ * bot访问密钥 Response VO 对象 kb_bot_apikey
  *
  * @author qknow
- * @date 2026-03-19
+ * @date 2026-04-24
  */
-@Schema(description = "工具管理 Response VO")
+@Schema(description = "bot访问密钥 Response VO")
 @Data
-public class KbToolRespVO implements Serializable {
+public class KbBotApikeyRespVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -91,29 +92,13 @@ public class KbToolRespVO implements Serializable {
     @Schema(description = "工作区id", example = "")
     private Long workspaceId;
 
-    @Excel(name = "名称")
-    @Schema(description = "名称", example = "")
-    private String name;
+    @Excel(name = "apikey")
+    @Schema(description = "apikey", example = "")
+    private String apiKey;
 
-    @Excel(name = "描述")
-    @Schema(description = "描述", example = "")
-    private String description;
-
-    @Excel(name = "标签")
-    @Schema(description = "标签", example = "")
-    private String tags;
-
-    @Excel(name = "类型")
-    @Schema(description = "类型", example = "")
-    private Integer type;
-
-    @Excel(name = "来源")
-    @Schema(description = "来源", example = "")
-    private String source;
-
-    @Excel(name = "方法数")
-    @Schema(description = "方法数", example = "")
-    private Integer methodNum;
+    @Excel(name = "botid")
+    @Schema(description = "botid", example = "")
+    private Long botId;
 
     @Excel(name = "是否有效")
     @Schema(description = "是否有效", example = "")

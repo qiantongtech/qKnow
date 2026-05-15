@@ -62,95 +62,61 @@
  * 等法律法规，严厉追究违约与侵权责任。
  */
 
-package tech.qiantong.qknow.module.kb.controller.admin.tool.vo;
+package tech.qiantong.qknow.module.kb.dal.dataobject.bot;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.*;
-import io.swagger.v3.oas.annotations.media.Schema;
-import tech.qiantong.qknow.common.core.annotation.Excel;
-import java.util.Date;
-import java.io.Serializable;
+import tech.qiantong.qknow.common.core.domain.BaseEntity;
 
 /**
- * 工具管理 Response VO 对象 kb_tool
+ * bot访问密钥 DO 对象 kb_bot_apikey
  *
  * @author qknow
- * @date 2026-03-19
+ * @date 2026-04-24
  */
-@Schema(description = "工具管理 Response VO")
 @Data
-public class KbToolRespVO implements Serializable {
-
+@TableName(value = "kb_bot_apikey")
+// 用于 Oracle、PostgreSQL、Kingbase、DB2、H2 数据库的主键自增。如果是 MySQL 等数据库，可不写。
+// @KeySequence("kb_bot_apikey_seq")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+public class KbBotApikeyDO extends BaseEntity {
+    @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
-    @Excel(name = "ID")
-    @Schema(description = "ID")
+    /**
+     * ID
+     */
+    @TableId(type = IdType.AUTO)
     private Long id;
 
-    @Excel(name = "工作区id")
-    @Schema(description = "工作区id", example = "")
+    /**
+     * 工作区id
+     */
     private Long workspaceId;
 
-    @Excel(name = "名称")
-    @Schema(description = "名称", example = "")
-    private String name;
+    /**
+     * apikey
+     */
+    private String apiKey;
 
-    @Excel(name = "描述")
-    @Schema(description = "描述", example = "")
-    private String description;
+    /**
+     * botid
+     */
+    private Long botId;
 
-    @Excel(name = "标签")
-    @Schema(description = "标签", example = "")
-    private String tags;
-
-    @Excel(name = "类型")
-    @Schema(description = "类型", example = "")
-    private Integer type;
-
-    @Excel(name = "来源")
-    @Schema(description = "来源", example = "")
-    private String source;
-
-    @Excel(name = "方法数")
-    @Schema(description = "方法数", example = "")
-    private Integer methodNum;
-
-    @Excel(name = "是否有效")
-    @Schema(description = "是否有效", example = "")
+    /**
+     * 是否有效
+     */
     private Boolean validFlag;
 
-    @Excel(name = "删除标志")
-    @Schema(description = "删除标志", example = "")
+    /**
+     * 删除标志
+     */
+    @TableLogic
     private Boolean delFlag;
 
-    @Excel(name = "创建人")
-    @Schema(description = "创建人", example = "")
-    private String createBy;
-
-    @Excel(name = "创建人id")
-    @Schema(description = "创建人id", example = "")
-    private Long creatorId;
-
-    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建时间", example = "")
-    private Date createTime;
-
-    @Excel(name = "更新人")
-    @Schema(description = "更新人", example = "")
-    private String updateBy;
-
-    @Excel(name = "更新人id")
-    @Schema(description = "更新人id", example = "")
-    private Long updaterId;
-
-    @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "更新时间", example = "")
-    private Date updateTime;
-
-    @Excel(name = "备注")
-    @Schema(description = "备注", example = "")
-    private String remark;
 
 }

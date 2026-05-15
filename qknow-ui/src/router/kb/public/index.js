@@ -89,7 +89,7 @@ export default [
         children: [
             {
                 name: 'agent',
-                path: 'bot/agent/detail',
+                path: 'bot/agent/build',
                 component: () => import('@/views/kb/agent/index.vue'),
                 meta: { title: 'Agent编排', activeMenu: '/kb/bot/agent'  }
             }
@@ -101,7 +101,7 @@ export default [
         children: [
             {
                 path: 'bot/processflow',
-                component: () => import('@/views/kb/bot/detail/index.vue'),
+                component: () => import('@/views/kb/bot/build/index.vue'),
                 name: 'ProcessFlow',
                 meta: { title: 'Bot构建', activeMenu: '/kb/bot' }
             },
@@ -110,7 +110,25 @@ export default [
                 component: () => import('@/views/kb/codeNative/index.vue'),
                 name: 'CodeNative',
                 meta: { title: '白盒化开发', activeMenu: '/system/bot' }
-            }
+            },
+            {
+                path: 'bot/workflow/detail',
+                component: () => import('@/views/kb/bot/detail/index.vue'),
+                name: 'workflowDetail',
+                meta: { title: '工作流详情', activeMenu: '/kb/bot/workflow' }
+            },
+            {
+                path: 'bot/chatflow/detail',
+                component: () => import('@/views/kb/bot/detail/index.vue'),
+                name: 'chatflowDetail',
+                meta: { title: 'Chatflow详情', activeMenu: '/kb/bot/chatflow' }
+            },
+            {
+                path: 'bot/agent/detail',
+                component: () => import('@/views/kb/bot/detail/index.vue'),
+                name: 'agentDetail',
+                meta: { title: 'agent详情', activeMenu: '/kb/bot/agent' }
+            },
         ]
     }
 ];
