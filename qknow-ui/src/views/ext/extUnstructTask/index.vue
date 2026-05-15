@@ -165,10 +165,22 @@
           prop="name"
           width="250"
            align="left"
-          show-overflow-tooltip
+         :show-overflow-tooltip="{ effect: 'light' }"
         >
           <template #default="scope">
             {{ scope.row.name || "-" }}
+          </template>
+        </el-table-column>
+             <el-table-column
+          v-if="getColumnVisibility(16)"
+          label="描述"
+          align="left"
+          prop="description"
+          min-width="260"
+          :show-overflow-tooltip="{ effect: 'light' }"
+        >
+          <template #default="scope">
+            {{ scope.row.description || "-" }}
           </template>
         </el-table-column>
         <el-table-column
@@ -221,7 +233,7 @@
             <span>{{
               scope.row.publishTime == null
                 ? "-"
-                : parseTime(scope.row.publishTime, "{y}-{m}-{d} {h}:{i}:{s}")
+                : parseTime(scope.row.publishTime, "{y}-{m}-{d} {h}:{i}")
             }}</span>
           </template>
         </el-table-column>
@@ -246,20 +258,11 @@
         >
           <template #default="scope">
             <span>{{
-              parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}:{s}")
+              parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}")
             }}</span>
           </template>
         </el-table-column>
-        <el-table-column
-          v-if="getColumnVisibility(16)"
-          label="备注"
-          align="center"
-          prop="remark"
-        >
-          <template #default="scope">
-            {{ scope.row.remark || "-" }}
-          </template>
-        </el-table-column>
+   
         <el-table-column
           label="操作"
           align="center"
@@ -269,6 +272,17 @@
           v-if="getColumnVisibility(17)"
         >
           <template #default="scope">
+              <el-button
+                  link
+                  type="primary"
+                  :disabled="scope.row.publishStatus == 1"
+                  icon="VideoPlay"
+                  @click="extraction(scope.row)"
+                  v-hasPermi="['ext:extUnstructTask:unstructtask:edit']"
+                  style="padding-left: 30px"
+                >
+                  执行
+                </el-button>
             <el-button
               link
               type="primary"
@@ -278,30 +292,22 @@
               v-hasPermi="['ext:extUnstructTask:unstructtask:extractResults']"
               >抽取结果
             </el-button>
-            <el-button
-              link
-              type="primary"
-              icon="List"
-              @click="showLogDialog(scope.row)"
-              v-hasPermi="['ext:extUnstructTask:unstructtask:taskLog']"
-              >执行日志
-            </el-button>
+           
             <el-popover placement="bottom" :width="100" trigger="click">
               <template #reference>
                 <el-button link type="primary" icon="ArrowDown">更多</el-button>
               </template>
               <div style="width: 90px" class="butgdlist">
-                <el-button
-                  link
-                  type="primary"
-                  :disabled="scope.row.publishStatus == 1"
-                  icon="Edit"
-                  @click="extraction(scope.row)"
-                  v-hasPermi="['ext:extUnstructTask:unstructtask:edit']"
-                  style="padding-left: 30px"
-                >
-                  执行
-                </el-button>
+                 <el-button
+              link
+              type="primary"
+              icon="List"
+              @click="showLogDialog(scope.row)"
+              v-hasPermi="['ext:extUnstructTask:unstructtask:taskLog']"
+               style="padding-left: 25px"
+              >执行日志
+            </el-button>
+              
                 <el-button
                   link
                   type="primary"
@@ -397,7 +403,7 @@
                   width="450"
                   label="文件名称"
                   prop="status"
-                  show-overflow-tooltip
+                 :show-overflow-tooltip="{ effect: 'light' }"
                 >
                   <template #default="scope">
                     {{ scope.row.name || "-" }}
@@ -551,7 +557,7 @@ const columns = ref([
   { key: 7, label: "发布人", visible: true },
   { key: 10, label: "创建人", visible: true },
   { key: 12, label: "创建时间", visible: true },
-  { key: 16, label: "备注", visible: true },
+  { key: 16, label: "描述", visible: true },
   { key: 17, label: "操作", visible: true },
 ]);
 
@@ -718,6 +724,61 @@ const getLabelByValue = (value) => {
 };
 
 /** 查询非结构化抽取任务列表 */
+const taskDescriptionMap = {
+  "疾病与诊断抽取任务":
+    "从疾病与诊断类文档中识别疾病名称、症状表现、诊断依据、检查项目等核心医学知识。",
+  "治疗与干预综合抽取任务":
+    "抽取治疗方案、干预措施、康复建议及随访要求，形成治疗与干预相关结构化信息。",
+  "人体结构学抽取":
+    "识别人体器官、组织结构、解剖部位及其层级关系，支撑医学知识图谱构建。",
+  "疾病治疗方案抽取":
+    "围绕具体疾病抽取用药方案、手术方式、护理措施和疗效评估等治疗方案信息。",
+  "药物机械知识抽取":
+    "抽取药物名称、适应症、用法用量以及医疗器械用途、操作规范等知识内容。",
+  "治疗方法综合抽取":
+    "汇总药物治疗、手术治疗、物理治疗和康复治疗等方法，抽取适用场景与注意事项。",
+  "疾病识别综合抽取":
+    "从多格式文本中识别疾病实体、临床表现、检查结果与诊断结论等综合信息。",
+  "医疗人力资源组织抽取":
+    "抽取医疗机构人员、岗位职责、组织架构和科室协作关系等管理类知识。",
+  "医学健康综合抽取":
+    "面向医学健康资料抽取疾病、药物、检查、干预和健康管理等综合知识要素。",
+  "综合器械应用抽取":
+    "识别医疗器械名称、应用场景、操作流程、维护要求及安全注意事项。",
+  "医学机械抽取任务":
+    "抽取医学设备和医疗机械的名称、功能、适用科室、使用规范及维护信息。",
+  "医学器械抽取任务":
+    "抽取医学设备和医疗器械的名称、功能、适用科室、使用规范及维护信息。",
+  "药物器械知识抽取":
+    "抽取药物名称、适应症、用法用量以及医疗器械用途、操作规范等知识内容。",
+  "医学机构抽取任务":
+    "抽取医院、科室、医疗机构类型、等级、地址及服务能力等机构相关信息。",
+};
+
+const taskDescriptionIdMap = {
+  13: taskDescriptionMap["医学机械抽取任务"],
+  14: taskDescriptionMap["疾病与诊断抽取任务"],
+  15: taskDescriptionMap["治疗与干预综合抽取任务"],
+  16: taskDescriptionMap["人体结构学抽取"],
+  17: taskDescriptionMap["疾病治疗方案抽取"],
+  18: taskDescriptionMap["药物机械知识抽取"],
+  19: taskDescriptionMap["治疗方法综合抽取"],
+  20: taskDescriptionMap["疾病识别综合抽取"],
+  21: taskDescriptionMap["医疗人力资源组织抽取"],
+  22: taskDescriptionMap["医学健康综合抽取"],
+  23: taskDescriptionMap["综合器械应用抽取"],
+};
+
+const getTaskDescription = (row) => {
+  const taskName = row.name ? row.name.trim() : "";
+  return (
+    taskDescriptionMap[taskName] ||
+    taskDescriptionIdMap[row.id] ||
+    row.remark ||
+    "-"
+  );
+};
+
 function getList() {
   loading.value = true;
 
@@ -736,7 +797,10 @@ function getList() {
   }
 
   listUnstructTask(queryParams.value).then((response) => {
-    unstructTaskList.value = response.data.rows;
+    unstructTaskList.value = response.data.rows.map((item) => ({
+      ...item,
+      description: getTaskDescription(item),
+    }));
     total.value = response.data.total;
     loading.value = false;
   });
