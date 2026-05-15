@@ -1170,8 +1170,9 @@ function clearNotification() {
   position: relative;
   text-align: center;
   line-height: 60px;
-  background: url(@/assets/system/images/layout/navbar_bg.png) no-repeat center center;
-  background-size: cover;
+  background: url(@/assets/system/images/layout/navbar_bg.jpg) no-repeat center center;
+  background-size: 100% 100%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 
   ::v-deep(.el-menu) {
     background-color:transparent;
@@ -1180,6 +1181,7 @@ function clearNotification() {
     display: flex;
     align-items: center;
     padding: 0 16px;
+    border-bottom: none;
   }
 
   .navbar-logo {
