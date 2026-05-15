@@ -60,7 +60,7 @@
     <div class="right-menu">
       <template v-if="appStore.device !== 'mobile'">
         <div
-          style="width: 220px; margin-top: 10px"
+          class="page-form"
           v-if="showSelector && knowledgeBaseId"
         >
           <el-form
@@ -1241,6 +1241,16 @@ function clearNotification() {
 
     &:focus {
       outline: none;
+    }
+
+    .page-form{
+        display: flex;
+        align-items: center;
+
+        .el-form-item{
+            margin-bottom:0;
+            margin-right: 15px;
+        }
     }
 
     .right-menu-item {
