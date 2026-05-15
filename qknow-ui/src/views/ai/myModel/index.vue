@@ -393,7 +393,6 @@ function routeTo(link, row) {
     window.location.href = link;
     return;
   }
-  console.log("routeTo", link, row);
   if (link !== "") {
     if (link === router.currentRoute.value.path) {
       window.location.reload();

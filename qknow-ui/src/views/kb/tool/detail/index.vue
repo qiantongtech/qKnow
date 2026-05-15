@@ -67,7 +67,7 @@
     <div class="pagecont-top" v-show="showSearch" style="padding-bottom: 15px">
       <div class="infotop">
         <div class="infotop-title mb15">
-          <el-tag size="medium">
+          <el-tag class="id-tag">
             {{ toolDetail.id }}
           </el-tag>
           <span style="margin-left: 8px">
@@ -83,20 +83,12 @@
                 @click="handleReturn"
                 @mousedown="(e) => e.preventDefault()"
               >
-                <svg-icon :iconClass="'fhs'" /> 返回
+                <svg-icon style="width: 1em;height: 1em; margin-right: 3px;" :iconClass="'fhs'" /> 返回
               </el-button>
             </el-col>
           </el-row>
         </div>
-        <el-row :gutter="20">
-          <el-col :span="8">
-            <div class="infotop-row border-top">
-              <div class="infotop-row-lable">描述</div>
-              <div class="infotop-row-value">
-                {{ toolDetail.description || "-" }}
-              </div>
-            </div>
-          </el-col>
+        <el-row :gutter="3" style="margin-bottom: 3px;">
           <el-col :span="8">
             <div class="infotop-row border-top">
               <div class="infotop-row-lable">标签</div>
@@ -115,14 +107,6 @@
               </div>
             </div>
           </el-col>
-          <!--            <el-col :span="8">-->
-          <!--              <div class="infotop-row border-top">-->
-          <!--                <div class="infotop-row-lable">来源</div>-->
-          <!--                <div class="infotop-row-value">-->
-          <!--                  {{ toolDetail.source || '-' }}-->
-          <!--                </div>-->
-          <!--              </div>-->
-          <!--            </el-col>-->
           <el-col :span="8">
             <div class="infotop-row border-top">
               <div class="infotop-row-lable">创建人</div>
@@ -135,11 +119,23 @@
             <div class="infotop-row border-top">
               <div class="infotop-row-lable">创建时间</div>
               <div class="infotop-row-value">
-                {{ parseTime(toolDetail.createTime, "{y}-{m}-{d}") }}
+                {{ parseTime(toolDetail.createTime, "{y}-{m}-{d} {h}:{i}") }}
               </div>
             </div>
           </el-col>
-          <el-col :span="16">
+        </el-row>
+        <el-row  style="margin-bottom: 3px;">
+          <el-col :span="24">
+            <div class="infotop-row border-top">
+              <div class="infotop-row-lable">描述</div>
+              <div class="infotop-row-value">
+                {{ toolDetail.description || "-" }}
+              </div>
+            </div>
+          </el-col>
+        </el-row >
+        <el-row>
+          <el-col :span="24">
             <div class="infotop-row border-top">
               <div class="infotop-row-lable">备注</div>
               <div class="infotop-row-value">
@@ -148,12 +144,13 @@
             </div>
           </el-col>
         </el-row>
+
       </div>
     </div>
 
     <div class="pagecont-bottom">
       <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-        <el-tab-pane label="工具列表" name="1">
+        <el-tab-pane label="工具方法" name="1">
           <Method :toolId="toolDetail.id" :key="toolDetail.id"></Method>
         </el-tab-pane>
       </el-tabs>
@@ -170,7 +167,6 @@ const { proxy } = getCurrentInstance();
 const activeName = ref("1");
 
 const handleClick = (tab, event) => {
-  console.log(tab, event);
 };
 
 const showSearch = ref(true);
@@ -215,6 +211,17 @@ const handleReturn = () => {
 };
 </script>
 <style scoped lang="scss">
+.id-tag {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2px;
+  background-color: #2666fb;
+  color: #fff;
+  aspect-ratio: 1 / 1;
+  width: 20px;
+  height: 20px;
+}
 .card-tag {
   margin: 2px;
 }
