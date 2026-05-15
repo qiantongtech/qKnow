@@ -59,7 +59,7 @@
         <div class="greeting">
           <div class="entry_period">亲爱的朋友，{{ greetingsTitle }}！</div>
           <div class="entry_greeting">
-            知识平台是未来的考古层，今天存储的每条数据都在书写明天的历史。
+            qKnow 智能体构建平台，让企业知识沉淀为智能能力。
           </div>
         </div>
         <div class="login-panel">
