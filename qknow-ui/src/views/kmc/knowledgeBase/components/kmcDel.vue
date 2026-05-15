@@ -204,10 +204,11 @@
                 label="最近更新时间"
                 prop="updatedAt"
                 min-width="180"
+                align="center"
               />
               <el-table-column label="删除影响" prop="impact" min-width="280" />
             </el-table>
-            <div class="table-footer">共 {{ relatedData.length }} 条数据</div>
+            <pagination :total="relatedData.length" />
           </div>
         </div>
 
@@ -361,10 +362,10 @@ const relatedData = ref([
     icon: Collection,
   },
   {
-    name: "检索索引",
+    name: "知识文件分段",
     count: stats.value.indexCount.toLocaleString(),
     updatedAt: "2024-05-20 14:35:42",
-    impact: "索引数据将被删除，影响检索与召回",
+    impact: "知识文件分段数据将被删除，影响检索与召回",
     type: "index",
     icon: Coin,
   },
@@ -739,6 +740,33 @@ onMounted(() => {
           padding: 14px 0;
           font-size: 13px;
         }
+      }
+    }
+
+    .type-icon {
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-size: 14px;
+
+      &.doc,
+      &.index,
+      &.permission {
+        color: #2666fb;
+        background: #eaf1ff;
+      }
+
+      &.category {
+        color: #10b981;
+        background: #e8f8f1;
+      }
+
+      &.test {
+        color: #7c5cff;
+        background: #f0edff;
       }
     }
 

@@ -149,6 +149,7 @@
           label="分类名称"
           prop="name"
           align="left"
+          width="250px"
           :show-overflow-tooltip="true"
         >
           <template #default="scope">
@@ -160,6 +161,7 @@
           label="显示顺序"
           align="center"
           prop="orderNum"
+          width="100px"
         >
           <template #default="scope">
             {{ scope.row.orderNum !== null ? scope.row.orderNum : "-" }}
@@ -170,7 +172,7 @@
           label="备注"
           align="left"
           prop="remark"
-          width="200px"
+          width="300px"
           :show-overflow-tooltip="{ effect: 'light' }"
         >
           <template #default="scope">
