@@ -137,7 +137,7 @@
             {{ scope.row.query || "-" }}
           </template>
         </el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           v-if="getColumnVisibility(3)"
           label="备注"
           align="left"
@@ -146,7 +146,7 @@
           <template #default="scope">
             {{ scope.row.remark || "-" }}
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           v-if="getColumnVisibility(4)"
           label="创建人"
@@ -229,7 +229,7 @@ const logList = ref([]);
 const columns = ref([
   { key: 1, label: "编号", visible: true },
   { key: 2, label: "问题", visible: true },
-  { key: 3, label: "备注", visible: true },
+  // { key: 3, label: "备注", visible: true },
   { key: 4, label: "创建人", visible: true },
   { key: 5, label: "创建时间", visible: true },
   { key: 6, label: "更新人", visible: true },

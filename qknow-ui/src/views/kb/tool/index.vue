@@ -118,7 +118,7 @@
            {{ scope.row.name || '-' }}
          </template>
        </el-table-column>
-       <el-table-column v-if="getColumnVisibility(3)" label="描述" align="left" prop="description" width="250px"
+       <el-table-column v-if="getColumnVisibility(3)" label="描述" align="left" prop="description" width="400px"
                         :show-overflow-tooltip="{ effect: 'light' }">
          <template #default="scope">
            {{ scope.row.description || '-' }}
@@ -139,15 +139,15 @@
            </div>
          </template>
        </el-table-column>
-<!--       <el-table-column v-if="getColumnVisibility(6)" label="来源" align="center" prop="source">-->
+<!--       <el-table-column v-if="getColumnVisibility(15)" label="备注" align="left" prop="remark" width="250"-->
+<!--                        :show-overflow-tooltip="{ effect: 'light' }">-->
 <!--         <template #default="scope">-->
-<!--           {{ scope.row.source || '-' }}-->
+<!--           {{ scope.row.remark || '-' }}-->
 <!--         </template>-->
 <!--       </el-table-column>-->
-       <el-table-column v-if="getColumnVisibility(15)" label="备注" align="left" prop="remark" width="250"
-                        :show-overflow-tooltip="{ effect: 'light' }">
+       <el-table-column v-if="getColumnVisibility(9)" label="工具方法数" align="center" prop="methodNum">
          <template #default="scope">
-           {{ scope.row.remark || '-' }}
+           {{ scope.row.methodNum || '-' }}
          </template>
        </el-table-column>
        <el-table-column v-if="getColumnVisibility(9)" label="创建人" align="center" prop="createBy">
@@ -160,14 +160,14 @@
            <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}') }}</span>
          </template>
        </el-table-column>
-       <el-table-column label="操作" v-if="getColumnVisibility(16)" align="center" class-name="small-padding fixed-width" fixed="right" width="240">
+       <el-table-column v-if="getColumnVisibility(16)" label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="240">
          <template #default="scope">
+           <el-button link type="primary" icon="view" @click="routeTo('/kb/tool/toolDetail',scope.row)"
+                      v-hasPermi="['kb:tool:tool:query']">详情</el-button>
            <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
                       v-hasPermi="['kb:tool:tool:edit']">修改</el-button>
            <el-button link type="danger" icon="Delete" @click="handleDelete(scope.row)"
                       v-hasPermi="['kb:tool:tool:remove']">删除</el-button>
-           <el-button link type="primary" icon="view" @click="routeTo('/kb/tool/toolDetail',scope.row)"
-                      v-hasPermi="['kb:tool:tool:query']">详情</el-button>
          </template>
        </el-table-column>
 
@@ -234,17 +234,9 @@
                   + 添加标签
                 </el-button>
               </div>
-              <!--                <el-input v-model="form.tags" placeholder="请输入标签" />-->
             </el-form-item>
           </el-col>
         </el-row>
-<!--        <el-row :gutter="20">-->
-<!--            <el-col :span="24">-->
-<!--              <el-form-item label="来源" prop="source">-->
-<!--                <el-input v-model="form.source" placeholder="请输入来源" />-->
-<!--              </el-form-item>-->
-<!--            </el-col>-->
-<!--          </el-row>-->
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item label="描述" prop="description">
