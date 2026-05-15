@@ -163,7 +163,7 @@
            {{ scope.row.createBy || '-' }}
          </template>
        </el-table-column>
-       <el-table-column v-if="getColumnVisibility(7)" label="创建时间" align="left" prop="createTime" width="180" sortable="custom" :sort-orders="['descending', 'ascending']">
+       <el-table-column v-if="getColumnVisibility(7)" label="创建时间" align="center" prop="createTime" width="180" sortable="custom" :sort-orders="['descending', 'ascending']">
          <template #default="scope">
            <span>{{ parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}") }}</span>
          </template>
