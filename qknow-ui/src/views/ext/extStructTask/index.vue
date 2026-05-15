@@ -255,11 +255,11 @@
         <el-table-column
           v-if="getColumnVisibility(9)"
           label="发布时间"
-          align="center"
+          align="left"
           prop="publishTime"
           sortable="custom"
           :sort-orders="['descending', 'ascending']"
-          width="180"
+          width="160"
         >
           <template #default="scope">
             <span>{{
@@ -283,9 +283,9 @@
         <el-table-column
           v-if="getColumnVisibility(14)"
           label="创建时间"
-          align="center"
+          align="left"
           prop="createTime"
-          width="180"
+          width="160"
           sortable="custom"
           :sort-orders="['descending', 'ascending']"
         >
@@ -298,9 +298,10 @@
       <el-table-column
           v-if="getColumnVisibility(18)"
           label="备注"
-          align="center"
+          align="left"
           prop="remark"
-          show-overflow-tooltip
+         :show-overflow-tooltip="{ effect: 'light' }"
+
         >
           <template #default="scope">
             {{ scope.row.remark || "-" }}
@@ -456,7 +457,7 @@ const taskVisible = ref(true);
 
 // 列显隐信息
 const columns = ref([
-  { key: 1, label: "ID", visible: true },
+  { key: 1, label: "编号", visible: true },
   { key: 2, label: "任务名称", visible: true },
   { key: 3, label: "更新类型", visible: true },
   { key: 4, label: "更新频率", visible: true },
