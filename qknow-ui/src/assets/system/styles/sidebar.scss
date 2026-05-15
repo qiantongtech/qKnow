@@ -202,6 +202,8 @@
       padding-left: 60px;
     }
 
+   
+
     .sub-menu-title-noDropdown {
       padding: 0 !important;
       position: relative;
@@ -252,6 +254,12 @@
 
   .el-menu--collapse .el-menu .el-sub-menu {
     min-width: $base-sidebar-width !important;
+  }
+
+  .sidebarHide{
+     .hamburger-container{
+        display: none;
+    }
   }
 
   // mobile responsive
