@@ -84,7 +84,7 @@ public interface AiModelMapper extends BaseMapperX<AiModelDO> {
 
     default PageResult<AiModelDO> selectPage(AiModelPageReqVO reqVO) {
         // 定义排序的字段（防止 SQL 注入，与数据库字段名称一致）
-        Set<String> allowedColumns = new HashSet<>(Arrays.asList("id", "create_time", "update_time"));
+        Set<String> allowedColumns = new HashSet<>(Arrays.asList("id","name", "create_time", "update_time"));
 
         // 构造动态查询条件
         return selectPage(reqVO, new LambdaQueryWrapperX<AiModelDO>()

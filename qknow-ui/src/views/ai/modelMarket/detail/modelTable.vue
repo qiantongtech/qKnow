@@ -10,12 +10,13 @@
         {{ scope.row.id || '-' }}
       </template>
     </el-table-column>
-    <el-table-column label="模型名称" align="center" prop="name">
+    <el-table-column label="模型名称" align="center" prop="name"sortable="custom"
+                     :sort-orders="['descending', 'ascending']">
       <template #default="scope">
         {{ scope.row.name || '-' }}
       </template>
     </el-table-column>
-    <el-table-column label="模型类型" align="center" prop="name">
+    <el-table-column label="模型类型" align="center" prop="type">
       <template #default="scope">
         <dict-tag :options="ai_model_tag" :value="scope.row.type"/>
       </template>
