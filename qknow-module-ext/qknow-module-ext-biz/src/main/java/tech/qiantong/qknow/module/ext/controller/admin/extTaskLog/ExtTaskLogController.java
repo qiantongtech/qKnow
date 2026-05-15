@@ -88,6 +88,8 @@ import tech.qiantong.qknow.module.ext.service.extTaskLog.IExtTaskLogService;
 
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -138,5 +140,12 @@ public class ExtTaskLogController extends BaseController {
     public CommonResult<ExtTaskLogRespVO> getInfo(@PathVariable("id") Long id) {
         ExtTaskLogDO extTaskLogDO = extTaskLogService.getExtTaskLogById(id);
         return CommonResult.success(BeanUtils.toBean(extTaskLogDO, ExtTaskLogRespVO.class));
+    }
+
+    @Operation(summary = "删除抽取日志")
+    @Log(title = "关系映射", businessType = BusinessType.DELETE)
+    @DeleteMapping("/{ids}")
+    public CommonResult<Integer> remove(@PathVariable Long[] ids) {
+        return CommonResult.toAjax(extTaskLogService.removeExtTaskById(Arrays.asList(ids)));
     }
 }
