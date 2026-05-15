@@ -162,6 +162,7 @@
           v-if="getColumnVisibility(1)"
           label="分类名称"
           prop="name"
+          width="250"
           :show-overflow-tooltip="true"
         >
           <template #default="scope">
@@ -173,6 +174,7 @@
           label="显示顺序"
           align="center"
           prop="orderNum"
+          width="100"
         >
           <template #default="scope">
             {{ scope.row.orderNum !== null ? scope.row.orderNum : "-" }}
@@ -181,7 +183,7 @@
         <el-table-column
           v-if="getColumnVisibility(3)"
           label="备注"
-          width="200"
+          width="300"
           align="left"
           prop="remark"
           :show-overflow-tooltip="{ effect: 'light' }"
