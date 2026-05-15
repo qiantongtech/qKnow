@@ -81,3 +81,11 @@ export function getDetailPage(query) {
     params: query
   })
 }
+
+// 删除抽取任务执行日志
+export function delTaskLog(id) {
+  return request({
+    url: '/ext/taskLog/' + id,
+    method: 'delete'
+  })
+}
