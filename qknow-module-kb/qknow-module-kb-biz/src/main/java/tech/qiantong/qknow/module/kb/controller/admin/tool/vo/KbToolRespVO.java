@@ -111,6 +111,10 @@ public class KbToolRespVO implements Serializable {
     @Schema(description = "来源", example = "")
     private String source;
 
+    @Excel(name = "方法数")
+    @Schema(description = "方法数", example = "")
+    private Integer methodNum;
+
     @Excel(name = "是否有效")
     @Schema(description = "是否有效", example = "")
     private Boolean validFlag;

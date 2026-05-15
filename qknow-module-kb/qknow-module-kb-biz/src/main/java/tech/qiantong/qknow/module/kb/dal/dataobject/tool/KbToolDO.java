@@ -64,6 +64,7 @@
 
 package tech.qiantong.qknow.module.kb.dal.dataobject.tool;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -119,5 +120,7 @@ public class KbToolDO extends BaseEntity {
     @TableLogic
     private Boolean delFlag;
 
+    /** 方法数 */
+    private Integer methodNum;
 
 }

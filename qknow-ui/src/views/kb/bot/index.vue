@@ -219,13 +219,31 @@
             </div>
           </template>
         </el-table-column>
+        <el-table-column label="节点数" v-if="getColumnVisibility(9)"
+            align="center"
+            prop="createBy"
+            width="80"
+        >
+          <template #default="scope">
+            {{ scope.row.nodeNum || "-" }}
+          </template>
+        </el-table-column>
+        <el-table-column label="密钥数" v-if="getColumnVisibility(10)"
+                         align="center"
+                         prop="createBy"
+                         width="80"
+        >
+          <template #default="scope">
+            {{ scope.row.apiKeyNum || "-" }}
+          </template>
+        </el-table-column>
 
         <el-table-column
             v-if="getColumnVisibility(5)"
             label="创建人"
             align="center"
             prop="createBy"
-            width="100"
+            width="80"
         >
           <template #default="scope">
             {{ scope.row.createBy || "-" }}
@@ -236,7 +254,7 @@
             label="创建时间"
             align="center"
             prop="createTime"
-            width="180"
+            width="150"
             sortable="custom"
             :sort-orders="['descending', 'ascending']"
         >
@@ -251,7 +269,7 @@
             label="最后更新时间"
             align="center"
             prop="updateTime"
-            width="180"
+            width="150"
             sortable="custom"
             :sort-orders="['descending', 'ascending']"
         >
@@ -267,7 +285,7 @@
             v-if="getColumnVisibility(8)"
             class-name="small-padding fixed-width"
             fixed="right"
-            width="240"
+            width="180"
         >
           <template #default="scope">
             <el-button
@@ -419,10 +437,12 @@ const columns = ref([
   {key: 2, label: "描述", visible: true},
   {key: 3, label: "类型", visible: true},
   {key: 4, label: "是否内置", visible: true},
+  {key: 9, label: "节点数", visible: true},
+  {key: 10, label: "密钥数", visible: true},
   {key: 5, label: "创建人", visible: true},
   {key: 6, label: "创建时间", visible: true},
   {key: 7, label: "最后更新时间", visible: true},
-  {key: 8, label: "操作", visible: true},
+  {key: 8, label: "操作", visible: true}
 ]);
 
 const getColumnVisibility = (key) => {
