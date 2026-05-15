@@ -1000,5 +1000,14 @@ getList();
   flex-direction: column;
   align-items: flex-start;
 }
+
+.user-time-cell {
+  line-height: 20px;
+
+  .time-text {
+    color: #8c8c8c;
+    font-size: 12px;
+  }
+}
 </style>
   
