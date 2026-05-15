@@ -219,10 +219,19 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="节点数" v-if="getColumnVisibility(9)"
+        <el-table-column label="节点数" v-if="getColumnVisibility(9) && (botType===1|| botType ===0)"
             align="center"
             prop="createBy"
             width="80"
+        >
+          <template #default="scope">
+            {{ scope.row.nodeNum || "-" }}
+          </template>
+        </el-table-column>
+        <el-table-column label="工具数" v-if="getColumnVisibility(9) && (botType===2)"
+                         align="center"
+                         prop="createBy"
+                         width="80"
         >
           <template #default="scope">
             {{ scope.row.nodeNum || "-" }}
