@@ -62,80 +62,80 @@
  * 等法律法规，严厉追究违约与侵权责任。
  */
 
-package tech.qiantong.qknow.module.kb.dal.dataobject.runtime;
+package tech.qiantong.qknow.module.kb.controller.admin.bot.vo;
 
-import lombok.*;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
-import tech.qiantong.qknow.common.core.domain.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import tech.qiantong.qknow.common.annotation.Excel;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
- * bot运行 DO 对象 kb_runtime
+ * bot访问密钥 Response VO 对象 kb_bot_apikey
  *
  * @author qknow
- * @date 2026-03-18
+ * @date 2026-04-24
  */
+@Schema(description = "bot访问密钥 Response VO")
 @Data
-@TableName(value = "kb_runtime")
-// 用于 Oracle、PostgreSQL、Kingbase、DB2、H2 数据库的主键自增。如果是 MySQL 等数据库，可不写。
-// @KeySequence("kb_runtime_seq")
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class KbRuntimeDO extends BaseEntity {
-    @TableField(exist = false)
+public class KbBotApikeyRespVO implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
-    /**
-     * ID
-     */
-    @TableId(type = IdType.AUTO)
+    @Excel(name = "ID")
+    @Schema(description = "ID")
     private Long id;
 
-    /**
-     * 工作区id
-     */
+    @Excel(name = "工作区id")
+    @Schema(description = "工作区id", example = "")
     private Long workspaceId;
 
-    /**
-     * botId
-     */
+    @Excel(name = "apikey")
+    @Schema(description = "apikey", example = "")
+    private String apiKey;
+
+    @Excel(name = "botid")
+    @Schema(description = "botid", example = "")
     private Long botId;
 
-    /**
-     * 输入问题
-     */
-    private String input;
-
-    /**
-     * 输出结果
-     */
-    private String output;
-
-    /**
-     * 运行状态
-     */
-    private Integer status;
-
-    /**
-     * 运行时间(毫秒)
-     */
-    private Long runtime;
-
-    /**
-     * 是否有效
-     */
+    @Excel(name = "是否有效")
+    @Schema(description = "是否有效", example = "")
     private Boolean validFlag;
 
-    /**
-     * 删除标志
-     */
-    @TableLogic
+    @Excel(name = "删除标志")
+    @Schema(description = "删除标志", example = "")
     private Boolean delFlag;
 
+    @Excel(name = "创建人")
+    @Schema(description = "创建人", example = "")
+    private String createBy;
+
+    @Excel(name = "创建人id")
+    @Schema(description = "创建人id", example = "")
+    private Long creatorId;
+
+    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "创建时间", example = "")
+    private Date createTime;
+
+    @Excel(name = "更新人")
+    @Schema(description = "更新人", example = "")
+    private String updateBy;
+
+    @Excel(name = "更新人id")
+    @Schema(description = "更新人id", example = "")
+    private Long updaterId;
+
+    @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "更新时间", example = "")
+    private Date updateTime;
+
+    @Excel(name = "备注")
+    @Schema(description = "备注", example = "")
+    private String remark;
 
 }

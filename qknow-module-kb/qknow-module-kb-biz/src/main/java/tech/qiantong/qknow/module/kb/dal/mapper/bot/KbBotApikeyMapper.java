@@ -62,80 +62,39 @@
  * 等法律法规，严厉追究违约与侵权责任。
  */
 
-package tech.qiantong.qknow.module.kb.dal.dataobject.runtime;
+package tech.qiantong.qknow.module.kb.dal.mapper.bot;
 
-import lombok.*;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
-import tech.qiantong.qknow.common.core.domain.BaseEntity;
+import tech.qiantong.qknow.common.core.page.PageResult;
+import tech.qiantong.qknow.module.kb.controller.admin.bot.vo.KbBotApikeyPageReqVO;
+import tech.qiantong.qknow.module.kb.dal.dataobject.bot.KbBotApikeyDO;
+import tech.qiantong.qknow.mybatis.core.mapper.BaseMapperX;
+import tech.qiantong.qknow.mybatis.core.query.LambdaQueryWrapperX;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * bot运行 DO 对象 kb_runtime
+ * bot访问密钥Mapper接口
  *
  * @author qknow
- * @date 2026-03-18
+ * @date 2026-04-24
  */
-@Data
-@TableName(value = "kb_runtime")
-// 用于 Oracle、PostgreSQL、Kingbase、DB2、H2 数据库的主键自增。如果是 MySQL 等数据库，可不写。
-// @KeySequence("kb_runtime_seq")
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class KbRuntimeDO extends BaseEntity {
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
+public interface KbBotApikeyMapper extends BaseMapperX<KbBotApikeyDO> {
 
-    /**
-     * ID
-     */
-    @TableId(type = IdType.AUTO)
-    private Long id;
+    default PageResult<KbBotApikeyDO> selectPage(KbBotApikeyPageReqVO reqVO) {
+        // 定义排序的字段（防止 SQL 注入，与数据库字段名称一致）
+        Set<String> allowedColumns = new HashSet<>(Arrays.asList("id", "create_time", "update_time"));
 
-    /**
-     * 工作区id
-     */
-    private Long workspaceId;
-
-    /**
-     * botId
-     */
-    private Long botId;
-
-    /**
-     * 输入问题
-     */
-    private String input;
-
-    /**
-     * 输出结果
-     */
-    private String output;
-
-    /**
-     * 运行状态
-     */
-    private Integer status;
-
-    /**
-     * 运行时间(毫秒)
-     */
-    private Long runtime;
-
-    /**
-     * 是否有效
-     */
-    private Boolean validFlag;
-
-    /**
-     * 删除标志
-     */
-    @TableLogic
-    private Boolean delFlag;
-
-
+        // 构造动态查询条件
+        return selectPage(reqVO, new LambdaQueryWrapperX<KbBotApikeyDO>()
+                .eqIfPresent(KbBotApikeyDO::getWorkspaceId, reqVO.getWorkspaceId())
+                .eqIfPresent(KbBotApikeyDO::getApiKey, reqVO.getApiKey())
+                .eqIfPresent(KbBotApikeyDO::getBotId, reqVO.getBotId())
+                .eqIfPresent(KbBotApikeyDO::getCreateTime, reqVO.getCreateTime())
+                // 如果 reqVO.getName() 不为空，则添加 name 的精确匹配条件（name = '<name>'）
+                // .likeIfPresent(KbBotApikeyDO::getName, reqVO.getName())
+                // 按照 createTime 字段降序排序
+                .orderBy(reqVO.getOrderByColumn(), reqVO.getIsAsc(), allowedColumns));
+    }
 }

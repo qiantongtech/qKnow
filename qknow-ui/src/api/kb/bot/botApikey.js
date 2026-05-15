@@ -62,80 +62,32 @@
  * 等法律法规，严厉追究违约与侵权责任。
  */
 
-package tech.qiantong.qknow.module.kb.dal.dataobject.runtime;
+import request from '@/utils/request'
 
-import lombok.*;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
-import tech.qiantong.qknow.common.core.domain.BaseEntity;
-
-/**
- * bot运行 DO 对象 kb_runtime
- *
- * @author qknow
- * @date 2026-03-18
- */
-@Data
-@TableName(value = "kb_runtime")
-// 用于 Oracle、PostgreSQL、Kingbase、DB2、H2 数据库的主键自增。如果是 MySQL 等数据库，可不写。
-// @KeySequence("kb_runtime_seq")
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class KbRuntimeDO extends BaseEntity {
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * ID
-     */
-    @TableId(type = IdType.AUTO)
-    private Long id;
-
-    /**
-     * 工作区id
-     */
-    private Long workspaceId;
-
-    /**
-     * botId
-     */
-    private Long botId;
-
-    /**
-     * 输入问题
-     */
-    private String input;
-
-    /**
-     * 输出结果
-     */
-    private String output;
-
-    /**
-     * 运行状态
-     */
-    private Integer status;
-
-    /**
-     * 运行时间(毫秒)
-     */
-    private Long runtime;
-
-    /**
-     * 是否有效
-     */
-    private Boolean validFlag;
-
-    /**
-     * 删除标志
-     */
-    @TableLogic
-    private Boolean delFlag;
-
-
+// 查询bot 管理列表
+export function apiKeyPage(query) {
+    return request({
+        url: '/kb/apikey/list',
+        method: 'get',
+        params: query
+    })
 }
+
+// 生成 apiKey
+export function genBotApiKey(botId) {
+    return request({
+        url: '/kb/apikey',
+        method: 'post',
+        data: {
+            botId: botId
+        }
+    })
+}
+// 删除 apiKey
+export function delBotApiKey(id) {
+    return request({
+        url: '/kb/apikey/' + id,
+        method: 'delete'
+    })
+}
+
