@@ -62,95 +62,39 @@
  * 等法律法规，严厉追究违约与侵权责任。
  */
 
-package tech.qiantong.qknow.module.kb.controller.admin.tool.vo;
+package tech.qiantong.qknow.module.kb.dal.mapper.bot;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
-import io.swagger.v3.oas.annotations.media.Schema;
-import tech.qiantong.qknow.common.core.annotation.Excel;
-import java.util.Date;
-import java.io.Serializable;
+import tech.qiantong.qknow.common.core.page.PageResult;
+import tech.qiantong.qknow.module.kb.controller.admin.bot.vo.KbBotApikeyPageReqVO;
+import tech.qiantong.qknow.module.kb.dal.dataobject.bot.KbBotApikeyDO;
+import tech.qiantong.qknow.mybatis.core.mapper.BaseMapperX;
+import tech.qiantong.qknow.mybatis.core.query.LambdaQueryWrapperX;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * 工具管理 Response VO 对象 kb_tool
+ * bot访问密钥Mapper接口
  *
  * @author qknow
- * @date 2026-03-19
+ * @date 2026-04-24
  */
-@Schema(description = "工具管理 Response VO")
-@Data
-public class KbToolRespVO implements Serializable {
+public interface KbBotApikeyMapper extends BaseMapperX<KbBotApikeyDO> {
 
-    private static final long serialVersionUID = 1L;
+    default PageResult<KbBotApikeyDO> selectPage(KbBotApikeyPageReqVO reqVO) {
+        // 定义排序的字段（防止 SQL 注入，与数据库字段名称一致）
+        Set<String> allowedColumns = new HashSet<>(Arrays.asList("id", "create_time", "update_time"));
 
-    @Excel(name = "ID")
-    @Schema(description = "ID")
-    private Long id;
-
-    @Excel(name = "工作区id")
-    @Schema(description = "工作区id", example = "")
-    private Long workspaceId;
-
-    @Excel(name = "名称")
-    @Schema(description = "名称", example = "")
-    private String name;
-
-    @Excel(name = "描述")
-    @Schema(description = "描述", example = "")
-    private String description;
-
-    @Excel(name = "标签")
-    @Schema(description = "标签", example = "")
-    private String tags;
-
-    @Excel(name = "类型")
-    @Schema(description = "类型", example = "")
-    private Integer type;
-
-    @Excel(name = "来源")
-    @Schema(description = "来源", example = "")
-    private String source;
-
-    @Excel(name = "方法数")
-    @Schema(description = "方法数", example = "")
-    private Integer methodNum;
-
-    @Excel(name = "是否有效")
-    @Schema(description = "是否有效", example = "")
-    private Boolean validFlag;
-
-    @Excel(name = "删除标志")
-    @Schema(description = "删除标志", example = "")
-    private Boolean delFlag;
-
-    @Excel(name = "创建人")
-    @Schema(description = "创建人", example = "")
-    private String createBy;
-
-    @Excel(name = "创建人id")
-    @Schema(description = "创建人id", example = "")
-    private Long creatorId;
-
-    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建时间", example = "")
-    private Date createTime;
-
-    @Excel(name = "更新人")
-    @Schema(description = "更新人", example = "")
-    private String updateBy;
-
-    @Excel(name = "更新人id")
-    @Schema(description = "更新人id", example = "")
-    private Long updaterId;
-
-    @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "更新时间", example = "")
-    private Date updateTime;
-
-    @Excel(name = "备注")
-    @Schema(description = "备注", example = "")
-    private String remark;
-
+        // 构造动态查询条件
+        return selectPage(reqVO, new LambdaQueryWrapperX<KbBotApikeyDO>()
+                .eqIfPresent(KbBotApikeyDO::getWorkspaceId, reqVO.getWorkspaceId())
+                .eqIfPresent(KbBotApikeyDO::getApiKey, reqVO.getApiKey())
+                .eqIfPresent(KbBotApikeyDO::getBotId, reqVO.getBotId())
+                .eqIfPresent(KbBotApikeyDO::getCreateTime, reqVO.getCreateTime())
+                // 如果 reqVO.getName() 不为空，则添加 name 的精确匹配条件（name = '<name>'）
+                // .likeIfPresent(KbBotApikeyDO::getName, reqVO.getName())
+                // 按照 createTime 字段降序排序
+                .orderBy(reqVO.getOrderByColumn(), reqVO.getIsAsc(), allowedColumns));
+    }
 }

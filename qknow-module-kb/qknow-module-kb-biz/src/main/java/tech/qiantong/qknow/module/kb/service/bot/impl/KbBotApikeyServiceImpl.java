@@ -62,95 +62,65 @@
  * 等法律法规，严厉追究违约与侵权责任。
  */
 
-package tech.qiantong.qknow.module.kb.controller.admin.tool.vo;
+package tech.qiantong.qknow.module.kb.service.bot.impl;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
-import io.swagger.v3.oas.annotations.media.Schema;
-import tech.qiantong.qknow.common.core.annotation.Excel;
-import java.util.Date;
-import java.io.Serializable;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import tech.qiantong.qknow.common.core.domain.model.LoginUser;
+import tech.qiantong.qknow.common.core.page.PageResult;
+import tech.qiantong.qknow.common.utils.object.BeanUtils;
+import tech.qiantong.qknow.module.kb.controller.admin.bot.vo.KbBotApikeyPageReqVO;
+import tech.qiantong.qknow.module.kb.controller.admin.bot.vo.KbBotApikeySaveReqVO;
+import tech.qiantong.qknow.module.kb.dal.dataobject.bot.KbBotApikeyDO;
+import tech.qiantong.qknow.module.kb.dal.mapper.bot.KbBotApikeyMapper;
+import tech.qiantong.qknow.module.kb.service.bot.IKbBotApikeyService;
+
+import java.util.Collection;
+import java.util.UUID;
 
 /**
- * 工具管理 Response VO 对象 kb_tool
+ * bot访问密钥Service业务层处理
  *
  * @author qknow
- * @date 2026-03-19
+ * @date 2026-04-24
  */
-@Schema(description = "工具管理 Response VO")
-@Data
-public class KbToolRespVO implements Serializable {
+@Slf4j
+@Service
+@Transactional(rollbackFor = Exception.class)
+public class KbBotApikeyServiceImpl extends ServiceImpl<KbBotApikeyMapper, KbBotApikeyDO> implements IKbBotApikeyService {
+    @Resource
+    private KbBotApikeyMapper kbBotApikeyMapper;
 
-    private static final long serialVersionUID = 1L;
+    private static final String API_KEY_FORMAT = "bot-{}";
 
-    @Excel(name = "ID")
-    @Schema(description = "ID")
-    private Long id;
+    @Override
+    public PageResult<KbBotApikeyDO> getKbBotApikeyPage(KbBotApikeyPageReqVO pageReqVO) {
+        return kbBotApikeyMapper.selectPage(pageReqVO);
+    }
 
-    @Excel(name = "工作区id")
-    @Schema(description = "工作区id", example = "")
-    private Long workspaceId;
+    @Override
+    public int removeKbBotApikey(Collection<Long> idList) {
+        // 批量删除bot访问密钥
+        return kbBotApikeyMapper.deleteByIds(idList);
+    }
 
-    @Excel(name = "名称")
-    @Schema(description = "名称", example = "")
-    private String name;
-
-    @Excel(name = "描述")
-    @Schema(description = "描述", example = "")
-    private String description;
-
-    @Excel(name = "标签")
-    @Schema(description = "标签", example = "")
-    private String tags;
-
-    @Excel(name = "类型")
-    @Schema(description = "类型", example = "")
-    private Integer type;
-
-    @Excel(name = "来源")
-    @Schema(description = "来源", example = "")
-    private String source;
-
-    @Excel(name = "方法数")
-    @Schema(description = "方法数", example = "")
-    private Integer methodNum;
-
-    @Excel(name = "是否有效")
-    @Schema(description = "是否有效", example = "")
-    private Boolean validFlag;
-
-    @Excel(name = "删除标志")
-    @Schema(description = "删除标志", example = "")
-    private Boolean delFlag;
-
-    @Excel(name = "创建人")
-    @Schema(description = "创建人", example = "")
-    private String createBy;
-
-    @Excel(name = "创建人id")
-    @Schema(description = "创建人id", example = "")
-    private Long creatorId;
-
-    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "创建时间", example = "")
-    private Date createTime;
-
-    @Excel(name = "更新人")
-    @Schema(description = "更新人", example = "")
-    private String updateBy;
-
-    @Excel(name = "更新人id")
-    @Schema(description = "更新人id", example = "")
-    private Long updaterId;
-
-    @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Schema(description = "更新时间", example = "")
-    private Date updateTime;
-
-    @Excel(name = "备注")
-    @Schema(description = "备注", example = "")
-    private String remark;
+    /**
+     * 生成bot访问密钥
+     *
+     * @param kbBotApikey bot访问密钥信息
+     * @param currentUser 当前用户
+     * @return 生成的bot访问密钥
+     */
+    @Override
+    public Boolean generate(KbBotApikeySaveReqVO kbBotApikey, LoginUser currentUser) {
+        KbBotApikeyDO kbBotApikeyDO = BeanUtils.toBean(kbBotApikey, KbBotApikeyDO.class);
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        kbBotApikeyDO.setApiKey(StrUtil.format(API_KEY_FORMAT,uuid));
+        return baseMapper.insert(kbBotApikeyDO) > 0;
+    }
 
 }

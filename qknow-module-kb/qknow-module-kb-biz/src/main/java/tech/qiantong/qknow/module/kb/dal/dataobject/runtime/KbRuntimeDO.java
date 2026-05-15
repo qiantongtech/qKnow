@@ -107,11 +107,6 @@ public class KbRuntimeDO extends BaseEntity {
     private Long botId;
 
     /**
-     * 会话id
-     */
-    private Long conversationId;
-
-    /**
      * 输入问题
      */
     private String input;

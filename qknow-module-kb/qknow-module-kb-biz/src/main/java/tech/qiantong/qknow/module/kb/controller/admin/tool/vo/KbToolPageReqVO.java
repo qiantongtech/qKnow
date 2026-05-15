@@ -99,7 +99,6 @@ public class KbToolPageReqVO extends PageParam {
     @Schema(description = "来源", example = "")
     private String source;
 
-
-
-
+    @Schema(description = "方法数", example = "")
+    private Integer methodNum;
 }
