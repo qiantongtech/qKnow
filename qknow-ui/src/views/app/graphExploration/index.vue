@@ -1499,7 +1499,7 @@ function previewRefactoring(row) {
     .name {
       font-family: PingFang SC;
       font-size: 16px;
-      color: var(--el-color-primary);
+      // color: var(--el-color-primary);
       display: flex;
       align-items: center;
       &::before {
@@ -1755,7 +1755,7 @@ function previewRefactoring(row) {
           .label {
             width: 270px;
             margin-left: 12px;
-            color: var(--el-color-primary);
+            // color: var(--el-color-primary);
           }
         }
 
@@ -1795,9 +1795,7 @@ function previewRefactoring(row) {
 
         .collapse-title {
           font-family: Pingfang Sc;
-          font-size: 16px;
-          font-weight: 600;
-          // padding: 0 10px;
+          font-size: 14px;
           display: flex;
           align-items: center;
 
