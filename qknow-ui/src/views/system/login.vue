@@ -42,8 +42,16 @@
           <!--            </el-carousel-item>-->
           <!--          </el-carousel>-->
 
-          <el-carousel style="width:100%;height:100%;" arrow="never" autoplay indicator-position="none">
-            <el-carousel-item v-for="(item, index) in loginimglist" :key="index">
+          <el-carousel
+            style="width: 100%; height: 100%"
+            arrow="never"
+            autoplay
+            indicator-position="none"
+          >
+            <el-carousel-item
+              v-for="(item, index) in loginimglist"
+              :key="index"
+            >
               <div class="swiper-slide" :style="getBackgroundStyle(item)"></div>
             </el-carousel-item>
           </el-carousel>
@@ -59,7 +67,7 @@
         <div class="greeting">
           <div class="entry_period">亲爱的朋友，{{ greetingsTitle }}！</div>
           <div class="entry_greeting">
-            qKnow 智能体构建平台，让企业知识沉淀为智能能力。
+            🌟 qKnow 智能体构建平台，让企业知识沉淀为智能能力。
           </div>
         </div>
         <div class="login-panel">
@@ -70,23 +78,38 @@
 
             <div class="titles-bar"></div>
             <el-form-item prop="username">
-              <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号">
+              <el-input
+                v-model="loginForm.username"
+                type="text"
+                auto-complete="off"
+                placeholder="账号"
+              >
                 <template #prefix>
                   <i class="iconfont">&#xeb44;</i>
                 </template>
               </el-input>
             </el-form-item>
             <el-form-item prop="password">
-              <el-input v-model="loginForm.password" type="password" auto-complete="off" placeholder="密码"
-                @keyup.enter="handleLogin">
+              <el-input
+                v-model="loginForm.password"
+                type="password"
+                auto-complete="off"
+                placeholder="密码"
+                @keyup.enter="handleLogin"
+              >
                 <template #prefix>
                   <i class="iconfont">&#xeb6f;</i>
                 </template>
               </el-input>
             </el-form-item>
             <el-form-item prop="code" v-if="captchaEnabled">
-              <el-input v-model="loginForm.code" auto-complete="off" placeholder="验证码" class="code-class"
-                @keyup.enter.native="handleLogin">
+              <el-input
+                v-model="loginForm.code"
+                auto-complete="off"
+                placeholder="验证码"
+                class="code-class"
+                @keyup.enter.native="handleLogin"
+              >
                 <template #prefix>
                   <i class="iconfont">&#xeb4a;</i>
                 </template>
@@ -97,7 +120,12 @@
             </el-form-item>
 
             <el-form-item style="width: 100%">
-              <el-button :loading="loading" type="primary" style="width: 100%" @click.native.prevent="handleLogin">
+              <el-button
+                :loading="loading"
+                type="primary"
+                style="width: 100%"
+                @click.native.prevent="handleLogin"
+              >
                 <span v-if="!loading">登 录</span>
                 <span v-else>登 录 中...</span>
               </el-button>
@@ -105,7 +133,9 @@
 
             <div class="form-actions">
               <el-checkbox v-model="loginForm.rememberMe">记住密码</el-checkbox>
-              <el-text type="primary" @click="dialogVisible = true">忘记密码</el-text>
+              <el-text type="primary" @click="dialogVisible = true"
+                >忘记密码</el-text
+              >
             </div>
           </el-form>
         </div>
@@ -120,7 +150,13 @@
             <div>
               <p>联系电话：</p>
               <!--              <p>400-660-8208</p>-->
-              <p>{{ contentDetail && contentDetail.contactNumber ? contentDetail.contactNumber : '400-660-8208' }}</p>
+              <p>
+                {{
+                  contentDetail && contentDetail.contactNumber
+                    ? contentDetail.contactNumber
+                    : "400-660-8208"
+                }}
+              </p>
             </div>
           </div>
           <div class="contact" style="padding-left: 24px">
@@ -131,84 +167,141 @@
             <div>
               <p>电子邮箱：</p>
               <!--              <p>support@qiantong.tech</p>-->
-              <p>{{ contentDetail && contentDetail.email ? contentDetail.email : 'support@qiantong.tech' }}</p>
+              <p>
+                {{
+                  contentDetail && contentDetail.email
+                    ? contentDetail.email
+                    : "support@qiantong.tech"
+                }}
+              </p>
             </div>
           </div>
         </div>
         <div class="chrome-wrap">
-          <img src="@/assets/system/images/login/goge-icon.png" style="height: 20px" />
-          <span style="
+          <img
+            src="@/assets/system/images/login/goge-icon.png"
+            style="height: 20px"
+          />
+          <span
+            style="
               color: #888;
               font-size: 12px;
               line-height: 0;
               margin-left: 10px;
-            ">为保证最佳浏览效果，请使用</span>
-          <span style="color: #ee2223; font-size: 12px; line-height: 0">Chrome</span>
-          <span style="color: #888; font-size: 12px; line-height: 0">浏览器，点击下载安装</span>
+            "
+            >为保证最佳浏览效果，请使用</span
+          >
+          <span style="color: #ee2223; font-size: 12px; line-height: 0"
+            >Chrome</span
+          >
+          <span style="color: #888; font-size: 12px; line-height: 0"
+            >浏览器，点击下载安装</span
+          >
           <a href="https://www.google.cn/chrome/" target="_blank">
-            <div style="
+            <div
+              style="
                 margin-left: 15px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-              ">
-              <img id="window_img" src="@/assets/system/images/login/window-icon.svg" style="height: 25px" />
-              <span style="
+              "
+            >
+              <img
+                id="window_img"
+                src="@/assets/system/images/login/window-icon.svg"
+                style="height: 25px"
+              />
+              <span
+                style="
                   color: #888;
                   font-size: 12px;
                   line-height: 0;
                   margin-top: 7px;
-                ">Window</span>
+                "
+                >Window</span
+              >
             </div>
           </a>
           <a href="https://www.google.cn/chrome/" target="_blank">
-            <div style="
+            <div
+              style="
                 margin-left: 15px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-              ">
-              <img id="mac_img" src="@/assets/system/images/login/mac-icon.svg" style="height: 25px" />
-              <span style="
+              "
+            >
+              <img
+                id="mac_img"
+                src="@/assets/system/images/login/mac-icon.svg"
+                style="height: 25px"
+              />
+              <span
+                style="
                   color: #888;
                   font-size: 12px;
                   line-height: 0;
                   margin-top: 7px;
-                ">Mac</span>
+                "
+                >Mac</span
+              >
             </div>
           </a>
         </div>
         <div class="bottom-info">
           <div class="copy-right">
-            Copyright© 2025 <a href="https://qiantong.tech" target="_blank">江苏千桐科技有限公司</a> 版权所有
+            Copyright© 2026
+            <a href="https://qiantong.tech" target="_blank"
+              >江苏千桐科技有限公司</a
+            >
+            版权所有
             <!-- {{ contentDetail && contentDetail.copyright ? contentDetail.copyright : `Copyright© ${parseTime(new Date(), "{y}")} 江苏千桐科技有限公司 版权所有` }}-->
           </div>
           <div class="record" @click="goKtPage()">
             <img src="https://www.asktempo.com/statics/images/an.png" alt="" />
             <!--            &nbsp;&nbsp; 苏ICP备2022008519号-3-->
             &nbsp;&nbsp;
-            {{ contentDetail && contentDetail.recordNumber ? contentDetail.recordNumber : '苏ICP备2022008519号-3' }}
+            {{
+              contentDetail && contentDetail.recordNumber
+                ? contentDetail.recordNumber
+                : "苏ICP备2022008519号-3"
+            }}
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <el-dialog v-model="dialogVisible" title="忘记密码" class="fp-form-dialog" width="650px"
-    :append-to="$refs['app-container']" draggable destroy-on-close>
-    <el-form :model="fpForm" label-width="auto" style="padding: 10px 60px 0;">
+  <el-dialog
+    v-model="dialogVisible"
+    title="忘记密码"
+    class="fp-form-dialog"
+    width="650px"
+    :append-to="$refs['app-container']"
+    draggable
+    destroy-on-close
+  >
+    <el-form :model="fpForm" label-width="auto" style="padding: 10px 60px 0">
       <el-row :gutter="20">
         <el-col :span="24">
           <el-form-item label="用户名">
-            <el-input v-model="fpForm.name" placeholder="请输入手机号或用户名" />
+            <el-input
+              v-model="fpForm.name"
+              placeholder="请输入手机号或用户名"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="24">
           <el-form-item label="验证码">
             <div class="wrapper">
               <el-input v-model="fpForm.code" placeholder="请输入验证码" />
-              <el-button type="primary" :disabled="codeFlag" style="margin-left: 10px;" @click="handleFPCodeClick">
-                {{ codeFlag ? `${codeTime}s` : '获取验证码' }}
+              <el-button
+                type="primary"
+                :disabled="codeFlag"
+                style="margin-left: 10px"
+                @click="handleFPCodeClick"
+              >
+                {{ codeFlag ? `${codeTime}s` : "获取验证码" }}
               </el-button>
             </div>
           </el-form-item>
@@ -243,14 +336,14 @@ import Cookies from "js-cookie";
 import { encrypt, decrypt } from "@/utils/jsencrypt";
 import Swiper from "swiper";
 import "swiper/swiper-bundle.min.css";
-import useUserStore from '@/store/system/user.js'
+import useUserStore from "@/store/system/user.js";
 import { getContent } from "@/api/system/system/content";
-import defaultLogo from '@/assets/system/images/login/logo.png';
+import defaultLogo from "@/assets/system/images/login/logo.png";
 // 使用 import 直接引入图片路径
-import banner1 from '@/assets/system/images/login/banner.png';
-import banner2 from '@/assets/system/images/login/banner2.png';
-import banner3 from '@/assets/system/images/login/banner-gy.jpg';
-import banner4 from '@/assets/system/images/login/banner-sl.png';
+import banner1 from "@/assets/system/images/login/banner.png";
+import banner2 from "@/assets/system/images/login/banner2.png";
+import banner3 from "@/assets/system/images/login/banner-gy.jpg";
+import banner4 from "@/assets/system/images/login/banner-sl.png";
 
 const userStore = useUserStore();
 const dialogVisible = ref(false);
@@ -265,14 +358,14 @@ const loginForm = ref({
   password: "",
   rememberMe: false,
   code: "",
-  uuid: ""
+  uuid: "",
 });
 const fpForm = ref({
   username: "",
   password: "",
   password2: "",
-  code: ""
-})
+  code: "",
+});
 // const loginimglist=ref([
 //   {
 //     id:1,
@@ -292,29 +385,33 @@ const fpForm = ref({
 //   }
 // ])
 const defaltImglist = ref([
-  { id: 1, image: new URL('@/assets/system/images/login/banner.png', import.meta.url).href },
+  {
+    id: 1,
+    image: new URL("@/assets/system/images/login/banner.png", import.meta.url)
+      .href,
+  },
   // {id: 4, image: new URL('@/assets/system/images/login/banner-sl.png', import.meta.url).href}
-])
+]);
 const loginimglist = ref([]);
 
 const getBackgroundStyle = (item) => {
   return {
-    background: `url(${item.image}) center center / cover no-repeat`
+    background: `url(${item.image}) center center / cover no-repeat`,
   };
 };
 
 const getAssetsFile = (url) => {
-  return new URL(`@/assets/system/images/login/${url}`, import.meta.url).href
-}
+  return new URL(`@/assets/system/images/login/${url}`, import.meta.url).href;
+};
 
 const loginRules = {
   username: [{ required: true, trigger: "blur", message: "请输入您的账号" }],
   password: [{ required: true, trigger: "blur", message: "请输入您的密码" }],
-  code: [{ required: true, trigger: "change", message: "请输入验证码" }]
+  code: [{ required: true, trigger: "change", message: "请输入验证码" }],
 };
 
-const logo = ref(null)
-const contentDetail = ref(null)
+const logo = ref(null);
+const contentDetail = ref(null);
 
 onMounted(() => {
   fetchContent();
@@ -325,39 +422,39 @@ const fetchContent = async () => {
   // loginimglist.value = defaltImglist.value
   try {
     // 调用你从 API 导入的 getContent 方法
-    const res = await getContent(1);  // 假设请求的是 id 为 1 的数据
+    const res = await getContent(1); // 假设请求的是 id 为 1 的数据
     if (res.code == 200) {
-      const data = res.data
-      contentDetail.value = data
-      const sysLogo = data.loginLogo
+      const data = res.data;
+      contentDetail.value = data;
+      const sysLogo = data.loginLogo;
       logo.value = sysLogo ? sysLogo : defaultLogo;
-      const carouselImageList = data.carouselImage.split(',')
+      const carouselImageList = data.carouselImage.split(",");
       // console.log('-----contentDetail',contentDetail.value)
       // console.log('-----login-----0----0--0--------0-',carouselImageList)
-      const carouselImgList = []
+      const carouselImgList = [];
       for (let i = 0; i <= carouselImageList.length; i++) {
-        let item = carouselImageList[i]
+        let item = carouselImageList[i];
         if (item) {
           carouselImgList.push({
             id: i + 1,
-            image: item
-          })
+            image: item,
+          });
         }
       }
       // console.log('-----login-----1----1--1--------1-',carouselImgList)
       if (carouselImgList.length > 0) {
-        loginimglist.value = carouselImgList
+        loginimglist.value = carouselImgList;
       } else {
-        loginimglist.value = defaltImglist.value
+        loginimglist.value = defaltImglist.value;
       }
     } else {
-      loginimglist.value = defaltImglist.value
+      loginimglist.value = defaltImglist.value;
     }
 
     // this.$message.success('内容加载成功');
   } catch (error) {
     logo.value = defaultLogo;
-    loginimglist.value = defaltImglist.value
+    loginimglist.value = defaltImglist.value;
   }
 };
 
@@ -381,17 +478,18 @@ function getCookie() {
   const rememberMe = Cookies.get("rememberMe");
   loginForm.value = {
     username: username === undefined ? loginForm.value.username : username,
-    password: password === undefined ? loginForm.value.password : decrypt(password),
-    rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
+    password:
+      password === undefined ? loginForm.value.password : decrypt(password),
+    rememberMe: rememberMe === undefined ? false : Boolean(rememberMe),
   };
 }
 
 getCookie();
 
-
 function getCode() {
-  getCodeImg().then(res => {
-    captchaEnabled.value = res.captchaEnabled === undefined ? true : res.captchaEnabled;
+  getCodeImg().then((res) => {
+    captchaEnabled.value =
+      res.captchaEnabled === undefined ? true : res.captchaEnabled;
     if (captchaEnabled.value) {
       codeUrl.value = "data:image/gif;base64," + res.img;
       loginForm.value.uuid = res.uuid;
@@ -399,17 +497,19 @@ function getCode() {
   });
 }
 
-getCode()
+getCode();
 
 function handleLogin() {
-  localStorage.setItem("username", loginForm.value.username)
-  proxy.$refs.loginRef.validate(valid => {
+  localStorage.setItem("username", loginForm.value.username);
+  proxy.$refs.loginRef.validate((valid) => {
     if (valid) {
       loading.value = true;
       // 勾选了需要记住密码设置在 cookie 中设置记住用户名和密码
       if (loginForm.value.rememberMe) {
         Cookies.set("username", loginForm.value.username, { expires: 30 });
-        Cookies.set("password", encrypt(loginForm.value.password), { expires: 30 });
+        Cookies.set("password", encrypt(loginForm.value.password), {
+          expires: 30,
+        });
         Cookies.set("rememberMe", loginForm.value.rememberMe, { expires: 30 });
       } else {
         // 否则移除
@@ -418,50 +518,52 @@ function handleLogin() {
         Cookies.remove("rememberMe");
       }
       // 调用action的登录方法
-      userStore.login(loginForm.value).then(() => {
-        window.location.href = "/index";
-      }).catch(() => {
-        loading.value = false;
-        // 重新获取验证码
-        if (captchaEnabled.value) {
-          getCode();
-        }
-      });
+      userStore
+        .login(loginForm.value)
+        .then(() => {
+          window.location.href = "/index";
+        })
+        .catch(() => {
+          loading.value = false;
+          // 重新获取验证码
+          if (captchaEnabled.value) {
+            getCode();
+          }
+        });
     }
   });
 }
 
 const timeValue = 3;
-const codeTime = ref(timeValue)
+const codeTime = ref(timeValue);
 
 function handleFPCodeClick() {
-  if (codeFlag.value) return
+  if (codeFlag.value) return;
   codeFlag.value = !codeFlag.value;
   setInterval(() => {
     if (codeTime.value > 1) {
-      codeTime.value--
+      codeTime.value--;
     } else {
       clearInterval();
       codeTime.value = timeValue;
       codeFlag.value = false;
     }
-  }, 1000)
+  }, 1000);
 }
 
 function goPage() {
-  window.open('https://qiantong.tech/', '_blank'); // 在新窗口打开链接
+  window.open("https://qiantong.tech/", "_blank"); // 在新窗口打开链接
 }
 
 //点击备案号调整工信部
 function goKtPage() {
-  window.open('https://beian.miit.gov.cn/#/Integrated/index', '_blank'); // 在新窗口打开链接
+  window.open("https://beian.miit.gov.cn/#/Integrated/index", "_blank"); // 在新窗口打开链接
 }
-
 </script>
 
 <style lang="scss">
 .el-carousel__button {
-  background-color: #2666FB;
+  background-color: #2666fb;
 }
 
 .fp-form-dialog {
@@ -480,7 +582,6 @@ function goKtPage() {
   .el-dialog__body {
     height: 316px !important;
   }
-
 }
 </style>
 
@@ -498,7 +599,8 @@ function goKtPage() {
     }
   }
 
-  .swiper-slide {}
+  .swiper-slide {
+  }
 
   /*  .swiper-slide-1{
       background: url(@/assets/system/images/login/banner.png) center center / cover no-repeat;
@@ -567,12 +669,10 @@ function goKtPage() {
     margin-bottom: 24px;
   }
 
-
   ::v-deep .el-input__prefix {
     top: 1px !important;
     left: 15px !important;
   }
-
 
   .left-content {
     width: 55%;
@@ -796,11 +896,14 @@ function goKtPage() {
 }
 </style>
 <style lang="scss" scoped>
-@media screen and (max-width: 1280px) {}
+@media screen and (max-width: 1280px) {
+}
 
-@media screen and (max-width: 992px) {}
+@media screen and (max-width: 992px) {
+}
 
-@media screen and (max-width: 768px) {}
+@media screen and (max-width: 768px) {
+}
 
 @media screen and (max-width: 576px) {
   .login-two {
@@ -890,7 +993,7 @@ function goKtPage() {
 .app-container {
   padding: 0px;
   margin: 0px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   min-height: 100%;
 }
 </style>
