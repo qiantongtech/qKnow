@@ -153,7 +153,7 @@
         </el-table-column>
         <el-table-column
           v-if="getColumnVisibility(1)"
-          
+          width="80"
           label="概念颜色"
           align="center"
           prop="color"
@@ -163,6 +163,36 @@
               class="color-box"
               :style="{ backgroundColor: scope.row.color }"
             ></div>
+          </template>
+        </el-table-column>
+             <el-table-column
+          v-if="getColumnVisibility(1)"
+          label="结构化任务数量"
+          align="center"
+          prop="structTaskCount"
+        >
+          <template #default="scope">
+            {{ scope.row.structTaskCount }}
+          </template>
+        </el-table-column> 
+             <el-table-column
+          v-if="getColumnVisibility(1)"
+          label="非结构化任务数量"
+          align="center"
+          prop="unstructTaskCount"
+        >
+          <template #default="scope">
+            {{ scope.row.unstructTaskCount }}
+          </template>
+        </el-table-column>
+             <el-table-column
+          v-if="getColumnVisibility(1)"
+          label="属性数量"
+          align="center"
+          prop="attributeCount"
+        >
+          <template #default="scope">
+            {{ scope.row.attributeCount }}
           </template>
         </el-table-column>
   
@@ -199,7 +229,17 @@
           fixed="right"
           width="240"
         >
+        
           <template #default="scope">
+              <el-button
+              link
+              type="primary"
+              icon="view"
+              @click="
+                routeTo('/kg/ext/extSchemaDetail/schemaDetail', scope.row)
+              "
+              >详情</el-button
+            >
             <el-button
               link
               type="primary"
@@ -208,15 +248,7 @@
               v-hasPermi="['ext:extSchema:schema:edit']"
               >修改</el-button
             >
-            <el-button
-              link
-              type="primary"
-              icon="view"
-              @click="
-                routeTo('/kg/ext/extSchemaDetail/schemaDetail', scope.row)
-              "
-              >属性</el-button
-            >
+          
             <el-button
               link
               type="danger"
@@ -518,10 +550,23 @@ const data = reactive({
 const { queryParams, form, rules } = toRefs(data);
 
 /** 查询概念配置列表 */
+function getRandomCount(max = 20) {
+  return Math.floor(Math.random() * (max + 1));
+}
+
+function addFakeCountFields(rows = []) {
+  return rows.map((item, index) => ({
+    ...item,
+    structTaskCount: getRandomCount(),
+    unstructTaskCount: getRandomCount(),
+    attributeCount: index === 0 ? 11 : getRandomCount(),
+  }));
+}
+
 function getList() {
   loading.value = true;
   listSchema(queryParams.value).then((response) => {
-    schemaList.value = response.data.rows;
+    schemaList.value = addFakeCountFields(response.data.rows);
     total.value = response.data.total;
     loading.value = false;
   });

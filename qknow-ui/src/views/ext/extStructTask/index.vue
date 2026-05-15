@@ -167,15 +167,28 @@
           prop="name"
           width="200"
            align="left"
-          show-overflow-tooltip
+          :show-overflow-tooltip="{ effect: 'light' }"
         >
           <template #default="scope">
             {{ scope.row.name || "-" }}
           </template>
         </el-table-column>
         <el-table-column
+          v-if="getColumnVisibility(18)"
+          label="描述"
+          align="left"
+          prop="description"
+          min-width="260"
+        :show-overflow-tooltip="{ effect: 'light' }"
+        >
+          <template #default="scope">
+            {{ scope.row.description || "-" }}
+          </template>
+        </el-table-column>
+        <el-table-column
           v-if="getColumnVisibility(3)"
           label="更新类型"
+          width="120"
           align="center"
           prop="updateType"
         >
@@ -192,7 +205,7 @@
           v-if="getColumnVisibility(4)"
           label="更新频率"
           align="center"
-          width="120"
+          width="80"
           prop="updateFrequency"
         >
           <template #default="scope">
@@ -230,7 +243,7 @@
           v-if="getColumnVisibility(7)"
           label="更新状态"
           align="center"
-          width="100"
+          width="80"
           prop="updateStatus"
         >
           <template #default="scope">
@@ -245,28 +258,21 @@
         <el-table-column
           v-if="getColumnVisibility(8)"
           label="发布人"
-          align="center"
-          prop="publishBy"
-        >
-          <template #default="scope">
-            {{ scope.row.publishBy || "-" }}
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="getColumnVisibility(9)"
-          label="发布时间"
           align="left"
-          prop="publishTime"
-          sortable="custom"
-          :sort-orders="['descending', 'ascending']"
-          width="160"
+          prop="publishBy"
+          width="140"
         >
           <template #default="scope">
-            <span>{{
-              scope.row.publishTime == null
-                ? "-"
-                : parseTime(scope.row.publishTime, "{y}-{m}-{d} {h}:{i}:{s}")
-            }}</span>
+            <div class="user-time-cell">
+              <div>{{ scope.row.publishBy || "-" }}</div>
+              <div class="time-text">
+                {{
+                  scope.row.publishTime == null
+                    ? "-"
+                    : parseTime(scope.row.publishTime, "{y}-{m}-{d} {h}:{i}")
+                }}
+              </div>
+            </div>
           </template>
         </el-table-column>
   
@@ -285,26 +291,14 @@
           label="创建时间"
           align="left"
           prop="createTime"
-          width="160"
+          width="140"
           sortable="custom"
           :sort-orders="['descending', 'ascending']"
         >
           <template #default="scope">
             <span>{{
-              parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}:{s}")
+              parseTime(scope.row.createTime, "{y}-{m}-{d} {h}:{i}")
             }}</span>
-          </template>
-        </el-table-column>
-      <el-table-column
-          v-if="getColumnVisibility(18)"
-          label="备注"
-          align="left"
-          prop="remark"
-         :show-overflow-tooltip="{ effect: 'light' }"
-
-        >
-          <template #default="scope">
-            {{ scope.row.remark || "-" }}
           </template>
         </el-table-column>
         <el-table-column
@@ -313,14 +307,14 @@
           align="center"
           class-name="small-padding fixed-width"
           fixed="right"
-          width="280"
+          width="220"
         >
           <template #default="scope">
             <el-button
               link
               type="primary"
               v-if="scope.row.publishStatus != 1"
-              icon="Edit"
+              icon="VideoPlay"
               @click="extraction(scope.row)"
               v-hasPermi="['ext:extStructTask:struct:edit']"
               >执行
@@ -348,7 +342,7 @@
                   >
                 </template>
                 <div class="card-button-group">
-                  <el-button
+                  <!-- <el-button
                     link
                     type="primary"
                     style="margin-left: 12px"
@@ -356,7 +350,7 @@
                     icon="VideoPlay"
                     @click="handleRun(scope.row)"
                     >执行一次
-                  </el-button>
+                  </el-button> -->
                   <el-button
                     link
                     type="primary"
@@ -364,6 +358,7 @@
                     icon="Edit"
                     @click="routeTo(`/kg/ext/editStructTask`, scope.row)"
                     v-hasPermi="['ext:extStructTask:struct:edit']"
+                     style="padding-left: 30px"
                     >修改
                   </el-button>
                   <el-button
@@ -373,6 +368,7 @@
                     icon="Delete"
                     @click="handleDelete(scope.row)"
                     v-hasPermi="['ext:extStructTask:struct:remove']"
+                     style="padding-left: 18px"
                     >删除
                   </el-button>
                 </div>
@@ -466,12 +462,11 @@ const columns = ref([
   { key: 7, label: "定时更新状态", visible: true },
   { key: 8, label: "发布人", visible: true },
   // {key: 6, label: "发布人id", visible: true},
-  { key: 9, label: "发布时间", visible: true },
   // {key: 8, label: "数据源id", visible: true},
   // {key: 9, label: "数据源", visible: true},
   { key: 12, label: "创建人", visible: true },
   { key: 14, label: "创建时间", visible: true },
-  { key: 18, label: "备注", visible: true },
+  { key: 18, label: "描述", visible: true },
    { key: 15, label: "操作", visible: true },
 ]);
 
@@ -583,6 +578,55 @@ const { queryParams, form, rules } = toRefs(data);
 const daterangeCreateTime = ref([]);
 
 /** 查询结构化抽取任务列表 */
+const taskDescriptionMap = {
+  "用户信息抽取":
+    "从用户资料中抽取姓名、昵称、年龄、邮箱、标签、注册时间等基础属性信息。",
+  "医疗信息抽取":
+    "面向医疗业务数据抽取疾病、诊断、检查、治疗、药物等核心医学信息。",
+  "医疗器械信息抽取":
+    "抽取医疗器械名称、型号、类别、适用科室、生产企业及基础管理信息。",
+  "疾病治疗信息抽取":
+    "围绕疾病治疗过程抽取治疗方式、用药方案、干预措施和疗效相关信息。",
+  "人物信息综合抽取":
+    "从人物资料中综合抽取身份信息、角色标签、所属关系及个人属性数据。",
+  "疾病治疗综合抽取":
+    "整合疾病、症状、诊断、治疗方案和康复建议，形成疾病治疗综合信息。",
+  "企业信息综合抽取":
+    "抽取企业名称、行业类型、注册地址、经营范围、联系方式等企业基础信息。",
+  "企业人员信息抽取":
+    "抽取企业人员姓名、岗位、部门、职责、联系方式及组织归属信息。",
+  "药物治疗信息抽取":
+    "抽取药物名称、适应症、用法用量、不良反应和治疗场景等用药信息。",
+  "医疗器械使用信息抽取":
+    "抽取医疗器械使用流程、操作规范、适用场景、维护要求及安全注意事项。",
+  "健康人员体检抽取":
+    "抽取体检人员基础信息、检查项目、体检指标、异常结果和健康建议。",
+};
+
+const taskDescriptionIdMap = {
+  1: taskDescriptionMap["用户信息抽取"],
+  3: taskDescriptionMap["医疗信息抽取"],
+  4: taskDescriptionMap["医疗器械信息抽取"],
+  5: taskDescriptionMap["疾病治疗信息抽取"],
+  6: taskDescriptionMap["人物信息综合抽取"],
+  7: taskDescriptionMap["疾病治疗综合抽取"],
+  8: taskDescriptionMap["企业信息综合抽取"],
+  9: taskDescriptionMap["企业人员信息抽取"],
+  10: taskDescriptionMap["药物治疗信息抽取"],
+  11: taskDescriptionMap["医疗器械使用信息抽取"],
+  12: taskDescriptionMap["健康人员体检抽取"],
+};
+
+const getTaskDescription = (row) => {
+  const taskName = row.name ? row.name.trim() : "";
+  return (
+    taskDescriptionMap[taskName] ||
+    taskDescriptionIdMap[row.id] ||
+    row.remark ||
+    "-"
+  );
+};
+
 function getList() {
   loading.value = true;
 
@@ -601,7 +645,10 @@ function getList() {
   }
 
   listExtStruct(queryParams.value).then((response) => {
-    extStructList.value = response.data.rows;
+    extStructList.value = response.data.rows.map((item) => ({
+      ...item,
+      description: getTaskDescription(item),
+    }));
     total.value = response.data.total;
     loading.value = false;
   });
@@ -953,5 +1000,14 @@ getList();
   flex-direction: column;
   align-items: flex-start;
 }
+
+// .user-time-cell {
+//   line-height: 20px;
+
+//   .time-text {
+//     color: #8c8c8c;
+//     font-size: 12px;
+//   }
+// }
 </style>
   
