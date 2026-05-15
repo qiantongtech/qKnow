@@ -60,7 +60,7 @@ const tagsViewStore = useTagsViewStore();
 <style lang="scss" scoped>
 .app-main {
   background-color: #f0f2f5;
-  width: calc(100% - 210px);
+  width: 100%;
   height: 100%;
   overflow: hidden;
   .app-main-inner {
