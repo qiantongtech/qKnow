@@ -1048,17 +1048,11 @@ onMounted(() => {
 .userInfo {
   height: 150px;
   padding: 35px 60px 0 32px;
-  background-image: -webkit-gradient(
-    linear,
-    left top,
-    right top,
-    from(#fff),
-    to(#f3f7fe)
-  );
-  background-image: linear-gradient(90deg, #fff, #f3f7fe);
   border-radius: 2px;
   justify-content: space-between;
   align-items: center;
+  background: url(@/assets/system/images/index/content.png) no-repeat center;
+  background-size: 100% 100%;
   //   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 }
 
