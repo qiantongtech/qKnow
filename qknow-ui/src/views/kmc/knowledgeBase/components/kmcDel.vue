@@ -273,14 +273,14 @@
       <!-- 底部按钮 -->
       <div class="btn-group">
         <el-button class="btn-cancel" @click="back">取消</el-button>
-        <el-button
+        <!-- <el-button
           type="primary"
           class="btn-export"
           icon="Download"
           :disabled="!canDelete"
           @click="handleExport"
           >导出备份</el-button
-        >
+        > -->
         <el-button
           type="danger"
           class="btn-delete"
