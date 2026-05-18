@@ -81,20 +81,46 @@
     </el-scrollbar>
 
     <div :class="['help', { collapse: isCollapse }]">
-        <div class="wrap">
+      <!-- 折叠状态下只显示图标 -->
+      <div v-if="isCollapse" class="help-icon-wrapper">
+        <svg-icon class="help-icon" icon-class="help-title" />
+        <!-- 悬浮弹出菜单 -->
+        <div class="help-popup">
+          <div class="wrap">
             <div class="help-head">
                 <div class="help-title">
                     <svg-icon class="img" icon-class="help-title" />
-                    <span>帮助与支持</span>
+                    <span>社区与支持</span>
                 </div>
                 <div class="help-desc">使用帮助、常见问题解答</div>
             </div>
             <div @click="handleHelp" class="help-btn">
-                <svg-icon class="img" icon-class="help" style="width: 12px !important; height: 12px !important; margin-right: 6px;"  />
-                <span>帮助中心</span>
+                <el-icon><House /></el-icon>
+                <span>qKnow社区</span>
             </div>
             <div class="help-second">
-                <span @click="handleFAQ">FAQ</span>
+                <span @click="handleFAQ">文档站</span>
+                <span class="line"></span>
+                <span @click="handleAbout">关于</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 展开状态显示完整内容 -->
+      <div v-else class="wrap">
+            <div class="help-head">
+                <div class="help-title">
+                    <svg-icon class="img" icon-class="help-title" />
+                    <span>社区与支持</span>
+                </div>
+                <div class="help-desc">使用帮助、常见问题解答</div>
+            </div>
+            <div @click="handleHelp" class="help-btn">
+                <el-icon><House /></el-icon>
+                <span>qKnow社区</span>
+            </div>
+            <div class="help-second">
+                <span @click="handleFAQ">文档站</span>
                 <span class="line"></span>
                 <span @click="handleAbout">关于</span>
             </div>
@@ -147,13 +173,13 @@ const displayLogo = computed(() => {
 });
 
 const handleFAQ = () => {
-  window.open("https://qknow.qiantong.tech/docs/others/faq.html", "_blank");
+  window.open("https://community.qknow.ai/docs/start/introduction.html", "_blank");
 };
 const handleAbout = () => {
-  window.open("https://qknow.qiantong.tech/", "_blank");
+  window.open("https://qiantong.tech/", "_blank");
 };
 const handleHelp = () => {
-  window.open("http://114.66.57.2:8089/docs/start/introduction.html", "_blank");
+  window.open("https://community.qknow.ai", "_blank");
 };
 </script>
 
@@ -224,6 +250,12 @@ const handleHelp = () => {
     align-items: center;
     margin: 10px 0;
 
+    .el-icon{
+        font-size: 14px;
+        color: #fff;
+        margin-right: 4px;
+    }
+
     .img {
       width: 15px !important;
       height: 15px !important;
@@ -268,32 +300,54 @@ const handleHelp = () => {
     }
   }
 
+  // 折叠状态下的样式
   &.collapse {
-    .help-btn {
-      width: 30px;
-      height: 30px;
-
-      .img {
-        margin: 0 !important;
-      }
-
-      span {
-        display: none;
-      }
-    }
-
-    .help-second {
+    padding: 0;
+    
+    .help-icon-wrapper {
+      position: relative;
       display: flex;
-      flex-direction: column;
-
-      span {
-        font-size: 10px;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      
+      .help-icon {
+        width: 24px;
+        height: 24px;
+        color: #fff;
+        cursor: pointer;
+        margin-right: 0 !important;
       }
-
-      .line {
-        width: 10px;
-        height: 1px;
-        margin: 2px 0;
+      
+      .help-popup {
+        position: absolute;
+        left: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+        margin-left: 8px;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 1002;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        border-radius: 4px;
+        overflow: hidden;
+        
+        .wrap {
+          background: linear-gradient(180deg, #1a365d 0%, #0d1b2a 100%);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          padding: 16px;
+          min-width: 200px;
+        }
+      }
+      
+      &:hover .help-popup {
+        opacity: 1;
+        visibility: visible;
       }
     }
   }
