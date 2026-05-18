@@ -28,16 +28,6 @@
 #  *
 # 更多信息请访问：https://qknow.qiantong.tech/business.html
 
-# 用户配置
-user:
-  password:
-    # 密码最大错误次数
-    maxRetryCount: 5
-    # 密码锁定时间（默认10分钟）
-    lockTime: 10
-    #万能密码 配置为空则不生效
-    universalPassword: qKnow123
-
 # 主数据源选择
 datasource:
   type: mysql
@@ -45,27 +35,28 @@ datasource:
 # Spring配置
 spring:
   # redis 配置
-  redis:
-    # 地址
-    host: redis
-    # 端口，默认为6379
-    port: 6379
-    # 数据库索引
-    database: 0
-    # 密码
-    password: tF0cC3aE2tD2hK0dA0oT
-    # 连接超时时间
-    timeout: 10s
-    lettuce:
-      pool:
-        # 连接池中的最小空闲连接
-        min-idle: 0
-        # 连接池中的最大空闲连接
-        max-idle: 8
-        # 连接池的最大数据库连接数
-        max-active: 8
-        # #连接池最大阻塞等待时间（使用负值表示没有限制）
-        max-wait: -1ms
+  data:
+    redis:
+      # 地址
+      host: 127.0.0.1
+      # 端口，默认为6379
+      port: 6379
+      # 数据库索引
+      database: 3
+      # 密码
+      password: tF0cC3aE2tD2hK0dA0oT
+      # 连接超时时间
+      timeout: 10s
+      lettuce:
+        pool:
+          # 连接池中的最小空闲连接
+          min-idle: 0
+          # 连接池中的最大空闲连接
+          max-idle: 8
+          # 连接池的最大数据库连接数
+          max-active: 8
+          # #连接池最大阻塞等待时间（使用负值表示没有限制）
+          max-wait: -1ms
 
   datasource:
     druid:
@@ -129,9 +120,9 @@ mysql:
   # JDBC驱动类名
   driver-class-name: com.mysql.cj.jdbc.Driver
   # 主库JDBC连接URL
-  url: jdbc:mysql://mysql:3306/qknow?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+  url: jdbc:mysql://127.0.0.1:3306/qknow_demo?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
   # 主库用户名
-  username: qknow
+  username: qknow_demo
   # 主库密码
   password: lJ7gP0cA5dD2dA1hA3bJ
 
@@ -140,11 +131,11 @@ dm8:
   # JDBC驱动类名
   driver-class-name: dm.jdbc.driver.DmDriver
   # 主库JDBC连接URL
-  url: jdbc:dm://127.0.0.1:5236/ANIVIA?STU&zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&schema=ANIVIA&serverTimezone=Asia/Shanghai
+  url: jdbc:mysql://127.0.0.1:3306/qknow_demo?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
   # 主库用户名
-  username:
+  username: root
   # 主库密码
-  password:
+  password: OAKC7dAs04BgWt
 
 # 人大金仓配置文件
 kingbase8:
@@ -168,16 +159,7 @@ oracle:
   # 主库密码
   password:
 
-neo4j:
-  uri: bolt://neo4j:7687
-  user: neo4j
-  password: aA3nJ7pF1iJ2cB0fM1nJ
-# neo4j日志
-logging:
-  level:
-    org:
-      neo4j:
-      #        driver: DEBUG
-      springframework:
-        data:
-          neo4j: DEBUG
+## 工作流模块的访问地址
+flow:
+  enable: false
+  url: http://127.0.0.1:26859/
