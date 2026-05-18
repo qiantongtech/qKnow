@@ -216,7 +216,7 @@ export const guideTipConfig = {
     },
     "kmc/kmcDocument.list": {
         title: '知识文件-知识资产的集中化、可视化与可治理化管理',
-        content: "支持 Word、PDF、TXT、Excel、DWG、PNG、JPG 等主流文档与图像格式的统一纳管，提供在线预览、下载、查看、编辑、删除等全维度操作能力，兼容工程图纸、技术文档等多种业务场景，实现知识资产的集中化、可视化与可治理化管理。",
+        content: "支持 Word、PDF、TXT、Xlsx、Xls 等主流文档格式的统一纳管，提供在线预览、下载、查看、编辑、删除等全维度操作能力，兼容技术文档多种业务场景，实现知识资产的集中化、可视化与可治理化管理。",
         type: 'remind', version: '1.0'
     },
     "kmc/recall": {
