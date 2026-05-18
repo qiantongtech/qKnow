@@ -28,31 +28,44 @@
 #  *
 # 更多信息请访问：https://qknow.qiantong.tech/business.html
 
-version: "2.1.1"
+version: "2.2.0"
 
 services:
-  # qknow 后端服务
-  qknow-api:
-    image: ${QKNOW_HUB}/qknow-server-ce:${QKNOW_TAG}
-    container_name: qknow-api
+  demo-api:
+    privileged: true
+    image: ${QKNOW_HUB}/qknow-server:${QKNOW_TAG}
     restart: always
-    profiles: [ "all" ]
+    profiles: [ "qknow", "base" ]
     env_file: .env
     environment:
       - TZ=Asia/Shanghai
-    ports:
-      - "8090:8090"
-    mac_address: 28-C5-D2-B7-FC-F5
+      - SPRING_CONFIG_LOCATION=file:/usr/app/jar/
+      - SPRING_CONFIG_NAME=application,application-file,application-ext,application-kmc,application-neo4j,application-thirdparty,application-ai
+    # 如需覆盖端口也可加：
+    #    ports:
+    #      - "8080:8080"
+    mac_address: 28-C5-D2-B7-FC-F7
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ./qknow-server/logs:/usr/app/jar/logs
-      - ./qknow-server/upload:/usr/app/jar/upload
-      - ./qknow-server/application-prod.yml:/usr/app/jar/application-prod.yml
-      - ./qknow-server/application-prod.yml:/usr/app/jar/application-prod.yml
+      - ./qKnow/server/logs:/usr/app/jar/logs
+      - ./qKnow/server/upload:/usr/app/jar/upload
+      - ./qKnow/server/application-prod.yml:/usr/app/jar/application-prod.yml
+      - ./qKnow/server/application-ext-prod.yml:/usr/app/jar/application-ext-prod.yml
+      - ./qKnow/server/application-file-prod.yml:/usr/app/jar/application-file-prod.yml
+      - ./qKnow/server/application-ai-prod.yml:/usr/app/jar/application-ai-prod.yml
+      - ./qKnow/server/application-neo4j-prod.yml:/usr/app/jar/application-neo4j-prod.yml
+      - ./qKnow/server/application-kmc-prod.yml:/usr/app/jar/application-kmc-prod.yml
+      - ./qKnow/server/application-thirdparty-prod.yml:/usr/app/jar/application-thirdparty-prod.yml
+      - ./qKnow/server/application.yml:/usr/app/jar/application.yml
+#      - ./qKnow/server/qKnow.key:/usr/app/jar/qKnow.key
     depends_on:
-      redis:
+      qknow-redis:
         condition: service_healthy
-      mysql:
+      mysql57:
+        condition: service_healthy
+      neo4j:
         condition: service_healthy
     networks:
-      - qknownet
+      - qknow_net
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

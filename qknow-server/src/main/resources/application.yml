@@ -33,7 +33,7 @@ qknow:
   # 名称
   name: qKnow
   # 版本
-  version: 2.1.1
+  version: 2.2.0
   # 版权年份
   copyrightYear: 2025
   # 文件路径 示例（ Windows配置D:/qknow/uploadPath，Linux配置 /home/qknow/uploadPath） -- 需要和 file 模块保持一致
@@ -46,7 +46,7 @@ qknow:
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为8090
-  port: 8090
+  port: 8099
   servlet:
     # 应用的访问路径
     context-path: /
