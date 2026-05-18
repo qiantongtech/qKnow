@@ -315,7 +315,8 @@
                           label="表字段"
                           align="center"
                           prop="field"
-                          show-overflow-tooltip
+                          width="200"
+                          :show-overflow-tooltip="{ effect: 'light' }"
                         />
                         <el-table-column
                           label="数据"
