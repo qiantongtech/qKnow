@@ -31,11 +31,7 @@
 -->
 
 <template>
-  <div
-    class="app-container"
-    ref="app-container"
-    v-loading="appLoading"
-  >
+  <div class="app-container" ref="app-container" v-loading="appLoading">
     <div class="head-title">
       <div class="name">{{ taskInfo.name }}</div>
       <div class="btns">
@@ -336,7 +332,8 @@
                           label="表字段"
                           align="center"
                           prop="field"
-                          show-overflow-tooltip
+                          width="200"
+                          :show-overflow-tooltip="{ effect: 'light' }"
                         />
                         <el-table-column
                           label="数据"

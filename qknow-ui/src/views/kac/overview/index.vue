@@ -110,7 +110,7 @@
       </aside>
     </div>
 
-    <section class="overview-section">
+    <!-- <section class="overview-section">
       <div class="section-head">
         <div class="panel-title">
           <span></span>
@@ -135,7 +135,7 @@
         />
         <el-empty v-else description="暂无解决方案" />
       </div>
-    </section>
+    </section> -->
 
     <section class="overview-section">
       <div class="section-head">
