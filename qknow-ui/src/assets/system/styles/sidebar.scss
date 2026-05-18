@@ -28,7 +28,7 @@
     bottom: 0;
     left: 0;
     z-index: 1001;
-    overflow: hidden;
+    // overflow: hidden;
     -webkit-box-shadow: 2px 0 6px rgba(0,21,41,.35);
     box-shadow: 2px 0 6px rgba(0,21,41,.35);
     background: url(@/assets/system/images/layout/sidebar_bg.png) no-repeat center center;
@@ -202,7 +202,16 @@
       padding-left: 60px;
     }
 
-   
+    .el-menu .sidebar-item > a{
+        padding: 0 !important;
+    }
+    .el-menu .sidebar-item .el-sub-menu{
+        padding: 0 !important;
+    }
+
+    .el-scrollbar{
+        height: calc(100% - 180px) !important;
+    }
 
     .sub-menu-title-noDropdown {
       padding: 0 !important;
@@ -247,6 +256,27 @@
             visibility: hidden;
             display: inline-block;
           }
+        }
+      }
+      
+      // 当前选中的菜单项显示图标
+      .el-menu-item.is-active {
+        height: 42px !important;
+        &>i,
+        &>span {
+          height: auto !important;
+          width: auto !important;
+          overflow: visible !important;
+          visibility: visible !important;
+        }
+      }
+      
+      .el-sub-menu.is-active > .el-sub-menu__title {
+        &>i {
+          height: auto !important;
+          width: auto !important;
+          overflow: visible !important;
+          visibility: visible !important;
         }
       }
     }
