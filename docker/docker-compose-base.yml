@@ -114,7 +114,7 @@ services:
       - "28080:8080"
       - "60051:50051"
     volumes:
-      - ./qKnow/weaviate:/var/lib/weaviate
+      - ./database/weaviate:/var/lib/weaviate
     environment:
       PERSISTENCE_DATA_PATH: /var/lib/weaviate
       QUERY_DEFAULTS_LIMIT: 25
