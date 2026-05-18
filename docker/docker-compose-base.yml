@@ -28,10 +28,10 @@
 #  *
 # 更多信息请访问：https://qknow.qiantong.tech/business.html
 
-version: "2.1.1"
+version: "2.2.0"
 
 services:
-  redis:
+  demo-redis:
     image: redis:6-alpine
     container_name: redis
     profiles: ["all", "local"]
@@ -50,7 +50,7 @@ services:
       test: [ 'CMD', 'redis-cli', 'ping' ]
     networks:
       - qknownet
-  neo4j:
+  demo-neo4j:
     image: neo4j:4.4.40
     container_name: neo4j
     restart: always
@@ -59,14 +59,14 @@ services:
       - NEO4J_AUTH=neo4j/${NEO4J_PASSWORD:-aA3nJ7pF1iJ2cB0fM1nJ}
     profiles: [ "all", "schema" ]
     ports:
-      - "7474:7474"
-      - "7687:7687"
+      - "27474:7474"
+      - "27687:7687"
     volumes:
       - ./database/neo4j/data:/data
       - ./database/neo4j/logs:/logs
     networks:
       - qknownet
-  nginx:
+  demo-nginx:
     image: nginx:1.24.0
     container_name: nginx
     restart: always
@@ -82,57 +82,37 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/sites/:/etc/nginx/http_vhost/:ro
   #MySQL主库
-  mysql:
-    privileged: true
-    image: mysql:8.0
-    container_name: mysql
+  demo-mysql57:
+    image: mysql:5.7
+    profiles: [ "base" ]
     restart: always
-    profiles: [ "all", "schema", "local", "qknow-mysql" ]
-    env_file: .env
     environment:
-      TZ: ${TZ}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-lJ7gP0cA5dD2dA1hA3bJ}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-qknow}
-      MYSQL_USER: ${MYSQL_USER:-qknow}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-lJ7gP0cA5dD2dA1hA3bJ}
-      # 开关变量
-      MYSQL_ENABLE: ${MYSQL_ENABLE:-false}
-    command: |
-      bash -c '
-      if [[ "$${MYSQL_ENABLE}" != "true" ]]; then
-      echo "[mysql] ENABLE is not true, exit."
-      exit 0
-      fi
-      exec docker-entrypoint.sh mysqld \
-      --lower-case-table-names=1 \
-      --character-set-server=utf8mb4 \
-      --collation-server=utf8mb4_general_ci \
-      --default-authentication-plugin=mysql_native_password
-      '
+      MYSQL_ROOT_PASSWORD: "lJ7gP0cA5dD2dA1hA3bJ"   # ← 修改成你的
+      TZ: "Asia/Shanghai"                          # 如需改时区请改
     ports:
-      - "3306:3306"
+      - "23306:3306"
     volumes:
-      #      #挂载数据库
-      #      - ./mysql/data:/var/lib/mysql
-      #挂载配置文件
-      - ./database/mysql/conf.d:/etc/mysql/conf.d
-      # 如需初始化 SQL：
+      - ./database/mysql/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf:ro
       - ./database/mysql/init:/docker-entrypoint-initdb.d:ro
+    networks:
+      - qknow_net
     healthcheck:
-      test: [ "CMD","mysqladmin","ping","-h","127.0.0.1","-plJ7gP0cA5dD2dA1hA3bJ" ]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-psfdjfFF#s2332" ]
       interval: 10s
       timeout: 5s
-      retries: 10
-    networks:
-      - qknownet
-  weaviate:
+      retries: 50
+      start_period: 20s
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  demo-weaviate:
     image: semitechnologies/weaviate:1.32.23
     container_name: weaviate
     profiles: [ "base" ]
     restart: always
     ports:
-      - "18080:8080"
-      - "50051:50051"
+      - "28080:8080"
+      - "60051:50051"
     volumes:
       - ./qKnow/weaviate:/var/lib/weaviate
     environment:

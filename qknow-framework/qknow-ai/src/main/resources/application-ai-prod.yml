@@ -62,6 +62,6 @@
 
 weaviate:
   scheme: http
-  host: localhost:18080
+  host: localhost:28080
   apiKey: WVF5YThaHlkYwhGUSmCRgsX3tD5ngdN8pkih
   className: SpringAiWeaviate # 必须是大驼峰
