@@ -47,6 +47,89 @@
               <div class="swiper-slide" :style="getBackgroundStyle(item)"></div>
             </el-carousel-item>
           </el-carousel>
+
+          <div class="login-effects-layer" aria-hidden="true">
+            <div class="effect-stage effect-dev">
+              <div class="dev-code dev-code-a">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <div class="dev-code dev-code-b">
+                <span></span>
+                <span></span>
+              </div>
+              <div class="dev-scan"></div>
+              <div class="effect-particle particle-a"></div>
+              <div class="effect-particle particle-b"></div>
+            </div>
+
+            <div class="effect-stage effect-workflow">
+              <div class="flow-node node-a"></div>
+              <div class="flow-node node-b"></div>
+              <div class="flow-node node-c"></div>
+              <div class="flow-line line-a"></div>
+              <div class="flow-line line-b"></div>
+              <div class="flow-pulse pulse-a"></div>
+              <div class="flow-pulse pulse-b"></div>
+              <div class="flow-base"></div>
+              <div class="flow-spark spark-a"></div>
+              <div class="flow-spark spark-b"></div>
+              <div class="flow-spark spark-c"></div>
+              <div class="module-platform workflow-platform">
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+
+            <div class="effect-stage effect-rag">
+              <div class="rag-doc doc-a">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <div class="rag-doc doc-b">
+                <span></span>
+                <span></span>
+              </div>
+              <div class="rag-search"></div>
+              <div class="rag-ray ray-a"></div>
+              <div class="rag-ray ray-b"></div>
+            </div>
+
+            <div class="effect-stage effect-graph">
+              <div class="graph-link link-a"></div>
+              <div class="graph-link link-b"></div>
+              <div class="graph-link link-c"></div>
+              <div class="graph-link link-d"></div>
+              <div class="graph-link link-e"></div>
+              <div class="graph-link link-f"></div>
+              <div class="graph-node graph-a"></div>
+              <div class="graph-node graph-b"></div>
+              <div class="graph-node graph-c"></div>
+              <div class="graph-node graph-d"></div>
+              <div class="graph-node graph-e"></div>
+              <div class="graph-node graph-f"></div>
+              <div class="graph-node graph-g"></div>
+              <div class="graph-wave"></div>
+              <div class="module-platform graph-platform">
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+
+            <div class="effect-stage effect-agent">
+              <div class="agent-core"></div>
+              <div class="agent-ring ring-a"></div>
+              <div class="agent-ring ring-b"></div>
+              <div class="agent-dot dot-a"></div>
+              <div class="agent-dot dot-b"></div>
+              <div class="agent-dot dot-c"></div>
+              <div class="agent-signal signal-a"></div>
+              <div class="agent-signal signal-b"></div>
+            </div>
+          </div>
+
         </div>
         <div class="swiper-pagination"></div>
       </div>
@@ -299,7 +382,8 @@ const loginimglist = ref([]);
 
 const getBackgroundStyle = (item) => {
   return {
-    background: `url(${item.image}) center center / cover no-repeat`
+    background: `url(${item.image}) no-repeat`,
+    backgroundSize: `100% 100%`
   };
 };
 
@@ -612,6 +696,13 @@ function goKtPage() {
     .leftSwiper {
       width: 100%;
       height: 100%;
+      position: relative;
+      overflow: hidden;
+
+      .swiper-wrapper {
+        position: relative;
+        height: 100%;
+      }
 
       .swiper-imagesize {
         width: 100%;
@@ -892,5 +983,966 @@ function goKtPage() {
   margin: 0px;
   background-color: #FFFFFF;
   min-height: 100%;
+}
+
+.login-effects-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.effect-stage {
+  position: absolute;
+  transform: translate(-50%, -50%) translateZ(0);
+  transform-origin: center;
+  animation: effectBreath 4s ease-in-out infinite;
+  will-change: transform, opacity;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 10% 4%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(39, 133, 255, 0.34), rgba(39, 133, 255, 0.08) 42%, transparent 70%);
+    filter: blur(8px);
+    opacity: 0.82;
+    animation: effectGlow 3.2s ease-in-out infinite;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 6%;
+    right: 6%;
+    top: 0;
+    height: 34%;
+    border-radius: 50%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(46, 134, 255, 0.16), transparent);
+    opacity: 0.65;
+    transform: translateY(-45%);
+    animation: scanDown 3.8s ease-in-out infinite;
+  }
+}
+
+.effect-dev {
+  left: 12.8%;
+  top: 48.8%;
+  width: 12.4%;
+  height: 18.8%;
+}
+
+.effect-workflow {
+  left: 32.5%;
+  top: 47.4%;
+  width: 12.8%;
+  height: 19%;
+  animation-delay: -0.6s;
+}
+
+.effect-rag {
+  left: 51.6%;
+  top: 46.2%;
+  width: 12%;
+  height: 18.4%;
+  animation-delay: -1.2s;
+}
+
+.effect-graph {
+  left: 69.5%;
+  top: 44.8%;
+  width: 12.8%;
+  height: 19.4%;
+  animation-delay: -1.8s;
+}
+
+.effect-agent {
+  left: 87.9%;
+  top: 43.2%;
+  width: 12.2%;
+  height: 18.2%;
+  animation-delay: -2.4s;
+}
+
+.dev-code {
+  position: absolute;
+  z-index: 1;
+  width: 54%;
+  padding: 7% 8%;
+  border: 1px solid rgba(84, 160, 255, 0.42);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.86), rgba(104, 171, 255, 0.18));
+  box-shadow: 0 0 18px rgba(47, 127, 255, 0.16);
+  animation: codeFloat 3.4s ease-in-out infinite;
+
+  span {
+    display: block;
+    height: 3px;
+    margin-bottom: 6px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #2d74ff, rgba(72, 170, 255, 0.18));
+    animation: codeTyping 2.6s ease-in-out infinite;
+  }
+
+  span:nth-child(2) {
+    width: 76%;
+    animation-delay: -0.5s;
+  }
+
+  span:nth-child(3) {
+    width: 58%;
+    animation-delay: -1s;
+  }
+}
+
+.dev-code-a {
+  left: 14%;
+  top: 18%;
+}
+
+.dev-code-b {
+  right: 10%;
+  bottom: 20%;
+  width: 48%;
+  animation-delay: -1.5s;
+}
+
+.dev-scan {
+  position: absolute;
+  z-index: 2;
+  left: 18%;
+  top: 16%;
+  width: 64%;
+  height: 68%;
+  border: 1px solid rgba(42, 138, 255, 0.34);
+  border-radius: 12px;
+  box-shadow: inset 0 0 18px rgba(42, 138, 255, 0.16);
+  animation: framePulse 2.4s ease-in-out infinite;
+}
+
+.effect-particle {
+  position: absolute;
+  z-index: 3;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2c7cff;
+  box-shadow: 0 0 12px rgba(44, 124, 255, 0.9);
+}
+
+.particle-a {
+  left: 20%;
+  top: 24%;
+  animation: particleDriftA 3.6s ease-in-out infinite;
+}
+
+.particle-b {
+  right: 18%;
+  bottom: 26%;
+  animation: particleDriftB 3.2s ease-in-out infinite;
+}
+
+.flow-node {
+  position: absolute;
+  z-index: 2;
+  width: 20%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #ffffff, #5fb4ff 48%, #1d65ff);
+  box-shadow: 0 0 20px rgba(37, 112, 255, 0.42);
+  animation: nodePulse 2.2s ease-in-out infinite;
+}
+
+.node-a {
+  left: 12%;
+  top: 20%;
+}
+
+.node-b {
+  left: 42%;
+  top: 41%;
+  animation-delay: -0.7s;
+}
+
+.node-c {
+  right: 12%;
+  bottom: 18%;
+  animation-delay: -1.4s;
+}
+
+.flow-line {
+  position: absolute;
+  z-index: 1;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(39, 127, 255, 0.8), transparent);
+  transform-origin: left center;
+}
+
+.line-a {
+  left: 26%;
+  top: 36%;
+  width: 38%;
+  transform: rotate(24deg);
+}
+
+.line-b {
+  left: 55%;
+  top: 58%;
+  width: 34%;
+  transform: rotate(24deg);
+}
+
+.flow-pulse {
+  position: absolute;
+  z-index: 3;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 14px #1e7dff;
+}
+
+.pulse-a {
+  animation: flowPulseA 2.4s ease-in-out infinite;
+}
+
+.pulse-b {
+  animation: flowPulseB 2.4s ease-in-out infinite 1.2s;
+}
+
+.flow-base {
+  position: absolute;
+  z-index: 0;
+  left: 6%;
+  right: 6%;
+  bottom: -24%;
+  height: 22%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(42, 138, 255, 0.36), rgba(42, 138, 255, 0.08) 52%, transparent 72%);
+  filter: blur(2px);
+  animation: flowBaseBreath 2.8s ease-in-out infinite;
+}
+
+.flow-spark {
+  position: absolute;
+  z-index: 3;
+  bottom: 5%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(36, 119, 255, 0.95);
+  animation: flowSpark 2.6s ease-in-out infinite;
+}
+
+.spark-a {
+  left: 24%;
+}
+
+.spark-b {
+  left: 50%;
+  animation-delay: -0.8s;
+}
+
+.spark-c {
+  right: 23%;
+  animation-delay: -1.6s;
+}
+
+.module-platform {
+  position: absolute;
+  z-index: 1;
+  left: 12%;
+  right: 12%;
+  bottom: 1%;
+  height: 24%;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at center, rgba(255, 255, 255, 0.86) 0 18%, rgba(86, 169, 255, 0.42) 34%, rgba(34, 118, 255, 0.2) 52%, transparent 72%);
+  box-shadow: 0 14px 24px rgba(36, 112, 255, 0.18);
+  filter: drop-shadow(0 0 12px rgba(43, 128, 255, 0.28));
+  animation: platformBreath 3s ease-in-out infinite;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    border-radius: 50%;
+    border: 1px solid rgba(63, 143, 255, 0.32);
+  }
+
+  &::before {
+    top: 15%;
+    height: 38%;
+  }
+
+  &::after {
+    top: 32%;
+    height: 46%;
+    opacity: 0.62;
+  }
+
+  span {
+    position: absolute;
+    left: 14%;
+    right: 14%;
+    height: 3px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent, rgba(44, 124, 255, 0.65), transparent);
+    animation: platformLine 2.4s ease-in-out infinite;
+  }
+
+  span:first-child {
+    top: 34%;
+  }
+
+  span:last-child {
+    top: 53%;
+    animation-delay: -1.2s;
+  }
+}
+
+.workflow-platform {
+  left: -2%;
+  right: -2%;
+  bottom: -34%;
+  height: 31%;
+}
+
+.graph-platform {
+  left: -1%;
+  right: -1%;
+  bottom: -27%;
+  height: 31%;
+}
+
+.rag-doc {
+  position: absolute;
+  z-index: 1;
+  width: 34%;
+  height: 44%;
+  border-radius: 8px;
+  border: 1px solid rgba(77, 149, 255, 0.36);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(99, 169, 255, 0.22));
+  box-shadow: 0 10px 24px rgba(34, 108, 255, 0.16);
+  animation: docFloat 3.6s ease-in-out infinite;
+
+  span {
+    display: block;
+    height: 3px;
+    margin: 15% 16% 0;
+    border-radius: 999px;
+    background: rgba(39, 111, 255, 0.62);
+  }
+
+  span:nth-child(2) {
+    width: 56%;
+  }
+
+  span:nth-child(3) {
+    width: 42%;
+  }
+}
+
+.doc-a {
+  left: 12%;
+  top: 16%;
+}
+
+.doc-b {
+  right: 13%;
+  bottom: 18%;
+  animation-delay: -1.4s;
+}
+
+.rag-search {
+  position: absolute;
+  z-index: 3;
+  left: 35%;
+  top: 34%;
+  width: 28%;
+  aspect-ratio: 1;
+  border: 4px solid rgba(38, 102, 251, 0.82);
+  border-radius: 50%;
+  box-shadow: 0 0 22px rgba(38, 102, 251, 0.42);
+  animation: searchBeat 2.8s ease-in-out infinite;
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: -28%;
+    bottom: -10%;
+    width: 42%;
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(38, 102, 251, 0.82);
+    transform: rotate(45deg);
+    transform-origin: left center;
+  }
+}
+
+.rag-ray {
+  position: absolute;
+  z-index: 2;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(32, 121, 255, 0.84), transparent);
+  animation: rayFlash 2.4s ease-in-out infinite;
+}
+
+.ray-a {
+  left: 20%;
+  top: 42%;
+  width: 60%;
+  transform: rotate(18deg);
+}
+
+.ray-b {
+  left: 18%;
+  top: 58%;
+  width: 62%;
+  transform: rotate(-22deg);
+  animation-delay: -1.2s;
+}
+
+.graph-link {
+  position: absolute;
+  z-index: 1;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(49, 128, 255, 0.1), rgba(49, 128, 255, 0.72), rgba(49, 128, 255, 0.1));
+  transform-origin: left center;
+  animation: linkGlow 2.8s ease-in-out infinite;
+}
+
+.link-a {
+  left: 25%;
+  top: 34%;
+  width: 48%;
+  transform: rotate(26deg);
+}
+
+.link-b {
+  left: 28%;
+  top: 58%;
+  width: 48%;
+  transform: rotate(-28deg);
+  animation-delay: -0.8s;
+}
+
+.link-c {
+  left: 43%;
+  top: 42%;
+  width: 34%;
+  transform: rotate(90deg);
+  animation-delay: -1.6s;
+}
+
+.link-d {
+  left: 21%;
+  top: 44%;
+  width: 38%;
+  transform: rotate(8deg);
+  animation-delay: -0.4s;
+}
+
+.link-e {
+  left: 47%;
+  top: 38%;
+  width: 36%;
+  transform: rotate(42deg);
+  animation-delay: -1.2s;
+}
+
+.link-f {
+  left: 45%;
+  top: 66%;
+  width: 31%;
+  transform: rotate(-12deg);
+  animation-delay: -2s;
+}
+
+.graph-node {
+  position: absolute;
+  z-index: 2;
+  width: 18%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  background: radial-gradient(circle at 32% 28%, #ffffff, #55bcff 36%, #286bff 72%);
+  box-shadow: 0 0 18px rgba(43, 116, 255, 0.56);
+  animation: graphNodePulse 2.6s ease-in-out infinite;
+}
+
+.graph-a {
+  left: 16%;
+  top: 24%;
+}
+
+.graph-b {
+  right: 14%;
+  top: 32%;
+  animation-delay: -0.5s;
+}
+
+.graph-c {
+  left: 28%;
+  bottom: 18%;
+  animation-delay: -1s;
+}
+
+.graph-d {
+  right: 22%;
+  bottom: 16%;
+  animation-delay: -1.5s;
+}
+
+.graph-e,
+.graph-f,
+.graph-g {
+  width: 12%;
+  border-width: 1px;
+}
+
+.graph-e {
+  left: 40%;
+  top: 14%;
+  animation-delay: -0.25s;
+}
+
+.graph-f {
+  right: 10%;
+  top: 58%;
+  animation-delay: -1.25s;
+}
+
+.graph-g {
+  left: 12%;
+  bottom: 34%;
+  animation-delay: -2.1s;
+}
+
+.graph-wave {
+  position: absolute;
+  z-index: 0;
+  left: 22%;
+  top: 28%;
+  width: 56%;
+  aspect-ratio: 1;
+  border: 1px solid rgba(49, 128, 255, 0.28);
+  border-radius: 50%;
+  animation: waveExpand 2.6s ease-out infinite;
+}
+
+.agent-core {
+  position: absolute;
+  z-index: 3;
+  left: 34%;
+  top: 30%;
+  width: 32%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, #ffffff 0 18%, #61c4ff 20% 48%, #236cff 50% 100%);
+  box-shadow: 0 0 26px rgba(35, 108, 255, 0.72);
+  animation: corePulse 2.2s ease-in-out infinite;
+}
+
+.agent-ring {
+  position: absolute;
+  left: 22%;
+  top: 18%;
+  width: 56%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid rgba(44, 124, 255, 0.46);
+  animation: agentSpin 4s linear infinite;
+
+  &::before {
+    content: "";
+    position: absolute;
+    right: 7%;
+    top: 9%;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 0 12px #227cff;
+  }
+}
+
+.ring-b {
+  left: 13%;
+  top: 9%;
+  width: 74%;
+  border-style: dashed;
+  animation-duration: 6s;
+  animation-direction: reverse;
+}
+
+.agent-dot {
+  position: absolute;
+  z-index: 2;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #2a78ff;
+  box-shadow: 0 0 14px rgba(42, 120, 255, 0.9);
+  animation: decisionDot 2.8s ease-in-out infinite;
+}
+
+.dot-a {
+  left: 16%;
+  top: 24%;
+}
+
+.dot-b {
+  right: 14%;
+  top: 28%;
+  animation-delay: -0.9s;
+}
+
+.dot-c {
+  left: 44%;
+  bottom: 14%;
+  animation-delay: -1.8s;
+}
+
+.agent-signal {
+  position: absolute;
+  z-index: 1;
+  left: 26%;
+  width: 48%;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(44, 124, 255, 0.8), transparent);
+  animation: signalSweep 2.4s ease-in-out infinite;
+}
+
+.signal-a {
+  top: 38%;
+  transform: rotate(24deg);
+}
+
+.signal-b {
+  top: 58%;
+  transform: rotate(-24deg);
+  animation-delay: -1.2s;
+}
+
+@keyframes effectBreath {
+  0%,
+  100% {
+    opacity: 0.84;
+    transform: translate(-50%, -50%) scale(0.985);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.035);
+  }
+}
+
+@keyframes effectGlow {
+  0%,
+  100% {
+    opacity: 0.42;
+    transform: scale(0.86);
+  }
+
+  50% {
+    opacity: 0.92;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes scanDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-46%);
+  }
+
+  45% {
+    opacity: 0.72;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(245%);
+  }
+}
+
+@keyframes codeFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8%);
+  }
+}
+
+@keyframes codeTyping {
+  0%,
+  100% {
+    width: 42%;
+    opacity: 0.5;
+  }
+
+  50% {
+    width: 86%;
+    opacity: 1;
+  }
+}
+
+@keyframes framePulse {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(0.96);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes particleDriftA {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(48px, 70px);
+  }
+}
+
+@keyframes particleDriftB {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(-52px, -58px);
+  }
+}
+
+@keyframes nodePulse {
+  0%,
+  100% {
+    transform: scale(0.92);
+    opacity: 0.78;
+  }
+
+  50% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+}
+
+@keyframes flowPulseA {
+  0% {
+    left: 17%;
+    top: 28%;
+    opacity: 0;
+  }
+
+  20%,
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    left: 49%;
+    top: 47%;
+    opacity: 0;
+  }
+}
+
+@keyframes flowPulseB {
+  0% {
+    left: 47%;
+    top: 48%;
+    opacity: 0;
+  }
+
+  20%,
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    left: 76%;
+    top: 70%;
+    opacity: 0;
+  }
+}
+
+@keyframes flowBaseBreath {
+  0%,
+  100% {
+    opacity: 0.36;
+    transform: scaleX(0.82);
+  }
+
+  50% {
+    opacity: 0.92;
+    transform: scaleX(1.08);
+  }
+}
+
+@keyframes flowSpark {
+  0%,
+  100% {
+    opacity: 0.22;
+    transform: translateY(10px) scale(0.75);
+  }
+
+  45% {
+    opacity: 1;
+    transform: translateY(-8px) scale(1.25);
+  }
+}
+
+@keyframes platformBreath {
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: scale(0.94);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes platformLine {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scaleX(0.62);
+  }
+
+  50% {
+    opacity: 0.95;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes docFloat {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+
+  50% {
+    transform: translateY(-8%) rotate(2deg);
+  }
+}
+
+@keyframes searchBeat {
+  0%,
+  100% {
+    transform: scale(0.94);
+  }
+
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes rayFlash {
+  0%,
+  100% {
+    opacity: 0.18;
+  }
+
+  50% {
+    opacity: 0.95;
+  }
+}
+
+@keyframes linkGlow {
+  0%,
+  100% {
+    opacity: 0.32;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes graphNodePulse {
+  0%,
+  100% {
+    transform: scale(0.92);
+  }
+
+  50% {
+    transform: scale(1.12);
+  }
+}
+
+@keyframes waveExpand {
+  0% {
+    opacity: 0.6;
+    transform: scale(0.65);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+}
+
+@keyframes corePulse {
+  0%,
+  100% {
+    transform: scale(0.95);
+  }
+
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes agentSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes decisionDot {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.8);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes signalSweep {
+  0%,
+  100% {
+    opacity: 0.18;
+  }
+
+  50% {
+    opacity: 0.9;
+  }
 }
 </style>
