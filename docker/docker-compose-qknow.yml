@@ -31,9 +31,9 @@
 version: "2.2.0"
 
 services:
-  demo-api:
+  api:
     privileged: true
-    image: ${QKNOW_HUB}/qknow-server:${QKNOW_TAG}
+    image: ${QKNOW_HUB}/qknow-server-ce:${QKNOW_TAG}
     restart: always
     profiles: [ "qknow", "base" ]
     env_file: .env
@@ -47,25 +47,25 @@ services:
     mac_address: 28-C5-D2-B7-FC-F7
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ./qKnow-server/logs:/usr/app/jar/logs
-      - ./qKnow-server/upload:/usr/app/jar/upload
-      - ./qKnow-server/application-prod.yml:/usr/app/jar/application-prod.yml
-      - ./qKnow-server/application-ext-prod.yml:/usr/app/jar/application-ext-prod.yml
-      - ./qKnow-server/application-file-prod.yml:/usr/app/jar/application-file-prod.yml
-      - ./qKnow-server/application-ai-prod.yml:/usr/app/jar/application-ai-prod.yml
-      - ./qKnow-server/application-neo4j-prod.yml:/usr/app/jar/application-neo4j-prod.yml
-      - ./qKnow-server/application-kmc-prod.yml:/usr/app/jar/application-kmc-prod.yml
-      - ./qKnow-server/application-thirdparty-prod.yml:/usr/app/jar/application-thirdparty-prod.yml
-      - ./qKnow-server/application.yml:/usr/app/jar/application.yml
-#      - ./qKnow-server/qKnow.key:/usr/app/jar/qKnow.key
+      - ./qknow-server/logs:/usr/app/jar/logs
+      - ./qknow-server/upload:/usr/app/jar/upload
+      - ./qknow-server/application-prod.yml:/usr/app/jar/application-prod.yml
+      - ./qknow-server/application-ext-prod.yml:/usr/app/jar/application-ext-prod.yml
+      - ./qknow-server/application-file-prod.yml:/usr/app/jar/application-file-prod.yml
+      - ./qknow-server/application-ai-prod.yml:/usr/app/jar/application-ai-prod.yml
+      - ./qknow-server/application-neo4j-prod.yml:/usr/app/jar/application-neo4j-prod.yml
+      - ./qknow-server/application-kmc-prod.yml:/usr/app/jar/application-kmc-prod.yml
+      - ./qknow-server/application-thirdparty-prod.yml:/usr/app/jar/application-thirdparty-prod.yml
+      - ./qknow-server/application.yml:/usr/app/jar/application.yml
+#      - ./qknow-server/qKnow.key:/usr/app/jar/qKnow.key
     depends_on:
-      qknow-redis:
+      redis:
         condition: service_healthy
       mysql57:
         condition: service_healthy
       neo4j:
         condition: service_healthy
     networks:
-      - qknow_net
+      - qknownet
     extra_hosts:
       - "host.docker.internal:host-gateway"

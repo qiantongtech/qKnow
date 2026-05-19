@@ -271,7 +271,6 @@ import GraphCover from "@/assets/kac/wzbx.png";
 //   getByApplyIdId,
 //   updateApply,
 // } from "@/api/kac/apply/apply.js";
-// import { listSimple } from "@/api/kg/graph/graph.js";
 // import { listBot } from "@/api/kb/bot/bot.js";
 // import { listKnowledgeBase } from "@/api/kmc/knowledgeBase/knowledgeBase.js";
 
