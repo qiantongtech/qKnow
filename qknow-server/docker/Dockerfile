@@ -1,4 +1,4 @@
-FROM crpi-kf13onfj0v8f6jax.cn-shanghai.personal.cr.aliyuncs.com/qiantongkeji/eclipse-temurin:8-jre-amd64
+FROM crpi-kf13onfj0v8f6jax.cn-shanghai.personal.cr.aliyuncs.com/qiantongkeji/eclipse-temurin:17-jre-amd64
 
 # 设置 UTF-8 环境（关键！）
 ENV LANG=C.UTF-8 \

@@ -14,6 +14,9 @@
  Date: 18/05/2026 09:48:04
 */
 
+CREATE DATABASE IF NOT EXISTS qknow_demo; -- 创建数据库（如果不存在）
+USE qknow_demo;                           -- 后续操作都在这个数据库里执行
+
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 

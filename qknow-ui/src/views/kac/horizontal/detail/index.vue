@@ -63,7 +63,11 @@
 -->
 
 <template>
-  <div class="app-container app-detail-page" ref="appContainer" v-loading="loading">
+  <div
+    class="app-container app-detail-page"
+    ref="appContainer"
+    v-loading="loading"
+  >
     <section class="detail-hero" :style="{ backgroundImage: `url(${heroBg})` }">
       <div class="hero-main">
         <div class="app-logo">
@@ -113,7 +117,9 @@
 
     <div
       class="detail-content"
-      :class="{ 'detail-content--single': !visibleMountedResourceGroups.length }"
+      :class="{
+        'detail-content--single': !visibleMountedResourceGroups.length,
+      }"
     >
       <main class="main-panel" ref="mainPanelRef">
         <section class="content-section">
@@ -182,7 +188,11 @@
                 <p class="scene-card-desc">{{ item.desc }}</p>
                 <div class="scene-card-meta">
                   <span class="scene-card-heat">
-                    <img class="scene-card-heat-icon" :src="heatFlameIcon" alt="" />
+                    <img
+                      class="scene-card-heat-icon"
+                      :src="heatFlameIcon"
+                      alt=""
+                    />
                     <span>{{ item.heatValue }}</span>
                   </span>
                   <span class="scene-card-date">
@@ -199,7 +209,9 @@
       <aside
         v-if="visibleMountedResourceGroups.length"
         class="resource-panel"
-        :style="mainPanelHeight ? { maxHeight: `${mainPanelHeight}px` } : undefined"
+        :style="
+          mainPanelHeight ? { maxHeight: `${mainPanelHeight}px` } : undefined
+        "
       >
         <div class="section-title resource-title">
           <span></span>
@@ -340,7 +352,7 @@ import { listKnowledge as listKacKnowledge } from "@/api/kac/applyKnowledge/appl
 import { listKacGraph } from "@/api/kac/applyGraph/applyGraph.js";
 import { listKacBot } from "@/api/kac/applyBot/applyBot.js";
 import { listKnowledgeBase } from "@/api/kmc/knowledgeBase/knowledgeBase.js";
-import { listSimple } from "@/api/kg/graph/graph.js";
+// import { listSimple } from "@/api/kg/graph/graph.js";
 import { listBot } from "@/api/kb/bot/bot.js";
 import { ElMessage } from "element-plus";
 
@@ -458,9 +470,7 @@ const categoryLabel = computed(() => {
 });
 const displayTags = computed(() => {
   const tags = getTags(applyDetail.value);
-  return tags.length
-    ? tags
-    : [];
+  return tags.length ? tags : [];
 });
 
 function getAppIcon(row = {}) {
@@ -480,7 +490,10 @@ const resourceDialogTitle = computed(() => {
 });
 const knowledgeResourceItems = computed(() =>
   normalizeResourceRows(
-    getMountedRows(mountedKnowledgeList.value, applyDetail.value.kacApplyKnowledgeList),
+    getMountedRows(
+      mountedKnowledgeList.value,
+      applyDetail.value.kacApplyKnowledgeList
+    ),
     knowledgeBaseList.value,
     ["knowledgeId", "knowledgeBaseId", "kbId", "id"],
     ["name", "knowledgeName", "knowledgeBaseName"],
@@ -654,9 +667,9 @@ function loadDropdownData() {
     knowledgeBaseList.value = res.data?.rows || [];
   });
 
-  listSimple({ pageSize: 1000, pageNum: 1 }).then((res) => {
-    graphList.value = res.data?.rows || [];
-  });
+  // listSimple({ pageSize: 1000, pageNum: 1 }).then((res) => {
+  //   graphList.value = res.data?.rows || [];
+  // });
 
   listBot({ pageSize: 1000, pageNum: 1 }).then((res) => {
     botList.value = res.data?.rows || [];
@@ -942,7 +955,7 @@ loadDropdownData();
 }
 
 .main-panel {
-  padding:20px;
+  padding: 20px;
 }
 
 .resource-panel {
@@ -1305,7 +1318,7 @@ loadDropdownData();
 
   &.knowledge {
     img {
-       width: 54px;
+      width: 54px;
       height: 54px;
     }
   }
@@ -1397,7 +1410,7 @@ loadDropdownData();
     grid-template-columns: 1fr;
   }
 }
-aside{
+aside {
   margin-bottom: 0;
 }
 </style>

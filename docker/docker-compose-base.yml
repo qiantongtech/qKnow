@@ -31,10 +31,9 @@
 version: "2.2.0"
 
 services:
-  demo-redis:
+  redis:
     image: redis:6-alpine
-    container_name: redis
-    profiles: ["all", "local"]
+    profiles: ["base"]
     env_file: .env
     restart: always
     environment:
@@ -47,30 +46,35 @@ services:
     ports:
       - "${EXPOSE_REDIS_PORT:-6379}:6379"
     healthcheck:
-      test: [ 'CMD', 'redis-cli', 'ping' ]
+      test: [ 'CMD', 'redis-cli', '-a', '${REDIS_PASSWORD}', 'ping' ]
     networks:
       - qknownet
-  demo-neo4j:
+
+  neo4j:
     image: neo4j:4.4.40
-    container_name: neo4j
+    profiles: ["base"]
     restart: always
-    env_file: .env
     environment:
       - NEO4J_AUTH=neo4j/${NEO4J_PASSWORD:-aA3nJ7pF1iJ2cB0fM1nJ}
-    profiles: [ "all", "schema" ]
     ports:
       - "27474:7474"
       - "27687:7687"
     volumes:
       - ./database/neo4j/data:/data
       - ./database/neo4j/logs:/logs
+    healthcheck:
+      test: [ "CMD", "cypher-shell", "-u", "neo4j", "-p", "${NEO4J_PASSWORD:-aA3nJ7pF1iJ2cB0fM1nJ}", "RETURN 1;" ]
+      interval: 30s      # 每 30 秒检查一次
+      timeout: 10s       # 超过 10 秒算失败
+      retries: 5         # 连续失败 5 次算 unhealthy
+      start_period: 40s  # 容器启动后等待 40 秒再开始检测
     networks:
       - qknownet
-  demo-nginx:
+
+  nginx:
     image: nginx:1.24.0
-    container_name: nginx
     restart: always
-    profiles: [ "all" ]
+    profiles: ["base"]
     env_file: .env
     ports:
       - '${EXPOSE_NGINX_PORT:-80}:${NGINX_PORT:-80}'
@@ -81,13 +85,14 @@ services:
       - ./nginx/logs:/var/log/nginx
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/sites/:/etc/nginx/http_vhost/:ro
+
   #MySQL主库
-  demo-mysql57:
+  mysql57:
     image: mysql:5.7
-    profiles: [ "base" ]
+    profiles: ["base"]
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: "lJ7gP0cA5dD2dA1hA3bJ"   # ← 修改成你的
+      MYSQL_ROOT_PASSWORD:  ${MYSQL_ROOT_PASSWORD}   # ← 修改成你的
       TZ: "Asia/Shanghai"                          # 如需改时区请改
     ports:
       - "23306:3306"
@@ -95,20 +100,19 @@ services:
       - ./database/mysql/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf:ro
       - ./database/mysql/init:/docker-entrypoint-initdb.d:ro
     networks:
-      - qknow_net
+      - qknownet
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-psfdjfFF#s2332" ]
+      test: [ "CMD-SHELL", "mysql -u root -p\"$MYSQL_ROOT_PASSWORD\" -e 'SELECT 1'" ]
       interval: 10s
-      timeout: 5s
-      retries: 50
-      start_period: 20s
+      timeout: 10s
+      retries: 15
+      start_period: 60s
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  demo-weaviate:
+  weaviate:
     image: semitechnologies/weaviate:1.32.23
-    container_name: weaviate
-    profiles: [ "base" ]
+    profiles: ["base"]
     restart: always
     ports:
       - "28080:8080"
@@ -128,10 +132,10 @@ services:
       AUTHORIZATION_ADMINLIST_USERS: hello@qknow
     healthcheck:
       # 健康检查，确保服务正常启动
-      test: [ "CMD", "curl", "-f", "http://localhost:8080/v1/meta" ]
+      test: [ "CMD", "curl", "-f", "-H", "Authorization: ApiKey WVF5YThaHlkYwhGUSmCRgsX3tD5ngdN8pkih", "http://localhost:8080/v1/meta" ]
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
-      - qknow_net
+      - qknownet
 
