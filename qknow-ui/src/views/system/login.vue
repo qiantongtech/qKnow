@@ -53,7 +53,7 @@
                         </el-carousel-item>
                     </el-carousel>
 
-                    <!-- <div class="login-effects-layer" aria-hidden="true">
+          <div class="login-effects-layer" aria-hidden="true">
             <div class="effect-stage effect-dev">
               <div class="dev-code dev-code-a">
                 <span></span>
@@ -133,7 +133,7 @@
               <div class="agent-signal signal-a"></div>
               <div class="agent-signal signal-b"></div>
             </div>
-          </div> -->
+          </div>
                 </div>
                 <div class="swiper-pagination"></div>
             </div>
