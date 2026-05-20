@@ -38,7 +38,7 @@ spring:
   data:
     redis:
       # 地址
-      host: 127.0.0.1
+      host: redis
       # 端口，默认为6379
       port: 6379
       # 数据库索引
@@ -120,9 +120,9 @@ mysql:
   # JDBC驱动类名
   driver-class-name: com.mysql.cj.jdbc.Driver
   # 主库JDBC连接URL
-  url: jdbc:mysql://127.0.0.1:3306/qknow_demo?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+  url: jdbc:mysql://mysql57:3306/qknow_demo?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
   # 主库用户名
-  username: qknow_demo
+  username: root
   # 主库密码
   password: lJ7gP0cA5dD2dA1hA3bJ
 

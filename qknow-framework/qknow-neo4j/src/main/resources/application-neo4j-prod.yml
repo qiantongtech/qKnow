@@ -29,7 +29,7 @@
 # 更多信息请访问：https://qknow.qiantong.tech/business.html
 
 neo4j:
-  uri: bolt://127.0.0.1:27687
+  uri: bolt://neo4j:7687
   user: neo4j
   password: aA3nJ7pF1iJ2cB0fM1nJ
 # neo4j日志
