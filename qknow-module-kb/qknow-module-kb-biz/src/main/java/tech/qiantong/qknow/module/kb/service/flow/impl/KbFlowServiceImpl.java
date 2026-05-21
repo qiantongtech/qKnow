@@ -178,14 +178,14 @@ public class KbFlowServiceImpl implements IKbFlowService {
         runtimeContext.setBotType(BotTypeEnums.WORK_FLOW);
         runtimeContext.setExecuteMode(BotExecuteModeEnum.STREAM);
         textExecuteFlow(kbFlowBO, runtimeContext);
-        Flux<CommonResult<String>> resultFlux = runtimeContext.getResultFlux();
-        // 添加一条总的数据
-        Mono<CommonResult<String>> map = resultFlux
-                .map(CommonResult::getData)
-                .collectList()
-                .map(this::margeOutPut)
-                .map(CommonResult::success);
-        runtimeContext.setResultFlux(Flux.concat(resultFlux, map));
+//        Flux<CommonResult<String>> resultFlux = runtimeContext.getResultFlux();
+//        // 添加一条总的数据
+//        Mono<CommonResult<String>> map = resultFlux
+//                .map(CommonResult::getData)
+//                .collectList()
+//                .map(this::margeOutPut)
+//                .map(CommonResult::success);
+//        runtimeContext.setResultFlux(Flux.concat(resultFlux, map));
         return runtimeContext.getResultFlux().onErrorResume(throwable ->
                 Flux.just(CommonResult.error(new ServiceException("大模型调用异常", 500))));
     }
