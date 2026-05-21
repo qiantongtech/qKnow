@@ -53,87 +53,99 @@
                         </el-carousel-item>
                     </el-carousel>
 
-          <div class="login-effects-layer" aria-hidden="true">
-            <div class="effect-stage effect-dev">
-              <div class="dev-code dev-code-a">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              <div class="dev-code dev-code-b">
-                <span></span>
-                <span></span>
-              </div>
-              <div class="dev-scan"></div>
-              <div class="effect-particle particle-a"></div>
-              <div class="effect-particle particle-b"></div>
-            </div>
+                    <div class="benefit-icons-layer" aria-hidden="true">
+                        <div class="benefit-icon benefit-icon-efficiency">
+                            <img :src="benefitEfficiencyIcon" alt="" />
+                        </div>
+                        <div class="benefit-icon benefit-icon-reliable benefit-icon-animated">
+                            <img :src="benefitOpenIcon" alt="" />
+                        </div>
+                        <div class="benefit-icon benefit-icon-open benefit-icon-animated">
+                            <img :src="benefitReliableIcon" alt="" />
+                        </div>
+                    </div>
 
-            <div class="effect-stage effect-workflow">
-              <div class="flow-node node-a"></div>
-              <div class="flow-node node-b"></div>
-              <div class="flow-node node-c"></div>
-              <div class="flow-line line-a"></div>
-              <div class="flow-line line-b"></div>
-              <div class="flow-pulse pulse-a"></div>
-              <div class="flow-pulse pulse-b"></div>
-              <div class="flow-base"></div>
-              <div class="flow-spark spark-a"></div>
-              <div class="flow-spark spark-b"></div>
-              <div class="flow-spark spark-c"></div>
-              <div class="module-platform workflow-platform">
-                <span></span>
-                <span></span>
-              </div>
-            </div>
+                    <div class="login-effects-layer" aria-hidden="true">
+                        <div class="effect-stage effect-dev">
+                            <div class="dev-code dev-code-a">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="dev-code dev-code-b">
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="dev-scan"></div>
+                            <div class="effect-particle particle-a"></div>
+                            <div class="effect-particle particle-b"></div>
+                        </div>
 
-            <div class="effect-stage effect-rag">
-              <div class="rag-doc doc-a">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              <div class="rag-doc doc-b">
-                <span></span>
-                <span></span>
-              </div>
-              <div class="rag-search"></div>
-              <div class="rag-ray ray-a"></div>
-              <div class="rag-ray ray-b"></div>
-            </div>
+                        <div class="effect-stage effect-workflow">
+                            <div class="flow-node node-a"></div>
+                            <div class="flow-node node-b"></div>
+                            <div class="flow-node node-c"></div>
+                            <div class="flow-line line-a"></div>
+                            <div class="flow-line line-b"></div>
+                            <div class="flow-pulse pulse-a"></div>
+                            <div class="flow-pulse pulse-b"></div>
+                            <div class="flow-base"></div>
+                            <div class="flow-spark spark-a"></div>
+                            <div class="flow-spark spark-b"></div>
+                            <div class="flow-spark spark-c"></div>
+                            <div class="module-platform workflow-platform">
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
 
-            <div class="effect-stage effect-graph">
-              <div class="graph-link link-a"></div>
-              <div class="graph-link link-b"></div>
-              <div class="graph-link link-c"></div>
-              <div class="graph-link link-d"></div>
-              <div class="graph-link link-e"></div>
-              <div class="graph-link link-f"></div>
-              <div class="graph-node graph-a"></div>
-              <div class="graph-node graph-b"></div>
-              <div class="graph-node graph-c"></div>
-              <div class="graph-node graph-d"></div>
-              <div class="graph-node graph-e"></div>
-              <div class="graph-node graph-f"></div>
-              <div class="graph-node graph-g"></div>
-              <div class="graph-wave"></div>
-              <div class="module-platform graph-platform">
-                <span></span>
-                <span></span>
-              </div>
-            </div>
+                        <div class="effect-stage effect-rag">
+                            <div class="rag-doc doc-a">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="rag-doc doc-b">
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="rag-search"></div>
+                            <div class="rag-ray ray-a"></div>
+                            <div class="rag-ray ray-b"></div>
+                        </div>
 
-            <div class="effect-stage effect-agent">
-              <div class="agent-core"></div>
-              <div class="agent-ring ring-a"></div>
-              <div class="agent-ring ring-b"></div>
-              <div class="agent-dot dot-a"></div>
-              <div class="agent-dot dot-b"></div>
-              <div class="agent-dot dot-c"></div>
-              <div class="agent-signal signal-a"></div>
-              <div class="agent-signal signal-b"></div>
-            </div>
-          </div>
+                        <div class="effect-stage effect-graph">
+                            <div class="graph-link link-a"></div>
+                            <div class="graph-link link-b"></div>
+                            <div class="graph-link link-c"></div>
+                            <div class="graph-link link-d"></div>
+                            <div class="graph-link link-e"></div>
+                            <div class="graph-link link-f"></div>
+                            <div class="graph-node graph-a"></div>
+                            <div class="graph-node graph-b"></div>
+                            <div class="graph-node graph-c"></div>
+                            <div class="graph-node graph-d"></div>
+                            <div class="graph-node graph-e"></div>
+                            <div class="graph-node graph-f"></div>
+                            <div class="graph-node graph-g"></div>
+                            <div class="graph-wave"></div>
+                            <div class="module-platform graph-platform">
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+
+                        <div class="effect-stage effect-agent">
+                            <div class="agent-core"></div>
+                            <div class="agent-ring ring-a"></div>
+                            <div class="agent-ring ring-b"></div>
+                            <div class="agent-dot dot-a"></div>
+                            <div class="agent-dot dot-b"></div>
+                            <div class="agent-dot dot-c"></div>
+                            <div class="agent-signal signal-a"></div>
+                            <div class="agent-signal signal-b"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="swiper-pagination"></div>
             </div>
@@ -403,6 +415,9 @@
     import banner2 from '@/assets/system/images/login/banner2.png';
     import banner3 from '@/assets/system/images/login/banner-gy.jpg';
     import banner4 from '@/assets/system/images/login/banner-sl.png';
+    import benefitEfficiencyIcon from '@/assets/system/images/login/hj.gif';
+    import benefitReliableIcon from '@/assets/system/images/login/kf.png';
+    import benefitOpenIcon from '@/assets/system/images/login/kk.png';
 
     const userStore = useUserStore();
     const dialogVisible = ref(false);
@@ -1061,6 +1076,66 @@
         margin: 0px;
         background-color: #ffffff;
         min-height: 100%;
+    }
+
+    .benefit-icons-layer {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    .benefit-icon {
+        position: absolute;
+        width: 6.7%;
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: translate(-50%, -50%);
+
+        img {
+            display: block;
+            width: 62%;
+            height: 62%;
+            object-fit: contain;
+        }
+    }
+
+    .benefit-icon-efficiency {
+        left: 16.5%;
+        top: 84.6%;
+
+        img {
+            transform: translate(-4%, -2%);
+        }
+    }
+
+    .benefit-icon-reliable {
+        left: 44.6%;
+        top: 85%;
+
+        img {
+            transform: translate(0, 3%);
+        }
+    }
+
+    .benefit-icon-open {
+        left: 72.2%;
+        top: 84.7%;
+
+        img {
+            transform: translate(0, 6%);
+        }
+    }
+
+    .benefit-icon-animated {
+        animation: benefitIconFloat 3s ease-in-out infinite;
+    }
+
+    .benefit-icon-open {
+        animation-delay: -1.2s;
     }
 
     .login-effects-layer {
@@ -2050,6 +2125,19 @@
 
         50% {
             opacity: 0.9;
+        }
+    }
+
+    @keyframes benefitIconFloat {
+        0%,
+        100% {
+            filter: drop-shadow(0 6px 10px rgba(40, 118, 255, 0.18));
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        50% {
+            filter: drop-shadow(0 10px 14px rgba(40, 118, 255, 0.3));
+            transform: translate(-50%, calc(-50% - 4px)) scale(1.04);
         }
     }
 </style>
