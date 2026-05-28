@@ -60,7 +60,15 @@
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
         <!--        <img v-if="logo" :src="logo" class="sidebar-logo" /> -->
-        <img v-if="logo" :src="displayLogo" class="sidebar-logo" />
+        <span
+          v-if="useSplitLogo"
+          class="sidebar-logo-split"
+          :class="{ 'logo-intro': logoIntroActive }"
+        >
+          <img :src="logoK" class="sidebar-logo-k" />
+          <img :src="logoQknow" class="sidebar-logo-word" />
+        </span>
+        <img v-else-if="logo" :src="displayLogo" class="sidebar-logo" />
       </router-link>
     </transition>
   </div>
@@ -71,6 +79,8 @@ import variables from "@/assets/system/styles/variables.module.scss";
 import logo from "@/assets/system/logo/logo.png";
 import logo2 from "@/assets/system/logo/logo2.png";
 import simpLogo from "@/assets/system/logo/simpLogo.png";
+import logoK from "@/assets/system/logo/logo-k.png";
+import logoQknow from "@/assets/system/logo/logo-qknow.png";
 
 import useSettingsStore from "@/store/system/settings";
 import defaultSettings from "@/settings";
@@ -81,6 +91,8 @@ const route = useRoute();
 // 使用 ref 来创建响应式的 logo
 const refLogo = ref(null); // 初始化 logo 为 simpLogo.png
 const refSimpLogo = ref(null); // 初始化 logo 为 simpLogo.png
+
+const logoIntroActive = ref(false);
 
 const props = defineProps({
   collapse: {
@@ -105,6 +117,14 @@ const displayLogo = computed(() => {
   return isSpecialRoute ? logo2 : refLogo.value;
 });
 
+const useSplitLogo = computed(() => {
+  const navbarLogoRoutes = defaultSettings.navbarLogoRoutes || [];
+  const isSpecialRoute = navbarLogoRoutes.some((logoPath) =>
+    route.path.startsWith(logoPath)
+  );
+  return !isSpecialRoute && (!refLogo.value || refLogo.value === logo);
+});
+
 const displaySimpLogo = computed(() => {
   const navbarLogoRoutes = defaultSettings.navbarLogoRoutes || [];
   const isSpecialRoute = navbarLogoRoutes.some((logoPath) =>
@@ -113,6 +133,10 @@ const displaySimpLogo = computed(() => {
   return isSpecialRoute ? logo : refSimpLogo.value;
 });
 onMounted(() => {
+  logoIntroActive.value = true;
+  window.setTimeout(() => {
+    logoIntroActive.value = false;
+  }, 1800);
   fetchContent();
 });
 // 使用 getContent 来获取数据，而不是重新定义一个 getContent 函数
@@ -170,7 +194,39 @@ const sideTheme = computed(() => settingsStore.sideTheme);
       margin-left:  -12px;
     }
 
-    
+    & .sidebar-logo-split {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      gap: 2px;
+      transform: translateX(-4px);
+      vertical-align: middle;
+    }
+
+    & .sidebar-logo-k {
+      display: block;
+      height: 36px;
+      object-fit: contain;
+      transform-origin: center;
+    }
+
+    & .sidebar-logo-word {
+      display: block;
+      height: 30px;
+      object-fit: contain;
+    }
+
+    & .logo-intro,
+    &:hover .sidebar-logo-split {
+      .sidebar-logo-k {
+        animation: sidebarLogoKIntro 1.15s cubic-bezier(0.2, 0.85, 0.22, 1) 0.35s both;
+      }
+
+      .sidebar-logo-word {
+        animation: sidebarLogoWordIntro 0.45s ease-out both;
+      }
+    }
 
     & .sidebar-title {
       display: inline-block;
@@ -195,6 +251,43 @@ const sideTheme = computed(() => settingsStore.sideTheme);
       margin-right: 0px;
       margin-left: -4px;
     }
+  }
+}
+
+@keyframes sidebarLogoKIntro {
+  0% {
+    opacity: 0;
+    filter: drop-shadow(0 0 0 rgba(69, 145, 255, 0));
+    transform: translateX(18px) scale(0.62) rotate(-10deg);
+  }
+
+  54% {
+    opacity: 1;
+    filter: drop-shadow(0 0 14px rgba(69, 145, 255, 0.65));
+    transform: translateX(-3px) scale(1.08) rotate(3deg);
+  }
+
+  78% {
+    filter: drop-shadow(0 0 10px rgba(69, 145, 255, 0.38));
+    transform: translateX(1px) scale(0.98) rotate(-1deg);
+  }
+
+  100% {
+    opacity: 1;
+    filter: drop-shadow(0 0 0 rgba(69, 145, 255, 0));
+    transform: translateX(0) scale(1) rotate(0);
+  }
+}
+
+@keyframes sidebarLogoWordIntro {
+  0% {
+    opacity: 0;
+    transform: translateX(-4px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 </style>
