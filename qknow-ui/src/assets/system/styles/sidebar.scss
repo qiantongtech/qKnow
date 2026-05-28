@@ -20,7 +20,7 @@
     -webkit-transition: width .28s;
     transition: width 0.28s;
     width: $base-sidebar-width !important;
-    // background-color: transparent !important;
+    background-color: transparent !important;
     height: 100%;
     position: fixed;
     font-size: 0px;
@@ -31,8 +31,8 @@
     overflow: hidden;
     -webkit-box-shadow: 2px 0 6px rgba(0,21,41,.35);
     box-shadow: 2px 0 6px rgba(0,21,41,.35);
-    // background: url(@/assets/system/images/layout/sidebar_bg.png) no-repeat center center;
-    // background-size: cover;
+    background: url(@/assets/system/images/layout/sidebar_bg.png) no-repeat center center;
+    background-size: cover;
 
     &.navbar-logo{
         box-shadow: none;
