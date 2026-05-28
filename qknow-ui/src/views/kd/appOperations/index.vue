@@ -860,7 +860,7 @@ onBeforeUnmount(() => {
 .app-operation-shell {
   display: grid;
   gap: 15px;
-  margin-top: 15px;
+  // margin-top: 15px;
 }
 
 .panel-card {
