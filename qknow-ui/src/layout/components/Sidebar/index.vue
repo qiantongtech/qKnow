@@ -216,6 +216,8 @@
                 inset 0 0 0 1px rgba(92, 144, 255, 0.08),
                 0 10px 28px rgba(33, 103, 255, 0.08);
             animation: helpCardBreath 4.8s ease-in-out infinite;
+            transform: translateZ(0);
+            backface-visibility: hidden;
 
             &::before {
                 content: '';
@@ -233,6 +235,8 @@
                 );
                 transform: translateX(-125%);
                 animation: helpCardSweep 5.6s ease-in-out infinite;
+                will-change: transform, opacity;
+                backface-visibility: hidden;
             }
 
             &::after {
@@ -247,6 +251,8 @@
                 background: radial-gradient(circle, rgba(60, 139, 255, 0.32), transparent 68%);
                 filter: blur(2px);
                 animation: helpCardGlow 4.8s ease-in-out infinite;
+                will-change: transform, opacity;
+                backface-visibility: hidden;
             }
         }
 
@@ -286,6 +292,8 @@
                 transform 0.2s ease,
                 box-shadow 0.2s ease;
             animation: helpBtnBreath 2.6s ease-in-out infinite;
+            will-change: transform, filter, box-shadow;
+            backface-visibility: hidden;
 
             &::after {
                 content: '';
@@ -297,6 +305,8 @@
                 background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.42), transparent);
                 transform: skewX(-18deg);
                 animation: helpBtnShine 3.8s ease-in-out infinite;
+                will-change: left, opacity;
+                backface-visibility: hidden;
             }
 
             &:hover {
@@ -384,11 +394,14 @@
                     &::before {
                         content: '';
                         position: absolute;
-                        inset: -1px;
+                        inset: 0;
                         border-radius: inherit;
                         background: linear-gradient(120deg, transparent, rgba(116, 173, 255, 0.35), transparent);
-                        transform: translateX(-120%);
-                        animation: helpCardSweep 5.6s ease-in-out infinite;
+                        background-size: 260% 100%;
+                        background-position: 160% 0;
+                        animation: helpIconSweep 5.6s ease-in-out infinite;
+                        will-change: background-position, opacity;
+                        backface-visibility: hidden;
                     }
 
                     .help-icon {
@@ -475,6 +488,23 @@
         50% {
             opacity: 0.72;
             transform: scale(1.08);
+        }
+    }
+
+    @keyframes helpIconSweep {
+        0%,
+        62% {
+            background-position: 160% 0;
+            opacity: 0;
+        }
+
+        72% {
+            opacity: 1;
+        }
+
+        100% {
+            background-position: -60% 0;
+            opacity: 0;
         }
     }
 

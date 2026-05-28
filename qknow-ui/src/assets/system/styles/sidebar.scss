@@ -28,7 +28,7 @@
     bottom: 0;
     left: 0;
     z-index: 1001;
-    // overflow: hidden;
+    overflow: hidden;
     -webkit-box-shadow: 2px 0 6px rgba(0,21,41,.35);
     box-shadow: 2px 0 6px rgba(0,21,41,.35);
     // background: url(@/assets/system/images/layout/sidebar_bg.png) no-repeat center center;
@@ -196,6 +196,7 @@
   .hideSidebar {
     .sidebar-container {
       width: 60px !important;
+      overflow: visible;
     }
 
     .main-container {
