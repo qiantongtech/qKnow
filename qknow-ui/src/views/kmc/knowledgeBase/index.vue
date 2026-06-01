@@ -407,27 +407,27 @@ const data = reactive({
 });
 
 const vectorData = ref({
-  rerankingEnable: null,
+  rerankingEnable: true,
   rerankingModelName: null,
   topK: 1,
   scoreThresholdEnabled: false,
   scoreThreshold: 0,
 });
 const fullTextData = ref({
-  rerankingEnable: null,
+  rerankingEnable: true,
   rerankingModelName: null,
   topK: 1,
   scoreThresholdEnabled: false,
   scoreThreshold: 0,
 });
 const mixData = ref({
-  rerankingEnable: null,
+  rerankingEnable: true,
   rerankingModelName: null,
   topK: 1,
   scoreThresholdEnabled: false,
   scoreThreshold: 0,
   keywordWeight: 0.5,
-  vectorWeight: null,
+  vectorWeight: 0.5,
   rerankingMode: "weighted_score",
 });
 
@@ -521,21 +521,14 @@ function submitForm() {
     form.value.vectorWeight = mixData.value.vectorWeight;
     form.value.rerankingMode = mixData.value.rerankingMode;
   }
+  const matchedItem = embeddingModel.value.find((item) =>
+    item.models.some((modelObj) => modelObj.model === form.value.embeddingModel)
+  );
+  form.value.rerankingProviderName = matchedItem ? matchedItem.provider : null;
 
   // 表单验证与提交
   proxy.$refs["knowledgeBaseRef"].validate((valid) => {
     if (valid) {
-      console.log("form", form.value);
-      if (form.value.embeddingModel) {
-        const matchedItem = embeddingModel.value.find((item) =>
-          item.models.some(
-            (modelObj) => modelObj.model === form.value.embeddingModel
-          )
-        );
-        form.value.embeddingModelProvider = matchedItem
-          ? matchedItem.provider
-          : null;
-      }
       // 区分修改和新增场景
       if (form.value.id) {
         // 修改场景：已有ID，先更新基础信息，再更新权限
@@ -545,6 +538,8 @@ function submitForm() {
             roleIds: roleIds.value,
           }).then(() => {
             proxy.$modal.msgSuccess("保存成功");
+            open.value = false;
+            getList();
           });
         });
       } else {
@@ -561,6 +556,8 @@ function submitForm() {
               proxy.$tab.closeOpenPage(obj).then(() => {
                 proxy.$tab.refreshPage();
               });
+              open.value = false;
+              getList();
             });
           } else {
             proxy.$modal.msgError("新增失败，未获取到知识库ID");
