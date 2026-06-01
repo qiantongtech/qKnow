@@ -150,15 +150,203 @@ const data = reactive({
 const { queryParams } = toRefs(data);
 
 const applyList = ref([]);
+const mockApplyList = [
+  {
+    id: 20,
+    workspaceId: 1001,
+    pluginId: null,
+    name: "文章编写",
+    category: 0,
+    description:
+      "文章编写插件是一类旨在辅助用户更高效、更高质量地完成文本创作任务的软件工具或扩展程序。",
+    status: 0,
+    source: null,
+    tags: '[{"name":"写作"},{"name":"文章"}]',
+    myApplyFlag: false,
+    icon: "/2026/05/11/6a01a88de4b0d389f4f52e8e.png",
+    validFlag: true,
+    delFlag: false,
+    createTime: "2026-04-23 19:54:44",
+    updateTime: "2026-04-23 19:54:44",
+    kacApplyKnowledgeList: null,
+    kacApplyGraphList: null,
+    kacApplyBotList: null,
+  },
+  {
+    id: 8,
+    workspaceId: 1001,
+    pluginId: null,
+    name: "批量检索",
+    category: 0,
+    description:
+      "支持一次性上传多个查询条件并行处理，汇总输出结果。大幅提升效率，适用于多项目数据对比或大规模文献调研。",
+    status: 0,
+    source: null,
+    tags: '[{"name":"效率"},{"name":"工具"}]',
+    myApplyFlag: false,
+    icon: "/2026/05/11/6a01a9a0e4b0d389f4f52e90.png",
+    validFlag: true,
+    delFlag: false,
+    createTime: "2026-04-21 18:41:23",
+    updateTime: "2026-04-21 18:41:23",
+    kacApplyKnowledgeList: null,
+    kacApplyGraphList: null,
+    kacApplyBotList: null,
+  },
+  {
+    id: 7,
+    workspaceId: 1001,
+    pluginId: null,
+    name: "精确检索",
+    category: 0,
+    description: "严格字符匹配，精准查找代码、条款或参数，无模糊干扰。",
+    status: 0,
+    source: null,
+    tags: '[{"name":"搜索"},{"name":"工具"}]',
+    myApplyFlag: false,
+    icon: "/2026/05/11/6a01a9d8e4b0d389f4f52e91.png",
+    validFlag: true,
+    delFlag: false,
+    createTime: "2026-04-21 18:41:10",
+    updateTime: "2026-04-21 18:41:10",
+    kacApplyKnowledgeList: null,
+    kacApplyGraphList: null,
+    kacApplyBotList: null,
+  },
+  {
+    id: 6,
+    workspaceId: 1001,
+    pluginId: null,
+    name: "实体关系检索",
+    category: 0,
+    description: "智能识别实体与深层关系，助力知识图谱与情报分析。",
+    status: 0,
+    source: null,
+    tags: '[{"name":"分析"},{"name":"数据"}]',
+    myApplyFlag: false,
+    icon: "/2026/05/11/6a01a9e9e4b0d389f4f52e92.png",
+    validFlag: true,
+    delFlag: false,
+    createTime: "2026-04-21 18:41:07",
+    updateTime: "2026-04-21 18:41:07",
+    kacApplyKnowledgeList: null,
+    kacApplyGraphList: null,
+    kacApplyBotList: null,
+  },
+  {
+    id: 5,
+    workspaceId: 1001,
+    pluginId: null,
+    name: "语义检索",
+    category: 0,
+    description:
+      "利用深度学习理解查询意图与上下文，突破关键词匹配限制。即使词汇不完全一致，也能通过语义关联精准定位内容。",
+    status: 0,
+    source: null,
+    tags: '[{"name":"搜索"},{"name":"AI"}]',
+    myApplyFlag: false,
+    icon: "/2026/05/11/6a01a9f9e4b0d389f4f52e93.png",
+    validFlag: true,
+    delFlag: false,
+    createTime: "2026-04-21 18:40:54",
+    updateTime: "2026-04-21 18:40:54",
+    kacApplyKnowledgeList: null,
+    kacApplyGraphList: null,
+    kacApplyBotList: null,
+  },
+  {
+    id: 4,
+    workspaceId: 1001,
+    pluginId: null,
+    name: "知识问答",
+    category: 0,
+    description:
+      "基于海量数据理解并回答各类事实性或解释性问题，提供准确简洁的答案，满足即时信息获取需求。",
+    status: 0,
+    source: null,
+    tags: '[{"name":"问答"},{"name":"知识"}]',
+    myApplyFlag: false,
+    icon: "/2026/05/11/6a01aa0ae4b0d389f4f52e94.png",
+    validFlag: true,
+    delFlag: false,
+    createTime: "2026-04-21 18:39:46",
+    updateTime: "2026-04-21 18:39:46",
+    kacApplyKnowledgeList: null,
+    kacApplyGraphList: null,
+    kacApplyBotList: null,
+  },
+  {
+    id: 3,
+    workspaceId: 1001,
+    pluginId: null,
+    name: "模板报告生成",
+    category: 0,
+    description:
+      "提供多场景标准模板，引导填充并自动排版，确保企业级文档专业规范。",
+    status: 0,
+    source: null,
+    tags: '[{"name":"模板"},{"name":"文档"}]',
+    myApplyFlag: false,
+    icon: "/2026/05/11/6a01aa17e4b0d389f4f52e95.png",
+    validFlag: true,
+    delFlag: false,
+    createTime: "2026-04-21 18:37:08",
+    updateTime: "2026-04-21 18:37:08",
+    kacApplyKnowledgeList: null,
+    kacApplyGraphList: null,
+    kacApplyBotList: null,
+  },
+  {
+    id: 2,
+    workspaceId: 1001,
+    pluginId: null,
+    name: "日报/周报/月报文章编写",
+    category: 0,
+    description:
+      "简化周期性工作汇报撰写。输入关键事项，系统自动扩展为结构完整、语气专业的报告，智能识别成果与计划。",
+    status: 0,
+    source: null,
+    tags: '[{"name":"写作"},{"name":"办公"}]',
+    myApplyFlag: false,
+    icon: "/2026/05/11/6a01a8f6e4b0d389f4f52e8f.png",
+    validFlag: true,
+    delFlag: false,
+    createTime: "2026-04-21 18:36:52",
+    updateTime: "2026-04-21 18:36:52",
+    kacApplyKnowledgeList: null,
+    kacApplyGraphList: null,
+    kacApplyBotList: null,
+  },
+];
+
+function getMockList() {
+  const keyword = queryParams.value.name?.trim().toLowerCase();
+  const pageNum = Number(queryParams.value.pageNum) || 1;
+  const pageSize = Number(queryParams.value.pageSize) || 10;
+  const filteredList = keyword
+    ? mockApplyList.filter((item) =>
+        [item.name, item.description, item.tags]
+          .filter(Boolean)
+          .some((value) => String(value).toLowerCase().includes(keyword))
+      )
+    : mockApplyList;
+  const start = (pageNum - 1) * pageSize;
+
+  applyList.value = filteredList.slice(start, start + pageSize);
+  total.value = filteredList.length;
+}
 
 /** 查询应用列表 */
 function getList() {
   loading.value = true;
-  listApply(queryParams.value).then((response) => {
-    applyList.value = response.data.rows;
-    total.value = response.data.total;
-    loading.value = false;
-  });
+  getMockList();
+  loading.value = false;
+  // 接口暂未迁移，先保留调用代码，后续后端接口接入后恢复。
+  // listApply(queryParams.value).then((response) => {
+  //   applyList.value = response.data.rows;
+  //   total.value = response.data.total;
+  //   loading.value = false;
+  // });
 }
 
 /** 搜索按钮操作 */

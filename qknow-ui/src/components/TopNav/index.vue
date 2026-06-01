@@ -319,18 +319,27 @@
 <style lang="scss">
     .el-menu--horizontal.el-menu {
         padding-top: 10px;
+        border-bottom: none;
     }
 
     .topmenu-container.el-menu--horizontal > .el-menu-item {
         font-size: 16px;
         font-weight: bold;
         float: left;
-        height: 100%;
+        height: 40px !important;
+        line-height: 40px !important;
         display: flex;
         align-items: center;
         justify-content: center;
         color: #333 !important;
         padding: 0 23px !important;
+        margin: 0 6px !important;
+        border-bottom: none !important;
+        border-radius: 4px;
+        transition:
+            background-color 0.22s ease,
+            color 0.22s ease,
+            box-shadow 0.22s ease;
     }
 
     /* sub-menu item */
@@ -341,29 +350,56 @@
         line-height: 40px !important;
         color: #333 !important;
         padding: 0 15px !important;
-        margin: 0 10px !important;
+        margin: 0 6px !important;
         border-radius: 5px;
-        border-bottom: 0;
+        border-bottom: none !important;
+        transition:
+            background-color 0.22s ease,
+            color 0.22s ease,
+            box-shadow 0.22s ease;
     }
 
     .topmenu-container.el-menu--horizontal > .el-menu-item.is-active,
     .el-menu--horizontal > .el-sub-menu.is-active .el-submenu__title,
     .el-menu--horizontal > .el-sub-menu.is-active .el-sub-menu__title {
-        background: rgba(19, 90, 251, 0.06) !important;
-        color: #{'var(--theme)'} !important;
+        background-color: #2666fb !important;
+        border-bottom: none !important;
+        color: #fff !important;
+        box-shadow: 0 6px 16px rgba(38, 102, 251, 0.18);
+    }
+
+    .topmenu-container.el-menu--horizontal > .el-menu-item.is-active .svg-icon,
+    .el-menu--horizontal > .el-sub-menu.is-active .el-sub-menu__title .svg-icon {
+        color: #fff !important;
     }
 
     /* 背景色隐藏 */
     .topmenu-container.el-menu--horizontal > .el-menu-item:not(.is-disabled):focus,
     .topmenu-container.el-menu--horizontal > .el-menu-item:not(.is-disabled):hover,
     .topmenu-container.el-menu--horizontal > .el-submenu .el-submenu__title:hover {
-        background: rgba(19, 90, 251, 0.06) !important;
-        color: #{'var(--theme)'} !important;
+        background-color: #2666fb !important;
+        color: #fff !important;
+        border-bottom: none !important;
+        box-shadow: 0 6px 16px rgba(38, 102, 251, 0.18);
+    }
+
+    .topmenu-container.el-menu--horizontal > .el-menu-item.is-active:not(.is-disabled):focus,
+    .topmenu-container.el-menu--horizontal > .el-menu-item.is-active:not(.is-disabled):hover,
+    .el-menu--horizontal > .el-sub-menu.is-active .el-sub-menu__title:hover {
+        background-color: #2666fb !important;
+        color: #fff !important;
     }
 
     /* 图标右间距 */
     .topmenu-container .svg-icon {
         margin-right: 4px;
+        transition: color 0.22s ease;
+    }
+
+    .topmenu-container.el-menu--horizontal > .el-menu-item:not(.is-disabled):focus .svg-icon,
+    .topmenu-container.el-menu--horizontal > .el-menu-item:not(.is-disabled):hover .svg-icon,
+    .topmenu-container.el-menu--horizontal > .el-submenu .el-submenu__title:hover .svg-icon {
+        color: #fff !important;
     }
 
     /* topmenu more arrow */
