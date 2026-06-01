@@ -131,9 +131,7 @@
             class="value-card"
             :style="{ backgroundImage: `url(${valueBg})` }"
           >
-            <p>
-              文章编写应用的核心价值在于大幅<span>降低创作门槛</span>并显著提升内容产出效率。它通过<span>智能辅助</span>与实时纠错，帮助创作者快速跨越构思与表达的障碍，将繁琐的文字组织工作自动化。最终，插件让创作者得以从重复性的劳动中解放出来，将更多<span>精力聚焦</span>于核心观点的创新与情感价值的传递。
-            </p>
+            <p v-html="coreValueHtml"></p>
             <div class="value-metrics">
               <div v-for="item in coreMetrics" :key="item.title">
                 <strong>{{ item.title }}</strong>
@@ -404,13 +402,16 @@ const data = reactive({
 });
 const { applyDetail, form } = toRefs(data);
 
-const coreMetrics = [
+const defaultCoreValueHtml =
+  "文章编写应用的核心价值在于大幅<span>降低创作门槛</span>并显著提升内容产出效率。它通过<span>智能辅助</span>与实时纠错，帮助创作者快速跨越构思与表达的障碍，将繁琐的文字组织工作自动化。最终，插件让创作者得以从重复性的劳动中解放出来，将更多<span>精力聚焦</span>于核心观点的创新与情感价值的传递。";
+
+const defaultCoreMetrics = [
   { title: "提升效率", desc: "智能生成，高效创作" },
   { title: "降低门槛", desc: "简化流程，轻松上手" },
   { title: "智能辅助", desc: "实时优化，质量提升" },
 ];
 
-const capabilityCards = [
+const defaultCapabilityCards = [
   {
     title: "知识库精准赋能",
     desc: "关联垂直领域知识库，为AI提供专业语料支撑，让生成内容言之有物。",
@@ -429,7 +430,7 @@ const capabilityCards = [
   },
 ];
 
-const scenarioCards = [
+const defaultScenarioCards = [
   {
     title: "新媒体内容创作",
     desc: "辅助生成标题与大纲，撰写公众号、小红书文案，缩短成稿周期。",
@@ -456,6 +457,162 @@ const scenarioCards = [
   },
 ];
 
+const verticalMockDetailMap = {
+  101: {
+    applyDetail: {
+      id: 101,
+      name: "故障快速排查与维修指导",
+      category: 1,
+      description:
+        "面向设备运维场景，结合故障现象、报警代码和历史维修记录，快速定位可能原因并生成维修步骤建议。",
+      status: 0,
+      tags: '[{"name":"运维"},{"name":"维修"}]',
+      myApplyFlag: false,
+      kacApplyKnowledgeList: [],
+      kacApplyGraphList: [],
+      kacApplyBotList: [],
+    },
+    coreValueHtml:
+      "故障快速排查与维修指导的核心价值在于把现场现象、报警代码、设备档案和历史案例统一串联，帮助运维人员快速形成<span>故障定位判断</span>和<span>可执行维修步骤</span>。它减少反复查资料和等待专家确认的时间，让维修过程更标准、更可追溯，也能持续沉淀企业自己的设备维修经验。",
+    coreMetrics: [
+      { title: "缩短排查时间", desc: "快速聚合线索定位原因" },
+      { title: "规范维修步骤", desc: "输出可执行处理流程" },
+      { title: "沉淀维修经验", desc: "复用历史案例与知识" },
+    ],
+    capabilityCards: [
+      {
+        title: "故障现象归因",
+        desc: "根据报警代码、运行参数和现场描述，推断高概率故障原因并给出排查顺序。",
+      },
+      {
+        title: "维修步骤编排",
+        desc: "按安全确认、部件检查、处理动作和复测验收生成标准化维修指导。",
+      },
+      {
+        title: "历史案例复用",
+        desc: "关联相似设备与历史工单，提取有效处置经验，减少重复试错。",
+      },
+      {
+        title: "风险与备件提示",
+        desc: "同步提示安全风险、所需工具、备件清单和停机影响，辅助现场准备。",
+      },
+    ],
+    scenarioCards: [
+      {
+        title: "现场故障抢修",
+        desc: "值班人员录入报警信息和现场现象后，快速获得排查路径与处理建议。",
+        image: sceneMedia,
+        tags: ["抢修", "排障"],
+        heatValue: "1.1k",
+        createTime: "2026.05.12",
+      },
+      {
+        title: "远程专家协同",
+        desc: "将排查过程、判断依据和关键截图汇总，方便专家远程复核与指导。",
+        image: sceneWriting,
+        tags: ["协同", "专家"],
+        heatValue: "920",
+        createTime: "2026.05.12",
+      },
+      {
+        title: "维修复盘归档",
+        desc: "自动整理故障原因、处置步骤、耗材使用和复测结果，形成标准案例。",
+        image: sceneTranslation,
+        tags: ["复盘", "工单"],
+        heatValue: "760",
+        createTime: "2026.05.12",
+      },
+    ],
+  },
+  102: {
+    applyDetail: {
+      id: 102,
+      name: "设备健康诊断与报告编写",
+      category: 1,
+      description:
+        "汇总巡检、运行、告警和检修数据，自动评估设备健康状态，输出结构化诊断结论和专业分析报告。",
+      status: 0,
+      tags: '[{"name":"设备"},{"name":"诊断"}]',
+      myApplyFlag: false,
+      kacApplyKnowledgeList: [],
+      kacApplyGraphList: [],
+      kacApplyBotList: [],
+    },
+    coreValueHtml:
+      "设备健康诊断与报告编写的核心价值在于把巡检、运行、告警和检修数据转化为清晰的<span>健康状态判断</span>。系统可以自动归纳关键风险、生成专业报告并给出检修建议，帮助管理人员从分散数据中快速看清设备趋势，提前安排<span>预防性维护</span>。",
+    coreMetrics: [
+      { title: "健康状态评估", desc: "汇总指标形成诊断结论" },
+      { title: "报告自动成稿", desc: "结构化输出专业报告" },
+      { title: "风险提前预警", desc: "识别趋势异常与隐患" },
+    ],
+    capabilityCards: [
+      {
+        title: "多源数据汇总",
+        desc: "整合巡检记录、运行曲线、告警事件和检修台账，形成统一诊断输入。",
+      },
+      {
+        title: "健康评分分析",
+        desc: "围绕负载、温度、振动、告警频次等指标生成设备健康评分与等级。",
+      },
+      {
+        title: "诊断报告生成",
+        desc: "自动组织设备概况、异常说明、风险判断和处置建议，减少人工编写成本。",
+      },
+      {
+        title: "检修建议闭环",
+        desc: "根据风险等级推荐检查项目、检修窗口和跟踪事项，支撑后续闭环管理。",
+      },
+    ],
+    scenarioCards: [
+      {
+        title: "月度健康评估",
+        desc: "按设备或区域生成月度健康报告，辅助管理层掌握整体运行状态。",
+        image: sceneMedia,
+        tags: ["评估", "报告"],
+        heatValue: "1.3k",
+        createTime: "2026.05.12",
+      },
+      {
+        title: "检修计划编排",
+        desc: "根据健康评分和风险等级，辅助安排检修优先级、窗口期和备件准备。",
+        image: sceneWriting,
+        tags: ["检修", "计划"],
+        heatValue: "980",
+        createTime: "2026.05.12",
+      },
+      {
+        title: "异常趋势预警",
+        desc: "对连续升温、振动增大、告警频发等趋势生成分析说明和处置建议。",
+        image: sceneTranslation,
+        tags: ["预警", "趋势"],
+        heatValue: "860",
+        createTime: "2026.05.12",
+      },
+    ],
+  },
+};
+
+const activeVerticalMockDetail = computed(() => {
+  if (getSource() !== "vertical") {
+    return null;
+  }
+  return verticalMockDetailMap[Number(id.value)] || null;
+});
+
+const coreValueHtml = computed(
+  () => activeVerticalMockDetail.value?.coreValueHtml || defaultCoreValueHtml
+);
+const coreMetrics = computed(
+  () => activeVerticalMockDetail.value?.coreMetrics || defaultCoreMetrics
+);
+const capabilityCards = computed(
+  () =>
+    activeVerticalMockDetail.value?.capabilityCards || defaultCapabilityCards
+);
+const scenarioCards = computed(
+  () => activeVerticalMockDetail.value?.scenarioCards || defaultScenarioCards
+);
+
 const isDisabled = computed(() => Number(applyDetail.value.status) === 0);
 const statusText = computed(() => (isDisabled.value ? "停用" : "正常"));
 const isMyAppSource = computed(() => getSource() === "myApp");
@@ -474,9 +631,12 @@ const displayTags = computed(() => {
 });
 
 function getAppIcon(row = {}) {
-  // if (!row.icon) {
-  //   return appFeather;
-  // }
+  if (!row.icon) {
+    return appFeather;
+  }
+  if (/^(data:|blob:|https?:\/\/)/.test(row.icon)) {
+    return row.icon;
+  }
   return `${import.meta.env.VITE_APP_BASE_API}/profile${row.icon}`;
 }
 
@@ -550,10 +710,11 @@ const visibleMountedResourceGroups = computed(() =>
 
 function getSource() {
   const routeName = route.name;
+  const routePath = route.path || "";
   if (routeName === "myAppDetail") {
     return "myApp";
   }
-  if (routeName === "verticalDetail") {
+  if (routeName === "verticalDetail" || routePath.includes("/kac/vertical/")) {
     return "vertical";
   }
   return "horizontal";
@@ -639,6 +800,17 @@ watch(
 async function getApplyDetailById() {
   loading.value = true;
   try {
+    const mockDetail = activeVerticalMockDetail.value;
+    if (mockDetail) {
+      applyDetail.value = { ...mockDetail.applyDetail };
+      mountedKnowledgeList.value = [];
+      mountedGraphList.value = [];
+      mountedBotList.value = [];
+      await nextTick();
+      updateMainPanelHeight();
+      return;
+    }
+
     const response = await getApply(id.value);
     applyDetail.value = response.data || {};
     await loadMountedResources();
@@ -803,7 +975,9 @@ function submitForm() {
   });
 }
 
-loadDropdownData();
+if (!activeVerticalMockDetail.value) {
+  loadDropdownData();
+}
 </script>
 
 <style scoped lang="scss">

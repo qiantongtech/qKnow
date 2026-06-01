@@ -108,7 +108,7 @@
         }
 
         .nest-menu{
-           justify-content: center;
+           justify-content: flex-start;
         }
       }
     }
@@ -162,6 +162,8 @@
     & .nest-menu .el-sub-menu>.el-sub-menu__title,
     & .el-sub-menu .el-menu-item {
       min-width: 100% !important;
+      justify-content: flex-start;
+      text-align: left;
 
       &:hover {
         //background-color: rgba(0, 0, 0, 0.06) !important;
