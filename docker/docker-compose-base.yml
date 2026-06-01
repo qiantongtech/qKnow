@@ -57,8 +57,8 @@ services:
     environment:
       - NEO4J_AUTH=neo4j/${NEO4J_PASSWORD:-aA3nJ7pF1iJ2cB0fM1nJ}
     ports:
-      - "27474:7474"
-      - "27687:7687"
+      - "47474:7474"
+      - "47687:7687"
     volumes:
       - ./database/neo4j/data:/data
       - ./database/neo4j/logs:/logs
