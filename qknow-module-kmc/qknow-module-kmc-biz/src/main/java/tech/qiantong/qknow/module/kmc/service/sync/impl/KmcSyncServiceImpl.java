@@ -488,6 +488,13 @@ public class KmcSyncServiceImpl extends ServiceImpl<KmcSyncMapper, KmcSyncDO> im
      * @param documentDO      文档对象
      * @param segmentList     分段列表
      */
+    /**
+     * 保存到向量数据库
+     *
+     * @param knowledgeBaseDO 知识库对象
+     * @param documentDO      文档对象
+     * @param segmentList     分段列表
+     */
     public void save2VectorStore(Map<String, Long> map, KmcKnowledgeBaseDO knowledgeBaseDO, KmcDocumentDO documentDO,
                                  List<Document> segmentList) {
         EmbeddingModel embeddingModel = aiModelService.getEmbeddingModel(
@@ -504,17 +511,29 @@ public class KmcSyncServiceImpl extends ServiceImpl<KmcSyncMapper, KmcSyncDO> im
             metadata.put(WeaviateConstant.METADATA_FIELD_SEGMENT_ID, segmentId);
         });
 
-        // 保存到向量数据库
-        FilterExpressionBuilder b = new FilterExpressionBuilder();
-        Filter.Expression expression = b.eq(WeaviateConstant.METADATA_FIELD_DOCUMENT_ID, documentDO.getId()).build();
         try {
-            vectorStore.delete(expression);
+            // ===================== 1. 先插入（自动创建Schema，解决 no graphql provider） =====================
+            List<List<Document>> partitions = Lists.partition(segmentList, 5);
+            for (List<Document> partition : partitions) {
+                vectorStore.add(partition);
+            }
+            log.info("文档ID {} 向量数据插入成功", documentDO.getId());
+
+            // ===================== 2. 再删除旧数据（安全删除，不存在不报错） =====================
+            FilterExpressionBuilder b = new FilterExpressionBuilder();
+            Filter.Expression expression = b.eq(WeaviateConstant.METADATA_FIELD_DOCUMENT_ID, documentDO.getId()).build();
+
+            try {
+                vectorStore.delete(expression);
+                log.info("文档ID {} 旧向量数据已清理", documentDO.getId());
+            } catch (Exception e) {
+                // 无数据/无Schema 都只打警告，不中断流程
+                log.warn("文档ID {} 旧向量数据不存在，无需删除", documentDO.getId());
+            }
+
         } catch (Exception e) {
-            e.printStackTrace();
-        }
-        List<List<Document>> partitions = Lists.partition(segmentList, 5);
-        for (List<Document> partition : partitions){
-            vectorStore.add(partition);
+            log.error("文档ID {} 向量库写入失败：{}", documentDO.getId(), e.getMessage(), e);
+            throw e;
         }
     }
 
