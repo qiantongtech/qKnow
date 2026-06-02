@@ -111,4 +111,8 @@ public class ExtSchemaRelationRespVO implements Serializable {
     @Schema(description = "备注", example = "")
     private String remark;
 
+    @Excel(name = "描述")
+    @Schema(description = "描述", example = "")
+    private String description;
+
 }

@@ -234,8 +234,8 @@
             {{ scope.row.nameCode || "-" }}
           </template>
         </el-table-column>
-                <el-table-column
-                width="200"
+        <el-table-column
+          width="200"
           v-if="getColumnVisibility(5)"
           label="描述"
           align="left"
@@ -243,7 +243,7 @@
           :show-overflow-tooltip="{ effect: 'light' }"
         >
           <template #default="scope">
-            {{ getAttributeDescription(scope.row) }}
+            {{ scope.row.description }}
           </template>
         </el-table-column>
         <el-table-column
@@ -502,6 +502,19 @@
                 placeholder="请输入备注"
                   maxlength="500"
                 show-word-limit
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="24">
+            <el-form-item label="描述" prop="description">
+              <el-input
+                  v-model="form.description"
+                  type="textarea"
+                  placeholder="请输入描述"
+                  maxlength="1000"
+                  show-word-limit
               />
             </el-form-item>
           </el-col>
@@ -840,24 +853,6 @@ const data = reactive({
 
 const { queryParams, form, rules } = toRefs(data);
 
-const attributeDescriptionMap = {
-  name: "用户或实体的基础名称字段，用于展示和检索主体名称。",
-  nick_name: "用户展示昵称，用于页面展示、互动场景和个性化标识。",
-  age: "用户实际年龄字段，用于年龄统计、筛选和基础画像分析。",
-  tags: "用户兴趣标签集合，用于记录用户偏好、兴趣分类和推荐匹配。",
-  reg_time: "用户注册时间字段，用于记录账号创建时间并支持时间维度统计。",
-  balance: "账户余额字段，用于记录用户账户中的可用金额，单位为元。",
-  email: "电子邮箱字段，用于接收系统通知、消息提醒或身份联系。",
-  photos: "相册图片字段，用于记录用户上传或关联的动态配图信息。",
-  level: "用户等级字段，用于标识用户当前等级，如普通、白银、黄金等。",
-  extra_config: "扩展配置字段，用于存放系统预留或业务扩展的补充配置。",
-  profile_url: "个人主页地址字段，用于记录第三方主页或外部个人链接。",
-};
-
-function getAttributeDescription(row) {
-  return attributeDescriptionMap[String(row.nameCode || "").trim()] || "-";
-}
-
 /** 查询概念属性列表 */
 function getList() {
   loading.value = true;
@@ -904,6 +899,7 @@ function reset() {
     updaterId: null,
     updateTime: null,
     remark: null,
+    description: null,
   };
   proxy.resetForm("attributeRef");
 }
