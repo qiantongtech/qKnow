@@ -101,6 +101,9 @@ public class ExtStructTaskDO extends BaseEntity {
     /** 数据源名称 */
     private String datasourceName;
 
+    /** 描述 */
+    private String description;
+
     /** 是否有效 */
     private Boolean validFlag;
 

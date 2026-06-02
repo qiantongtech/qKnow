@@ -647,7 +647,7 @@ function getList() {
   listExtStruct(queryParams.value).then((response) => {
     extStructList.value = response.data.rows.map((item) => ({
       ...item,
-      description: getTaskDescription(item),
+      // description: getTaskDescription(item),
     }));
     total.value = response.data.total;
     loading.value = false;
