@@ -85,10 +85,12 @@
 
       .nest-menu{
         &>a{
-            padding: 0 15px 0 15px;
+            // padding: 0 10px 0 10px;
         }
         .el-menu-item{
-            
+            .menu-title{
+                padding-left: 30px;
+            }
         }
       }
       
@@ -97,7 +99,7 @@
         margin-bottom: 15px;
         &>.el-sub-menu,
         &>a{
-            padding: 0 15px;
+            padding: 0 10px;
         }
         
 
@@ -118,12 +120,23 @@
       text-overflow: ellipsis !important;
       white-space: nowrap !important;
       color: #fff;
+      font-size: 16px;
       font-weight: bold;
       // font-family: PingFangSC;
     }
 
     .el-menu-item .el-menu-tooltip__trigger {
       display: inline-block !important;
+    }
+
+    .el-menu-item,
+    .el-sub-menu__title {
+      transition: none !important;
+    }
+
+    .el-menu-item:not(.is-active) {
+      background: transparent !important;
+      box-shadow: none !important;
     }
 
      .el-menu-item {

@@ -363,9 +363,11 @@
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         align-items: center;
+        min-width: 0;
         height: 43px;
         margin-top: 5px;
         padding: 0 6px;
+        overflow: hidden;
         border-radius: 2px;
         background: linear-gradient(
             180deg,
@@ -382,10 +384,11 @@
         height: 43px;
         padding: 0 4px;
         display: grid;
-        grid-template-columns: 24px minmax(0, max-content);
+        grid-template-columns: 24px minmax(0, 74px);
         column-gap: 5px;
         align-items: center;
         justify-content: center;
+        overflow: hidden;
 
         &:first-child {
             padding-left: 2px;
@@ -405,6 +408,7 @@
 
     .forecast-day {
         min-width: 0;
+        width: 100%;
         text-align: left;
 
         .forecast-main {
@@ -447,6 +451,71 @@
         width: 1px;
         height: 27px;
         background: rgba(120, 154, 199, 0.24);
+    }
+
+    @container (max-width: 360px) {
+        .weather-forecast {
+            padding: 0 4px;
+        }
+
+        .forecast-item {
+            grid-template-columns: 22px minmax(0, 66px);
+            column-gap: 4px;
+            padding: 0 2px;
+        }
+
+        .forecast-icon {
+            width: 22px;
+            height: 22px;
+        }
+
+        .forecast-day {
+            .forecast-main {
+                grid-template-columns: 24px max-content;
+                column-gap: 3px;
+            }
+
+            .name,
+            .desc {
+                font-size: 11px;
+            }
+
+            .desc {
+                width: 24px;
+            }
+        }
+
+        .forecast-range {
+            font-size: 11px;
+        }
+    }
+
+    @container (max-width: 300px) {
+        .weather-forecast {
+            padding: 0 3px;
+        }
+
+        .forecast-item {
+            grid-template-columns: 20px minmax(0, 1fr);
+            column-gap: 3px;
+            padding: 0 1px;
+        }
+
+        .forecast-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .forecast-day {
+            .forecast-main {
+                grid-template-columns: minmax(0, max-content);
+                column-gap: 0;
+            }
+
+            .desc {
+                display: none;
+            }
+        }
     }
 
     @container (min-width: 380px) {
