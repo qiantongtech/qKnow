@@ -174,7 +174,7 @@
           <template #default="scope">
             {{ scope.row.structTaskCount }}
           </template>
-        </el-table-column> 
+        </el-table-column>
              <el-table-column
           v-if="getColumnVisibility(1)"
           label="非结构化任务数量"
@@ -195,7 +195,7 @@
             {{ scope.row.attributeCount }}
           </template>
         </el-table-column>
-  
+
         <el-table-column
           v-if="getColumnVisibility(6)"
           label="创建人"
@@ -206,7 +206,7 @@
             {{ scope.row.createBy || "-" }}
           </template>
         </el-table-column>
-        
+
         <el-table-column
           v-if="getColumnVisibility(8)"
           label="创建时间"
@@ -229,7 +229,7 @@
           fixed="right"
           width="240"
         >
-        
+
           <template #default="scope">
               <el-button
               link
@@ -248,7 +248,7 @@
               v-hasPermi="['ext:extSchema:schema:edit']"
               >修改</el-button
             >
-          
+
             <el-button
               link
               type="danger"
@@ -305,7 +305,7 @@
           </el-col>
         </el-row>
            <el-row :gutter="20">
-         
+
           <el-col :span="24">
             <el-form-item label="概念颜色" prop="color">
               <!--              <el-color-picker v-model="form.color"></el-color-picker>-->
@@ -529,6 +529,8 @@ const data = reactive({
     name: null,
     description: null,
     createTime: null,
+    orderByColumn: "createTime",
+    isAsc: "descending",
   },
   rules: {
     // workspaceId: [{ required: true, message: "工作区id不能为空", trigger: "blur" }],
