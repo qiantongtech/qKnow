@@ -132,7 +132,7 @@
 <!--            {{ scope.row.workspaceId || '-' }}-->
 <!--          </template>-->
 <!--        </el-table-column>-->
-        
+
         <el-table-column v-if="getColumnVisibility(2)" label="起点" align="left" prop="startSchemaId">
           <template #default="scope">
             {{ getLabelByValue(scope.row.startSchemaId) || '-' }}
@@ -150,7 +150,7 @@
         </el-table-column>
          <el-table-column v-if="getColumnVisibility(8)" label="描述" width="250" align="left" prop="description" :show-overflow-tooltip="{ effect: 'light' }">
           <template #default="scope">
-            {{ getRelationDescription(scope.row) }}
+            {{ scope.row.description || '-' }}
           </template>
         </el-table-column>
         <el-table-column v-if="getColumnVisibility(5)" label="是否可逆" align="center" prop="inverseFlag">
@@ -266,6 +266,14 @@
             <el-form-item label="备注" prop="remark">
               <el-input v-model="form.remark" type="textarea" placeholder="请输入备注"   maxlength="500"
                 show-word-limit />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="24">
+            <el-form-item label="描述" prop="description">
+              <el-input v-model="form.description" type="textarea" placeholder="请输入描述"   maxlength="1000"
+                        show-word-limit />
             </el-form-item>
           </el-col>
         </el-row>
@@ -451,6 +459,8 @@ const data = reactive({
     endSchemaId: null,
     inverseFlag: null,
     createTime: null,
+    orderByColumn: "createTime",
+    isAsc: "descending",
   },
   rules: {
     workspaceId: [{ required: true, message: "工作区id不能为空", trigger: "blur" }],
@@ -542,7 +552,8 @@ function reset() {
     updateBy: null,
     updaterId: null,
     updateTime: null,
-    remark: null
+    remark: null,
+    description: null,
   };
   proxy.resetForm("relationRef");
 }

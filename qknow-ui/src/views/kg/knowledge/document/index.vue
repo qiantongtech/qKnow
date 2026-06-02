@@ -165,7 +165,7 @@
               width="80"
               sortable="custom"
             />
-            <el-table-column 
+            <el-table-column
               v-if="getColumnVisibility(2)"
               label="文件名称"
               prop="name"
