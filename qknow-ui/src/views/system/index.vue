@@ -254,6 +254,7 @@ import * as echarts from "echarts";
 import {
   onBeforeUnmount,
   onMounted,
+  nextTick,
   ref,
   watch,
   getCurrentInstance,
@@ -924,30 +925,46 @@ const module9 = ref([
 ]);
 
 function chartIntancesResize() {
-  console.log(chartIntances);
   chartIntances.forEach((intance) => {
-    intance.resize();
+    if (intance && !intance.isDisposed?.()) {
+      intance.resize();
+    }
   });
 }
 
-window.addEventListener("resize", chartIntancesResize);
+let chartResizeTimers = [];
 
-onBeforeUnmount(() => {
-  window.removeEventListener("resize", chartIntancesResize);
-});
+function clearChartResizeTimers() {
+  chartResizeTimers.forEach((timer) => window.clearTimeout(timer));
+  chartResizeTimers = [];
+}
+
+function scheduleChartResize() {
+  clearChartResizeTimers();
+  nextTick(() => {
+    [0, 80, 180, 320].forEach((delay) => {
+      const timer = window.setTimeout(() => {
+        window.requestAnimationFrame(chartIntancesResize);
+      }, delay);
+      chartResizeTimers.push(timer);
+    });
+  });
+}
 
 // 获取当前实例
 const instance = getCurrentInstance();
 
-const callback = () => {
-  window.addEventListener("resize", chartIntancesResize);
+const handleSidebarStatusChange = () => {
+  scheduleChartResize();
 };
 
 // 在组件销毁时移除事件监听
 onBeforeUnmount(() => {
+  clearChartResizeTimers();
+  window.removeEventListener("resize", scheduleChartResize);
   instance.appContext.config.globalProperties.$bus.off(
     "getsidebarStatus",
-    callback
+    handleSidebarStatusChange
   );
 });
 
@@ -957,11 +974,11 @@ onMounted(() => {
   initModule6();
   initModule8();
   getxljtcont();
+  scheduleChartResize();
+  window.addEventListener("resize", scheduleChartResize);
   instance.appContext.config.globalProperties.$bus.on(
     "getsidebarStatus",
-    () => {
-      window.addEventListener("resize", chartIntancesResize);
-    }
+    handleSidebarStatusChange
   );
 });
 </script>
