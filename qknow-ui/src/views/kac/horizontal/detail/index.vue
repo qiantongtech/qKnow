@@ -97,7 +97,7 @@
           type="primary"
           plain
           icon="CopyDocument"
-          :disabled="isDisabled"
+          :disabled="isHeroActionDisabled"
           @click="showCopyDialog('copy')"
           @mousedown="(e) => e.preventDefault()"
         >
@@ -106,7 +106,7 @@
         <el-button
           type="primary"
           icon="Promotion"
-          :disabled="isDisabled && applyDetail.myApplyFlag === false"
+          :disabled="isHeroActionDisabled"
           @click="handleUse(applyDetail)"
           @mousedown="(e) => e.preventDefault()"
         >
@@ -457,10 +457,55 @@ const defaultScenarioCards = [
   },
 ];
 
+function createMockIcon({ bgStart, bgEnd, accent, symbol }) {
+  const symbols = {
+    wrench: `
+      <path d="M42 18a13 13 0 0 0 15 18L36 57a8 8 0 0 1-11-11l21-21a13 13 0 0 0-4-7Z" fill="white" opacity=".96"/>
+      <path d="M25 51l7 7" stroke="${accent}" stroke-width="4" stroke-linecap="round"/>
+    `,
+    health: `
+      <rect x="18" y="24" width="44" height="32" rx="8" fill="white" opacity=".95"/>
+      <path d="M40 31v18M31 40h18" stroke="${accent}" stroke-width="5" stroke-linecap="round"/>
+      <path d="M22 20c8-9 28-9 36 0" stroke="white" stroke-width="5" stroke-linecap="round" opacity=".75"/>
+    `,
+  };
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+      <defs>
+        <linearGradient id="bg" x1="12" y1="10" x2="68" y2="70" gradientUnits="userSpaceOnUse">
+          <stop stop-color="${bgStart}"/>
+          <stop offset="1" stop-color="${bgEnd}"/>
+        </linearGradient>
+      </defs>
+      <rect width="80" height="80" rx="16" fill="url(#bg)"/>
+      <circle cx="66" cy="14" r="9" fill="white" opacity=".24"/>
+      <circle cx="15" cy="66" r="12" fill="white" opacity=".14"/>
+      ${symbols[symbol]}
+    </svg>
+  `;
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
+const verticalMockIcons = {
+  fault: createMockIcon({
+    bgStart: "#ff9f43",
+    bgEnd: "#f45b69",
+    accent: "#f97316",
+    symbol: "wrench",
+  }),
+  health: createMockIcon({
+    bgStart: "#35d0ba",
+    bgEnd: "#0ea5e9",
+    accent: "#0ea5e9",
+    symbol: "health",
+  }),
+};
+
 const verticalMockDetailMap = {
   101: {
     applyDetail: {
       id: 101,
+      icon: verticalMockIcons.fault,
       name: "故障快速排查与维修指导",
       category: 1,
       description:
@@ -527,6 +572,7 @@ const verticalMockDetailMap = {
   102: {
     applyDetail: {
       id: 102,
+      icon: verticalMockIcons.health,
       name: "设备健康诊断与报告编写",
       category: 1,
       description:
@@ -593,10 +639,22 @@ const verticalMockDetailMap = {
 };
 
 const activeVerticalMockDetail = computed(() => {
-  if (getSource() !== "vertical") {
+  const source = getSource();
+  if (!["vertical", "myApp"].includes(source)) {
     return null;
   }
-  return verticalMockDetailMap[Number(id.value)] || null;
+  const mockDetail = verticalMockDetailMap[Number(id.value)] || null;
+  if (!mockDetail || source !== "myApp") {
+    return mockDetail;
+  }
+  return {
+    ...mockDetail,
+    applyDetail: {
+      ...mockDetail.applyDetail,
+      status: 1,
+      myApplyFlag: true,
+    },
+  };
 });
 
 const coreValueHtml = computed(
@@ -616,6 +674,12 @@ const scenarioCards = computed(
 const isDisabled = computed(() => Number(applyDetail.value.status) === 0);
 const statusText = computed(() => (isDisabled.value ? "停用" : "正常"));
 const isMyAppSource = computed(() => getSource() === "myApp");
+const isMyAppVerticalMockDetail = computed(
+  () => isMyAppSource.value && Boolean(verticalMockDetailMap[Number(id.value)])
+);
+const isHeroActionDisabled = computed(
+  () => isDisabled.value || isMyAppVerticalMockDetail.value
+);
 const categoryLabel = computed(() => {
   if (Number(applyDetail.value.category) === 1) {
     return "纵向行业应用";

@@ -117,7 +117,7 @@
 <script setup name="Horizontal">
 import Card from "@/views/kac/horizontal/components/card.vue";
 import { ref, reactive, toRefs } from 'vue';
-import { listApply } from "@/api/kac/apply/apply.js";
+// import { listApply } from "@/api/kac/apply/apply.js";
 import useUserStore from "@/store/system/user.js";
 
 const {proxy} = getCurrentInstance();
@@ -153,14 +153,122 @@ const {queryParams} = toRefs(data);
 
 const applyList = ref([]);
 
+function createIcon({ bgStart, bgEnd, accent, symbol }) {
+  const symbols = {
+    wrench: `
+      <path d="M42 18a13 13 0 0 0 15 18L36 57a8 8 0 0 1-11-11l21-21a13 13 0 0 0-4-7Z" fill="white" opacity=".96"/>
+      <path d="M25 51l7 7" stroke="${accent}" stroke-width="4" stroke-linecap="round"/>
+    `,
+    health: `
+      <rect x="18" y="24" width="44" height="32" rx="8" fill="white" opacity=".95"/>
+      <path d="M40 31v18M31 40h18" stroke="${accent}" stroke-width="5" stroke-linecap="round"/>
+      <path d="M22 20c8-9 28-9 36 0" stroke="white" stroke-width="5" stroke-linecap="round" opacity=".75"/>
+    `
+  };
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+      <defs>
+        <linearGradient id="bg" x1="12" y1="10" x2="68" y2="70" gradientUnits="userSpaceOnUse">
+          <stop stop-color="${bgStart}"/>
+          <stop offset="1" stop-color="${bgEnd}"/>
+        </linearGradient>
+      </defs>
+      <rect width="80" height="80" rx="16" fill="url(#bg)"/>
+      <circle cx="66" cy="14" r="9" fill="white" opacity=".24"/>
+      <circle cx="15" cy="66" r="12" fill="white" opacity=".14"/>
+      ${symbols[symbol]}
+    </svg>
+  `;
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
+const mockApplyList = [
+  {
+    id: 101,
+    workspaceId: 1001,
+    pluginId: null,
+    name: "故障快速排查与维修指导",
+    category: 1,
+    description:
+      "面向设备运维场景，结合故障现象、报警代码和历史维修记录，快速定位可能原因并生成维修步骤建议。",
+    status: 1,
+    source: "纵向行业应用",
+    tags: '[{"name":"运维"},{"name":"维修"}]',
+    useScene: null,
+    useCount: 128,
+    myApplyFlag: true,
+    validFlag: true,
+    delFlag: false,
+    createTime: "2026-05-12 09:20:00",
+    updateTime: "2026-05-12 09:20:00",
+    kacApplyKnowledgeList: [],
+    kacApplyGraphList: [],
+    kacApplyBotList: [],
+    icon: createIcon({
+      bgStart: "#ff9f43",
+      bgEnd: "#f45b69",
+      accent: "#f97316",
+      symbol: "wrench"
+    })
+  },
+  {
+    id: 102,
+    workspaceId: 1001,
+    pluginId: null,
+    name: "设备健康诊断与报告编写",
+    category: 1,
+    description:
+      "汇总巡检、运行、告警和检修数据，自动评估设备健康状态，输出结构化诊断结论和专业分析报告。",
+    status: 1,
+    source: "纵向行业应用",
+    tags: '[{"name":"设备"},{"name":"诊断"}]',
+    useScene: null,
+    useCount: 96,
+    myApplyFlag: true,
+    validFlag: true,
+    delFlag: false,
+    createTime: "2026-05-12 09:20:00",
+    updateTime: "2026-05-12 09:20:00",
+    kacApplyKnowledgeList: [],
+    kacApplyGraphList: [],
+    kacApplyBotList: [],
+    icon: createIcon({
+      bgStart: "#35d0ba",
+      bgEnd: "#0ea5e9",
+      accent: "#0ea5e9",
+      symbol: "health"
+    })
+  }
+];
+
+function getMockList() {
+  const keyword = queryParams.value.name?.trim().toLowerCase();
+  const pageNum = Number(queryParams.value.pageNum) || 1;
+  const pageSize = Number(queryParams.value.pageSize) || 10;
+  const filteredList = keyword
+    ? mockApplyList.filter((item) =>
+        [item.name, item.description, item.tags]
+          .filter(Boolean)
+          .some((value) => String(value).toLowerCase().includes(keyword))
+      )
+    : mockApplyList;
+  const start = (pageNum - 1) * pageSize;
+
+  applyList.value = filteredList.slice(start, start + pageSize);
+  total.value = filteredList.length;
+}
+
 /** 查询应用列表 */
 function getList() {
   loading.value = true;
-  listApply(queryParams.value).then(response => {
-    applyList.value = response.data.rows;
-    total.value = response.data.total;
-    loading.value = false;
-  });
+  getMockList();
+  loading.value = false;
+  // 后续需要恢复接口时打开下面代码即可。
+  // listApply(queryParams.value).then(response => {
+  //   applyList.value = response.data.rows;
+  //   total.value = response.data.total;
+  //   loading.value = false;
+  // });
 }
 
 /** 搜索按钮操作 */
