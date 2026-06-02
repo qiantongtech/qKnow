@@ -80,6 +80,9 @@ public class ExtSchemaRelationDO extends BaseEntity {
     /** 是否有效 */
     private Boolean validFlag;
 
+    /** 描述 */
+    private String description;
+
     /** 删除标志 */
     @TableLogic
     private Boolean delFlag;
