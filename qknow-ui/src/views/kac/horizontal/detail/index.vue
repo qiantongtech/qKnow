@@ -369,7 +369,7 @@ const route = useRoute();
 const router = useRouter();
 const { proxy } = getCurrentInstance();
 
-const id = ref(route.query.id || 1);
+const id = ref(route.query.id || null);
 const loading = ref(false);
 const open = ref(false);
 const title = ref("");
@@ -941,6 +941,10 @@ function getSource() {
   return "horizontal";
 }
 
+function isApplyDetailRoute() {
+  return ["horizontalDetail", "verticalDetail", "myAppDetail"].includes(route.name);
+}
+
 function updateMainPanelHeight() {
   if (!mainPanelRef.value) {
     mainPanelHeight.value = 0;
@@ -1021,15 +1025,28 @@ function showCopyDialog(action) {
 }
 
 watch(
-  () => route.query.id,
-  (newId) => {
-    id.value = newId || 1;
+  () => [route.name, route.query.id],
+  ([, newId]) => {
+    if (!isApplyDetailRoute()) {
+      loading.value = false;
+      return;
+    }
+    if (!newId) {
+      loading.value = false;
+      return;
+    }
+    id.value = newId;
     getApplyDetailById();
   },
   { immediate: true }
 );
 
 async function getApplyDetailById() {
+  if (!isApplyDetailRoute() || !id.value) {
+    loading.value = false;
+    return;
+  }
+
   loading.value = true;
   try {
     const mockDetail = activeVerticalMockDetail.value;
