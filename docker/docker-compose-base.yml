@@ -114,6 +114,7 @@ services:
     image: semitechnologies/weaviate:1.32.23
     profiles: ["base"]
     restart: always
+    hostname: weaviate
     ports:
       - "28080:8080"
       - "60051:50051"
@@ -130,6 +131,8 @@ services:
       AUTHENTICATION_APIKEY_USERS: hello@qknow
       AUTHORIZATION_ADMINLIST_ENABLED: true
       AUTHORIZATION_ADMINLIST_USERS: hello@qknow
+      CLUSTER_HOSTNAME: weaviate #和hostname保持一致
+      RAFT_BOOTSTRAP_EXPECT: "1" #启动预期1个节点，自动选自己为leader
     healthcheck:
       # 健康检查，确保服务正常启动
       test: [ "CMD", "curl", "-f", "http://localhost:8080/v1/meta" ]
