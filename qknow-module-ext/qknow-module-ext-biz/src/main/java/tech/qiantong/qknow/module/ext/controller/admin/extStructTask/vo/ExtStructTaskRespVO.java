@@ -146,4 +146,7 @@ public class ExtStructTaskRespVO implements Serializable {
     @Schema(description = "备注", example = "")
     private String remark;
 
+    @Schema(description = "描述", example = "")
+    private String description;
+
 }
