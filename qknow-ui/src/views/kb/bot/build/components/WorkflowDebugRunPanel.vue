@@ -114,7 +114,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { computed, onBeforeUnmount, ref, watch } from "vue";
 import { ProcessFlow } from "@/api/kb/bot/flow.js";
 import MarkdownIt from "markdown-it";
 import hljs from "highlight.js";
@@ -306,6 +306,10 @@ const stopStream = async () => {
     conversationInAbortController.value.abort();
   }
 };
+
+onBeforeUnmount(() => {
+  stopStream();
+});
 </script>
 
 <style scoped lang="scss">
