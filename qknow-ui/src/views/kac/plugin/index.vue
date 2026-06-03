@@ -1208,24 +1208,7 @@
 
     /** 删除按钮操作 */
     function handleDelete(row) {
-        const _ids = row.id || ids.value;
-        proxy.$modal
-            .confirm('是否确认删除插件管理编号为"' + _ids + '"的数据项？')
-            .then(function () {
-                const deleteIds = Array.isArray(_ids) ? _ids : [_ids];
-                mockPluginList.value = mockPluginList.value.filter(
-                    (item) => !deleteIds.includes(item.id)
-                );
-                ids.value = [];
-                single.value = true;
-                multiple.value = true;
-                // return delPlugin(_ids);
-            })
-            .then(() => {
-                getList();
-                proxy.$modal.msgSuccess('删除成功');
-            })
-            .catch(() => {});
+        proxy.$modal.msgWarning('演示数据，不可删除！');
     }
 
     /** 导出按钮操作 */

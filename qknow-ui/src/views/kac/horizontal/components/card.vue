@@ -420,24 +420,11 @@
     }
 
     function handleDelete(row) {
-        const _ids = row.id;
-        proxy.$modal
-            .confirm(`是否确认删除当前应用编号为"${_ids}"的数据项？`)
-            .then(() => delApply(_ids))
-            .then(() => {
-                proxy.$modal.msgSuccess('删除成功');
-                emit('refresh');
-            })
-            .catch(() => {});
+        proxy.$modal.msgWarning('演示数据，不可删除！');
     }
 
     async function handleUpdate(row) {
-        reset();
-        await ensureDropdownData();
-        const res = await getByApplyIdId(row.id);
-        form.value = res.data;
-        title.value = '修改应用';
-        open.value = true;
+        proxy.$modal.msgWarning('演示数据，不可修改！');
     }
 
     // id 与页面类型的映射关系
