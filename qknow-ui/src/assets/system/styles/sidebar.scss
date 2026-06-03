@@ -28,7 +28,7 @@
     bottom: 0;
     left: 0;
     z-index: 1001;
-    // overflow: hidden;
+    overflow: hidden;
     -webkit-box-shadow: 2px 0 6px rgba(0,21,41,.35);
     box-shadow: 2px 0 6px rgba(0,21,41,.35);
     background: url(@/assets/system/images/layout/sidebar_bg.png) no-repeat center center;
@@ -118,8 +118,8 @@
       text-overflow: ellipsis !important;
       white-space: nowrap !important;
       color: #fff;
-      font-weight: 500;
-      font-family: PingFangSC;
+      font-weight: bold;
+      // font-family: PingFangSC;
     }
 
     .el-menu-item .el-menu-tooltip__trigger {
@@ -196,6 +196,7 @@
   .hideSidebar {
     .sidebar-container {
       width: 60px !important;
+      overflow: visible;
     }
 
     .main-container {

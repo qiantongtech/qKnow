@@ -178,17 +178,18 @@ public class ExtNeo4jServiceImpl implements ExtNeo4jService {
                 propertiesMap.put("confidence", extractionDO.getConfidence());
                 propertiesMap.put("workspace_id", extractionDO.getWorkspaceId() == null ? "" : extractionDO.getWorkspaceId());
 
-
-                // 头节点完整属性
-                ConcurrentHashMap<String, Object> startMap = new ConcurrentHashMap<>();
-                startMap.put("name", head);
-                startMap.putAll(propertiesMap);
                 if(extractionDO.getStartSchemaId() != null){
                     propertiesMap.put("schema_id", extractionDO.getStartSchemaId());
                 }
                 if (StringUtils.isNotBlank(extractionDO.getStartTextIds())){
                     propertiesMap.put("text_ids", extractionDO.getStartTextIds());
                 }
+
+                // 头节点完整属性
+                ConcurrentHashMap<String, Object> startMap = new ConcurrentHashMap<>();
+                startMap.put("name", head);
+                startMap.putAll(propertiesMap);
+
                 // 必建头节点
                 dynamicRepository.mergeCreateNode(label, startBuild, startMergeMap, startMap);
 
@@ -207,16 +208,17 @@ public class ExtNeo4jServiceImpl implements ExtNeo4jService {
                 ConcurrentHashMap<String, Object> endMergeMap = objectMapper.readValue(
                         JSONObject.toJSONString(endMerge), ConcurrentHashMap.class);
 
-                // 尾节点完整属性
-                ConcurrentHashMap<String, Object> endMap = new ConcurrentHashMap<>();
-                endMap.put("name", tail);
-                endMap.putAll(propertiesMap);
                 if(extractionDO.getEndSchemaId() != null){
                     propertiesMap.put("schema_id", extractionDO.getEndSchemaId());
                 }
                 if (StringUtils.isNotBlank(extractionDO.getEndTextIds())){
                     propertiesMap.put("text_ids", extractionDO.getEndTextIds());
                 }
+                // 尾节点完整属性
+                ConcurrentHashMap<String, Object> endMap = new ConcurrentHashMap<>();
+                endMap.put("name", tail);
+                endMap.putAll(propertiesMap);
+
                 dynamicRepository.mergeCreateNode(label, startBuild, endMergeMap, endMap);
 
                 // ========== 关系为空，不创建关系 ==========
