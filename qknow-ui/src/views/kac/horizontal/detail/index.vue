@@ -97,7 +97,6 @@
           type="primary"
           plain
           icon="CopyDocument"
-          :disabled="isHeroActionDisabled"
           @click="showCopyDialog('copy')"
           @mousedown="(e) => e.preventDefault()"
         >
@@ -106,7 +105,6 @@
         <el-button
           type="primary"
           icon="Promotion"
-          :disabled="isHeroActionDisabled"
           @click="handleUse(applyDetail)"
           @mousedown="(e) => e.preventDefault()"
         >
@@ -501,6 +499,167 @@ const verticalMockIcons = {
   }),
 };
 
+const mockKnowledgeBaseList = [
+  {
+    id: 901,
+    name: "泵站机组故障案例知识库",
+    description:
+      "收录泵站机组典型故障实例，包含故障现象、原因分析、排查流程、处置方案及复盘总结，为运维检修、技能培训和问题溯源提供参考。",
+  },
+  {
+    id: 902,
+    name: "泵站设备故障诊断知识库",
+    description:
+      "面向泵站运行维护与设备管理，围绕水泵、电机、阀门、管道、传感器、控制柜等关键设备整理常见故障诊断知识。",
+  },
+  {
+    id: 903,
+    name: "泵站常见故障排查及解决方案库",
+    description:
+      "汇集泵站全设备常见故障，明确故障现象、排查步骤、处理方法及预防措施，适配给排水、排涝、污水泵站等场景。",
+  },
+];
+
+const mockBotList = [
+  {
+    id: 801,
+    name: "泵站安防与智能巡检助手",
+    description: "联动监控视频与传感器，自动识别异常状态并预警，辅助实现无人值守。",
+    type: "Agent",
+  },
+  {
+    id: 802,
+    name: "泵站气象预警与调度助手",
+    description:
+      "实时接入气象局雷达回波与降雨量数据，结合泵站水位监测，提供短临降雨预报及排涝启停建议。",
+    type: "Agent",
+  },
+  {
+    id: 803,
+    name: "qKnow-知识问答(知识库+知识图谱)",
+    description: "知识问答(知识库+知识图谱)",
+    type: "Chatflow",
+  },
+  {
+    id: 804,
+    name: "设备故障咨询问答",
+    description: "根据数据来回答设备故障相关问题。",
+    type: "Chatflow",
+  },
+  {
+    id: 805,
+    name: "qKnow-智能写作-日报生成",
+    description: "智能写作助手",
+    type: "工作流",
+  },
+  {
+    id: 806,
+    name: "qKnow-智能写作-周报生成",
+    description: "智能写作助手",
+    type: "工作流",
+  },
+  {
+    id: 807,
+    name: "qKnow-智能写作-月报生成",
+    description: "智能写作助手",
+    type: "工作流",
+  },
+  {
+    id: 808,
+    name: "故障诊断报告自动生成",
+    description: "根据所提供的数据自动生成诊断报告。",
+    type: "工作流",
+  },
+  {
+    id: 811,
+    name: "qKnow-知识问答(图谱)",
+    description: "知识问答(图谱)",
+    type: "工作流",
+  },
+  {
+    id: 812,
+    name: "qKnow-意图检索",
+    description: "意图检索",
+    type: "工作流",
+  },
+  {
+    id: 813,
+    name: "qKnow-图谱语义检索",
+    description: "图谱语义检索",
+    type: "工作流",
+  },
+  {
+    id: 814,
+    name: "qKnow-知识检索",
+    description: "知识检索",
+    type: "工作流",
+  },
+  {
+    id: 815,
+    name: "qKnow-图谱模型提取",
+    description: "图谱模型提取",
+    type: "工作流",
+  },
+  {
+    id: 816,
+    name: "qKnow-三元组抽取",
+    description: "三元组抽取",
+    type: "工作流",
+  },
+  {
+    id: 817,
+    name: "qKnow-合规性检查",
+    description: "合规性检查",
+    type: "工作流",
+  },
+  {
+    id: 818,
+    name: "qKnow-问答建议",
+    description: "问答建议",
+    type: "工作流",
+  },
+  {
+    id: 819,
+    name: "qKnow-智能写作-大纲内容提取",
+    description: "智能写作助手",
+    type: "工作流",
+  },
+  {
+    id: 820,
+    name: "qKnow-智能写作-生成文章",
+    description: "智能写作助手",
+    type: "工作流",
+  },
+];
+
+const mockApplyKnowledgeRelations = mockKnowledgeBaseList.map((item, index) => ({
+  id: 10000 + index,
+  knowledgeId: item.id,
+  name: item.name,
+  knowledgeBaseName: item.name,
+  description: item.description,
+}));
+
+const mockApplyBotRelations = mockBotList
+  .filter((item) => [801, 802, 803, 804, 808].includes(item.id))
+  .map((item, index) => ({
+    id: 11000 + index,
+    botId: item.id,
+    name: item.name,
+    botName: item.name,
+    description: item.description,
+  }));
+
+const mockHealthBotRelations = mockBotList
+  .filter((item) => ![805, 806, 807].includes(item.id))
+  .map((item, index) => ({
+    id: 12000 + index,
+    botId: item.id,
+    name: item.name,
+    botName: item.name,
+    description: item.description,
+  }));
+
 const verticalMockDetailMap = {
   101: {
     applyDetail: {
@@ -513,9 +672,9 @@ const verticalMockDetailMap = {
       status: 0,
       tags: '[{"name":"运维"},{"name":"维修"}]',
       myApplyFlag: false,
-      kacApplyKnowledgeList: [],
+      kacApplyKnowledgeList: mockApplyKnowledgeRelations,
       kacApplyGraphList: [],
-      kacApplyBotList: [],
+      kacApplyBotList: mockApplyBotRelations,
     },
     coreValueHtml:
       "故障快速排查与维修指导的核心价值在于把现场现象、报警代码、设备档案和历史案例统一串联，帮助运维人员快速形成<span>故障定位判断</span>和<span>可执行维修步骤</span>。它减少反复查资料和等待专家确认的时间，让维修过程更标准、更可追溯，也能持续沉淀企业自己的设备维修经验。",
@@ -580,9 +739,9 @@ const verticalMockDetailMap = {
       status: 0,
       tags: '[{"name":"设备"},{"name":"诊断"}]',
       myApplyFlag: false,
-      kacApplyKnowledgeList: [],
+      kacApplyKnowledgeList: mockApplyKnowledgeRelations,
       kacApplyGraphList: [],
-      kacApplyBotList: [],
+      kacApplyBotList: mockHealthBotRelations,
     },
     coreValueHtml:
       "设备健康诊断与报告编写的核心价值在于把巡检、运行、告警和检修数据转化为清晰的<span>健康状态判断</span>。系统可以自动归纳关键风险、生成专业报告并给出检修建议，帮助管理人员从分散数据中快速看清设备趋势，提前安排<span>预防性维护</span>。",
@@ -677,9 +836,7 @@ const isMyAppSource = computed(() => getSource() === "myApp");
 const isMyAppVerticalMockDetail = computed(
   () => isMyAppSource.value && Boolean(verticalMockDetailMap[Number(id.value)])
 );
-const isHeroActionDisabled = computed(
-  () => isDisabled.value || isMyAppVerticalMockDetail.value
-);
+const isMockVerticalDetail = computed(() => Boolean(activeVerticalMockDetail.value));
 const categoryLabel = computed(() => {
   if (Number(applyDetail.value.category) === 1) {
     return "纵向行业应用";
@@ -838,7 +995,18 @@ function reset() {
   proxy.resetForm("applyRef");
 }
 
+function showDevelopingMessage() {
+  ElMessage({
+    message: "功能正在开发中",
+    type: "warning",
+  });
+}
+
 function showCopyDialog(action) {
+  if (isMockVerticalDetail.value) {
+    showDevelopingMessage();
+    return;
+  }
   reset();
   const _id = applyDetail.value.id;
   getByApplyIdId(_id).then((res) => {
@@ -867,9 +1035,12 @@ async function getApplyDetailById() {
     const mockDetail = activeVerticalMockDetail.value;
     if (mockDetail) {
       applyDetail.value = { ...mockDetail.applyDetail };
-      mountedKnowledgeList.value = [];
+      knowledgeBaseList.value = mockKnowledgeBaseList;
+      botList.value = mockBotList;
+      mountedKnowledgeList.value =
+        mockDetail.applyDetail.kacApplyKnowledgeList || [];
       mountedGraphList.value = [];
-      mountedBotList.value = [];
+      mountedBotList.value = mockDetail.applyDetail.kacApplyBotList || [];
       await nextTick();
       updateMainPanelHeight();
       return;
@@ -970,6 +1141,11 @@ function normalizeResourceRows(
 }
 
 function handleUse(row) {
+  if (isMockVerticalDetail.value) {
+    showDevelopingMessage();
+    return;
+  }
+
   let path = "";
   const source = getSource();
 
@@ -998,6 +1174,10 @@ function handleUse(row) {
 }
 
 function openResourceDialog(type) {
+  if (isMockVerticalDetail.value) {
+    showDevelopingMessage();
+    return;
+  }
   resourceDialogType.value = type;
   resourceDialogOpen.value = true;
 }
