@@ -566,8 +566,19 @@
             return;
         }
 
+        if ([8, 20].includes(id)) {
+            const path = '/kac/horizontal/horizontalDetail';
+            router.push({
+                path,
+                query: {
+                    id: row.id
+                }
+            });
+            return;
+        }
+
         // id = 2, 3: 提示暂无详情
-        if (id === 2 || id === 3 || id === 4 || id === 5 || id === 6 || id === 7 || id === 8) {
+        if (id === 2 || id === 3 || id === 4 || id === 5 || id === 6 || id === 7) {
             ElMessage({
                 message: '功能正在开发中',
                 type: 'warning'
