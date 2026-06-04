@@ -133,7 +133,7 @@ services:
       AUTHORIZATION_ADMINLIST_USERS: hello@qknow
     healthcheck:
       # 健康检查，确保服务正常启动
-      test: [ "CMD", "curl", "-f", "http://localhost:8080/v1/meta" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider","--header", "Authorization:Bearer WVF5YThaHlkYwhGUSmCRgsX3tD5ngdN8pkih", "http://localhost:8080/v1/meta" ]
       interval: 10s
       timeout: 5s
       retries: 5
