@@ -216,7 +216,7 @@
             category: 1,
             description:
                 '面向设备运维场景，结合故障现象、报警代码和历史维修记录，快速定位可能原因并生成维修步骤建议。',
-            status: 0,
+            status: 1,
             tags: '[{"name":"运维"},{"name":"维修"}]',
             icon: createIcon({
                 bgStart: '#ff9f43',
@@ -231,7 +231,7 @@
             category: 1,
             description:
                 '汇总巡检、运行、告警和检修数据，自动评估设备健康状态，输出结构化诊断结论和专业分析报告。',
-            status: 0,
+            status: 1,
             tags: '[{"name":"设备"},{"name":"诊断"}]',
             icon: createIcon({
                 bgStart: '#35d0ba',
@@ -246,7 +246,7 @@
             category: 1,
             description:
                 '自动统计降雨、水位、流量等水雨情数据，生成趋势分析、异常提示和可直接发布的业务简报。',
-            status: 0,
+            status: 1,
             tags: '[{"name":"水利"},{"name":"简报"}]',
             icon: createIcon({
                 bgStart: '#60a5fa',
@@ -261,7 +261,7 @@
             category: 1,
             description:
                 '基于巡查规范和隐患分类标准，解答现场检查问题，并将发现项自动整理为隐患台账。',
-            status: 0,
+            status: 1,
             tags: '[{"name":"巡查"},{"name":"台账"}]',
             icon: createIcon({
                 bgStart: '#a78bfa',
@@ -276,7 +276,7 @@
             category: 1,
             description:
                 '围绕药品适应症、用法用量、禁忌和相互作用提供智能咨询，辅助形成安全、规范的用药建议。',
-            status: 0,
+            status: 1,
             tags: '[{"name":"医疗"},{"name":"用药"}]',
             icon: createIcon({
                 bgStart: '#34d399',
@@ -291,7 +291,7 @@
             category: 1,
             description:
                 '整合慢病患者基础信息、检查结果和随访记录，自动生成健康档案摘要与随访报告。',
-            status: 0,
+            status: 1,
             tags: '[{"name":"慢病"},{"name":"随访"}]',
             icon: createIcon({
                 bgStart: '#fbbf24',
@@ -306,7 +306,7 @@
             category: 1,
             description:
                 '围绕水资源调度规则、取水许可流程和政策条款提供问答服务，辅助业务人员快速研判办理要求。',
-            status: 0,
+            status: 1,
             tags: '[{"name":"水资源"},{"name":"问答"}]',
             icon: createIcon({
                 bgStart: '#22d3ee',
@@ -321,7 +321,7 @@
             category: 1,
             description:
                 '结合医学影像报告文本，提取关键检查结论、异常描述和随访建议，生成通俗易懂的解读内容。',
-            status: 0,
+            status: 1,
             tags: '[{"name":"影像"},{"name":"解读"}]',
             icon: createIcon({
                 bgStart: '#fb7185',
