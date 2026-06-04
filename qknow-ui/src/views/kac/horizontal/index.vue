@@ -159,7 +159,7 @@ const mockApplyList = [
     category: 0,
     description:
       "文章编写插件是一类旨在辅助用户更高效、更高质量地完成文本创作任务的软件工具或扩展程序。",
-    status: 0,
+    status: 1,
     source: null,
     tags: '[{"name":"写作"},{"name":"文章"}]',
     myApplyFlag: false,
@@ -180,7 +180,7 @@ const mockApplyList = [
     category: 0,
     description:
       "支持一次性上传多个查询条件并行处理，汇总输出结果。大幅提升效率，适用于多项目数据对比或大规模文献调研。",
-    status: 0,
+    status: 1,
     source: null,
     tags: '[{"name":"效率"},{"name":"工具"}]',
     myApplyFlag: false,
@@ -200,7 +200,7 @@ const mockApplyList = [
     name: "精确检索",
     category: 0,
     description: "严格字符匹配，精准查找代码、条款或参数，无模糊干扰。",
-    status: 0,
+    status: 1,
     source: null,
     tags: '[{"name":"搜索"},{"name":"工具"}]',
     myApplyFlag: false,
@@ -220,7 +220,7 @@ const mockApplyList = [
     name: "实体关系检索",
     category: 0,
     description: "智能识别实体与深层关系，助力知识图谱与情报分析。",
-    status: 0,
+    status: 1,
     source: null,
     tags: '[{"name":"分析"},{"name":"数据"}]',
     myApplyFlag: false,
@@ -241,7 +241,7 @@ const mockApplyList = [
     category: 0,
     description:
       "利用深度学习理解查询意图与上下文，突破关键词匹配限制。即使词汇不完全一致，也能通过语义关联精准定位内容。",
-    status: 0,
+    status: 1,
     source: null,
     tags: '[{"name":"搜索"},{"name":"AI"}]',
     myApplyFlag: false,
@@ -262,7 +262,7 @@ const mockApplyList = [
     category: 0,
     description:
       "基于海量数据理解并回答各类事实性或解释性问题，提供准确简洁的答案，满足即时信息获取需求。",
-    status: 0,
+    status: 1,
     source: null,
     tags: '[{"name":"问答"},{"name":"知识"}]',
     myApplyFlag: false,
@@ -283,7 +283,7 @@ const mockApplyList = [
     category: 0,
     description:
       "提供多场景标准模板，引导填充并自动排版，确保企业级文档专业规范。",
-    status: 0,
+    status: 1,
     source: null,
     tags: '[{"name":"模板"},{"name":"文档"}]',
     myApplyFlag: false,
@@ -304,7 +304,7 @@ const mockApplyList = [
     category: 0,
     description:
       "简化周期性工作汇报撰写。输入关键事项，系统自动扩展为结构完整、语气专业的报告，智能识别成果与计划。",
-    status: 0,
+    status: 1,
     source: null,
     tags: '[{"name":"写作"},{"name":"办公"}]',
     myApplyFlag: false,

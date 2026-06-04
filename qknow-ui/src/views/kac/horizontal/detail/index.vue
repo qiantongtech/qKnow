@@ -669,7 +669,7 @@ const verticalMockDetailMap = {
       category: 1,
       description:
         "面向设备运维场景，结合故障现象、报警代码和历史维修记录，快速定位可能原因并生成维修步骤建议。",
-      status: 0,
+      status: 1,
       tags: '[{"name":"运维"},{"name":"维修"}]',
       myApplyFlag: false,
       kacApplyKnowledgeList: mockApplyKnowledgeRelations,
@@ -736,7 +736,7 @@ const verticalMockDetailMap = {
       category: 1,
       description:
         "汇总巡检、运行、告警和检修数据，自动评估设备健康状态，输出结构化诊断结论和专业分析报告。",
-      status: 0,
+      status: 1,
       tags: '[{"name":"设备"},{"name":"诊断"}]',
       myApplyFlag: false,
       kacApplyKnowledgeList: mockApplyKnowledgeRelations,
