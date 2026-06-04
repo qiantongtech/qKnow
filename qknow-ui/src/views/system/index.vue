@@ -163,28 +163,28 @@
                             </div>
                             <div class="border-item-body">
                                 <div class="all-entrance">
-<!--                                    <div-->
-<!--                                        class="entrance-item"-->
-<!--                                        v-for="item in entranceList"-->
-<!--                                        :key="item.name"-->
-<!--                                        v-hasPermi="item.perm"-->
-<!--                                        @click="routeTo(item.path, item.query)"-->
-<!--                                    >-->
-<!--                                        <div class="image">-->
-<!--                                            <img :src="item.iconPath" class="icon" />-->
-<!--                                        </div>-->
-<!--                                        <div class="name">{{ item.name }}</div>-->
-<!--                                    </div>-->
+                                    <!--                                    <div-->
+                                    <!--                                        class="entrance-item"-->
+                                    <!--                                        v-for="item in entranceList"-->
+                                    <!--                                        :key="item.name"-->
+                                    <!--                                        v-hasPermi="item.perm"-->
+                                    <!--                                        @click="routeTo(item.path, item.query)"-->
+                                    <!--                                    >-->
+                                    <!--                                        <div class="image">-->
+                                    <!--                                            <img :src="item.iconPath" class="icon" />-->
+                                    <!--                                        </div>-->
+                                    <!--                                        <div class="name">{{ item.name }}</div>-->
+                                    <!--                                    </div>-->
                                     <div
                                         class="entrance-item"
                                         v-for="item in entranceList"
                                         :key="item.name"
                                         @click="routeTo(item.path, item.query)"
                                     >
-                                      <div class="image">
-                                        <img :src="item.iconPath" class="icon" />
-                                      </div>
-                                      <div class="name">{{ item.name }}</div>
+                                        <div class="image">
+                                            <img :src="item.iconPath" class="icon" />
+                                        </div>
+                                        <div class="name">{{ item.name }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -891,7 +891,7 @@
             name: '《2030年知识经济预测模型》',
             status: '1',
             publishStatus: '1',
-            publishBy: '小桐',
+            publishBy: '吴同',
             createTime: '2025-05-01 11:23'
         },
         {
@@ -899,7 +899,7 @@
             name: '《金融知识图谱构建与风险预警白皮书》',
             status: '2',
             publishStatus: '1',
-            publishBy: '小桐',
+            publishBy: '吴同',
             createTime: '2025-05-01 11:23'
         },
         {
@@ -907,7 +907,7 @@
             name: '《多模态知识融合算法白皮书》',
             status: '1',
             publishStatus: '1',
-            publishBy: '小桐',
+            publishBy: '吴同',
             createTime: '2025-05-01 11:23'
         },
         {
@@ -915,7 +915,7 @@
             name: '《智慧城市知识管理解决方案》',
             status: '2',
             publishStatus: '0',
-            publishBy: '小桐',
+            publishBy: '吴同',
             createTime: '2025-05-01 11:23'
         },
         {
@@ -923,7 +923,7 @@
             name: '《智能教育平台知识点分类体系》',
             status: '1',
             publishStatus: '1',
-            publishBy: '小桐',
+            publishBy: '吴同',
             createTime: '2025-05-01 11:23'
         }
     ]);
