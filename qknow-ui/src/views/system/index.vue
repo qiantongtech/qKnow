@@ -163,17 +163,28 @@
                             </div>
                             <div class="border-item-body">
                                 <div class="all-entrance">
+<!--                                    <div-->
+<!--                                        class="entrance-item"-->
+<!--                                        v-for="item in entranceList"-->
+<!--                                        :key="item.name"-->
+<!--                                        v-hasPermi="item.perm"-->
+<!--                                        @click="routeTo(item.path, item.query)"-->
+<!--                                    >-->
+<!--                                        <div class="image">-->
+<!--                                            <img :src="item.iconPath" class="icon" />-->
+<!--                                        </div>-->
+<!--                                        <div class="name">{{ item.name }}</div>-->
+<!--                                    </div>-->
                                     <div
                                         class="entrance-item"
                                         v-for="item in entranceList"
                                         :key="item.name"
-                                        v-hasPermi="item.perm"
                                         @click="routeTo(item.path, item.query)"
                                     >
-                                        <div class="image">
-                                            <img :src="item.iconPath" class="icon" />
-                                        </div>
-                                        <div class="name">{{ item.name }}</div>
+                                      <div class="image">
+                                        <img :src="item.iconPath" class="icon" />
+                                      </div>
+                                      <div class="name">{{ item.name }}</div>
                                     </div>
                                 </div>
                             </div>
