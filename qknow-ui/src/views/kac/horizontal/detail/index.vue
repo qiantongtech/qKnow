@@ -910,10 +910,22 @@ const activeVerticalMockDetail = computed(() => {
 });
 
 const activeHorizontalMockDetail = computed(() => {
-  if (getSource() !== "horizontal") {
+  const source = getSource();
+  if (!["horizontal", "myApp"].includes(source)) {
     return null;
   }
-  return horizontalMockDetailMap[Number(id.value)] || null;
+  const mockDetail = horizontalMockDetailMap[Number(id.value)] || null;
+  if (!mockDetail || source !== "myApp") {
+    return mockDetail;
+  }
+  return {
+    ...mockDetail,
+    applyDetail: {
+      ...mockDetail.applyDetail,
+      status: 1,
+      myApplyFlag: true,
+    },
+  };
 });
 
 const activeMockDetail = computed(
