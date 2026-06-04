@@ -660,6 +660,99 @@ const mockHealthBotRelations = mockBotList
     description: item.description,
   }));
 
+const horizontalBotList = [
+  { id: 1, name: "qKnow-知识问答(图谱)", description: "知识问答(图谱)", type: 0, builtinFlag: 1 },
+  { id: 3, name: "qKnow-意图检索", description: "意图检索", type: 0, builtinFlag: 1 },
+  { id: 4, name: "qKnow-图谱语义检索", description: "图谱语义检索", type: 0, builtinFlag: 1 },
+  { id: 5, name: "qKnow-知识检索", description: "知识检索", type: 0, builtinFlag: 1 },
+  { id: 6, name: "qKnow-图谱模型提取", description: "图谱模型提取", type: 0, builtinFlag: 1 },
+  { id: 7, name: "qKnow-三元组抽取", description: "三元组抽取", type: 0, builtinFlag: 1 },
+  { id: 8, name: "qKnow-合规性检查", description: "合规性检查", type: 0, builtinFlag: 1 },
+  { id: 9, name: "qKnow-问答建议", description: "问答建议", type: 0, builtinFlag: 1 },
+  { id: 11, name: "qKnow-智能写作-大纲内容提取", description: "智能写作助手", type: 0, builtinFlag: 1 },
+  { id: 12, name: "qKnow-智能写作-生成文章", description: "智能写作助手", type: 0, builtinFlag: 1 },
+  { id: 13, name: "qKnow-智能写作-智能续写", description: "智能写作助手", type: 0, builtinFlag: 1 },
+  { id: 14, name: "qKnow-智能写作-智能扩写", description: "智能写作助手", type: 0, builtinFlag: 1 },
+  { id: 15, name: "qKnow-智能写作-智能润色", description: "智能写作助手", type: 0, builtinFlag: 1 },
+  { id: 16, name: "qKnow-智能写作-智能缩写", description: "智能写作助手", type: 0, builtinFlag: 1 },
+  { id: 17, name: "qKnow-智能写作-模板生成", description: "智能写作助手", type: 0, builtinFlag: 1 },
+  { id: 18, name: "qKnow-智能写作-生成摘要", description: "智能写作助手", type: 0, builtinFlag: 1 },
+  { id: 19, name: "qKnow-智能写作-生成大纲", description: "智能写作助手", type: 0, builtinFlag: 1 },
+  { id: 20, name: "qKnow-智能写作-标题优化", description: "智能写作助手", type: 0, builtinFlag: 1 },
+  { id: 21, name: "qKnow-智能写作-大纲内容优化", description: "智能写作助手", type: 0, builtinFlag: 1 },
+  { id: 22, name: "qKnow-智能写作-文章内容优化", description: "智能写作助手", type: 0, builtinFlag: 1 },
+].map((item) => ({
+  ...item,
+  createBy: "吴同",
+  createTime: "2026-06-04 09:19:00",
+  updateTime: "2026-06-04 09:19:00",
+}));
+
+const horizontalApplyKnowledgeRelations = mockKnowledgeBaseList.map((item, index) => ({
+  id: 13000 + index,
+  knowledgeId: item.id,
+  name: item.name,
+  knowledgeBaseName: item.name,
+  description: item.description,
+}));
+
+const horizontalApplyBotRelations = horizontalBotList.map((item, index) => ({
+  id: 14000 + index,
+  botId: item.id,
+  name: item.name,
+  botName: item.name,
+  description: item.description,
+}));
+
+const horizontalMockDetailMap = {
+  20: {
+    applyDetail: {
+      id: 20,
+      icon: "/2026/05/11/6a01a88de4b0d389f4f52e8e.png",
+      name: "文章编写",
+      category: 0,
+      description:
+        "文章编写插件是一类旨在辅助用户更高效、更高质量地完成文本创作任务的软件工具或扩展程序。",
+      status: 1,
+      tags: '[{"name":"写作"},{"name":"文章"}]',
+      myApplyFlag: false,
+      kacApplyKnowledgeList: horizontalApplyKnowledgeRelations,
+      kacApplyGraphList: [],
+      kacApplyBotList: horizontalApplyBotRelations,
+    },
+    coreValueHtml:
+      "文章编写应用通过多类智能写作 Bot 协同，覆盖大纲提取、文章生成、续写、扩写、润色、摘要和标题优化等环节，帮助用户把分散素材快速整理为<span>结构完整、表达清晰</span>的专业内容。",
+    coreMetrics: [
+      { title: "提升写作效率", desc: "多 Bot 协同生成内容" },
+      { title: "优化内容质量", desc: "润色、缩写、扩写一体化" },
+      { title: "沉淀知识素材", desc: "关联知识库支撑创作" },
+    ],
+  },
+  8: {
+    applyDetail: {
+      id: 8,
+      icon: "/2026/05/11/6a01a9a0e4b0d389f4f52e90.png",
+      name: "批量检索",
+      category: 0,
+      description:
+        "支持一次性上传多个查询条件并行处理，汇总输出结果。大幅提升效率，适用于多项目数据对比或大规模文献调研。",
+      status: 1,
+      tags: '[{"name":"效率"},{"name":"工具"}]',
+      myApplyFlag: false,
+      kacApplyKnowledgeList: horizontalApplyKnowledgeRelations,
+      kacApplyGraphList: [],
+      kacApplyBotList: horizontalApplyBotRelations,
+    },
+    coreValueHtml:
+      "批量检索应用整合知识检索、意图检索、图谱语义检索、问答建议和智能写作类 Bot，适合在大量查询任务中快速完成<span>批量召回、结果归纳</span>和报告输出。",
+    coreMetrics: [
+      { title: "批量处理", desc: "一次提交多个检索任务" },
+      { title: "多策略检索", desc: "覆盖知识、语义和意图检索" },
+      { title: "自动汇总", desc: "检索结果快速整理输出" },
+    ],
+  },
+};
+
 const verticalMockDetailMap = {
   101: {
     applyDetail: {
@@ -816,18 +909,29 @@ const activeVerticalMockDetail = computed(() => {
   };
 });
 
+const activeHorizontalMockDetail = computed(() => {
+  if (getSource() !== "horizontal") {
+    return null;
+  }
+  return horizontalMockDetailMap[Number(id.value)] || null;
+});
+
+const activeMockDetail = computed(
+  () => activeHorizontalMockDetail.value || activeVerticalMockDetail.value
+);
+
 const coreValueHtml = computed(
-  () => activeVerticalMockDetail.value?.coreValueHtml || defaultCoreValueHtml
+  () => activeMockDetail.value?.coreValueHtml || defaultCoreValueHtml
 );
 const coreMetrics = computed(
-  () => activeVerticalMockDetail.value?.coreMetrics || defaultCoreMetrics
+  () => activeMockDetail.value?.coreMetrics || defaultCoreMetrics
 );
 const capabilityCards = computed(
   () =>
-    activeVerticalMockDetail.value?.capabilityCards || defaultCapabilityCards
+    activeMockDetail.value?.capabilityCards || defaultCapabilityCards
 );
 const scenarioCards = computed(
-  () => activeVerticalMockDetail.value?.scenarioCards || defaultScenarioCards
+  () => activeMockDetail.value?.scenarioCards || defaultScenarioCards
 );
 
 const isDisabled = computed(() => Number(applyDetail.value.status) === 0);
@@ -836,7 +940,7 @@ const isMyAppSource = computed(() => getSource() === "myApp");
 const isMyAppVerticalMockDetail = computed(
   () => isMyAppSource.value && Boolean(verticalMockDetailMap[Number(id.value)])
 );
-const isMockVerticalDetail = computed(() => Boolean(activeVerticalMockDetail.value));
+const isMockVerticalDetail = computed(() => Boolean(activeMockDetail.value));
 const categoryLabel = computed(() => {
   if (Number(applyDetail.value.category) === 1) {
     return "纵向行业应用";
@@ -1049,11 +1153,15 @@ async function getApplyDetailById() {
 
   loading.value = true;
   try {
-    const mockDetail = activeVerticalMockDetail.value;
+    const mockDetail = activeMockDetail.value;
     if (mockDetail) {
       applyDetail.value = { ...mockDetail.applyDetail };
-      knowledgeBaseList.value = mockKnowledgeBaseList;
-      botList.value = mockBotList;
+      knowledgeBaseList.value =
+        mockDetail.knowledgeBaseList || mockKnowledgeBaseList;
+      graphList.value = mockDetail.graphList || [];
+      botList.value =
+        mockDetail.botList ||
+        (activeHorizontalMockDetail.value ? horizontalBotList : mockBotList);
       mountedKnowledgeList.value =
         mockDetail.applyDetail.kacApplyKnowledgeList || [];
       mountedGraphList.value = [];
@@ -1236,7 +1344,7 @@ function submitForm() {
   });
 }
 
-if (!activeVerticalMockDetail.value) {
+if (!activeMockDetail.value) {
   loadDropdownData();
 }
 </script>
