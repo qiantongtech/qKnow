@@ -184,6 +184,52 @@ function createIcon({ bgStart, bgEnd, accent, symbol }) {
 
 const mockApplyList = [
   {
+    id: 20,
+    workspaceId: 1001,
+    pluginId: null,
+    name: "文章编写",
+    category: 0,
+    description:
+      "文章编写插件是一类旨在辅助用户更高效、更高质量地完成文本创作任务的软件工具或扩展程序。",
+    status: 1,
+    source: "横向通用应用",
+    tags: '[{"name":"写作"},{"name":"文章"}]',
+    useScene: null,
+    useCount: 156,
+    myApplyFlag: true,
+    validFlag: true,
+    delFlag: false,
+    createTime: "2026-04-23 19:54:44",
+    updateTime: "2026-04-23 19:54:44",
+    kacApplyKnowledgeList: [],
+    kacApplyGraphList: [],
+    kacApplyBotList: [],
+    icon: "/2026/05/11/6a01a88de4b0d389f4f52e8e.png"
+  },
+  {
+    id: 8,
+    workspaceId: 1001,
+    pluginId: null,
+    name: "批量检索",
+    category: 0,
+    description:
+      "支持一次性上传多个查询条件并行处理，汇总输出结果。大幅提升效率，适用于多项目数据对比或大规模文献调研。",
+    status: 1,
+    source: "横向通用应用",
+    tags: '[{"name":"效率"},{"name":"工具"}]',
+    useScene: null,
+    useCount: 143,
+    myApplyFlag: true,
+    validFlag: true,
+    delFlag: false,
+    createTime: "2026-04-21 18:41:23",
+    updateTime: "2026-04-21 18:41:23",
+    kacApplyKnowledgeList: [],
+    kacApplyGraphList: [],
+    kacApplyBotList: [],
+    icon: "/2026/05/11/6a01a9a0e4b0d389f4f52e90.png"
+  },
+  {
     id: 101,
     workspaceId: 1001,
     pluginId: null,
