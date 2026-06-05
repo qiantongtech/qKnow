@@ -7,6 +7,7 @@
  <img src="https://img.shields.io/badge/qKnow-Agent%20Platform-blue.svg" alt="qKnow">
  <img src="https://gitee.com/qiantongtech/qKnow/badge/star.svg" alt=""/>
  <img src="https://img.shields.io/github/stars/qiantongtech/qKnow?label=Github%20Stars" alt=""/>
+ <img src="https://atomgit.com/qiantongtech/qKnow/star/badge.svg" alt=""/>
 </p>
 
 <p align="center">
