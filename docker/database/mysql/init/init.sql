@@ -10537,7 +10537,7 @@ INSERT INTO `system_menu` VALUES (2322, '模型市场', 2080, 1, 'modelMarket', 
 INSERT INTO `system_menu` VALUES (2323, '我的模型', 2080, 2, 'myModel', 'ai/myModel/index', NULL, '', 1, 0, 'C', '0', '0', 'ai:modelMarket:key:list', '#', '吴同', '2026-04-21 13:57:04', '吴同', '2026-04-21 13:57:04', '');
 INSERT INTO `system_menu` VALUES (2324, 'api密钥配置', 2080, 1, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'ai:modelMarket:key:edit', '#', '吴同', '2026-04-21 13:57:04', '', NULL, '');
 INSERT INTO `system_menu` VALUES (2325, 'api密钥查看', 2080, 0, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'ai:modelMarket:key:query', '#', '吴同', '2026-04-21 13:57:04', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2335, 'Bot 管理', 2057, 1, 'bot', 'Bot 管理', '', '', 1, 0, 'M', '0', '0', 'kb:bot:bot:list', 'Bot 管理', '吴同', '2026-04-13 10:38:02', '小桐', '2026-05-13 17:20:53', '');
+INSERT INTO `system_menu` VALUES (2335, 'Bot 管理', 2057, 1, 'bot', 'Bot 管理', '', '', 1, 0, 'M', '0', '0', 'kb:bot:bot:list', 'bot管理', '吴同', '2026-04-13 10:38:02', '小桐', '2026-05-13 17:20:53', '');
 INSERT INTO `system_menu` VALUES (2336, '新增 Bot', 2335, 1, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kb:bot:bot:add', '#', '吴同', '2026-04-21 13:58:59', '', NULL, '');
 INSERT INTO `system_menu` VALUES (2337, '修改 Bot', 2335, 2, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kb:bot:bot:edit', '#', '吴同', '2026-04-21 13:58:59', '', NULL, '');
 INSERT INTO `system_menu` VALUES (2338, '删除 Bot', 2335, 3, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kb:bot:bot:remove', '#', '吴同', '2026-04-21 13:58:59', '', NULL, '');
