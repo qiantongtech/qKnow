@@ -179,6 +179,7 @@
                                         class="entrance-item"
                                         v-for="item in entranceList"
                                         :key="item.name"
+                                        v-hasPermi="item.perm"
                                         @click="routeTo(item.path, item.query)"
                                     >
                                         <div class="image">
@@ -287,7 +288,7 @@
             name: 'Bot管理',
             path: '/kb/bot/workflow',
             query: { botType: 0 },
-            perm: [''],
+            perm: ['kb:bot:bot:list'],
             iconPath: getEntranceIcon('bot.png'),
             color: 'color-primary'
         },
@@ -295,7 +296,7 @@
             name: '图谱探索',
             path: '/kg/app/graphExploration',
             query: {},
-            perm: [''],
+            perm: ['app:graphExploration:graphExploration:list'],
             iconPath: getEntranceIcon('graph.png'),
             color: 'color-pale-blue'
         },
@@ -303,7 +304,7 @@
             name: '概念配置',
             path: '/kg/ext/schema',
             query: {},
-            perm: [''],
+            perm: ['ext:extSchema:schema:list'],
             iconPath: getEntranceIcon('concept.png'),
             color: 'color-orange'
         },
@@ -327,7 +328,7 @@
             name: '应用中心',
             path: '/kac/overview',
             query: {},
-            perm: [''],
+            perm: ['kac:overview:overview:list'],
             iconPath: getEntranceIcon('app.png'),
             color: 'color-purple'
         },
@@ -335,7 +336,7 @@
             name: '知识库',
             path: '/kmc/knowledgeBase',
             query: {},
-            perm: [''],
+            perm: ['kmc:knowledgeBase:knowledgebase:list'],
             iconPath: getEntranceIcon('kb.png'),
             color: 'color-yellow'
         },
@@ -343,7 +344,7 @@
             name: '插件中心',
             path: '/plugin/plugin',
             query: {},
-            perm: [''],
+            perm: ['kac:plugin:plugin:remove'],
             iconPath: getEntranceIcon('plugin.png'),
             color: 'color-red'
         }
