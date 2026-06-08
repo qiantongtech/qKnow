@@ -275,6 +275,10 @@ qKnow 欢迎开发者、企业用户和行业伙伴共同参与建设。
     </tr>
     <tr>
         <td><img alt="" src=".gitee/system/ragSetting.png"/></td>
-        <td><img alt="" src=".gitee/system/graph.png"/></td>
+        <td><img alt="" src=".gitee/system/kac.png"/></td>
+    </tr>
+    <tr>
+        <td><img alt="" src=".gitee/system/plugin.png"/></td>
+        <td><img alt="" src=".gitee/system/ai.png"/></td>
     </tr>
 </table>
