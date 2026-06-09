@@ -452,7 +452,10 @@ function handleFPCodeClick(){
   overflow: auto;
   display: flex;
   .swiper-slide-1{
-    background: url(@/assets/system/images/sso_login/banner1.png) center center / cover no-repeat;
+    background-image: url(@/assets/system/images/sso_login/banner1.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
   }
 
   .form-actions{
@@ -544,6 +547,10 @@ function handleFPCodeClick(){
     .leftSwiper {
       width: 100%;
       height: 100%;
+      .swiper-slide {
+        width: 100%;
+        height: 100%;
+      }
       .swiper-imagesize {
         width: 100%;
         height: 100%;

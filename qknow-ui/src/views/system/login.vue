@@ -34,7 +34,7 @@
     <!-- 上次登录用户登录页面登录页面样式二 -->
     <div class="login-two sysInfo sysInfo-wrap" ref="app-container">
         <div class="left-content">
-            <div class="swiper leftSwiper">
+            <div class="swiper leftSwiper" ref="bannerStageRef">
                 <div class="swiper-wrapper">
                     <!--          <el-carousel  style="width:100%;heght:100%;" arrow="never" autoplay>-->
                     <!--            <el-carousel-item v-for="(item,index) in loginimglist" :key="index">-->
@@ -401,7 +401,7 @@
 </template>
 
 <script setup>
-    import { ref } from 'vue';
+    import { getCurrentInstance, nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
     import { getCodeImg } from '@/api/system/login';
     import Cookies from 'js-cookie';
     import { encrypt, decrypt } from '@/utils/jsencrypt';
@@ -421,6 +421,9 @@
 
     const userStore = useUserStore();
     const dialogVisible = ref(false);
+    const bannerStageRef = ref(null);
+    const defaultBannerRatio = 1305 / 1205;
+    let bannerResizeObserver = null;
     const { proxy } = getCurrentInstance();
     const loading = ref(false);
     const codeUrl = ref('');
@@ -469,9 +472,26 @@
 
     const getBackgroundStyle = (item) => {
         return {
-            background: `url(${item.image}) no-repeat`,
-            backgroundSize: `100% 100%`
+            backgroundImage: `url(${item.image})`,
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center center',
+            backgroundSize: 'cover'
         };
+    };
+
+    const updateBannerLayerSize = () => {
+        const stage = bannerStageRef.value;
+        if (!stage) return;
+
+        const { width, height } = stage.getBoundingClientRect();
+        if (!width || !height) return;
+
+        const stageRatio = width / height;
+        const renderWidth = stageRatio > defaultBannerRatio ? width : height * defaultBannerRatio;
+        const renderHeight = stageRatio > defaultBannerRatio ? width / defaultBannerRatio : height;
+
+        stage.style.setProperty('--login-banner-render-width', `${renderWidth}px`);
+        stage.style.setProperty('--login-banner-render-height', `${renderHeight}px`);
     };
 
     const getAssetsFile = (url) => {
@@ -489,6 +509,20 @@
 
     onMounted(() => {
         fetchContent();
+        nextTick(() => {
+            updateBannerLayerSize();
+            window.addEventListener('resize', updateBannerLayerSize);
+
+            if (window.ResizeObserver && bannerStageRef.value) {
+                bannerResizeObserver = new ResizeObserver(updateBannerLayerSize);
+                bannerResizeObserver.observe(bannerStageRef.value);
+            }
+        });
+    });
+
+    onBeforeUnmount(() => {
+        window.removeEventListener('resize', updateBannerLayerSize);
+        bannerResizeObserver?.disconnect();
     });
     // 使用 getContent 来获取数据，而不是重新定义一个 getContent 函数
     const fetchContent = async () => {
@@ -672,6 +706,9 @@
         }
 
         .swiper-slide {
+            width: 100%;
+            height: 100%;
+            background-color: #f4f8ff;
         }
 
         /*  .swiper-slide-1{
@@ -782,6 +819,8 @@
             }
 
             .leftSwiper {
+                --login-banner-render-width: 100%;
+                --login-banner-render-height: 100%;
                 width: 100%;
                 height: 100%;
                 position: relative;
@@ -1080,7 +1119,11 @@
 
     .benefit-icons-layer {
         position: absolute;
-        inset: 0;
+        left: 50%;
+        top: 50%;
+        width: var(--login-banner-render-width);
+        height: var(--login-banner-render-height);
+        transform: translate(-50%, -50%);
         z-index: 3;
         pointer-events: none;
         overflow: hidden;
@@ -1140,7 +1183,11 @@
 
     .login-effects-layer {
         position: absolute;
-        inset: 0;
+        left: 50%;
+        top: 50%;
+        width: var(--login-banner-render-width);
+        height: var(--login-banner-render-height);
+        transform: translate(-50%, -50%);
         z-index: 2;
         pointer-events: none;
         overflow: hidden;
