@@ -32,6 +32,7 @@
 
 <template>
     <el-menu
+        ref="menuRef"
         :default-active="activeMenu"
         mode="horizontal"
         @select="handleSelect"
@@ -57,6 +58,7 @@
         <el-sub-menu
             :style="{ '--theme': theme }"
             index="more"
+            class="more-top-menu"
             v-if="topMenus.length > visibleNumber"
         >
             <template #title>
@@ -87,6 +89,8 @@
     const { proxy } = getCurrentInstance();
     // 顶部栏初始数
     const visibleNumber = ref(null);
+    const menuRef = ref(null);
+    let resizeObserver = null;
     // 当前激活菜单的 index
     const currentIndex = ref('/system');
     // 隐藏侧边栏路由
@@ -189,20 +193,28 @@
 
     // 计算可用宽度下的顶部导航栏可显示菜单数量
     function calculateVisibleMenus() {
-        const bodyWidth = document.body.getBoundingClientRect().width;
-        const leftWidth = 210 + 50; // Logo + 小图标，左边最大宽度
-        const rightWidth = 410; // 右侧功能区，右边最大宽度
-        const menuWidth = 124; // 每个菜单项宽度
+        const menuEl = menuRef.value?.$el || menuRef.value;
+        const navbarEl = menuEl?.closest?.('.navbar');
+        const rightMenuEl = navbarEl?.querySelector?.('.right-menu');
+        const menuLeft = menuEl?.offsetLeft || 0;
+        const navbarWidth = navbarEl?.clientWidth || document.body.getBoundingClientRect().width;
+        const rightWidth = Math.max(rightMenuEl?.getBoundingClientRect?.().width || 0, 430);
+        const safeGap = 24;
+        const menuWidth = 124;
+        const moreMenuWidth = 138;
 
-        const availableWidth = bodyWidth - leftWidth - rightWidth;
+        const availableWidth = navbarWidth - menuLeft - rightWidth - safeGap;
 
         if (availableWidth < 0) {
             visibleNumber.value = 0;
             return;
         }
 
-        const rawCount = Math.floor(availableWidth / menuWidth);
-        const finalCount = Math.max(0, rawCount - 1); // 减1留给“更多菜单”
+        const fullCount = Math.floor(availableWidth / menuWidth);
+        const finalCount =
+            topMenus.value.length <= fullCount
+                ? topMenus.value.length
+                : Math.max(0, Math.floor((availableWidth - moreMenuWidth) / menuWidth));
 
         visibleNumber.value = finalCount;
     }
@@ -302,13 +314,23 @@
 
     onMounted(() => {
         window.addEventListener('resize', calculateVisibleMenus);
+        nextTick(() => {
+            calculateVisibleMenus();
+            const menuEl = menuRef.value?.$el || menuRef.value;
+            const navbarEl = menuEl?.closest?.('.navbar');
+            const rightMenuEl = navbarEl?.querySelector?.('.right-menu');
+            if (window.ResizeObserver && navbarEl) {
+                resizeObserver = new ResizeObserver(calculateVisibleMenus);
+                resizeObserver.observe(navbarEl);
+                if (rightMenuEl) {
+                    resizeObserver.observe(rightMenuEl);
+                }
+            }
+        });
     });
     onBeforeUnmount(() => {
         window.removeEventListener('resize', calculateVisibleMenus);
-    });
-
-    onMounted(() => {
-        calculateVisibleMenus();
+        resizeObserver?.disconnect();
     });
     // 如果需要暴露给父组件使用，可以使用 defineExpose
     defineExpose({
@@ -319,59 +341,113 @@
 <style lang="scss">
     .el-menu--horizontal.el-menu {
         padding-top: 10px;
+        border-bottom: none;
     }
 
     .topmenu-container.el-menu--horizontal > .el-menu-item {
         font-size: 16px;
         font-weight: bold;
         float: left;
-        height: 100%;
+        height: 40px !important;
+        line-height: 40px !important;
         display: flex;
         align-items: center;
         justify-content: center;
         color: #333 !important;
         padding: 0 23px !important;
+        margin: 0 3px !important;
+        border-bottom: none !important;
+        border-radius: 4px;
+        transition:
+            background-color 0.22s ease,
+            color 0.22s ease,
+            box-shadow 0.22s ease;
     }
 
     /* sub-menu item */
     .topmenu-container.el-menu--horizontal > .el-sub-menu .el-sub-menu__title {
         font-size: 16px;
+        font-weight: bold;
         float: left;
         height: 40px !important;
         line-height: 40px !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         color: #333 !important;
-        padding: 0 15px !important;
-        margin: 0 10px !important;
-        border-radius: 5px;
-        border-bottom: 0;
+        padding: 0 23px !important;
+        margin: 0 3px !important;
+        border-radius: 4px;
+        border-bottom: none !important;
+        transition:
+            background-color 0.22s ease,
+            color 0.22s ease,
+            box-shadow 0.22s ease;
     }
 
     .topmenu-container.el-menu--horizontal > .el-menu-item.is-active,
     .el-menu--horizontal > .el-sub-menu.is-active .el-submenu__title,
     .el-menu--horizontal > .el-sub-menu.is-active .el-sub-menu__title {
-        background: rgba(19, 90, 251, 0.06) !important;
-        color: #{'var(--theme)'} !important;
+        background-color: #2666fb !important;
+        border-bottom: none !important;
+        color: #fff !important;
+        box-shadow: 0 6px 16px rgba(38, 102, 251, 0.18);
+    }
+
+    .topmenu-container.el-menu--horizontal > .el-menu-item.is-active .svg-icon,
+    .el-menu--horizontal > .el-sub-menu.is-active .el-sub-menu__title .svg-icon {
+        color: #fff !important;
     }
 
     /* 背景色隐藏 */
     .topmenu-container.el-menu--horizontal > .el-menu-item:not(.is-disabled):focus,
     .topmenu-container.el-menu--horizontal > .el-menu-item:not(.is-disabled):hover,
-    .topmenu-container.el-menu--horizontal > .el-submenu .el-submenu__title:hover {
-        background: rgba(19, 90, 251, 0.06) !important;
-        color: #{'var(--theme)'} !important;
+    .topmenu-container.el-menu--horizontal > .el-sub-menu .el-sub-menu__title:hover {
+        background-color: #2666fb !important;
+        color: #fff !important;
+        border-bottom: none !important;
+        box-shadow: 0 6px 16px rgba(38, 102, 251, 0.18);
+    }
+
+    .topmenu-container.el-menu--horizontal > .el-menu-item.is-active:not(.is-disabled):focus,
+    .topmenu-container.el-menu--horizontal > .el-menu-item.is-active:not(.is-disabled):hover,
+    .el-menu--horizontal > .el-sub-menu.is-active .el-sub-menu__title:hover {
+        background-color: #2666fb !important;
+        color: #fff !important;
     }
 
     /* 图标右间距 */
     .topmenu-container .svg-icon {
         margin-right: 4px;
+        transition: color 0.22s ease;
+    }
+
+    .topmenu-container.el-menu--horizontal > .el-menu-item:not(.is-disabled):focus .svg-icon,
+    .topmenu-container.el-menu--horizontal > .el-menu-item:not(.is-disabled):hover .svg-icon,
+    .topmenu-container.el-menu--horizontal > .el-sub-menu .el-sub-menu__title:hover .svg-icon {
+        color: #fff !important;
     }
 
     /* topmenu more arrow */
     .topmenu-container .el-sub-menu .el-sub-menu__icon-arrow {
         position: static;
+        flex-shrink: 0;
         vertical-align: middle;
         margin-left: 8px;
         margin-top: 0px;
+    }
+
+    .topmenu-container .more-top-menu .el-sub-menu__title .svg-icon,
+    .topmenu-container .more-top-menu .el-sub-menu__icon-arrow {
+        flex-shrink: 0;
+        color: inherit;
+        filter:
+            drop-shadow(0.45px 0 0 currentColor)
+            drop-shadow(0 0.45px 0 currentColor);
+    }
+
+    .topmenu-container .more-top-menu .el-sub-menu__title {
+        white-space: nowrap;
     }
 
     .el-menu--horizontal .el-menu .el-menu-item {

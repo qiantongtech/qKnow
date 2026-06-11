@@ -7,6 +7,7 @@
  <img src="https://img.shields.io/badge/qKnow-Agent%20Platform-blue.svg" alt="qKnow">
  <img src="https://gitee.com/qiantongtech/qKnow/badge/star.svg" alt=""/>
  <img src="https://img.shields.io/github/stars/qiantongtech/qKnow?label=Github%20Stars" alt=""/>
+ <img src="https://atomgit.com/qiantongtech/qKnow/star/badge.svg" alt=""/>
 </p>
 
 <p align="center">
@@ -274,6 +275,10 @@ qKnow 欢迎开发者、企业用户和行业伙伴共同参与建设。
     </tr>
     <tr>
         <td><img alt="" src=".gitee/system/ragSetting.png"/></td>
-        <td><img alt="" src=".gitee/system/graph.png"/></td>
+        <td><img alt="" src=".gitee/system/kac.png"/></td>
+    </tr>
+    <tr>
+        <td><img alt="" src=".gitee/system/plugin.png"/></td>
+        <td><img alt="" src=".gitee/system/ai.png"/></td>
     </tr>
 </table>

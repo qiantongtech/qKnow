@@ -104,5 +104,8 @@ public class ExtSchemaAttributeDO extends BaseEntity {
     @TableLogic
     private Boolean delFlag;
 
+    /** 描述 */
+    private String description;
+
 
 }
