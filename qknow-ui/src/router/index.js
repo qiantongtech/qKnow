@@ -30,26 +30,29 @@
  * 更多信息请访问：https://qknow.qiantong.tech/business.html
  */
 
-import { createWebHistory, createRouter } from 'vue-router'
-import { clearCancelTokens } from '@/utils/request'  // 确保导入路径正确
+import { createWebHistory, createRouter } from 'vue-router';
+import { clearCancelTokens } from '@/utils/request'; // 确保导入路径正确
 
 /* 系统模块公共路由 */
-import systemPublicRouter from './system/public/index.js'
+import systemPublicRouter from './system/public/index.js';
 /* 知识应用模块 */
-import appPublicRouter from './app/public/index.js'
+import appPublicRouter from './app/public/index.js';
 /* 知识库模块公共路由 */
 import KmcPublicRouter from './kmc/public/index.js';
 /* Bot模块动态路由 */
 import kbPublicRouter from './kb/public/index.js';
 /* 知识图谱模块公共路由 */
 import kgPublicRouter from './kg/public/index.js';
+/* 应用中心模块动态路由 */
+import kacPublicRouter from './kac/public/index.js';
 
 /* 系统模块动态路由 */
-import systemDynamicRouter from './system/dynamic/index.js'
+import systemDynamicRouter from './system/dynamic/index.js';
 /* 知识库模块动态路由 */
-import KmcDynamicRouter from './kmc/dynamic/index.js'
+import KmcDynamicRouter from './kmc/dynamic/index.js';
 /* 知识图谱模块动态路由 */
-import KgDynamicRouter from './kg/dynamic/index.js'
+import KgDynamicRouter from './kg/dynamic/index.js';
+
 /**
  * Note: 路由配置项
  *
@@ -79,44 +82,41 @@ export const constantRoutes = [
     ...KmcPublicRouter,
     ...kbPublicRouter,
     ...kgPublicRouter,
-]
+    ...kacPublicRouter
+];
 
 // 动态路由，基于用户权限动态去加载
-export const dynamicRoutes = [
-    ...systemDynamicRouter,
-    ...KmcDynamicRouter,
-    ...KgDynamicRouter,
-]
+export const dynamicRoutes = [...systemDynamicRouter, ...KmcDynamicRouter, ...KgDynamicRouter];
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes: constantRoutes,
-  scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition
-    } else {
-      return { top: 0 }
+    history: createWebHistory(),
+    routes: constantRoutes,
+    scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) {
+            return savedPosition;
+        } else {
+            return { top: 0 };
+        }
     }
-  },
 });
 
 // 在路由守卫中添加取消请求逻辑
 router.beforeEach((to, from, next) => {
-    clearCancelTokens() // 在路由切换前取消所有未完成的请求
-     if (to.meta.dynamicTitle && to.query.title) {
-    // 动态覆盖标题
-    document.title = to.query.title
-  } else  if (to.meta.type == 'plugin') {
-    document.title = to.meta.title || '默认标题'
-  }
-    next()
-})
+    clearCancelTokens(); // 在路由切换前取消所有未完成的请求
+    if (to.meta.dynamicTitle && to.query.title) {
+        // 动态覆盖标题
+        document.title = to.query.title;
+    } else if (to.meta.type == 'plugin') {
+        document.title = to.meta.title || '默认标题';
+    }
+    next();
+});
 
 /**
  * 重置路由
  */
 export function resetRouter() {
-  window.location.href = `${window.location.protocol}//${window.location.host}/login/`;
+    window.location.href = `${window.location.protocol}//${window.location.host}/login/`;
 }
 
 export default router;

@@ -206,54 +206,16 @@
             flex-shrink: 0;
             overflow: hidden;
             isolation: isolate;
-            background:
-                linear-gradient(135deg, rgba(76, 129, 255, 0.18), rgba(255, 255, 255, 0.05)),
-                rgba(255, 255, 255, 0.06);
+            // background:
+            //     linear-gradient(135deg, rgba(76, 129, 255, 0.18), rgba(255, 255, 255, 0.05)),
+            //     rgba(255, 255, 255, 0.06);
+            background: #112337;
             border-radius: 4px;
             border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 12px;
             box-shadow:
                 inset 0 0 0 1px rgba(92, 144, 255, 0.08),
                 0 10px 28px rgba(33, 103, 255, 0.08);
-            animation: helpCardBreath 4.8s ease-in-out infinite;
-            transform: translateZ(0);
-            backface-visibility: hidden;
-
-            &::before {
-                content: '';
-                position: absolute;
-                inset: -1px;
-                z-index: 0;
-                border-radius: inherit;
-                background: linear-gradient(
-                    120deg,
-                    transparent 0%,
-                    rgba(255, 255, 255, 0.06) 28%,
-                    rgba(118, 172, 255, 0.32) 48%,
-                    rgba(255, 255, 255, 0.08) 62%,
-                    transparent 100%
-                );
-                transform: translateX(-125%);
-                animation: helpCardSweep 5.6s ease-in-out infinite;
-                will-change: transform, opacity;
-                backface-visibility: hidden;
-            }
-
-            &::after {
-                content: '';
-                position: absolute;
-                right: -36px;
-                top: -34px;
-                width: 86px;
-                height: 86px;
-                z-index: 0;
-                border-radius: 50%;
-                background: radial-gradient(circle, rgba(60, 139, 255, 0.32), transparent 68%);
-                filter: blur(2px);
-                animation: helpCardGlow 4.8s ease-in-out infinite;
-                will-change: transform, opacity;
-                backface-visibility: hidden;
-            }
         }
 
         .help-head {
@@ -265,7 +227,6 @@
                 width: 17px;
                 margin-right: 10px !important;
                 filter: drop-shadow(0 0 8px rgba(99, 166, 255, 0.36));
-                animation: helpIconPulse 3.6s ease-in-out infinite;
             }
 
             .help-desc {
@@ -288,31 +249,6 @@
             align-items: center;
             margin: 10px 0;
             box-shadow: 0 8px 18px rgba(44, 111, 255, 0.2);
-            transition:
-                transform 0.2s ease,
-                box-shadow 0.2s ease;
-            animation: helpBtnBreath 2.6s ease-in-out infinite;
-            will-change: transform, filter, box-shadow;
-            backface-visibility: hidden;
-
-            &::after {
-                content: '';
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                left: -35%;
-                width: 28%;
-                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.42), transparent);
-                transform: skewX(-18deg);
-                animation: helpBtnShine 3.8s ease-in-out infinite;
-                will-change: left, opacity;
-                backface-visibility: hidden;
-            }
-
-            &:hover {
-                transform: translateY(-1px);
-                box-shadow: 0 10px 22px rgba(44, 111, 255, 0.34);
-            }
 
             .el-icon {
                 font-size: 14px;
@@ -378,41 +314,27 @@
         &.collapse {
             padding: 0;
 
-                .help-icon-wrapper {
-                    position: relative;
+            .help-icon-wrapper {
+                position: relative;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 width: 60px;
                 height: 60px;
-                    background: rgba(255, 255, 255, 0.06);
-                    border-radius: 4px;
-                    border: 1px solid rgba(255, 255, 255, 0.2);
-                    box-shadow: 0 10px 24px rgba(33, 103, 255, 0.1);
-                    animation: helpCardBreath 4.8s ease-in-out infinite;
+                background: rgba(255, 255, 255, 0.06);
+                border-radius: 4px;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                box-shadow: 0 10px 24px rgba(33, 103, 255, 0.1);
 
-                    &::before {
-                        content: '';
-                        position: absolute;
-                        inset: 0;
-                        border-radius: inherit;
-                        background: linear-gradient(120deg, transparent, rgba(116, 173, 255, 0.35), transparent);
-                        background-size: 260% 100%;
-                        background-position: 160% 0;
-                        animation: helpIconSweep 5.6s ease-in-out infinite;
-                        will-change: background-position, opacity;
-                        backface-visibility: hidden;
-                    }
-
-                    .help-icon {
-                        width: 24px;
-                        height: 24px;
-                        color: #fff;
-                        cursor: pointer;
-                        margin-right: 0 !important;
-                        position: relative;
-                        z-index: 1;
-                    }
+                .help-icon {
+                    width: 24px;
+                    height: 24px;
+                    color: #fff;
+                    cursor: pointer;
+                    margin-right: 0 !important;
+                    position: relative;
+                    z-index: 1;
+                }
 
                 .help-popup {
                     position: absolute;
@@ -422,7 +344,6 @@
                     margin-left: 8px;
                     opacity: 0;
                     visibility: hidden;
-                    transition: all 0.3s ease;
                     z-index: 1002;
                     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
                     border-radius: 4px;
@@ -441,119 +362,6 @@
                     visibility: visible;
                 }
             }
-        }
-    }
-
-    @keyframes helpCardBreath {
-        0%,
-        100% {
-            border-color: rgba(255, 255, 255, 0.2);
-            box-shadow:
-                inset 0 0 0 1px rgba(92, 144, 255, 0.08),
-                0 10px 28px rgba(33, 103, 255, 0.08);
-        }
-
-        50% {
-            border-color: rgba(111, 168, 255, 0.5);
-            box-shadow:
-                inset 0 0 0 1px rgba(141, 190, 255, 0.18),
-                0 14px 34px rgba(33, 103, 255, 0.18);
-        }
-    }
-
-    @keyframes helpCardSweep {
-        0%,
-        62% {
-            transform: translateX(-125%);
-            opacity: 0;
-        }
-
-        72% {
-            opacity: 1;
-        }
-
-        100% {
-            transform: translateX(125%);
-            opacity: 0;
-        }
-    }
-
-    @keyframes helpCardGlow {
-        0%,
-        100% {
-            opacity: 0.36;
-            transform: scale(0.92);
-        }
-
-        50% {
-            opacity: 0.72;
-            transform: scale(1.08);
-        }
-    }
-
-    @keyframes helpIconSweep {
-        0%,
-        62% {
-            background-position: 160% 0;
-            opacity: 0;
-        }
-
-        72% {
-            opacity: 1;
-        }
-
-        100% {
-            background-position: -60% 0;
-            opacity: 0;
-        }
-    }
-
-    @keyframes helpIconPulse {
-        0%,
-        100% {
-            opacity: 0.86;
-            transform: translateY(0);
-        }
-
-        50% {
-            opacity: 1;
-            transform: translateY(-1px);
-        }
-    }
-
-    @keyframes helpBtnShine {
-        0%,
-        58% {
-            left: -35%;
-            opacity: 0;
-        }
-
-        68% {
-            opacity: 1;
-        }
-
-        100% {
-            left: 112%;
-            opacity: 0;
-        }
-    }
-
-    @keyframes helpBtnBreath {
-        0%,
-        100% {
-            box-shadow:
-                0 0 0 0 rgba(66, 132, 255, 0),
-                0 8px 18px rgba(44, 111, 255, 0.2);
-            filter: brightness(1);
-            transform: scale(1);
-        }
-
-        50% {
-            box-shadow:
-                0 0 0 4px rgba(66, 132, 255, 0.16),
-                0 0 22px rgba(88, 151, 255, 0.46);
-            filter: brightness(1.08);
-            transform: scale(1.035);
         }
     }
 </style>

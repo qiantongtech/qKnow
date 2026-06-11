@@ -97,7 +97,6 @@
           type="primary"
           plain
           icon="CopyDocument"
-          :disabled="isDisabled"
           @click="showCopyDialog('copy')"
           @mousedown="(e) => e.preventDefault()"
         >
@@ -106,7 +105,6 @@
         <el-button
           type="primary"
           icon="Promotion"
-          :disabled="isDisabled && applyDetail.myApplyFlag === false"
           @click="handleUse(applyDetail)"
           @mousedown="(e) => e.preventDefault()"
         >
@@ -131,9 +129,7 @@
             class="value-card"
             :style="{ backgroundImage: `url(${valueBg})` }"
           >
-            <p>
-              文章编写应用的核心价值在于大幅<span>降低创作门槛</span>并显著提升内容产出效率。它通过<span>智能辅助</span>与实时纠错，帮助创作者快速跨越构思与表达的障碍，将繁琐的文字组织工作自动化。最终，插件让创作者得以从重复性的劳动中解放出来，将更多<span>精力聚焦</span>于核心观点的创新与情感价值的传递。
-            </p>
+            <p v-html="coreValueHtml"></p>
             <div class="value-metrics">
               <div v-for="item in coreMetrics" :key="item.title">
                 <strong>{{ item.title }}</strong>
@@ -373,7 +369,7 @@ const route = useRoute();
 const router = useRouter();
 const { proxy } = getCurrentInstance();
 
-const id = ref(route.query.id || 1);
+const id = ref(route.query.id || null);
 const loading = ref(false);
 const open = ref(false);
 const title = ref("");
@@ -404,13 +400,16 @@ const data = reactive({
 });
 const { applyDetail, form } = toRefs(data);
 
-const coreMetrics = [
+const defaultCoreValueHtml =
+  "文章编写应用的核心价值在于大幅<span>降低创作门槛</span>并显著提升内容产出效率。它通过<span>智能辅助</span>与实时纠错，帮助创作者快速跨越构思与表达的障碍，将繁琐的文字组织工作自动化。最终，插件让创作者得以从重复性的劳动中解放出来，将更多<span>精力聚焦</span>于核心观点的创新与情感价值的传递。";
+
+const defaultCoreMetrics = [
   { title: "提升效率", desc: "智能生成，高效创作" },
   { title: "降低门槛", desc: "简化流程，轻松上手" },
   { title: "智能辅助", desc: "实时优化，质量提升" },
 ];
 
-const capabilityCards = [
+const defaultCapabilityCards = [
   {
     title: "知识库精准赋能",
     desc: "关联垂直领域知识库，为AI提供专业语料支撑，让生成内容言之有物。",
@@ -429,7 +428,7 @@ const capabilityCards = [
   },
 ];
 
-const scenarioCards = [
+const defaultScenarioCards = [
   {
     title: "新媒体内容创作",
     desc: "辅助生成标题与大纲，撰写公众号、小红书文案，缩短成稿周期。",
@@ -456,9 +455,504 @@ const scenarioCards = [
   },
 ];
 
+function createMockIcon({ bgStart, bgEnd, accent, symbol }) {
+  const symbols = {
+    wrench: `
+      <path d="M42 18a13 13 0 0 0 15 18L36 57a8 8 0 0 1-11-11l21-21a13 13 0 0 0-4-7Z" fill="white" opacity=".96"/>
+      <path d="M25 51l7 7" stroke="${accent}" stroke-width="4" stroke-linecap="round"/>
+    `,
+    health: `
+      <rect x="18" y="24" width="44" height="32" rx="8" fill="white" opacity=".95"/>
+      <path d="M40 31v18M31 40h18" stroke="${accent}" stroke-width="5" stroke-linecap="round"/>
+      <path d="M22 20c8-9 28-9 36 0" stroke="white" stroke-width="5" stroke-linecap="round" opacity=".75"/>
+    `,
+  };
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+      <defs>
+        <linearGradient id="bg" x1="12" y1="10" x2="68" y2="70" gradientUnits="userSpaceOnUse">
+          <stop stop-color="${bgStart}"/>
+          <stop offset="1" stop-color="${bgEnd}"/>
+        </linearGradient>
+      </defs>
+      <rect width="80" height="80" rx="16" fill="url(#bg)"/>
+      <circle cx="66" cy="14" r="9" fill="white" opacity=".24"/>
+      <circle cx="15" cy="66" r="12" fill="white" opacity=".14"/>
+      ${symbols[symbol]}
+    </svg>
+  `;
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
+const verticalMockIcons = {
+  fault: createMockIcon({
+    bgStart: "#ff9f43",
+    bgEnd: "#f45b69",
+    accent: "#f97316",
+    symbol: "wrench",
+  }),
+  health: createMockIcon({
+    bgStart: "#35d0ba",
+    bgEnd: "#0ea5e9",
+    accent: "#0ea5e9",
+    symbol: "health",
+  }),
+};
+
+const mockKnowledgeBaseList = [
+  {
+    id: 901,
+    name: "泵站机组故障案例知识库",
+    description:
+      "收录泵站机组典型故障实例，包含故障现象、原因分析、排查流程、处置方案及复盘总结，为运维检修、技能培训和问题溯源提供参考。",
+  },
+  {
+    id: 902,
+    name: "泵站设备故障诊断知识库",
+    description:
+      "面向泵站运行维护与设备管理，围绕水泵、电机、阀门、管道、传感器、控制柜等关键设备整理常见故障诊断知识。",
+  },
+  {
+    id: 903,
+    name: "泵站常见故障排查及解决方案库",
+    description:
+      "汇集泵站全设备常见故障，明确故障现象、排查步骤、处理方法及预防措施，适配给排水、排涝、污水泵站等场景。",
+  },
+];
+
+const mockBotList = [
+  {
+    id: 801,
+    name: "泵站安防与智能巡检助手",
+    description: "联动监控视频与传感器，自动识别异常状态并预警，辅助实现无人值守。",
+    type: "Agent",
+  },
+  {
+    id: 802,
+    name: "泵站气象预警与调度助手",
+    description:
+      "实时接入气象局雷达回波与降雨量数据，结合泵站水位监测，提供短临降雨预报及排涝启停建议。",
+    type: "Agent",
+  },
+  {
+    id: 803,
+    name: "qKnow-知识问答(知识库+知识图谱)",
+    description: "知识问答(知识库+知识图谱)",
+    type: "Chatflow",
+  },
+  {
+    id: 804,
+    name: "设备故障咨询问答",
+    description: "根据数据来回答设备故障相关问题。",
+    type: "Chatflow",
+  },
+  {
+    id: 805,
+    name: "qKnow-智能写作-日报生成",
+    description: "智能写作助手",
+    type: "工作流",
+  },
+  {
+    id: 806,
+    name: "qKnow-智能写作-周报生成",
+    description: "智能写作助手",
+    type: "工作流",
+  },
+  {
+    id: 807,
+    name: "qKnow-智能写作-月报生成",
+    description: "智能写作助手",
+    type: "工作流",
+  },
+  {
+    id: 808,
+    name: "故障诊断报告自动生成",
+    description: "根据所提供的数据自动生成诊断报告。",
+    type: "工作流",
+  },
+  {
+    id: 811,
+    name: "qKnow-知识问答(图谱)",
+    description: "知识问答(图谱)",
+    type: "工作流",
+  },
+  {
+    id: 812,
+    name: "qKnow-意图检索",
+    description: "意图检索",
+    type: "工作流",
+  },
+  {
+    id: 813,
+    name: "qKnow-图谱语义检索",
+    description: "图谱语义检索",
+    type: "工作流",
+  },
+  {
+    id: 814,
+    name: "qKnow-知识检索",
+    description: "知识检索",
+    type: "工作流",
+  },
+  {
+    id: 815,
+    name: "qKnow-图谱模型提取",
+    description: "图谱模型提取",
+    type: "工作流",
+  },
+  {
+    id: 816,
+    name: "qKnow-三元组抽取",
+    description: "三元组抽取",
+    type: "工作流",
+  },
+  {
+    id: 817,
+    name: "qKnow-合规性检查",
+    description: "合规性检查",
+    type: "工作流",
+  },
+  {
+    id: 818,
+    name: "qKnow-问答建议",
+    description: "问答建议",
+    type: "工作流",
+  },
+  {
+    id: 819,
+    name: "qKnow-智能写作-大纲内容提取",
+    description: "智能写作助手",
+    type: "工作流",
+  },
+  {
+    id: 820,
+    name: "qKnow-智能写作-生成文章",
+    description: "智能写作助手",
+    type: "工作流",
+  },
+];
+
+const mockApplyKnowledgeRelations = mockKnowledgeBaseList.map((item, index) => ({
+  id: 10000 + index,
+  knowledgeId: item.id,
+  name: item.name,
+  knowledgeBaseName: item.name,
+  description: item.description,
+}));
+
+const mockApplyBotRelations = mockBotList
+  .filter((item) => [801, 802, 803, 804, 808].includes(item.id))
+  .map((item, index) => ({
+    id: 11000 + index,
+    botId: item.id,
+    name: item.name,
+    botName: item.name,
+    description: item.description,
+  }));
+
+const mockHealthBotRelations = mockBotList
+  .filter((item) => ![805, 806, 807].includes(item.id))
+  .map((item, index) => ({
+    id: 12000 + index,
+    botId: item.id,
+    name: item.name,
+    botName: item.name,
+    description: item.description,
+  }));
+
+const horizontalBotList = [
+  { id: 1, name: "qKnow-知识问答(图谱)", description: "知识问答(图谱)", type: 0, builtinFlag: 1 },
+  { id: 3, name: "qKnow-意图检索", description: "意图检索", type: 0, builtinFlag: 1 },
+  { id: 4, name: "qKnow-图谱语义检索", description: "图谱语义检索", type: 0, builtinFlag: 1 },
+  { id: 5, name: "qKnow-知识检索", description: "知识检索", type: 0, builtinFlag: 1 },
+  { id: 6, name: "qKnow-图谱模型提取", description: "图谱模型提取", type: 0, builtinFlag: 1 },
+  { id: 7, name: "qKnow-三元组抽取", description: "三元组抽取", type: 0, builtinFlag: 1 },
+  { id: 8, name: "qKnow-合规性检查", description: "合规性检查", type: 0, builtinFlag: 1 },
+  { id: 9, name: "qKnow-问答建议", description: "问答建议", type: 0, builtinFlag: 1 },
+  { id: 11, name: "qKnow-智能写作-大纲内容提取", description: "智能写作助手", type: 0, builtinFlag: 1 },
+  { id: 12, name: "qKnow-智能写作-生成文章", description: "智能写作助手", type: 0, builtinFlag: 1 },
+  { id: 13, name: "qKnow-智能写作-智能续写", description: "智能写作助手", type: 0, builtinFlag: 1 },
+  { id: 14, name: "qKnow-智能写作-智能扩写", description: "智能写作助手", type: 0, builtinFlag: 1 },
+  { id: 15, name: "qKnow-智能写作-智能润色", description: "智能写作助手", type: 0, builtinFlag: 1 },
+  { id: 16, name: "qKnow-智能写作-智能缩写", description: "智能写作助手", type: 0, builtinFlag: 1 },
+  { id: 17, name: "qKnow-智能写作-模板生成", description: "智能写作助手", type: 0, builtinFlag: 1 },
+  { id: 18, name: "qKnow-智能写作-生成摘要", description: "智能写作助手", type: 0, builtinFlag: 1 },
+  { id: 19, name: "qKnow-智能写作-生成大纲", description: "智能写作助手", type: 0, builtinFlag: 1 },
+  { id: 20, name: "qKnow-智能写作-标题优化", description: "智能写作助手", type: 0, builtinFlag: 1 },
+  { id: 21, name: "qKnow-智能写作-大纲内容优化", description: "智能写作助手", type: 0, builtinFlag: 1 },
+  { id: 22, name: "qKnow-智能写作-文章内容优化", description: "智能写作助手", type: 0, builtinFlag: 1 },
+].map((item) => ({
+  ...item,
+  createBy: "吴同",
+  createTime: "2026-06-04 09:19:00",
+  updateTime: "2026-06-04 09:19:00",
+}));
+
+const horizontalApplyKnowledgeRelations = mockKnowledgeBaseList.map((item, index) => ({
+  id: 13000 + index,
+  knowledgeId: item.id,
+  name: item.name,
+  knowledgeBaseName: item.name,
+  description: item.description,
+}));
+
+const horizontalApplyBotRelations = horizontalBotList.map((item, index) => ({
+  id: 14000 + index,
+  botId: item.id,
+  name: item.name,
+  botName: item.name,
+  description: item.description,
+}));
+
+const horizontalMockDetailMap = {
+  20: {
+    applyDetail: {
+      id: 20,
+      icon: "/2026/05/11/6a01a88de4b0d389f4f52e8e.png",
+      name: "文章编写",
+      category: 0,
+      description:
+        "文章编写插件是一类旨在辅助用户更高效、更高质量地完成文本创作任务的软件工具或扩展程序。",
+      status: 1,
+      tags: '[{"name":"写作"},{"name":"文章"}]',
+      myApplyFlag: false,
+      kacApplyKnowledgeList: horizontalApplyKnowledgeRelations,
+      kacApplyGraphList: [],
+      kacApplyBotList: horizontalApplyBotRelations,
+    },
+    coreValueHtml:
+      "文章编写应用通过多类智能写作 Bot 协同，覆盖大纲提取、文章生成、续写、扩写、润色、摘要和标题优化等环节，帮助用户把分散素材快速整理为<span>结构完整、表达清晰</span>的专业内容。",
+    coreMetrics: [
+      { title: "提升写作效率", desc: "多 Bot 协同生成内容" },
+      { title: "优化内容质量", desc: "润色、缩写、扩写一体化" },
+      { title: "沉淀知识素材", desc: "关联知识库支撑创作" },
+    ],
+  },
+  8: {
+    applyDetail: {
+      id: 8,
+      icon: "/2026/05/11/6a01a9a0e4b0d389f4f52e90.png",
+      name: "批量检索",
+      category: 0,
+      description:
+        "支持一次性上传多个查询条件并行处理，汇总输出结果。大幅提升效率，适用于多项目数据对比或大规模文献调研。",
+      status: 1,
+      tags: '[{"name":"效率"},{"name":"工具"}]',
+      myApplyFlag: false,
+      kacApplyKnowledgeList: horizontalApplyKnowledgeRelations,
+      kacApplyGraphList: [],
+      kacApplyBotList: horizontalApplyBotRelations,
+    },
+    coreValueHtml:
+      "批量检索应用整合知识检索、意图检索、图谱语义检索、问答建议和智能写作类 Bot，适合在大量查询任务中快速完成<span>批量召回、结果归纳</span>和报告输出。",
+    coreMetrics: [
+      { title: "批量处理", desc: "一次提交多个检索任务" },
+      { title: "多策略检索", desc: "覆盖知识、语义和意图检索" },
+      { title: "自动汇总", desc: "检索结果快速整理输出" },
+    ],
+  },
+};
+
+const verticalMockDetailMap = {
+  101: {
+    applyDetail: {
+      id: 101,
+      icon: verticalMockIcons.fault,
+      name: "故障快速排查与维修指导",
+      category: 1,
+      description:
+        "面向设备运维场景，结合故障现象、报警代码和历史维修记录，快速定位可能原因并生成维修步骤建议。",
+      status: 1,
+      tags: '[{"name":"运维"},{"name":"维修"}]',
+      myApplyFlag: false,
+      kacApplyKnowledgeList: mockApplyKnowledgeRelations,
+      kacApplyGraphList: [],
+      kacApplyBotList: mockApplyBotRelations,
+    },
+    coreValueHtml:
+      "故障快速排查与维修指导的核心价值在于把现场现象、报警代码、设备档案和历史案例统一串联，帮助运维人员快速形成<span>故障定位判断</span>和<span>可执行维修步骤</span>。它减少反复查资料和等待专家确认的时间，让维修过程更标准、更可追溯，也能持续沉淀企业自己的设备维修经验。",
+    coreMetrics: [
+      { title: "缩短排查时间", desc: "快速聚合线索定位原因" },
+      { title: "规范维修步骤", desc: "输出可执行处理流程" },
+      { title: "沉淀维修经验", desc: "复用历史案例与知识" },
+    ],
+    capabilityCards: [
+      {
+        title: "故障现象归因",
+        desc: "根据报警代码、运行参数和现场描述，推断高概率故障原因并给出排查顺序。",
+      },
+      {
+        title: "维修步骤编排",
+        desc: "按安全确认、部件检查、处理动作和复测验收生成标准化维修指导。",
+      },
+      {
+        title: "历史案例复用",
+        desc: "关联相似设备与历史工单，提取有效处置经验，减少重复试错。",
+      },
+      {
+        title: "风险与备件提示",
+        desc: "同步提示安全风险、所需工具、备件清单和停机影响，辅助现场准备。",
+      },
+    ],
+    scenarioCards: [
+      {
+        title: "现场故障抢修",
+        desc: "值班人员录入报警信息和现场现象后，快速获得排查路径与处理建议。",
+        image: sceneMedia,
+        tags: ["抢修", "排障"],
+        heatValue: "1.1k",
+        createTime: "2026.05.12",
+      },
+      {
+        title: "远程专家协同",
+        desc: "将排查过程、判断依据和关键截图汇总，方便专家远程复核与指导。",
+        image: sceneWriting,
+        tags: ["协同", "专家"],
+        heatValue: "920",
+        createTime: "2026.05.12",
+      },
+      {
+        title: "维修复盘归档",
+        desc: "自动整理故障原因、处置步骤、耗材使用和复测结果，形成标准案例。",
+        image: sceneTranslation,
+        tags: ["复盘", "工单"],
+        heatValue: "760",
+        createTime: "2026.05.12",
+      },
+    ],
+  },
+  102: {
+    applyDetail: {
+      id: 102,
+      icon: verticalMockIcons.health,
+      name: "设备健康诊断与报告编写",
+      category: 1,
+      description:
+        "汇总巡检、运行、告警和检修数据，自动评估设备健康状态，输出结构化诊断结论和专业分析报告。",
+      status: 1,
+      tags: '[{"name":"设备"},{"name":"诊断"}]',
+      myApplyFlag: false,
+      kacApplyKnowledgeList: mockApplyKnowledgeRelations,
+      kacApplyGraphList: [],
+      kacApplyBotList: mockHealthBotRelations,
+    },
+    coreValueHtml:
+      "设备健康诊断与报告编写的核心价值在于把巡检、运行、告警和检修数据转化为清晰的<span>健康状态判断</span>。系统可以自动归纳关键风险、生成专业报告并给出检修建议，帮助管理人员从分散数据中快速看清设备趋势，提前安排<span>预防性维护</span>。",
+    coreMetrics: [
+      { title: "健康状态评估", desc: "汇总指标形成诊断结论" },
+      { title: "报告自动成稿", desc: "结构化输出专业报告" },
+      { title: "风险提前预警", desc: "识别趋势异常与隐患" },
+    ],
+    capabilityCards: [
+      {
+        title: "多源数据汇总",
+        desc: "整合巡检记录、运行曲线、告警事件和检修台账，形成统一诊断输入。",
+      },
+      {
+        title: "健康评分分析",
+        desc: "围绕负载、温度、振动、告警频次等指标生成设备健康评分与等级。",
+      },
+      {
+        title: "诊断报告生成",
+        desc: "自动组织设备概况、异常说明、风险判断和处置建议，减少人工编写成本。",
+      },
+      {
+        title: "检修建议闭环",
+        desc: "根据风险等级推荐检查项目、检修窗口和跟踪事项，支撑后续闭环管理。",
+      },
+    ],
+    scenarioCards: [
+      {
+        title: "月度健康评估",
+        desc: "按设备或区域生成月度健康报告，辅助管理层掌握整体运行状态。",
+        image: sceneMedia,
+        tags: ["评估", "报告"],
+        heatValue: "1.3k",
+        createTime: "2026.05.12",
+      },
+      {
+        title: "检修计划编排",
+        desc: "根据健康评分和风险等级，辅助安排检修优先级、窗口期和备件准备。",
+        image: sceneWriting,
+        tags: ["检修", "计划"],
+        heatValue: "980",
+        createTime: "2026.05.12",
+      },
+      {
+        title: "异常趋势预警",
+        desc: "对连续升温、振动增大、告警频发等趋势生成分析说明和处置建议。",
+        image: sceneTranslation,
+        tags: ["预警", "趋势"],
+        heatValue: "860",
+        createTime: "2026.05.12",
+      },
+    ],
+  },
+};
+
+const activeVerticalMockDetail = computed(() => {
+  const source = getSource();
+  if (!["vertical", "myApp"].includes(source)) {
+    return null;
+  }
+  const mockDetail = verticalMockDetailMap[Number(id.value)] || null;
+  if (!mockDetail || source !== "myApp") {
+    return mockDetail;
+  }
+  return {
+    ...mockDetail,
+    applyDetail: {
+      ...mockDetail.applyDetail,
+      status: 1,
+      myApplyFlag: true,
+    },
+  };
+});
+
+const activeHorizontalMockDetail = computed(() => {
+  const source = getSource();
+  if (!["horizontal", "myApp"].includes(source)) {
+    return null;
+  }
+  const mockDetail = horizontalMockDetailMap[Number(id.value)] || null;
+  if (!mockDetail || source !== "myApp") {
+    return mockDetail;
+  }
+  return {
+    ...mockDetail,
+    applyDetail: {
+      ...mockDetail.applyDetail,
+      status: 1,
+      myApplyFlag: true,
+    },
+  };
+});
+
+const activeMockDetail = computed(
+  () => activeHorizontalMockDetail.value || activeVerticalMockDetail.value
+);
+
+const coreValueHtml = computed(
+  () => activeMockDetail.value?.coreValueHtml || defaultCoreValueHtml
+);
+const coreMetrics = computed(
+  () => activeMockDetail.value?.coreMetrics || defaultCoreMetrics
+);
+const capabilityCards = computed(
+  () =>
+    activeMockDetail.value?.capabilityCards || defaultCapabilityCards
+);
+const scenarioCards = computed(
+  () => activeMockDetail.value?.scenarioCards || defaultScenarioCards
+);
+
 const isDisabled = computed(() => Number(applyDetail.value.status) === 0);
 const statusText = computed(() => (isDisabled.value ? "停用" : "正常"));
 const isMyAppSource = computed(() => getSource() === "myApp");
+const isMyAppVerticalMockDetail = computed(
+  () => isMyAppSource.value && Boolean(verticalMockDetailMap[Number(id.value)])
+);
+const isMockVerticalDetail = computed(() => Boolean(activeMockDetail.value));
 const categoryLabel = computed(() => {
   if (Number(applyDetail.value.category) === 1) {
     return "纵向行业应用";
@@ -474,9 +968,12 @@ const displayTags = computed(() => {
 });
 
 function getAppIcon(row = {}) {
-  // if (!row.icon) {
-  //   return appFeather;
-  // }
+  if (!row.icon) {
+    return appFeather;
+  }
+  if (/^(data:|blob:|https?:\/\/)/.test(row.icon)) {
+    return row.icon;
+  }
   return `${import.meta.env.VITE_APP_BASE_API}/profile${row.icon}`;
 }
 
@@ -550,13 +1047,18 @@ const visibleMountedResourceGroups = computed(() =>
 
 function getSource() {
   const routeName = route.name;
+  const routePath = route.path || "";
   if (routeName === "myAppDetail") {
     return "myApp";
   }
-  if (routeName === "verticalDetail") {
+  if (routeName === "verticalDetail" || routePath.includes("/kac/vertical/")) {
     return "vertical";
   }
   return "horizontal";
+}
+
+function isApplyDetailRoute() {
+  return ["horizontalDetail", "verticalDetail", "myAppDetail"].includes(route.name);
 }
 
 function updateMainPanelHeight() {
@@ -613,7 +1115,18 @@ function reset() {
   proxy.resetForm("applyRef");
 }
 
+function showDevelopingMessage() {
+  ElMessage({
+    message: "功能正在开发中",
+    type: "warning",
+  });
+}
+
 function showCopyDialog(action) {
+  if (isMockVerticalDetail.value) {
+    showDevelopingMessage();
+    return;
+  }
   reset();
   const _id = applyDetail.value.id;
   getByApplyIdId(_id).then((res) => {
@@ -628,17 +1141,48 @@ function showCopyDialog(action) {
 }
 
 watch(
-  () => route.query.id,
-  (newId) => {
-    id.value = newId || 1;
+  () => [route.name, route.query.id],
+  ([, newId]) => {
+    if (!isApplyDetailRoute()) {
+      loading.value = false;
+      return;
+    }
+    if (!newId) {
+      loading.value = false;
+      return;
+    }
+    id.value = newId;
     getApplyDetailById();
   },
   { immediate: true }
 );
 
 async function getApplyDetailById() {
+  if (!isApplyDetailRoute() || !id.value) {
+    loading.value = false;
+    return;
+  }
+
   loading.value = true;
   try {
+    const mockDetail = activeMockDetail.value;
+    if (mockDetail) {
+      applyDetail.value = { ...mockDetail.applyDetail };
+      knowledgeBaseList.value =
+        mockDetail.knowledgeBaseList || mockKnowledgeBaseList;
+      graphList.value = mockDetail.graphList || [];
+      botList.value =
+        mockDetail.botList ||
+        (activeHorizontalMockDetail.value ? horizontalBotList : mockBotList);
+      mountedKnowledgeList.value =
+        mockDetail.applyDetail.kacApplyKnowledgeList || [];
+      mountedGraphList.value = [];
+      mountedBotList.value = mockDetail.applyDetail.kacApplyBotList || [];
+      await nextTick();
+      updateMainPanelHeight();
+      return;
+    }
+
     const response = await getApply(id.value);
     applyDetail.value = response.data || {};
     await loadMountedResources();
@@ -734,6 +1278,11 @@ function normalizeResourceRows(
 }
 
 function handleUse(row) {
+  if (isMockVerticalDetail.value) {
+    showDevelopingMessage();
+    return;
+  }
+
   let path = "";
   const source = getSource();
 
@@ -762,6 +1311,10 @@ function handleUse(row) {
 }
 
 function openResourceDialog(type) {
+  if (isMockVerticalDetail.value) {
+    showDevelopingMessage();
+    return;
+  }
   resourceDialogType.value = type;
   resourceDialogOpen.value = true;
 }
@@ -803,7 +1356,9 @@ function submitForm() {
   });
 }
 
-loadDropdownData();
+if (!activeMockDetail.value) {
+  loadDropdownData();
+}
 </script>
 
 <style scoped lang="scss">

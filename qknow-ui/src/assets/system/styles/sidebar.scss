@@ -20,7 +20,7 @@
     -webkit-transition: width .28s;
     transition: width 0.28s;
     width: $base-sidebar-width !important;
-    background-color: transparent !important;
+    // background-color: transparent !important;
     height: 100%;
     position: fixed;
     font-size: 0px;
@@ -31,8 +31,8 @@
     overflow: hidden;
     -webkit-box-shadow: 2px 0 6px rgba(0,21,41,.35);
     box-shadow: 2px 0 6px rgba(0,21,41,.35);
-    background: url(@/assets/system/images/layout/sidebar_bg.png) no-repeat center center;
-    background-size: cover;
+    // background: url(@/assets/system/images/layout/sidebar_bg.png) no-repeat center center;
+    // background-size: cover;
 
     &.navbar-logo{
         box-shadow: none;
@@ -85,10 +85,12 @@
 
       .nest-menu{
         &>a{
-            padding: 0 15px 0 15px;
+            // padding: 0 10px 0 10px;
         }
         .el-menu-item{
-            
+            .menu-title{
+                padding-left: 30px;
+            }
         }
       }
       
@@ -97,7 +99,7 @@
         margin-bottom: 15px;
         &>.el-sub-menu,
         &>a{
-            padding: 0 15px;
+            padding: 0 10px;
         }
         
 
@@ -108,7 +110,7 @@
         }
 
         .nest-menu{
-           justify-content: center;
+           justify-content: flex-start;
         }
       }
     }
@@ -118,12 +120,23 @@
       text-overflow: ellipsis !important;
       white-space: nowrap !important;
       color: #fff;
-      font-weight: bold;
+      font-size: 14px;
+      // font-weight: bold;
       // font-family: PingFangSC;
     }
 
     .el-menu-item .el-menu-tooltip__trigger {
       display: inline-block !important;
+    }
+
+    .el-menu-item,
+    .el-sub-menu__title {
+      transition: none !important;
+    }
+
+    .el-menu-item:not(.is-active) {
+      background: transparent !important;
+      box-shadow: none !important;
     }
 
      .el-menu-item {
@@ -162,6 +175,8 @@
     & .nest-menu .el-sub-menu>.el-sub-menu__title,
     & .el-sub-menu .el-menu-item {
       min-width: 100% !important;
+      justify-content: flex-start;
+      text-align: left;
 
       &:hover {
         //background-color: rgba(0, 0, 0, 0.06) !important;

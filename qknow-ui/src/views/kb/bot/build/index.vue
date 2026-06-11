@@ -949,12 +949,14 @@
           >
             <WorkflowDebugRunPanel
               v-if="!isChatflowWorkflow"
+              :key="`workflow-debug-${debugRunPanelKey}`"
               :fields="debugRunStartFields"
               :workflow-data="debugRunWorkflowData"
               :before-run="validateFlowBeforeRun"
             />
             <ChatflowDebugRunPanel
               v-else
+              :key="`chatflow-debug-${debugRunPanelKey}`"
               v-model:show-sections="chatflowDebugSectionsVisible"
               :fields="debugRunStartFields"
               :workflow-data="debugRunWorkflowData"
@@ -1069,7 +1071,14 @@
 </template>
 
 <script setup name="ProcessFlow">
-import { ref, computed, nextTick, onBeforeUnmount, onMounted } from "vue";
+import {
+  ref,
+  computed,
+  nextTick,
+  onActivated,
+  onBeforeUnmount,
+  onMounted,
+} from "vue";
 import {
   VueFlow,
   useVueFlow,
@@ -1153,14 +1162,18 @@ const loading = ref(false);
 // 工作流类型
 const workflowType = ref(null);
 const flowBuiltinFlag = ref(null);
-const nodes = ref([
-  {
-    id: "start_1",
-    type: "start",
-    position: { x: 100, y: 200 },
-    data: normalizeStartNodeData({ label: "开始" }),
-  },
-]);
+function createDefaultFlowNodes() {
+  return [
+    {
+      id: "start_1",
+      type: "start",
+      position: { x: 100, y: 200 },
+      data: normalizeStartNodeData({ label: "开始" }),
+    },
+  ];
+}
+
+const nodes = ref(createDefaultFlowNodes());
 
 const edges = ref([
   // { id: "e1-2", source: "1", target: "2", type: "default" },
@@ -1182,6 +1195,7 @@ const rules = reactive({
 // 工作流id
 const botId = ref(null);
 const flowName = ref(null);
+let flowDataRequestSeed = 0;
 let conditionCaseSeed = 0;
 let edgeSeed = 0;
 let nodeSeed = 0;
@@ -1202,6 +1216,7 @@ const startFieldDraft = ref({
   required: true,
 });
 const debugRunPanelVisible = ref(false);
+const debugRunPanelKey = ref(0);
 const chatflowDebugSectionsVisible = ref(true);
 const appContainerRef = ref(null);
 const selectedNode = ref(null);
@@ -1555,6 +1570,20 @@ function toggleChatflowDebugSections() {
   chatflowDebugSectionsVisible.value = !chatflowDebugSectionsVisible.value;
 }
 
+function resetDebugRunState() {
+  selectedNode.value = null;
+  debugRunPanelVisible.value = false;
+  chatflowDebugSectionsVisible.value = true;
+  debugRunPanelKey.value += 1;
+}
+
+function resetFlowCanvas() {
+  hideAddNodeMenu();
+  selectedNode.value = null;
+  nodes.value = createDefaultFlowNodes();
+  edges.value = [];
+}
+
 //复制Bot
 function showCopyDialog() {
   title.value = "复制Bot";
@@ -1765,59 +1794,90 @@ function getModelList() {
   });
 }
 
-function getFlowData(id) {
+function getFlowData(id, requestKey = flowDataRequestSeed) {
+  resetFlowCanvas();
   // loading.value = true;
-  getFlow(id).then((res) => {
-    const normalizedFlow = normalizeWorkflowGraphIds({
-      nodes: res.data.nodes,
-      edges: res.data.edges,
-    });
-
-    if (
-      Array.isArray(normalizedFlow.nodes) &&
-      normalizedFlow.nodes.length > 0
-    ) {
-      nodes.value = normalizedFlow.nodes.map((node) => ({
-        ...node,
-        data: normalizeNodeData(node?.type, cloneNodeData(node?.data || {})),
-      }));
+  return getFlow(id).then((res) => {
+    if (requestKey !== flowDataRequestSeed) {
+      return;
     }
 
-    if (
-      Array.isArray(normalizedFlow.edges) &&
-      normalizedFlow.edges.length > 0
-    ) {
-      edges.value = normalizedFlow.edges;
+    const flowData = res?.data || {};
+    const normalizedFlow = normalizeWorkflowGraphIds({
+      nodes: flowData.nodes,
+      edges: flowData.edges,
+    });
+    const nextNodes = Array.isArray(normalizedFlow.nodes)
+      ? normalizedFlow.nodes.map((node) => ({
+          ...node,
+          data: normalizeNodeData(node?.type, cloneNodeData(node?.data || {})),
+        }))
+      : [];
+
+    if (nextNodes.length) {
+      nodes.value = nextNodes;
+      edges.value = Array.isArray(normalizedFlow.edges)
+        ? normalizedFlow.edges
+        : [];
+    } else {
+      resetFlowCanvas();
     }
     // loading.value = false;
+  }).catch(() => {
+    if (requestKey === flowDataRequestSeed) {
+      resetFlowCanvas();
+    }
   });
 }
 
-function getBotDetail(id) {
+function getBotDetail(id, requestKey = flowDataRequestSeed) {
   botDetail.value = {};
   workflowType.value = null;
   flowName.value = "";
   flowBuiltinFlag.value = 0;
-  getBot(id).then((res) => {
+  return getBot(id).then((res) => {
+    if (requestKey !== flowDataRequestSeed) {
+      return;
+    }
+
     botDetail.value = res.data;
     workflowType.value = res.data.type;
     flowName.value = res.data.name;
     flowBuiltinFlag.value = res.data.builtinFlag;
+  }).catch(() => {
+    if (requestKey !== flowDataRequestSeed) {
+      return;
+    }
+
+    botDetail.value = {};
+    workflowType.value = null;
+    flowName.value = "";
+    flowBuiltinFlag.value = 0;
   });
 }
 
 watch(
   () => route.query.id,
   (newId) => {
+    const requestKey = ++flowDataRequestSeed;
+    resetDebugRunState();
+    resetFlowCanvas();
     botId.value = newId;
     if (!newId) {
       return;
     }
-    getBotDetail(newId);
-    getFlowData(newId);
+    getBotDetail(newId, requestKey).then(() => {
+      if (requestKey === flowDataRequestSeed) {
+        getFlowData(newId, requestKey);
+      }
+    });
   },
   { immediate: true }
 );
+
+onActivated(() => {
+  resetDebugRunState();
+});
 
 onMounted(() => {
   nodes.value = nodes.value.map((node) => ({
