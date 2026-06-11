@@ -28,8 +28,6 @@
 #  *
 # 更多信息请访问：https://qknow.qiantong.tech/business.html
 
-version: "2.2.1"
-
 services:
   redis:
     image: redis:6-alpine
@@ -46,9 +44,11 @@ services:
     ports:
       - "${EXPOSE_REDIS_PORT:-6379}:6379"
     healthcheck:
-      test: [ 'CMD', 'redis-cli', '-a', '${REDIS_PASSWORD}', 'ping' ]
+      test: [ 'CMD', 'redis-cli', '-a', '${REDIS_PASSWORD:-tF0cC3aE2tD2hK0dA0oT}', 'ping' ]
     networks:
       - qknownet
+    extra_hosts:    
+      - "host.docker.internal:host-gateway"
 
   neo4j:
     image: neo4j:4.4.40
@@ -60,16 +60,19 @@ services:
       - "47474:7474"
       - "47687:7687"
     volumes:
-      - ./database/neo4j/data:/data
-      - ./database/neo4j/logs:/logs
+      - ./qKnow/neo4j/data:/data
+      - ./qKnow/neo4j/logs:/logs
+      - ./qKnow/neo4j/conf:/var/lib/neo4j/conf
     healthcheck:
       test: [ "CMD", "cypher-shell", "-u", "neo4j", "-p", "${NEO4J_PASSWORD:-aA3nJ7pF1iJ2cB0fM1nJ}", "RETURN 1;" ]
       interval: 30s      # 每 30 秒检查一次
       timeout: 10s       # 超过 10 秒算失败
       retries: 5         # 连续失败 5 次算 unhealthy
-      start_period: 40s  # 容器启动后等待 40 秒再开始检测
+      start_period: 120s  # 容器启动后等待 120 秒再开始检测
     networks:
       - qknownet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   nginx:
     image: nginx:1.24.0
@@ -81,10 +84,12 @@ services:
     networks:
       - qknownet
     volumes:
-      - ./nginx/dist:/usr/share/nginx
-      - ./nginx/logs:/var/log/nginx
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/sites/:/etc/nginx/http_vhost/:ro
+      - ./qKnow/nginx/dist:/usr/share/nginx
+      - ./qKnow/nginx/logs:/var/log/nginx
+      - ./qKnow/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./qKnow/nginx/sites/:/etc/nginx/http_vhost/:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   #MySQL主库
   mysql57:
@@ -92,21 +97,21 @@ services:
     profiles: ["base"]
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD:  ${MYSQL_ROOT_PASSWORD}   # ← 修改成你的
+      MYSQL_ROOT_PASSWORD:  ${MYSQL_ROOT_PASSWORD:-lJ7gP0cA5dD2dA1hA3bJ}   # ← 修改成你的
       TZ: "Asia/Shanghai"                          # 如需改时区请改
     ports:
       - "23306:3306"
     volumes:
-      - ./database/mysql/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf:ro
-      - ./database/mysql/init:/docker-entrypoint-initdb.d:ro
+      - ./qKnow/db/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf:ro
+      - ./qKnow/db/init:/docker-entrypoint-initdb.d:ro
     networks:
       - qknownet
     healthcheck:
-      test: [ "CMD-SHELL", "mysql -u root -p\"$MYSQL_ROOT_PASSWORD\" -e 'SELECT 1'" ]
-      interval: 10s
-      timeout: 10s
-      retries: 15
-      start_period: 60s
+      test: [ "CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-plJ7gP0cA5dD2dA1hA3bJ" ]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 300s
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
@@ -119,7 +124,7 @@ services:
       - "28080:8080"
       - "60051:50051"
     volumes:
-      - ./database/weaviate:/var/lib/weaviate
+      - ./qKnow/weaviate:/var/lib/weaviate
     environment:
       PERSISTENCE_DATA_PATH: /var/lib/weaviate
       QUERY_DEFAULTS_LIMIT: 25
@@ -139,4 +144,5 @@ services:
       retries: 5
     networks:
       - qknownet
-
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
