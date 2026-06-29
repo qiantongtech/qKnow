@@ -91,6 +91,10 @@ echo "----------------------------------------"
 # 启动 qKnow API 容器（忽略已停止的情况）
 docker start qknow-demo-api-1
 
+# 等待 10 秒让 API 启动
+echo "   → 等待 API 服务启动 (10秒)..."
+sleep 10
+
 # 启动 qKnow nginx 容器（忽略已停止的情况）
 docker start qknow-demo-nginx-1
 # ==================================================================
