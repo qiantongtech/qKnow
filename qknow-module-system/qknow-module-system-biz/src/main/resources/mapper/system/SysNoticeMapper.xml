@@ -105,6 +105,7 @@
                 </otherwise>
             </choose>
         </where>
+        order by create_time desc
     </select>
 
     <insert id="insertNotice" parameterType="SysNotice">
