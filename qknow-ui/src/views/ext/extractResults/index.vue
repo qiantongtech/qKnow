@@ -1,33 +1,19 @@
 <!--
-  Copyright © 2026 Qiantong Technology Co., Ltd.
-  qKnow Knowledge Platform
-   *
-  License:
-  Released under the Apache License, Version 2.0.
-  You may use, modify, and distribute this software for commercial purposes
-  under the terms of the License.
-   *
-  Special Notice:
-  All derivative versions are strictly prohibited from modifying or removing
-  the default system logo and copyright information.
-  For brand customization, please apply for brand customization authorization via official channels.
-   *
-  More information: https://qknow.qiantong.tech/business.html
-   *
-  ============================================================================
-   *
-  版权所有 © 2026 江苏千桐科技有限公司
-  qKnow 知识平台（开源版）
-   *
-  许可协议：
-  本项目基于 Apache License 2.0 开源协议发布，
-  允许在遵守协议的前提下进行商用、修改和分发。
-   *
-  特别说明：
-  所有衍生版本不得修改或移除系统默认的 LOGO 和版权信息；
-  如需定制品牌，请通过官方渠道申请品牌定制授权。
-   *
-  更多信息请访问：https://qknow.qiantong.tech/business.html
+ Copyright © 2025-present Jiangsu Qiantong Technology Co., Ltd.
+ 
+ This file is part of qKnow Intelligent Agent Building Platform (Open Source Edition).
+ 
+ qKnow is licensed under Apache License 2.0 with additional qKnow terms.
+ You may use qKnow for commercial purposes, but you may not remove, hide,
+ modify, or replace the qKnow logo, copyright notices, license notices,
+ or attribution information without a separate commercial license.
+ 
+ White-label use, OEM distribution, rebranding, or presenting qKnow as
+ another product requires separate commercial authorization from
+ Jiangsu Qiantong Technology Co., Ltd.
+ 
+ Business License: https://community.qknow.ai/business/policy.html
+ See the LICENSE file in the project root for full license information.
 -->
 
 <template>
@@ -38,23 +24,28 @@
             <el-aside :style="{ width: `${leftWidth}px` }" class="left-pane">
                 <div class="left-tree">
                     <div class="head-container">
-                        <el-input :suffix-icon="Search" v-model="filterText" clearable
-                                  style="width: 100%; margin-bottom: 20px" placeholder="输入查找名称"/>
+                        <el-input
+                            :suffix-icon="Search"
+                            v-model="filterText"
+                            clearable
+                            style="width: 100%; margin-bottom: 20px"
+                            placeholder="输入查找名称"
+                        />
                     </div>
                     <div class="head-container control-tree">
                         <el-tree
-                                node-key="id"
-                                :props="props"
-                                show-checkbox
-                                highlight-current
-                                @check="handleCheck"
-                                @node-click="handleNodeClick"
-                                ref="treeRef"
-                                class="filter-tree"
-                                :data="treeData"
-                                :default-checked-keys="checkedKeys"
-                                default-expand-all
-                                :filter-node-method="filterNode"
+                            node-key="id"
+                            :props="props"
+                            show-checkbox
+                            highlight-current
+                            @check="handleCheck"
+                            @node-click="handleNodeClick"
+                            ref="treeRef"
+                            class="filter-tree"
+                            :data="treeData"
+                            :default-checked-keys="checkedKeys"
+                            default-expand-all
+                            :filter-node-method="filterNode"
                         />
                     </div>
                 </div>
@@ -71,9 +62,19 @@
                     <div class="name">{{ taskInfo.name }}</div>
                     <div class="btns">
                         <el-button icon="Back" @click="handleBack">返回</el-button>
-                        <el-button v-if="!releaseStatus" icon="Upload" type="primary" @click="handleRelease">发布
+                        <el-button
+                            v-if="!releaseStatus"
+                            icon="Upload"
+                            type="primary"
+                            @click="handleRelease"
+                            >发布
                         </el-button>
-                        <el-button v-if="releaseStatus" icon="Upload" type="primary" @click="handleCancelRelease">取消发布
+                        <el-button
+                            v-if="releaseStatus"
+                            icon="Upload"
+                            type="primary"
+                            @click="handleCancelRelease"
+                            >取消发布
                         </el-button>
                     </div>
                 </div>
@@ -81,8 +82,17 @@
                     <div class="gragh-container" id="gragh-container">
                         <div class="toolbar" ref="toolbarRef">
                             <template v-for="item in toolbar" :key="item.id">
-                                <el-tooltip class="box-item" effect="light" :content="item.tip" placement="right">
-                                    <div class="toolbar-item" @click="toolbarClick(item)" :title="item.tip">
+                                <el-tooltip
+                                    class="box-item"
+                                    effect="light"
+                                    :content="item.tip"
+                                    placement="right"
+                                >
+                                    <div
+                                        class="toolbar-item"
+                                        @click="toolbarClick(item)"
+                                        :title="item.tip"
+                                    >
                                         <el-icon>
                                             <component :is="item.icon"></component>
                                         </el-icon>
@@ -105,12 +115,17 @@
                             <div class="details-title">
                                 <div class="title-label">
                                     <el-icon class="icon" @click="detailClose">
-                                        <Close/>
+                                        <Close />
                                     </el-icon>
                                     <span class="label">{{ currentNodeData.name }}</span>
                                 </div>
                                 <div class="title-slot">
-                                    <el-button size="small" type="danger" icon="Delete" @click="handleDel">删除
+                                    <el-button
+                                        size="small"
+                                        type="danger"
+                                        icon="Delete"
+                                        @click="handleDel"
+                                        >删除
                                     </el-button>
                                 </div>
                             </div>
@@ -121,19 +136,50 @@
                                             <div class="collapse-title">属性信息</div>
                                         </template>
                                         <div class="collapse-con">
-                                            <el-table stripe height="100px" v-loading="attrLoading" :data="attrData">
-                                                <el-table-column label="属性名称" key="a" prop="a"/>
-                                                <el-table-column label="数据类型" key="b" prop="b" show-overflow-tooltip/>
-                                                <el-table-column label="属性值" key="c" prop="c" show-overflow-tooltip/>
-                                                <el-table-column label="操作" class-name="small-padding fixed-width"
-                                                                 fixed="right" width="150">
+                                            <el-table
+                                                stripe
+                                                height="100px"
+                                                v-loading="attrLoading"
+                                                :data="attrData"
+                                            >
+                                                <el-table-column
+                                                    label="属性名称"
+                                                    key="a"
+                                                    prop="a"
+                                                />
+                                                <el-table-column
+                                                    label="数据类型"
+                                                    key="b"
+                                                    prop="b"
+                                                    show-overflow-tooltip
+                                                />
+                                                <el-table-column
+                                                    label="属性值"
+                                                    key="c"
+                                                    prop="c"
+                                                    show-overflow-tooltip
+                                                />
+                                                <el-table-column
+                                                    label="操作"
+                                                    class-name="small-padding fixed-width"
+                                                    fixed="right"
+                                                    width="150"
+                                                >
                                                     <template #default="scope">
-                                                        <el-button link type="primary" icon="Edit"
-                                                                   @click="attrUpdate(scope.row)">修改
+                                                        <el-button
+                                                            link
+                                                            type="primary"
+                                                            icon="Edit"
+                                                            @click="attrUpdate(scope.row)"
+                                                            >修改
                                                         </el-button>
-                                                        <el-divider direction="vertical"/>
-                                                        <el-button link type="danger" icon="Delete"
-                                                                   @click="attrDelete(scope.row)">删除
+                                                        <el-divider direction="vertical" />
+                                                        <el-button
+                                                            link
+                                                            type="danger"
+                                                            icon="Delete"
+                                                            @click="attrDelete(scope.row)"
+                                                            >删除
                                                         </el-button>
                                                     </template>
                                                 </el-table-column>
@@ -145,23 +191,51 @@
                                             <div class="collapse-title">关联三元组</div>
                                         </template>
                                         <div class="collapse-con">
-                                            <el-table stripe height="200px" v-loading="tripletLoading"
-                                                      :data="tripletData">
-                                                <el-table-column label="起点" key="startName" prop="startName"
-                                                                 show-overflow-tooltip/>
-                                                <el-table-column label="关系" key="name" prop="name"
-                                                                 show-overflow-tooltip/>
-                                                <el-table-column label="终点" key="endName" prop="endName"
-                                                                 show-overflow-tooltip/>
-                                                <el-table-column label="操作" class-name="small-padding fixed-width"
-                                                                 fixed="right" width="150">
+                                            <el-table
+                                                stripe
+                                                height="200px"
+                                                v-loading="tripletLoading"
+                                                :data="tripletData"
+                                            >
+                                                <el-table-column
+                                                    label="起点"
+                                                    key="startName"
+                                                    prop="startName"
+                                                    show-overflow-tooltip
+                                                />
+                                                <el-table-column
+                                                    label="关系"
+                                                    key="name"
+                                                    prop="name"
+                                                    show-overflow-tooltip
+                                                />
+                                                <el-table-column
+                                                    label="终点"
+                                                    key="endName"
+                                                    prop="endName"
+                                                    show-overflow-tooltip
+                                                />
+                                                <el-table-column
+                                                    label="操作"
+                                                    class-name="small-padding fixed-width"
+                                                    fixed="right"
+                                                    width="150"
+                                                >
                                                     <template #default="scope">
-                                                        <el-button link type="primary" icon="Edit"
-                                                                   @click="tripletUpdate(scope.row)">修改
+                                                        <el-button
+                                                            link
+                                                            type="primary"
+                                                            icon="Edit"
+                                                            @click="tripletUpdate(scope.row)"
+                                                            >修改
                                                         </el-button>
-                                                        <el-divider direction="vertical"/>
-                                                        <el-button link type="danger" icon="Delete"
-                                                                   @click="tripletDelete(scope.row)">删除
+                                                        <el-divider direction="vertical" />
+                                                        <el-button
+                                                            link
+                                                            type="danger"
+                                                            icon="Delete"
+                                                            @click="tripletDelete(scope.row)"
+                                                            >删除
                                                         </el-button>
                                                     </template>
                                                 </el-table-column>
@@ -174,7 +248,15 @@
                                         </template>
                                         <div class="collapse-con1">
                                             <div v-for="(item, index) in textList" :key="index">
-                                              <span v-if="currentNodeData.textIds && currentNodeData.textIds.split(',').includes(item.id.toString())">{{ item.text }}</span>
+                                                <span
+                                                    v-if="
+                                                        currentNodeData.textIds &&
+                                                        currentNodeData.textIds
+                                                            .split(',')
+                                                            .includes(item.id.toString())
+                                                    "
+                                                    >{{ item.text }}</span
+                                                >
                                             </div>
                                         </div>
                                     </el-collapse-item>
@@ -184,14 +266,31 @@
                                         </template>
                                         <div class="collapse-con1">
                                             <div v-for="(doc, index) in docList" :key="index">
-                                                <div v-if="currentNodeData.docId == doc.id"
-                                                     style="display: flex; justify-content: space-between">
-                                                    <td style="text-align: left; width: 80%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer"
-                                                        :title="doc.name" @click="previewRefactoring(doc)">
+                                                <div
+                                                    v-if="currentNodeData.docId == doc.id"
+                                                    style="
+                                                        display: flex;
+                                                        justify-content: space-between;
+                                                    "
+                                                >
+                                                    <td
+                                                        style="
+                                                            text-align: left;
+                                                            width: 80%;
+                                                            white-space: nowrap;
+                                                            overflow: hidden;
+                                                            text-overflow: ellipsis;
+                                                            cursor: pointer;
+                                                        "
+                                                        :title="doc.name"
+                                                        @click="previewRefactoring(doc)"
+                                                    >
                                                         {{ doc.name }}
                                                     </td>
-                                                    <td style="text-align: right">{{ parseTime(doc.createTime,
-                                                        "{y}-{m}-{d}") }}
+                                                    <td style="text-align: right">
+                                                        {{
+                                                            parseTime(doc.createTime, '{y}-{m}-{d}')
+                                                        }}
                                                     </td>
                                                     <!--                          <td style="text-align: right">-->
                                                     <!--                            <el-button link type="primary" icon="view" @click="previewRefactoring(doc)">预览</el-button>-->
@@ -213,23 +312,25 @@
 
 <script setup name="KEresult">
     // 初始化画布
-    import {Graph} from "@antv/g6";
-    import {Search} from "@element-plus/icons-vue";
-    import {getExtExtraction,
+    import { Graph } from '@antv/g6';
+    import { Search } from '@element-plus/icons-vue';
+    import {
+        getExtExtraction,
         getTaskTextList,
         deleteNode,
         strutReleaseByTaskId,
-        strutCancelReleaseByTaskId,
-    } from "@/api/ext/extUnstructTask/unstructTask";
+        strutCancelReleaseByTaskId
+    } from '@/api/ext/extUnstructTask/unstructTask';
+    import { updateRelationship, deleteRelationship } from '@/api/ext/extStructTask/extStruct';
     import {
-        updateRelationship,
-        deleteRelationship
-    } from "@/api/ext/extStructTask/extStruct";
-    import {getPdfPreview, updatePreviewCount, updateDownloadCount} from "@/api/kmc/kmcDocument/kmcDocument.js";
+        getPdfPreview,
+        updatePreviewCount,
+        updateDownloadCount
+    } from '@/api/kmc/kmcDocument/kmcDocument.js';
 
-    const {proxy} = getCurrentInstance();
+    const { proxy } = getCurrentInstance();
     const router = useRouter();
-    const taskInfo = ref({name: ""});
+    const taskInfo = ref({ name: '' });
     watch(
         () => router.currentRoute.value.query.id,
         (val) => {
@@ -237,24 +338,24 @@
                 taskInfo.value = router.currentRoute.value.query;
             }
         },
-        {immediate: true}
+        { immediate: true }
     );
 
-    const releaseStatus = ref(false)//true已发布 false未发布
+    const releaseStatus = ref(false); //true已发布 false未发布
     const textList = ref(null);
     const docList = ref(null);
     let graph = null;
     let graphData = ref({
         nodes: [],
-        edges: [],
+        edges: []
     });
     const appLoading = ref(false);
     onMounted(() => {
         //查询抽取结果
         let id = taskInfo.value.id;
-        getExtExtractionData({taskId: id});
+        getExtExtractionData({ taskId: id });
         //根据taskId获取段落数据和文档
-        getTextListAndDocList({taskId: id});
+        getTextListAndDocList({ taskId: id });
     });
 
     //根据taskId获取段落数据和文档
@@ -262,7 +363,7 @@
         textList.value = null;
         docList.value = null;
         getTaskTextList({
-            taskId: val.taskId,
+            taskId: val.taskId
         }).then((response) => {
             if (response && response.code === 200) {
                 //文本段落数据
@@ -277,38 +378,38 @@
     function getExtExtractionData(val) {
         appLoading.value = true;
         getExtExtraction({
-            taskId: val.taskId,
+            taskId: val.taskId
         }).then((response) => {
             appLoading.value = false;
             let data = response.data;
-            console.log("-----data----", data);
-            releaseStatus.value = response.data.releaseStatus == 1 ? true : false
+            console.log('-----data----', data);
+            releaseStatus.value = response.data.releaseStatus == 1 ? true : false;
 
             let entityList = data.entities.map((item) => {
                 return {
                     ...item,
-                    id: item.id + "",
+                    id: item.id + '',
                     size: 40,
                     halo: true,
                     style: {
-                        fill: "#7dbffa",
-                    },
+                        fill: '#7dbffa'
+                    }
                 };
             });
             let tripletList = data.relationships.map((item) => {
                 return {
                     ...item,
-                    id: "edge" + item.id,
+                    id: 'edge' + item.id,
                     name: item.relationType, //关系
-                    source: item.startId + "", //头部实体
-                    target: item.endId + "", //尾部实体
+                    source: item.startId + '', //头部实体
+                    target: item.endId + '' //尾部实体
                 };
             });
-            console.log("-----数据1----", entityList);
-            console.log("-----数据2----", tripletList);
+            console.log('-----数据1----', entityList);
+            console.log('-----数据2----', tripletList);
             graphData.value.nodes = entityList;
             graphData.value.edges = tripletList;
-            console.log("-----数据----", graphData.value);
+            console.log('-----数据----', graphData.value);
             //设置画布
             setGraph(graphData.value);
             if (data.length == 0) return;
@@ -320,117 +421,122 @@
     function setGraph(data) {
         // 画布逻辑
         graph = new Graph({
-            container: "gragh-container",
+            container: 'gragh-container',
             animation: data.nodes.length < 100,
             data: data,
-            autoFit: "view",
+            autoFit: 'view',
             autoResize: true,
             node: {
-                type: "circle",
+                type: 'circle',
                 style: {
                     halo: (d) => d.halo || false,
                     labelWordWrap: true,
-                    labelMaxWidth: "300",
-                    labelFill: "#DAE6FD",
-                    labelPlacement: "bottom",
+                    labelMaxWidth: '300',
+                    labelFill: '#DAE6FD',
+                    labelPlacement: 'bottom',
                     labelText: (d) => d.name,
                     labelFontSize: 16,
                     size: (d) => d.size,
-                    ports: [],
+                    ports: []
                 },
                 state: {
                     // 高亮
                     highlight: {
-                        fill: "#0076ff",
+                        fill: '#0076ff',
                         halo: true,
-                        lineWidth: 0,
+                        lineWidth: 0
                     },
                     click: {
                         halo: true,
                         haloLineWidth: 20,
-                        stroke: "#0036ff",
-                        lineWidth: 4,
+                        stroke: '#0036ff',
+                        lineWidth: 4
                     },
                     dim: {
-                        fill: "#99ADD1",
-                    },
+                        fill: '#99ADD1'
+                    }
                 },
                 palette: {
-                    type: "group",
-                    field: "cluster",
-                },
+                    type: 'group',
+                    field: 'cluster'
+                }
             },
             edge: {
                 state: {
                     // 高亮
                     highlight: {
-                        stroke: "#0076ff",
-                    },
+                        stroke: '#0076ff'
+                    }
                 },
                 style: {
                     lineWidth: 5,
                     labelText: (d) => d.name,
-                    labelFill: "#7DBFFA",
+                    labelFill: '#7DBFFA',
                     labelFontSize: 12,
                     labelOffsetY: 16,
-                    endArrow: true,
+                    endArrow: true
                 },
                 palette: {
-                    type: "group",
-                    field: "cluster",
-                },
+                    type: 'group',
+                    field: 'cluster'
+                }
             },
             layout: {
-                type: "d3-force",
+                type: 'd3-force',
                 link: {
                     distance: (d) => {
                         return 100;
                     },
                     strength: (d) => {
                         return 0.2;
-                    },
+                    }
                 },
                 manyBody: {
                     strength: (d) => {
                         return -180;
-                    },
-                },
+                    }
+                }
             },
             plugins: [
                 {
-                    type: "fullscreen",
-                    key: "fullscreen",
-                },
+                    type: 'fullscreen',
+                    key: 'fullscreen'
+                }
             ],
             behaviors: [
-                "zoom-canvas",
-                "drag-canvas",
-                "drag-element-force",
+                'zoom-canvas',
+                'drag-canvas',
+                'drag-element-force',
                 {
-                    type: "hover-activate",
-                    enable: (event) => event.targetType === "node",
+                    type: 'hover-activate',
+                    enable: (event) => event.targetType === 'node',
                     degree: 1, // 👈🏻 Activate relations.
-                    state: "highlight",
-                    inactiveState: "dim",
+                    state: 'highlight',
+                    inactiveState: 'dim',
                     onHover: (event) => {
-                        event.view.setCursor("pointer");
+                        event.view.setCursor('pointer');
                     },
                     onHoverEnd: (event) => {
-                        event.view.setCursor("default");
-                    },
+                        event.view.setCursor('default');
+                    }
                 },
                 {
-                    type: "click-select",
-                    key: "clickControl",
-                    state: "click",
+                    type: 'click-select',
+                    key: 'clickControl',
+                    state: 'click',
                     onClick: (d) => {
-                        console.log(d, "===dd");
-                        if (d.target.nodeName === "document") {
+                        console.log(d, '===dd');
+                        if (d.target.nodeName === 'document') {
                             detailShow.value = false;
                         }
-                        if (d.target.type == "node") {
-                            currentNodeData.value = graphData.value.nodes.find((e) => e.id == d.target.id);
-                            console.log("---------currentNodeData.value-------", currentNodeData.value);
+                        if (d.target.type == 'node') {
+                            currentNodeData.value = graphData.value.nodes.find(
+                                (e) => e.id == d.target.id
+                            );
+                            console.log(
+                                '---------currentNodeData.value-------',
+                                currentNodeData.value
+                            );
 
                             //关联三元组
                             let tripletList = [];
@@ -442,58 +548,54 @@
                             tripletData.value = tripletList;
                             detailShow.value = true;
                         }
-                    },
-                },
-            ],
+                    }
+                }
+            ]
         });
         graph.render();
     }
 
     //发布
     const handleRelease = () => {
-        proxy.$modal
-            .confirm(`是否确认发布？`)
-            .then(() => {
-                strutReleaseByTaskId({taskId: taskInfo.value.id}).then(res => {
-                    if (res && res.code == 200) {
-                        releaseStatus.value = true
-                        proxy.$modal.msgSuccess("发布成功")
-                    }
-                })
-            })
-    }
+        proxy.$modal.confirm(`是否确认发布？`).then(() => {
+            strutReleaseByTaskId({ taskId: taskInfo.value.id }).then((res) => {
+                if (res && res.code == 200) {
+                    releaseStatus.value = true;
+                    proxy.$modal.msgSuccess('发布成功');
+                }
+            });
+        });
+    };
 
     //取消发布
     const handleCancelRelease = () => {
-        proxy.$modal
-            .confirm(`是否确认取消发布？`)
-            .then(() => {
-                strutCancelReleaseByTaskId({taskId: taskInfo.value.id}).then(res => {
-                    if (res && res.code == 200) {
-                        releaseStatus.value = false
-                        proxy.$modal.msgSuccess("取消发布成功")
-                    }
-                })
-            })
-    }
+        proxy.$modal.confirm(`是否确认取消发布？`).then(() => {
+            strutCancelReleaseByTaskId({ taskId: taskInfo.value.id }).then((res) => {
+                if (res && res.code == 200) {
+                    releaseStatus.value = false;
+                    proxy.$modal.msgSuccess('取消发布成功');
+                }
+            });
+        });
+    };
 
     const toolbarRef = ref();
     const toolbar = ref([
         {
-            id: "full-screen",
-            icon: "FullScreen",
+            id: 'full-screen',
+            icon: 'FullScreen',
             isFull: false,
-            tip: "全屏",
+            tip: '全屏'
         },
         {
-            id: "zoom-in",
-            icon: "ZoomIn",
-            tip: "放大",
+            id: 'zoom-in',
+            icon: 'ZoomIn',
+            tip: '放大'
         },
         {
-            id: "zoom-out",
-            icon: "ZoomOut",
-            tip: "缩小",
+            id: 'zoom-out',
+            icon: 'ZoomOut',
+            tip: '缩小'
         },
         //   {
         //     id: "undo",
@@ -506,30 +608,30 @@
         //     tip: "重做",
         //   },
         {
-            id: "auto-fit",
-            icon: "Aim",
-            tip: "恢复视角",
+            id: 'auto-fit',
+            icon: 'Aim',
+            tip: '恢复视角'
         },
         {
-            id: "export",
-            icon: "Download",
-            tip: "导出",
+            id: 'export',
+            icon: 'Download',
+            tip: '导出'
         },
         {
-            id: "reset",
-            icon: "Refresh",
-            tip: "重置",
-        },
+            id: 'reset',
+            icon: 'Refresh',
+            tip: '重置'
+        }
     ]);
     const toolbarClick = async (item) => {
         const animation = {
             duration: 500,
-            easing: "linear",
+            easing: 'linear'
         };
-        const history = graph.getPluginInstance("history");
+        const history = graph.getPluginInstance('history');
         switch (item.id) {
-            case "full-screen": {
-                const fullscreenPlugin = graph.getPluginInstance("fullscreen");
+            case 'full-screen': {
+                const fullscreenPlugin = graph.getPluginInstance('fullscreen');
                 if (!item.isFull) {
                     fullscreenPlugin.request();
                 } else {
@@ -538,30 +640,30 @@
                 item.isFull = !item.isFull;
                 break;
             }
-            case "zoom-in":
+            case 'zoom-in':
                 graph.zoomBy(1.2, animation);
                 break;
-            case "zoom-out":
+            case 'zoom-out':
                 graph.zoomBy(0.8, animation);
                 break;
-            case "redo":
+            case 'redo':
                 if (history.canRedo()) history.redo();
                 break;
-            case "undo":
+            case 'undo':
                 if (history.canUndo()) history.undo();
                 break;
-            case "auto-fit":
+            case 'auto-fit':
                 graph.fitView(
                     {
-                        when: "always", // 始终进行适配
-                        direction: "both", // 在两个方向上适配
+                        when: 'always', // 始终进行适配
+                        direction: 'both' // 在两个方向上适配
                     },
                     animation
                 );
                 break;
-            case "export": {
+            case 'export': {
                 const dataURL = await graph.toDataURL();
-                const [head, content] = dataURL.split(",");
+                const [head, content] = dataURL.split(',');
                 const contentType = head.match(/:(.*?);/)[1];
 
                 const bstr = atob(content);
@@ -570,24 +672,24 @@
                 while (length--) {
                     u8arr[length] = bstr.charCodeAt(length);
                 }
-                const blob = new Blob([u8arr], {type: contentType});
-                let link = document.createElement("a");
+                const blob = new Blob([u8arr], { type: contentType });
+                let link = document.createElement('a');
                 let url = URL.createObjectURL(blob); // 创建 Blob URL
                 link.href = url;
-                link.setAttribute("download", taskInfo.value.name + "抽取结果"); // 设置文件名
+                link.setAttribute('download', taskInfo.value.name + '抽取结果'); // 设置文件名
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
                 URL.revokeObjectURL(url); // 释放 Blob URL
                 break;
             }
-            case "reset": {
+            case 'reset': {
                 graph.destroy();
                 graph = null;
                 let id = taskInfo.value.id;
-                getExtExtractionData({taskId: id});
+                getExtExtractionData({ taskId: id });
                 //根据taskId获取段落数据和文档
-                getTextListAndDocList({taskId: id});
+                getTextListAndDocList({ taskId: id });
                 break;
             }
         }
@@ -601,8 +703,8 @@
         isResizing.value = true;
         startX = event.clientX;
         // 使用 requestAnimationFrame 减少重绘频率
-        document.addEventListener("mousemove", updateResize);
-        document.addEventListener("mouseup", stopResize);
+        document.addEventListener('mousemove', updateResize);
+        document.addEventListener('mouseup', stopResize);
     };
     const updateResize = (event) => {
         if (isResizing.value) {
@@ -610,18 +712,17 @@
             leftWidth.value += delta; // 修改左侧宽度
             startX = event.clientX; // 更新起始位置
             // 使用 requestAnimationFrame 来减少页面重绘频率
-            requestAnimationFrame(() => {
-            });
+            requestAnimationFrame(() => {});
         }
     };
     const stopResize = () => {
         isResizing.value = false;
-        document.removeEventListener("mousemove", updateResize);
-        document.removeEventListener("mouseup", stopResize);
+        document.removeEventListener('mousemove', updateResize);
+        document.removeEventListener('mouseup', stopResize);
     };
 
     // 过滤树
-    const filterText = ref("");
+    const filterText = ref('');
     const treeRef = ref();
     watch(filterText, (val) => {
         treeRef.value && treeRef.value.filter(val);
@@ -629,23 +730,23 @@
 
     // 树结构
     const props = {
-        label: "label",
-        children: "children",
+        label: 'label',
+        children: 'children'
     };
     let treeData = ref([]);
     let checkedKeys = ref([]);
     const initTree = () => {
         treeData.value = [
             {
-                id: "parent1",
-                label: "实体",
+                id: 'parent1',
+                label: '实体',
                 children: graphData.value.nodes.map((item) => {
                     return {
                         id: item.id,
-                        label: item.name,
+                        label: item.name
                     };
-                }),
-            },
+                })
+            }
         ];
         const getAllIds = (treeData) => {
             let ids = [];
@@ -663,23 +764,22 @@
 
     //预览
     function previewRefactoring(row) {
-        console.log(row, "1111111111");
-        getPdfPreview({url: row.path}).then((res) => {
+        console.log(row, '1111111111');
+        getPdfPreview({ url: row.path }).then((res) => {
             console.log(res);
-            if (res.data.fileBase64 == "") {
-                this.$modal.msgError("文件无内容");
+            if (res.data.fileBase64 == '') {
+                this.$modal.msgError('文件无内容');
             } else {
                 viewPdf(res.data.fileBase64);
                 //修改浏览次数
-                updatePreviewCount(row.id).then((response) => {
-                });
+                updatePreviewCount(row.id).then((response) => {});
             }
         });
     }
 
     // content是base64格式
     function viewPdf(content) {
-        console.log("content", content);
+        console.log('content', content);
         const blob = base64ToBlob(content);
         if (window.navigator && window.navigator.msSaveOrOpenBlob) {
             window.navigator.msSaveOrOpenBlob(blob);
@@ -696,12 +796,16 @@
             const left = (screenWidth - width) / 2;
             const top = (screenHeight - height) / 2;
             const fileURL = URL.createObjectURL(blob);
-            window.open(fileURL, "预览", `scrollbars=yes, width=${width}, height=${height}, top=${top}, left=${left}`); //打开ppf文件
+            window.open(
+                fileURL,
+                '预览',
+                `scrollbars=yes, width=${width}, height=${height}, top=${top}, left=${left}`
+            ); //打开ppf文件
         }
     }
 
     function base64ToBlob(data) {
-        let code = data.replace(/[\n\r]/g, ""); // 检查base64字符串是否符合base64编码
+        let code = data.replace(/[\n\r]/g, ''); // 检查base64字符串是否符合base64编码
         // atob() 方法用于解码使用 base-64 编码的字符串。
         const raw = window.atob(code);
         const rawLength = raw.length;
@@ -711,22 +815,22 @@
             uInt8Array[i] = raw.charCodeAt(i);
         }
         // 通过Blob将Uint8Array数组转换成pdf类型的文件对象
-        return new Blob([uInt8Array], {type: "application/pdf"});
+        return new Blob([uInt8Array], { type: 'application/pdf' });
     }
 
     //下载
     function handleDownload(row) {
-        if (row.path === "") {
-            this.$modal.msgError("没有文件");
+        if (row.path === '') {
+            this.$modal.msgError('没有文件');
         } else {
             fetch(row.path) // 使用 fetch 获取文件数据
                 .then((response) => response.blob()) // 将文件数据转换为 Blob
                 .then((blob) => {
                     updateDownloadCount(row.id).then((response) => {
-                        const link = document.createElement("a");
+                        const link = document.createElement('a');
                         const url = URL.createObjectURL(blob); // 创建 Blob URL
                         link.href = url;
-                        link.setAttribute("download", row.name || "下载文件"); // 设置文件名
+                        link.setAttribute('download', row.name || '下载文件'); // 设置文件名
                         document.body.appendChild(link);
                         link.click();
                         document.body.removeChild(link);
@@ -734,7 +838,7 @@
                     });
                 })
                 .catch(() => {
-                    this.$modal.msgError("文件下载失败");
+                    this.$modal.msgError('文件下载失败');
                 });
         }
     }
@@ -742,14 +846,20 @@
     const handleCheck = (data, checked) => {
         const id = data.id;
         // console.log(data, checked.checkedKeys);
-        if (id !== "parent1") {
+        if (id !== 'parent1') {
             // 隐藏数据
-            let hideData = graphData.value.edges.filter((e) => e.source === id || e.target === id).map((e) => e.id);
+            let hideData = graphData.value.edges
+                .filter((e) => e.source === id || e.target === id)
+                .map((e) => e.id);
             hideData.push(id);
             // 显示数据
             let showData = graphData.value.edges
                 .filter((e) => e.source === id || e.target === id)
-                .filter((e) => checked.checkedKeys.includes(e.source) && checked.checkedKeys.includes(e.target))
+                .filter(
+                    (e) =>
+                        checked.checkedKeys.includes(e.source) &&
+                        checked.checkedKeys.includes(e.target)
+                )
                 .map((e) => e.id);
             showData.push(id);
             if (checked.checkedKeys.includes(id)) {
@@ -770,11 +880,11 @@
     const handleNodeClick = (data) => {
         console.log(data.id);
         if (oldId.value) {
-            graph.setElementState(oldId.value, "");
+            graph.setElementState(oldId.value, '');
         }
         oldId.value = data.id;
-        if (data.id == "parent1" || data.id == "parent2") return;
-        graph.setElementState(data.id, "click").then(() =>
+        if (data.id == 'parent1' || data.id == 'parent2') return;
+        graph.setElementState(data.id, 'click').then(() =>
             graph.focusElement(data.id).then(() => {
                 graph.zoomTo(2);
             })
@@ -800,11 +910,11 @@
     // 点击事件
     const handleBack = () => {
         router.push({
-            path: "/ext/unstructTask",
+            path: '/ext/unstructTask',
             query: {
                 pageNum: taskInfo.value.pageNum,
-                pageSize: taskInfo.value.pageSize,
-            },
+                pageSize: taskInfo.value.pageSize
+            }
         });
     };
 
@@ -838,7 +948,7 @@
      ]);
      */
 
-// 右侧弹框
+    // 右侧弹框
     const currentNodeData = ref();
     const detailShow = ref(false);
     const detailClose = () => {
@@ -846,7 +956,7 @@
     };
     const handleDel = () => {
         if (releaseStatus.value) {
-            proxy.$modal.msgWarning("已发布状态禁止删除和修改！")
+            proxy.$modal.msgWarning('已发布状态禁止删除和修改！');
         } else {
             proxy.$modal
                 .confirm(`是否确认删除实体为【${currentNodeData.value.name}】的数据项？`)
@@ -854,28 +964,32 @@
                     // 接口
                     const id = currentNodeData.value.id;
                     deleteNode(id).then((response) => {
-                        console.log("-------删除成功------", response);
+                        console.log('-------删除成功------', response);
                         // 隐藏弹框，过滤树，暂隐node节点
                         detailClose();
-                        treeData.value[0].children = treeData.value[0].children.filter((e) => e.id !== id);
-                        let hideData = graphData.value.edges.filter((e) => e.source === id || e.target === id).map((e) => e.id);
+                        treeData.value[0].children = treeData.value[0].children.filter(
+                            (e) => e.id !== id
+                        );
+                        let hideData = graphData.value.edges
+                            .filter((e) => e.source === id || e.target === id)
+                            .map((e) => e.id);
                         hideData.push(id);
                         hideData.forEach((e) => graph.hideElement(e, false));
                         // 过滤数据
                         graphData.value.nodes = graphData.value.nodes.filter((e) => e.id !== id);
-                        graphData.value.edges = graphData.value.edges.filter((e) => e.source !== id && e.target !== id);
+                        graphData.value.edges = graphData.value.edges.filter(
+                            (e) => e.source !== id && e.target !== id
+                        );
 
-                        proxy.$modal.msgSuccess("删除成功");
+                        proxy.$modal.msgSuccess('删除成功');
                     });
                 })
-                .catch(() => {
-                });
+                .catch(() => {});
         }
-
     };
 
     // 右侧详情-折叠面板
-    const collapseAct = ref(["1", "2", "3", "4"]);
+    const collapseAct = ref(['1', '2', '3', '4']);
     const collapseChange = (val) => {
         console.log(val);
     };
@@ -883,10 +997,8 @@
     // 表格1
     const attrLoading = ref(false);
     const attrData = ref([]);
-    const attrUpdate = () => {
-    };
-    const attrDelete = () => {
-    };
+    const attrUpdate = () => {};
+    const attrDelete = () => {};
 
     // 表格2
     const tripletLoading = ref(false);
@@ -895,17 +1007,17 @@
     // 修改关系
     const tripletUpdate = (val) => {
         if (releaseStatus.value) {
-            proxy.$modal.msgWarning("已发布状态禁止删除和修改！")
+            proxy.$modal.msgWarning('已发布状态禁止删除和修改！');
         } else {
             proxy.$modal
                 .prompt(`请输入起点【${val.startName}】终点【${val.endName}】的关系`)
                 .then((res) => {
-                    console.log('---修改关系----', res)
+                    console.log('---修改关系----', res);
                     if (!res.value) {
-                        proxy.$modal.msgWarning("关系不能为空")
-                    }else if(/^\d+$/.test(res.value)){
-                        proxy.$modal.msgWarning("关系不能为纯数字")
-                    }else {
+                        proxy.$modal.msgWarning('关系不能为空');
+                    } else if (/^\d+$/.test(res.value)) {
+                        proxy.$modal.msgWarning('关系不能为纯数字');
+                    } else {
                         // let startNode = graphData.value.nodes.find(e => e.id == val.startId)
                         // let endNode = graphData.value.nodes.find(e => e.id == val.endId)
                         updateRelationship({
@@ -917,40 +1029,42 @@
                             extractType: 2
                         }).then((response) => {
                             if (response && response.code == 200) {
-                                graphData.value.edges.forEach(e => {
+                                graphData.value.edges.forEach((e) => {
                                     if (e.id == val.id) {
-                                        e.relationType = res.value
+                                        e.relationType = res.value;
                                     }
-                                })
-                                tripletData.value.forEach(e => {
+                                });
+                                tripletData.value.forEach((e) => {
                                     if (e.id == val.id) {
-                                        e.name = res.value
+                                        e.name = res.value;
                                     }
-                                })
+                                });
                             }
-                        })
+                        });
                     }
-                })
+                });
         }
     };
 
     // 删除关系
     const tripletDelete = (val) => {
         if (releaseStatus.value) {
-            proxy.$modal.msgWarning("已发布状态禁止删除和修改！")
+            proxy.$modal.msgWarning('已发布状态禁止删除和修改！');
         } else {
             proxy.$modal
                 .confirm(`是否确认删除起点【${val.startName}】终点【${val.endName}】的数据项？`)
                 .then(() => {
                     deleteRelationship({
                         relationshipId: Number(val.id.replace('edge', ''))
-                    }).then(res => {
+                    }).then((res) => {
                         if (res && res.code == 200) {
-                            graphData.value.edges = graphData.value.edges.filter(e => e.id != val.id)
-                            tripletData.value = tripletData.value.filter(e => e.id != val.id)
+                            graphData.value.edges = graphData.value.edges.filter(
+                                (e) => e.id != val.id
+                            );
+                            tripletData.value = tripletData.value.filter((e) => e.id != val.id);
                         }
-                    })
-                })
+                    });
+                });
         }
     };
 
@@ -1067,7 +1181,7 @@
             .gragh-container {
                 width: 100%;
                 height: 100%;
-                background: #fff url("@/assets/ke/images/bg.png") no-repeat;
+                background: #fff url('@/assets/ke/images/bg.png') no-repeat;
                 background-size: 100% 100%;
 
                 :deep(.g6-toolbar) {
@@ -1123,7 +1237,7 @@
                 bottom: 20px;
                 width: 50px;
                 height: 50px;
-                background: url("@/assets/ke/images/tool.png") no-repeat;
+                background: url('@/assets/ke/images/tool.png') no-repeat;
                 background-size: 100% 100%;
 
                 .tool-mask {
@@ -1235,7 +1349,7 @@
 
                         &::before {
                             display: inline-block;
-                            content: "";
+                            content: '';
                             width: 6px;
                             height: 16px;
                             border-radius: 2px 2px 2px 2px;

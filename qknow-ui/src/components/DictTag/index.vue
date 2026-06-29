@@ -1,115 +1,115 @@
 <!--
-  Copyright © 2026 Qiantong Technology Co., Ltd.
-  qKnow Knowledge Platform
-   *
-  License:
-  Released under the Apache License, Version 2.0.
-  You may use, modify, and distribute this software for commercial purposes
-  under the terms of the License.
-   *
-  Special Notice:
-  All derivative versions are strictly prohibited from modifying or removing
-  the default system logo and copyright information.
-  For brand customization, please apply for brand customization authorization via official channels.
-   *
-  More information: https://qknow.qiantong.tech/business.html
-   *
-  ============================================================================
-   *
-  版权所有 © 2026 江苏千桐科技有限公司
-  qKnow 知识平台（开源版）
-   *
-  许可协议：
-  本项目基于 Apache License 2.0 开源协议发布，
-  允许在遵守协议的前提下进行商用、修改和分发。
-   *
-  特别说明：
-  所有衍生版本不得修改或移除系统默认的 LOGO 和版权信息；
-  如需定制品牌，请通过官方渠道申请品牌定制授权。
-   *
-  更多信息请访问：https://qknow.qiantong.tech/business.html
+ Copyright © 2025-present Jiangsu Qiantong Technology Co., Ltd.
+ 
+ This file is part of qKnow Intelligent Agent Building Platform (Open Source Edition).
+ 
+ qKnow is licensed under Apache License 2.0 with additional qKnow terms.
+ You may use qKnow for commercial purposes, but you may not remove, hide,
+ modify, or replace the qKnow logo, copyright notices, license notices,
+ or attribution information without a separate commercial license.
+ 
+ White-label use, OEM distribution, rebranding, or presenting qKnow as
+ another product requires separate commercial authorization from
+ Jiangsu Qiantong Technology Co., Ltd.
+ 
+ Business License: https://community.qknow.ai/business/policy.html
+ See the LICENSE file in the project root for full license information.
 -->
 
 <template>
-  <div>
-    <template v-for="(item, index) in options">
-      <template v-if="values.includes(item.value)">
-        <span
-          v-if="(item.elTagType == 'default' || item.elTagType == '') && (item.elTagClass == '' || item.elTagClass == null)"
-          :key="item.value"
-          :index="index"
-          :class="item.elTagClass"
-        >{{ item.label + " " }}</span>
-        <el-tag
-          v-else
-          :disable-transitions="true"
-          :key="item.value + ''"
-          :index="index"
-          :type="item.elTagType"
-          :class="item.elTagClass"
-        >{{ item.label + " " }}</el-tag>
-        <!-- item.elTagType === 'primary' ? '' : item.elTagType 不知道为什么改？ -->
-      </template>
-    </template>
-    <template v-if="unmatch && showValue">
-      {{ unmatchArray | handleArray }}
-    </template>
-  </div>
+    <div>
+        <template v-for="(item, index) in options">
+            <template v-if="values.includes(item.value)">
+                <span
+                    v-if="
+                        (item.elTagType == 'default' || item.elTagType == '') &&
+                        (item.elTagClass == '' || item.elTagClass == null)
+                    "
+                    :key="item.value"
+                    :index="index"
+                    :class="item.elTagClass"
+                    >{{ item.label + ' ' }}</span
+                >
+                <el-tag
+                    v-else
+                    :disable-transitions="true"
+                    :key="item.value + ''"
+                    :index="index"
+                    :type="item.elTagType"
+                    :class="item.elTagClass"
+                    >{{ item.label + ' ' }}</el-tag
+                >
+                <!-- item.elTagType === 'primary' ? '' : item.elTagType 不知道为什么改？ -->
+            </template>
+        </template>
+        <template v-if="unmatch && showValue">
+            {{ unmatchArray | handleArray }}
+        </template>
+    </div>
 </template>
 
 <script setup>
-// 记录未匹配的项
-const unmatchArray = ref([]);
+    // 记录未匹配的项
+    const unmatchArray = ref([]);
 
-const props = defineProps({
-  // 数据
-  options: {
-    type: Array,
-    default: null,
-  },
-  // 当前的值
-  value: [Number, String, Array],
-  // 当未找到匹配的数据时，显示value
-  showValue: {
-    type: Boolean,
-    default: true,
-  },
-  separator: {
-    type: String,
-    default: ",",
-  }
-});
+    const props = defineProps({
+        // 数据
+        options: {
+            type: Array,
+            default: null
+        },
+        // 当前的值
+        value: [Number, String, Array],
+        // 当未找到匹配的数据时，显示value
+        showValue: {
+            type: Boolean,
+            default: true
+        },
+        separator: {
+            type: String,
+            default: ','
+        }
+    });
 
-const values = computed(() => {
-  if (props.value === null || typeof props.value === 'undefined' || props.value === '') return [];
-  return Array.isArray(props.value) ? props.value.map(item => '' + item) : String(props.value).split(props.separator);
-});
+    const values = computed(() => {
+        if (props.value === null || typeof props.value === 'undefined' || props.value === '')
+            return [];
+        return Array.isArray(props.value)
+            ? props.value.map((item) => '' + item)
+            : String(props.value).split(props.separator);
+    });
 
-const unmatch = computed(() => {
-  unmatchArray.value = [];
-  // 没有value不显示
-  if (props.value === null || typeof props.value === 'undefined' || props.value === '' || props.options.length === 0) return false
-  // 传入值为数组
-  let unmatch = false // 添加一个标志来判断是否有未匹配项
-  values.value.forEach(item => {
-    if (!props.options.some(v => v.value === item)) {
-      unmatchArray.value.push(item)
-      unmatch = true // 如果有未匹配项，将标志设置为true
+    const unmatch = computed(() => {
+        unmatchArray.value = [];
+        // 没有value不显示
+        if (
+            props.value === null ||
+            typeof props.value === 'undefined' ||
+            props.value === '' ||
+            props.options.length === 0
+        )
+            return false;
+        // 传入值为数组
+        let unmatch = false; // 添加一个标志来判断是否有未匹配项
+        values.value.forEach((item) => {
+            if (!props.options.some((v) => v.value === item)) {
+                unmatchArray.value.push(item);
+                unmatch = true; // 如果有未匹配项，将标志设置为true
+            }
+        });
+        return unmatch; // 返回标志的值
+    });
+
+    function handleArray(array) {
+        if (array.length === 0) return '';
+        return array.reduce((pre, cur) => {
+            return pre + ' ' + cur;
+        });
     }
-  })
-  return unmatch // 返回标志的值
-});
-
-function handleArray(array) {
-  if (array.length === 0) return "";
-  return array.reduce((pre, cur) => {
-    return pre + " " + cur;
-  });
-}
 </script>
 
 <style scoped>
-.el-tag + .el-tag {
-  margin-left: 10px;
-}
+    .el-tag + .el-tag {
+        margin-left: 10px;
+    }
 </style>

@@ -1,143 +1,138 @@
 <!--
-  Copyright © 2026 Qiantong Technology Co., Ltd.
-  qKnow Knowledge Platform
-   *
-  License:
-  Released under the Apache License, Version 2.0.
-  You may use, modify, and distribute this software for commercial purposes
-  under the terms of the License.
-   *
-  Special Notice:
-  All derivative versions are strictly prohibited from modifying or removing
-  the default system logo and copyright information.
-  For brand customization, please apply for brand customization authorization via official channels.
-   *
-  More information: https://qknow.qiantong.tech/business.html
-   *
-  ============================================================================
-   *
-  版权所有 © 2026 江苏千桐科技有限公司
-  qKnow 知识平台（开源版）
-   *
-  许可协议：
-  本项目基于 Apache License 2.0 开源协议发布，
-  允许在遵守协议的前提下进行商用、修改和分发。
-   *
-  特别说明：
-  所有衍生版本不得修改或移除系统默认的 LOGO 和版权信息；
-  如需定制品牌，请通过官方渠道申请品牌定制授权。
-   *
-  更多信息请访问：https://qknow.qiantong.tech/business.html
+ Copyright © 2025-present Jiangsu Qiantong Technology Co., Ltd.
+ 
+ This file is part of qKnow Intelligent Agent Building Platform (Open Source Edition).
+ 
+ qKnow is licensed under Apache License 2.0 with additional qKnow terms.
+ You may use qKnow for commercial purposes, but you may not remove, hide,
+ modify, or replace the qKnow logo, copyright notices, license notices,
+ or attribution information without a separate commercial license.
+ 
+ White-label use, OEM distribution, rebranding, or presenting qKnow as
+ another product requires separate commercial authorization from
+ Jiangsu Qiantong Technology Co., Ltd.
+ 
+ Business License: https://community.qknow.ai/business/policy.html
+ See the LICENSE file in the project root for full license information.
 -->
 
 <template>
-  <div class="icon-body">
-    <el-input
-      v-model="iconName"
-      class="icon-search"
-      clearable
-      placeholder="请输入图标名称"
-      @clear="filterIcons"
-      @input="filterIcons"
-    >
-      <template #suffix><i class="el-icon-search el-input__icon" /></template>
-    </el-input>
-    <div class="icon-list">
-      <div class="list-container">
-        <div v-for="(item, index) in iconList" class="icon-item-wrapper" :key="index" @click="selectedIcon(item)">
-          <div :class="['icon-item', { active: activeIcon === item }]">
-            <svg-icon :icon-class="item" class-name="icon" style="height: 25px;width: 16px;"/>
-            <span>{{ item }}</span>
-          </div>
+    <div class="icon-body">
+        <el-input
+            v-model="iconName"
+            class="icon-search"
+            clearable
+            placeholder="请输入图标名称"
+            @clear="filterIcons"
+            @input="filterIcons"
+        >
+            <template #suffix><i class="el-icon-search el-input__icon" /></template>
+        </el-input>
+        <div class="icon-list">
+            <div class="list-container">
+                <div
+                    v-for="(item, index) in iconList"
+                    class="icon-item-wrapper"
+                    :key="index"
+                    @click="selectedIcon(item)"
+                >
+                    <div :class="['icon-item', { active: activeIcon === item }]">
+                        <svg-icon
+                            :icon-class="item"
+                            class-name="icon"
+                            style="height: 25px; width: 16px"
+                        />
+                        <span>{{ item }}</span>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </template>
 
 <script setup>
-import icons from './requireIcons'
+    import icons from './requireIcons';
 
-const props = defineProps({
-  activeIcon: {
-    type: String
-  }
-});
+    const props = defineProps({
+        activeIcon: {
+            type: String
+        }
+    });
 
-const iconName = ref('');
-const iconList = ref(icons);
-const emit = defineEmits(['selected']);
+    const iconName = ref('');
+    const iconList = ref(icons);
+    const emit = defineEmits(['selected']);
 
-function filterIcons() {
-  iconList.value = icons
-  if (iconName.value) {
-    iconList.value = icons.filter(item => item.indexOf(iconName.value) !== -1)
-  }
-}
+    function filterIcons() {
+        iconList.value = icons;
+        if (iconName.value) {
+            iconList.value = icons.filter((item) => item.indexOf(iconName.value) !== -1);
+        }
+    }
 
-function selectedIcon(name) {
-  emit('selected', name)
-  document.body.click()
-}
+    function selectedIcon(name) {
+        emit('selected', name);
+        document.body.click();
+    }
 
-function reset() {
-  iconName.value = ''
-  iconList.value = icons
-}
+    function reset() {
+        iconName.value = '';
+        iconList.value = icons;
+    }
 
-defineExpose({
-  reset
-})
+    defineExpose({
+        reset
+    });
 </script>
 
-<style lang='scss' scoped>
-   .icon-body {
-    width: 100%;
-    padding: 10px;
-    .icon-search {
-      position: relative;
-      margin-bottom: 5px;
-    }
-    .icon-list {
-      height: 200px;
-      overflow: auto;
-      .list-container {
-        display: flex;
-        flex-wrap: wrap;
-        .icon-item-wrapper {
-          width: calc(100% / 3);
-          height: 25px;
-          line-height: 25px;
-          cursor: pointer;
-          display: flex;
-          .icon-item {
-            display: flex;
-            max-width: 100%;
-            height: 100%;
-            padding: 0 5px;
-            &:hover {
-              background: #ececec;
-              border-radius: 5px;
-            }
-            .icon {
-              flex-shrink: 0;
-            }
-            span {
-              display: inline-block;
-              vertical-align: -0.15em;
-              fill: currentColor;
-              padding-left: 2px;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
-            }
-          }
-          .icon-item.active {
-            background: #ececec;
-            border-radius: 5px;
-          }
+<style lang="scss" scoped>
+    .icon-body {
+        width: 100%;
+        padding: 10px;
+        .icon-search {
+            position: relative;
+            margin-bottom: 5px;
         }
-      }
+        .icon-list {
+            height: 200px;
+            overflow: auto;
+            .list-container {
+                display: flex;
+                flex-wrap: wrap;
+                .icon-item-wrapper {
+                    width: calc(100% / 3);
+                    height: 25px;
+                    line-height: 25px;
+                    cursor: pointer;
+                    display: flex;
+                    .icon-item {
+                        display: flex;
+                        max-width: 100%;
+                        height: 100%;
+                        padding: 0 5px;
+                        &:hover {
+                            background: #ececec;
+                            border-radius: 5px;
+                        }
+                        .icon {
+                            flex-shrink: 0;
+                        }
+                        span {
+                            display: inline-block;
+                            vertical-align: -0.15em;
+                            fill: currentColor;
+                            padding-left: 2px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                        }
+                    }
+                    .icon-item.active {
+                        background: #ececec;
+                        border-radius: 5px;
+                    }
+                }
+            }
+        }
     }
-  }
 </style>

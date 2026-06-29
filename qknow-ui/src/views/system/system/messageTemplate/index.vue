@@ -1,170 +1,203 @@
 <!--
-  Copyright © 2026 Qiantong Technology Co., Ltd.
-  qKnow Knowledge Platform
-   *
-  License:
-  Released under the Apache License, Version 2.0.
-  You may use, modify, and distribute this software for commercial purposes
-  under the terms of the License.
-   *
-  Special Notice:
-  All derivative versions are strictly prohibited from modifying or removing
-  the default system logo and copyright information.
-  For brand customization, please apply for brand customization authorization via official channels.
-   *
-  More information: https://qknow.qiantong.tech/business.html
-   *
-  ============================================================================
-   *
-  版权所有 © 2026 江苏千桐科技有限公司
-  qKnow 知识平台（开源版）
-   *
-  许可协议：
-  本项目基于 Apache License 2.0 开源协议发布，
-  允许在遵守协议的前提下进行商用、修改和分发。
-   *
-  特别说明：
-  所有衍生版本不得修改或移除系统默认的 LOGO 和版权信息；
-  如需定制品牌，请通过官方渠道申请品牌定制授权。
-   *
-  更多信息请访问：https://qknow.qiantong.tech/business.html
+ Copyright © 2025-present Jiangsu Qiantong Technology Co., Ltd.
+ 
+ This file is part of qKnow Intelligent Agent Building Platform (Open Source Edition).
+ 
+ qKnow is licensed under Apache License 2.0 with additional qKnow terms.
+ You may use qKnow for commercial purposes, but you may not remove, hide,
+ modify, or replace the qKnow logo, copyright notices, license notices,
+ or attribution information without a separate commercial license.
+ 
+ White-label use, OEM distribution, rebranding, or presenting qKnow as
+ another product requires separate commercial authorization from
+ Jiangsu Qiantong Technology Co., Ltd.
+ 
+ Business License: https://community.qknow.ai/business/policy.html
+ See the LICENSE file in the project root for full license information.
 -->
 
 <template>
-  <div class="app-container" ref="app-container">
-    <div class="pagecont-top" v-show="showSearch">
-      <el-form class="btn-style" :model="queryParams" ref="queryRef" :inline="true" label-width="68px">
-        <el-form-item label="消息标题" prop="title">
-          <el-input
-              class="el-form-input-width"
-              v-model="queryParams.title"
-              placeholder="请输入消息标题"
-              clearable
-              @keyup.enter="handleQuery"
-          />
-        </el-form-item>
-        <el-form-item label="消息类别" prop="category">
-          <el-select v-model="queryParams.category" placeholder="请选择" class="el-form-input-width">
-            <el-option
-                v-for="dict in message_category"
-                :key="dict.value"
-                :label="dict.label"
-                :value="dict.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="消息等级" prop="msgLevel">
-          <el-select v-model="queryParams.msgLevel" placeholder="请选择" class="el-form-input-width">
-            <el-option
-                v-for="dict in message_level"
-                :key="dict.value"
-                :label="dict.label"
-                :value="dict.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item>
-          <el-button type="primary" @click="handleQuery" @mousedown="(e) => e.preventDefault()">
-            <i class="iconfont-mini icon-a-chaxunxianxing mr5"></i>查询
-          </el-button>
-          <el-button @click="resetQuery" @mousedown="e => e.preventDefault()">
-            <i class="iconfont-mini icon-a-shuaxinxianxing mr5"></i>重置
-          </el-button>
-        </el-form-item>
-      </el-form>
-    </div>
-    <div class="pagecont-bottom">
-      <div class="justify-between mb15">
-        <el-row :gutter="15" class="justify-end btn-style">
-          <el-col :span="1.5">
-            <el-button
-                type="primary"
-                plain
-                @click="handleAdd"
-                v-hasPermi="['system:messageTemplate:add']"
-                @mousedown="e => e.preventDefault()"
+    <div class="app-container" ref="app-container">
+        <div class="pagecont-top" v-show="showSearch">
+            <el-form
+                class="btn-style"
+                :model="queryParams"
+                ref="queryRef"
+                :inline="true"
+                label-width="68px"
             >
-              <i class="iconfont-mini icon-xinzeng mr5"></i>新增
-            </el-button>
-          </el-col>
-        </el-row>
-        <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
-      </div>
+                <el-form-item label="消息标题" prop="title">
+                    <el-input
+                        class="el-form-input-width"
+                        v-model="queryParams.title"
+                        placeholder="请输入消息标题"
+                        clearable
+                        @keyup.enter="handleQuery"
+                    />
+                </el-form-item>
+                <el-form-item label="消息类别" prop="category">
+                    <el-select
+                        v-model="queryParams.category"
+                        placeholder="请选择"
+                        class="el-form-input-width"
+                    >
+                        <el-option
+                            v-for="dict in message_category"
+                            :key="dict.value"
+                            :label="dict.label"
+                            :value="dict.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="消息等级" prop="msgLevel">
+                    <el-select
+                        v-model="queryParams.msgLevel"
+                        placeholder="请选择"
+                        class="el-form-input-width"
+                    >
+                        <el-option
+                            v-for="dict in message_level"
+                            :key="dict.value"
+                            :label="dict.label"
+                            :value="dict.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
 
-      <el-table stripe   v-loading="loading" :data="messageTemplateList">
-        <el-table-column label="模版ID" align="center" prop="id"/>
-        <el-table-column label="消息标题" align="center" prop="title">
-          <template #default="scope">
-            {{ scope.row.title || '-' }}
-          </template>
-        </el-table-column>
-        <el-table-column label="消息模板内容" align="center" prop="content" width="180" :show-overflow-tooltip="true">
-          <template #default="scope">
-            {{ scope.row.content || '-' }}
-          </template>
-        </el-table-column>
-        <el-table-column label="消息类别" align="center" prop="category">
-          <template #default="scope">
-            <dict-tag :options="message_category" :value="scope.row.category"/>
-          </template>
-        </el-table-column>
-        <el-table-column label="消息等级" align="center" prop="msgLevel">
-          <template #default="scope">
-            <dict-tag :options="message_level" :value="scope.row.msgLevel"/>
-          </template>
-        </el-table-column>
-        <el-table-column label="创建人" align="center" prop="createBy">
-          <template #default="scope">
-            {{ scope.row.createBy || '-' }}
-          </template>
-        </el-table-column>
-        <el-table-column label="创建时间" align="center" prop="createTime" width="180">
-          <template #default="scope">
-            <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="备注" align="center" prop="remark">
-          <template #default="scope">
-            {{ scope.row.remark || '-' }}
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right" width="240">
-          <template #default="scope">
-            <el-button link type="primary" @click="handleUpdate(scope.row)"
-                       v-hasPermi="['system:messageTemplate:edit']">
-              <i class="iconfont-mini icon-a-xiugaixianxing"></i>
-              修改
-            </el-button>
-            <el-button link type="danger" @click="handleDelete(scope.row)"
-                       v-hasPermi="['system:messageTemplate:remove']">
-              <i class="iconfont-mini icon-a-shanchuxianxing"></i>
-              删除
-            </el-button>
-          </template>
-        </el-table-column>
+                <el-form-item>
+                    <el-button
+                        type="primary"
+                        @click="handleQuery"
+                        @mousedown="(e) => e.preventDefault()"
+                    >
+                        <i class="iconfont-mini icon-a-chaxunxianxing mr5"></i>查询
+                    </el-button>
+                    <el-button @click="resetQuery" @mousedown="(e) => e.preventDefault()">
+                        <i class="iconfont-mini icon-a-shuaxinxianxing mr5"></i>重置
+                    </el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+        <div class="pagecont-bottom">
+            <div class="justify-between mb15">
+                <el-row :gutter="15" class="justify-end btn-style">
+                    <el-col :span="1.5">
+                        <el-button
+                            type="primary"
+                            plain
+                            @click="handleAdd"
+                            v-hasPermi="['system:messageTemplate:add']"
+                            @mousedown="(e) => e.preventDefault()"
+                        >
+                            <i class="iconfont-mini icon-xinzeng mr5"></i>新增
+                        </el-button>
+                    </el-col>
+                </el-row>
+                <right-toolbar
+                    v-model:showSearch="showSearch"
+                    @queryTable="getList"
+                ></right-toolbar>
+            </div>
 
-        <template #empty>
-          <div class="emptyBg">
-            <img src="@/assets/system/images/no_data/noData.png" alt="">
-            <p>没有记录哦~</p>
-          </div>
-        </template>
-      </el-table>
+            <el-table stripe v-loading="loading" :data="messageTemplateList">
+                <el-table-column label="模版ID" align="center" prop="id" />
+                <el-table-column label="消息标题" align="center" prop="title">
+                    <template #default="scope">
+                        {{ scope.row.title || '-' }}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    label="消息模板内容"
+                    align="center"
+                    prop="content"
+                    width="180"
+                    :show-overflow-tooltip="true"
+                >
+                    <template #default="scope">
+                        {{ scope.row.content || '-' }}
+                    </template>
+                </el-table-column>
+                <el-table-column label="消息类别" align="center" prop="category">
+                    <template #default="scope">
+                        <dict-tag :options="message_category" :value="scope.row.category" />
+                    </template>
+                </el-table-column>
+                <el-table-column label="消息等级" align="center" prop="msgLevel">
+                    <template #default="scope">
+                        <dict-tag :options="message_level" :value="scope.row.msgLevel" />
+                    </template>
+                </el-table-column>
+                <el-table-column label="创建人" align="center" prop="createBy">
+                    <template #default="scope">
+                        {{ scope.row.createBy || '-' }}
+                    </template>
+                </el-table-column>
+                <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+                    <template #default="scope">
+                        <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="备注" align="center" prop="remark">
+                    <template #default="scope">
+                        {{ scope.row.remark || '-' }}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    label="操作"
+                    align="center"
+                    class-name="small-padding fixed-width"
+                    fixed="right"
+                    width="240"
+                >
+                    <template #default="scope">
+                        <el-button
+                            link
+                            type="primary"
+                            @click="handleUpdate(scope.row)"
+                            v-hasPermi="['system:messageTemplate:edit']"
+                        >
+                            <i class="iconfont-mini icon-a-xiugaixianxing"></i>
+                            修改
+                        </el-button>
+                        <el-button
+                            link
+                            type="danger"
+                            @click="handleDelete(scope.row)"
+                            v-hasPermi="['system:messageTemplate:remove']"
+                        >
+                            <i class="iconfont-mini icon-a-shanchuxianxing"></i>
+                            删除
+                        </el-button>
+                    </template>
+                </el-table-column>
 
-      <pagination
-          v-show="total>0"
-          :total="total"
-          v-model:page="queryParams.pageNum"
-          v-model:limit="queryParams.pageSize"
-          @pagination="getList"
-      />
-    </div>
+                <template #empty>
+                    <div class="emptyBg">
+                        <img src="@/assets/system/images/no_data/noData.png" alt="" />
+                        <p>没有记录哦~</p>
+                    </div>
+                </template>
+            </el-table>
 
-    <!-- 添加或修改消息模板对话框 -->
-    <el-dialog :title="title" v-model="open" width="800px" :append-to="$refs['app-container']" draggable
-               destroy-on-close>
-      <!-- <template #header="{ close, titleId, titleClass }">
+            <pagination
+                v-show="total > 0"
+                :total="total"
+                v-model:page="queryParams.pageNum"
+                v-model:limit="queryParams.pageSize"
+                @pagination="getList"
+            />
+        </div>
+
+        <!-- 添加或修改消息模板对话框 -->
+        <el-dialog
+            :title="title"
+            v-model="open"
+            width="800px"
+            :append-to="$refs['app-container']"
+            draggable
+            destroy-on-close
+        >
+            <!-- <template #header="{ close, titleId, titleClass }">
         <span role="heading" aria-level="2" class="el-dialog__title">
           {{ title }}
           <el-popover placement="top-start" width="641px" trigger="hover">
@@ -196,27 +229,27 @@
             </svg></i>
         </button>
       </template> -->
-      <el-form ref="messageTemplateRef" :model="form" :rules="rules" label-width="80px">
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="消息标题" prop="title">
-              <el-input v-model="form.title" placeholder="请输入消息标题"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="消息类别" prop="category">
-              <el-select v-model="form.category" placeholder="请选择">
-                <el-option
-                    v-for="dict in message_category"
-                    :key="dict.value"
-                    :label="dict.label"
-                    :value="parseInt(dict.value)"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <!-- <el-row :gutter="20">
+            <el-form ref="messageTemplateRef" :model="form" :rules="rules" label-width="80px">
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                        <el-form-item label="消息标题" prop="title">
+                            <el-input v-model="form.title" placeholder="请输入消息标题" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="消息类别" prop="category">
+                            <el-select v-model="form.category" placeholder="请选择">
+                                <el-option
+                                    v-for="dict in message_category"
+                                    :key="dict.value"
+                                    :label="dict.label"
+                                    :value="parseInt(dict.value)"
+                                ></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <!-- <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item label="消息类别" prop="category">
               <el-select v-model="form.category" placeholder="请选择">
@@ -230,201 +263,208 @@
             </el-form-item>
           </el-col>
         </el-row> -->
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="消息等级" prop="level">
-              <el-select v-model="form.msgLevel" placeholder="请选择">
-                <el-option
-                    v-for="dict in message_level"
-                    :key="dict.value"
-                    :label="dict.label"
-                    :value="parseInt(dict.value)"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="24">
-            <el-form-item label="消息模板" prop="content">
-              <el-input v-model="form.content" type="textarea" placeholder="请输入内容"/>
-              <!--          <editor v-model="form.content" :min-height="192"/>-->
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="24">
-            <el-form-item label="备注" prop="remark">
-              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button size="mini" @click="cancel">取 消</el-button>
-          <el-button type="primary" size="mini" @click="submitForm">确 定</el-button>
-        </div>
-      </template>
-    </el-dialog>
-  </div>
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                        <el-form-item label="消息等级" prop="level">
+                            <el-select v-model="form.msgLevel" placeholder="请选择">
+                                <el-option
+                                    v-for="dict in message_level"
+                                    :key="dict.value"
+                                    :label="dict.label"
+                                    :value="parseInt(dict.value)"
+                                ></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                    <el-col :span="24">
+                        <el-form-item label="消息模板" prop="content">
+                            <el-input
+                                v-model="form.content"
+                                type="textarea"
+                                placeholder="请输入内容"
+                            />
+                            <!--          <editor v-model="form.content" :min-height="192"/>-->
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                    <el-col :span="24">
+                        <el-form-item label="备注" prop="remark">
+                            <el-input
+                                v-model="form.remark"
+                                type="textarea"
+                                placeholder="请输入内容"
+                            />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button size="mini" @click="cancel">取 消</el-button>
+                    <el-button type="primary" size="mini" @click="submitForm">确 定</el-button>
+                </div>
+            </template>
+        </el-dialog>
+    </div>
 </template>
 
 <script setup name="MessageTemplate">
-import {
-  listMessageTemplate,
-  getMessageTemplate,
-  delMessageTemplate,
-  addMessageTemplate,
-  updateMessageTemplate
-} from "@/api/system/system/message/messageTemplate";
+    import {
+        listMessageTemplate,
+        getMessageTemplate,
+        delMessageTemplate,
+        addMessageTemplate,
+        updateMessageTemplate
+    } from '@/api/system/system/message/messageTemplate';
 
-const {proxy} = getCurrentInstance();
-const {message_category, message_level} = proxy.useDict("message_category", "message_level");
+    const { proxy } = getCurrentInstance();
+    const { message_category, message_level } = proxy.useDict('message_category', 'message_level');
 
-const messageTemplateList = ref([]);
-const open = ref(false);
-const loading = ref(true);
-const showSearch = ref(true);
-const ids = ref([]);
-const single = ref(true);
-const multiple = ref(true);
-const total = ref(0);
-const title = ref("");
+    const messageTemplateList = ref([]);
+    const open = ref(false);
+    const loading = ref(true);
+    const showSearch = ref(true);
+    const ids = ref([]);
+    const single = ref(true);
+    const multiple = ref(true);
+    const total = ref(0);
+    const title = ref('');
 
-const data = reactive({
-  form: {},
-  queryParams: {
-    pageNum: 1,
-    pageSize: 10,
-    title: null,
-    category: null,
-    msgLevel: null,
-  },
-  rules: {
-    title: [
-      {required: true, message: "消息标题不能为空", trigger: "blur"}
-    ],
-    content: [
-      {required: true, message: "消息模板内容不能为空", trigger: "blur"}
-    ],
-    category: [
-      {required: true, message: "消息类别不能为空", trigger: "blur"}
-    ],
-    msgLevel: [
-      {required: true, message: "消息等级不能为空", trigger: "blur"}
-    ],
-  }
-});
+    const data = reactive({
+        form: {},
+        queryParams: {
+            pageNum: 1,
+            pageSize: 10,
+            title: null,
+            category: null,
+            msgLevel: null
+        },
+        rules: {
+            title: [{ required: true, message: '消息标题不能为空', trigger: 'blur' }],
+            content: [{ required: true, message: '消息模板内容不能为空', trigger: 'blur' }],
+            category: [{ required: true, message: '消息类别不能为空', trigger: 'blur' }],
+            msgLevel: [{ required: true, message: '消息等级不能为空', trigger: 'blur' }]
+        }
+    });
 
-const {queryParams, form, rules} = toRefs(data);
+    const { queryParams, form, rules } = toRefs(data);
 
-/** 查询消息模板列表 */
-function getList() {
-  loading.value = true;
-  listMessageTemplate(queryParams.value).then(response => {
-    messageTemplateList.value = response.data.rows;
-    total.value = response.data.total;
-    loading.value = false;
-  });
-}
-
-// 取消按钮
-function cancel() {
-  open.value = false;
-  reset();
-}
-
-// 表单重置
-function reset() {
-  form.value = {
-    id: null,
-    title: null,
-    content: null,
-    category: null,
-    msgLevel: null,
-    validFlag: null,
-    delFlag: null,
-    createBy: null,
-    creatorId: null,
-    createTime: null,
-    updateBy: null,
-    updatorId: null,
-    updateTime: null,
-    remark: null
-  };
-  proxy.resetForm("messageTemplateRef");
-}
-
-/** 搜索按钮操作 */
-function handleQuery() {
-  queryParams.value.pageNum = 1;
-  getList();
-}
-
-/** 重置按钮操作 */
-function resetQuery() {
-  proxy.resetForm("queryRef");
-  handleQuery();
-}
-
-/** 新增按钮操作 */
-function handleAdd() {
-  reset();
-  open.value = true;
-  title.value = "添加消息模板";
-}
-
-/** 修改按钮操作 */
-function handleUpdate(row) {
-  reset();
-  const _id = row.id || ids.value
-  getMessageTemplate(_id).then(response => {
-    form.value = response.data;
-    open.value = true;
-    title.value = "修改消息模板";
-  });
-}
-
-/** 提交按钮 */
-function submitForm() {
-  proxy.$refs["messageTemplateRef"].validate(valid => {
-    if (valid) {
-      if (form.value.id != null) {
-        updateMessageTemplate(form.value).then(response => {
-          proxy.$modal.msgSuccess("修改成功");
-          open.value = false;
-          getList();
+    /** 查询消息模板列表 */
+    function getList() {
+        loading.value = true;
+        listMessageTemplate(queryParams.value).then((response) => {
+            messageTemplateList.value = response.data.rows;
+            total.value = response.data.total;
+            loading.value = false;
         });
-      } else {
-        addMessageTemplate(form.value).then(response => {
-          proxy.$modal.msgSuccess("新增成功");
-          open.value = false;
-          getList();
-        });
-      }
     }
-  });
-}
 
-/** 删除按钮操作 */
-function handleDelete(row) {
-  const _ids = row.id || ids.value;
-  proxy.$modal.confirm('是否确认删除消息模板编号为"' + _ids + '"的数据项？').then(function () {
-    return delMessageTemplate(_ids);
-  }).then(() => {
+    // 取消按钮
+    function cancel() {
+        open.value = false;
+        reset();
+    }
+
+    // 表单重置
+    function reset() {
+        form.value = {
+            id: null,
+            title: null,
+            content: null,
+            category: null,
+            msgLevel: null,
+            validFlag: null,
+            delFlag: null,
+            createBy: null,
+            creatorId: null,
+            createTime: null,
+            updateBy: null,
+            updatorId: null,
+            updateTime: null,
+            remark: null
+        };
+        proxy.resetForm('messageTemplateRef');
+    }
+
+    /** 搜索按钮操作 */
+    function handleQuery() {
+        queryParams.value.pageNum = 1;
+        getList();
+    }
+
+    /** 重置按钮操作 */
+    function resetQuery() {
+        proxy.resetForm('queryRef');
+        handleQuery();
+    }
+
+    /** 新增按钮操作 */
+    function handleAdd() {
+        reset();
+        open.value = true;
+        title.value = '添加消息模板';
+    }
+
+    /** 修改按钮操作 */
+    function handleUpdate(row) {
+        reset();
+        const _id = row.id || ids.value;
+        getMessageTemplate(_id).then((response) => {
+            form.value = response.data;
+            open.value = true;
+            title.value = '修改消息模板';
+        });
+    }
+
+    /** 提交按钮 */
+    function submitForm() {
+        proxy.$refs['messageTemplateRef'].validate((valid) => {
+            if (valid) {
+                if (form.value.id != null) {
+                    updateMessageTemplate(form.value).then((response) => {
+                        proxy.$modal.msgSuccess('修改成功');
+                        open.value = false;
+                        getList();
+                    });
+                } else {
+                    addMessageTemplate(form.value).then((response) => {
+                        proxy.$modal.msgSuccess('新增成功');
+                        open.value = false;
+                        getList();
+                    });
+                }
+            }
+        });
+    }
+
+    /** 删除按钮操作 */
+    function handleDelete(row) {
+        const _ids = row.id || ids.value;
+        proxy.$modal
+            .confirm('是否确认删除消息模板编号为"' + _ids + '"的数据项？')
+            .then(function () {
+                return delMessageTemplate(_ids);
+            })
+            .then(() => {
+                getList();
+                proxy.$modal.msgSuccess('删除成功');
+            })
+            .catch(() => {});
+    }
+
+    /** 导出按钮操作 */
+    function handleExport() {
+        proxy.download(
+            'system/messageTemplate/export',
+            {
+                ...queryParams.value
+            },
+            `messageTemplate_${new Date().getTime()}.xlsx`
+        );
+    }
+
     getList();
-    proxy.$modal.msgSuccess("删除成功");
-  }).catch(() => {
-  });
-}
-
-/** 导出按钮操作 */
-function handleExport() {
-  proxy.download('system/messageTemplate/export', {
-    ...queryParams.value
-  }, `messageTemplate_${new Date().getTime()}.xlsx`)
-}
-
-getList();
 </script>
