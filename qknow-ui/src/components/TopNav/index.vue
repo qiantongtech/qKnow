@@ -49,8 +49,8 @@
         >
             <template #title>
                 <svg-icon icon-class="menu" />
-                更多菜单</template
-            >
+                更多菜单
+            </template>
             <template v-for="(item, index) in topMenus">
                 <el-menu-item :index="item.path" :key="index" v-if="index >= visibleNumber">
                     <svg-icon
@@ -61,22 +61,41 @@
                 </el-menu-item>
             </template>
         </el-sub-menu>
+        <div ref="measureRef" class="topmenu-measure" aria-hidden="true">
+            <div
+                v-for="(item, index) in topMenus"
+                :key="`measure-${index}`"
+                class="topmenu-measure-item"
+                data-topmenu-measure-item
+            >
+                <svg-icon
+                    v-if="item.meta && item.meta.icon && item.meta.icon !== '#'"
+                    :icon-class="item.meta.icon"
+                />
+                <span>{{ item.meta.title }}</span>
+            </div>
+            <div class="topmenu-measure-item topmenu-measure-more" data-topmenu-measure-more>
+                <svg-icon icon-class="menu" />
+                <span>更多菜单</span>
+                <span class="topmenu-measure-arrow"></span>
+            </div>
+        </div>
     </el-menu>
 </template>
 
 <script setup>
-    import { constantRoutes } from '@/router';
     import { isHttp } from '@/utils/validate';
     import useAppStore from '@/store/system/app';
     import useSettingsStore from '@/store/system/settings';
     import usePermissionStore from '@/store/system/permission';
-    import { el } from 'element-plus/es/locale/index.mjs';
     import useTagsViewStore from '@/store/system/tagsView';
     const { proxy } = getCurrentInstance();
     // 顶部栏初始数
-    const visibleNumber = ref(null);
+    const visibleNumber = ref(0);
     const menuRef = ref(null);
+    const measureRef = ref(null);
     let resizeObserver = null;
+    let calculateFrame = null;
     // 当前激活菜单的 index
     const currentIndex = ref('/system');
     // 隐藏侧边栏路由
@@ -178,29 +197,85 @@
     // }
 
     // 计算可用宽度下的顶部导航栏可显示菜单数量
+    function scheduleCalculateVisibleMenus() {
+        if (calculateFrame) {
+            cancelAnimationFrame(calculateFrame);
+        }
+        calculateFrame = requestAnimationFrame(() => {
+            calculateFrame = null;
+            calculateVisibleMenus();
+        });
+    }
+
+    function getElementWidth(element) {
+        return Math.ceil(element?.getBoundingClientRect?.().width || 0);
+    }
+
+    function getHorizontalPadding(element) {
+        const style = window.getComputedStyle(element);
+        return (parseFloat(style.paddingLeft) || 0) + (parseFloat(style.paddingRight) || 0);
+    }
+
+    function getAvailableMenuWidth(menuEl, rightMenuEl) {
+        const safeGap = 24;
+        const rightWidth = getElementWidth(rightMenuEl);
+        const nextRightOffset = rightWidth > 0 ? rightWidth + safeGap : 430;
+
+        menuEl.style.setProperty('--topnav-right-offset', `${nextRightOffset}px`);
+
+        const menuWidth = getElementWidth(menuEl);
+        return Math.max(0, menuWidth - getHorizontalPadding(menuEl));
+    }
+
     function calculateVisibleMenus() {
         const menuEl = menuRef.value?.$el || menuRef.value;
+        const measureEl = measureRef.value;
         const navbarEl = menuEl?.closest?.('.navbar');
         const rightMenuEl = navbarEl?.querySelector?.('.right-menu');
-        const menuLeft = menuEl?.offsetLeft || 0;
-        const navbarWidth = navbarEl?.clientWidth || document.body.getBoundingClientRect().width;
-        const rightWidth = Math.max(rightMenuEl?.getBoundingClientRect?.().width || 0, 430);
-        const safeGap = 24;
-        const menuWidth = 124;
-        const moreMenuWidth = 138;
 
-        const availableWidth = navbarWidth - menuLeft - rightWidth - safeGap;
+        if (!menuEl || !measureEl || !topMenus.value.length) {
+            visibleNumber.value = topMenus.value.length;
+            return;
+        }
 
-        if (availableWidth < 0) {
+        const availableWidth = getAvailableMenuWidth(menuEl, rightMenuEl);
+
+        if (availableWidth <= 0) {
             visibleNumber.value = 0;
             return;
         }
 
-        const fullCount = Math.floor(availableWidth / menuWidth);
-        const finalCount =
-            topMenus.value.length <= fullCount
-                ? topMenus.value.length
-                : Math.max(0, Math.floor((availableWidth - moreMenuWidth) / menuWidth));
+        const itemWidths = Array.from(
+            measureEl.querySelectorAll('[data-topmenu-measure-item]')
+        ).map(getElementWidth);
+        const moreMenuWidth = getElementWidth(
+            measureEl.querySelector('[data-topmenu-measure-more]')
+        );
+
+        let usedWidth = 0;
+        let fullCount = 0;
+        for (const width of itemWidths) {
+            if (usedWidth + width > availableWidth) {
+                break;
+            }
+            usedWidth += width;
+            fullCount += 1;
+        }
+
+        if (fullCount >= topMenus.value.length) {
+            visibleNumber.value = topMenus.value.length;
+            return;
+        }
+
+        usedWidth = moreMenuWidth;
+        let finalCount = 0;
+        for (const width of itemWidths) {
+            if (usedWidth + width > availableWidth) {
+                break;
+            }
+            usedWidth += width;
+            finalCount += 1;
+        }
 
         visibleNumber.value = finalCount;
     }
@@ -299,24 +374,32 @@
     }
 
     onMounted(() => {
-        window.addEventListener('resize', calculateVisibleMenus);
+        window.addEventListener('resize', scheduleCalculateVisibleMenus);
         nextTick(() => {
             calculateVisibleMenus();
             const menuEl = menuRef.value?.$el || menuRef.value;
             const navbarEl = menuEl?.closest?.('.navbar');
             const rightMenuEl = navbarEl?.querySelector?.('.right-menu');
             if (window.ResizeObserver && navbarEl) {
-                resizeObserver = new ResizeObserver(calculateVisibleMenus);
+                resizeObserver = new ResizeObserver(scheduleCalculateVisibleMenus);
                 resizeObserver.observe(navbarEl);
+                resizeObserver.observe(menuEl);
+                if (measureRef.value) {
+                    resizeObserver.observe(measureRef.value);
+                }
                 if (rightMenuEl) {
                     resizeObserver.observe(rightMenuEl);
                 }
             }
         });
     });
+    watch(topMenus, () => nextTick(scheduleCalculateVisibleMenus), { flush: 'post' });
     onBeforeUnmount(() => {
-        window.removeEventListener('resize', calculateVisibleMenus);
+        window.removeEventListener('resize', scheduleCalculateVisibleMenus);
         resizeObserver?.disconnect();
+        if (calculateFrame) {
+            cancelAnimationFrame(calculateFrame);
+        }
     });
     // 如果需要暴露给父组件使用，可以使用 defineExpose
     defineExpose({
@@ -406,6 +489,42 @@
     .topmenu-container .svg-icon {
         margin-right: 4px;
         transition: color 0.22s ease;
+    }
+
+    .topmenu-container .topmenu-measure {
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: flex;
+        align-items: center;
+        height: 0;
+        overflow: visible;
+        pointer-events: none;
+        visibility: hidden;
+        white-space: nowrap;
+    }
+
+    .topmenu-container .topmenu-measure-item {
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px !important;
+        line-height: 40px !important;
+        margin: 0 3px !important;
+        padding: 0 23px !important;
+        border-radius: 4px;
+        color: #333 !important;
+        font-size: 16px;
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
+    .topmenu-container .topmenu-measure-arrow {
+        width: 14px;
+        height: 14px;
+        margin-left: 8px;
+        flex-shrink: 0;
     }
 
     .topmenu-container.el-menu--horizontal > .el-menu-item:not(.is-disabled):focus .svg-icon,

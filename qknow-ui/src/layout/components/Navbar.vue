@@ -1177,7 +1177,7 @@
         .topmenu-container {
             position: absolute;
             left: 40px;
-            right: 430px;
+            right: var(--topnav-right-offset, 430px);
             overflow: hidden;
             &.has-navbar-logo {
                 left: 200px;

@@ -76,7 +76,7 @@ export const guideTipConfig = {
     // 首页
     index: {
         title: '重要提醒：本系统为演示站点，<u>每日凌晨 02:30 清除所有用户数据</u>，以保障系统整洁与稳定运行。如需体验完整功能，建议申请试用专属测试环境。',
-        content: `建议先看视频再试用！40分钟完整演示 qKnow 商业版全流程操作，助您高效理解系统能力。 👉 观看视频 <strong><a href="https://www.bilibili.com/video/BV1ojkmBNEm3/" target="_blank">《qKnow知识平台商业版全流程实操演示(2025年11月版)》</a></strong>`,
+        content: `建议先看视频再试用！40分钟完整演示 qKnow 商业版全流程操作，助您高效理解系统能力。 👉 观看视频 <strong><a href="https://www.bilibili.com/video/BV1ojkmBNEm3/" target="_blank">《qKnow智能体构建平台商业版全流程实操演示(2025年11月版)》</a></strong>`,
         // content: `建议先看视频再试用！60 分钟 qKnow 商业版全流程操作演示，助你高效 get 系统核心能力。实操视频正在精心制作中，上线后将第一时间同步，敬请期待～`,
         type: 'danger',
         version: '1.0'
