@@ -1,33 +1,19 @@
 <!--
-  Copyright © 2026 Qiantong Technology Co., Ltd.
-  qKnow Knowledge Platform
-   *
-  License:
-  Released under the Apache License, Version 2.0.
-  You may use, modify, and distribute this software for commercial purposes
-  under the terms of the License.
-   *
-  Special Notice:
-  All derivative versions are strictly prohibited from modifying or removing
-  the default system logo and copyright information.
-  For brand customization, please apply for brand customization authorization via official channels.
-   *
-  More information: https://qknow.qiantong.tech/business.html
-   *
-  ============================================================================
-   *
-  版权所有 © 2026 江苏千桐科技有限公司
-  qKnow 知识平台（开源版）
-   *
-  许可协议：
-  本项目基于 Apache License 2.0 开源协议发布，
-  允许在遵守协议的前提下进行商用、修改和分发。
-   *
-  特别说明：
-  所有衍生版本不得修改或移除系统默认的 LOGO 和版权信息；
-  如需定制品牌，请通过官方渠道申请品牌定制授权。
-   *
-  更多信息请访问：https://qknow.qiantong.tech/business.html
+ Copyright © 2025-present Jiangsu Qiantong Technology Co., Ltd.
+ 
+ This file is part of qKnow Intelligent Agent Building Platform (Open Source Edition).
+ 
+ qKnow is licensed under Apache License 2.0 with additional qKnow terms.
+ You may use qKnow for commercial purposes, but you may not remove, hide,
+ modify, or replace the qKnow logo, copyright notices, license notices,
+ or attribution information without a separate commercial license.
+ 
+ White-label use, OEM distribution, rebranding, or presenting qKnow as
+ another product requires separate commercial authorization from
+ Jiangsu Qiantong Technology Co., Ltd.
+ 
+ Business License: https://community.qknow.ai/business/policy.html
+ See the LICENSE file in the project root for full license information.
 -->
 
 <template>
@@ -38,25 +24,49 @@
                 <div class="form-item">
                     <div class="form-label">登录页logo</div>
                     <div class="form-input">
-                        <ImageUpload v-model="loginLogoModelValue" :limit="1" :fileSize="10" :isShowTip="true" @update:modelValue="loginLogoUpdate" :platForm="platForm"  />  <!-- 使用组件 -->
+                        <ImageUpload
+                            v-model="loginLogoModelValue"
+                            :limit="1"
+                            :fileSize="10"
+                            :isShowTip="true"
+                            @update:modelValue="loginLogoUpdate"
+                            :platForm="platForm"
+                        />
+                        <!-- 使用组件 -->
                     </div>
                 </div>
             </el-col>
 
             <el-col :span="24">
-            <div class="form-item">
-                <div class="form-label">系统Logo</div>
-                <div class="form-input">
-                    <ImageUpload v-model="logoModelValue" :limit="1" :fileSize="10" :isShowTip="true" @update:modelValue="logoUpdate" :platForm="platForm"  />  <!-- 使用组件 -->
+                <div class="form-item">
+                    <div class="form-label">系统Logo</div>
+                    <div class="form-input">
+                        <ImageUpload
+                            v-model="logoModelValue"
+                            :limit="1"
+                            :fileSize="10"
+                            :isShowTip="true"
+                            @update:modelValue="logoUpdate"
+                            :platForm="platForm"
+                        />
+                        <!-- 使用组件 -->
+                    </div>
                 </div>
-            </div>
             </el-col>
 
             <el-col :span="24">
                 <div class="form-item">
                     <div class="form-label">登录页轮播图</div>
                     <div class="form-input">
-                        <ImageUpload v-model="carouselImageModelValue" :limit="3" :fileSize="10" :isShowTip="true" @update:modelValue="carouselImageUpdate" :platForm="platForm"  />  <!-- 使用组件 -->
+                        <ImageUpload
+                            v-model="carouselImageModelValue"
+                            :limit="3"
+                            :fileSize="10"
+                            :isShowTip="true"
+                            @update:modelValue="carouselImageUpdate"
+                            :platForm="platForm"
+                        />
+                        <!-- 使用组件 -->
                     </div>
                 </div>
             </el-col>
@@ -67,10 +77,12 @@
                     <div class="form-label">联系电话</div>
                     <div class="form-input">
                         <div class="form-input-i">
-                            <el-input v-model="contentDetail.contactNumber" placeholder="请输入联系电话"></el-input>
+                            <el-input
+                                v-model="contentDetail.contactNumber"
+                                placeholder="请输入联系电话"
+                            ></el-input>
                         </div>
                     </div>
-
                 </div>
             </el-col>
 
@@ -80,7 +92,10 @@
                     <div class="form-label">电子邮箱</div>
                     <div class="form-input">
                         <div class="form-input-i">
-                            <el-input v-model="contentDetail.email" placeholder="请输入电子邮箱"></el-input>
+                            <el-input
+                                v-model="contentDetail.email"
+                                placeholder="请输入电子邮箱"
+                            ></el-input>
                         </div>
                     </div>
                 </div>
@@ -92,7 +107,10 @@
                     <div class="form-label">版权方</div>
                     <div class="form-input">
                         <div class="form-input-i">
-                            <el-input v-model="contentDetail.copyright" placeholder="请输入版权方"></el-input>
+                            <el-input
+                                v-model="contentDetail.copyright"
+                                placeholder="请输入版权方"
+                            ></el-input>
                         </div>
                     </div>
                 </div>
@@ -104,40 +122,41 @@
                     <div class="form-label">备案号</div>
                     <div class="form-input">
                         <div class="form-input-i">
-                            <el-input v-model="contentDetail.recordNumber" placeholder="请输入备案号"></el-input>
+                            <el-input
+                                v-model="contentDetail.recordNumber"
+                                placeholder="请输入备案号"
+                            ></el-input>
                         </div>
                     </div>
                 </div>
             </el-col>
 
-<!--            {{contentDetail}}-->
-            <div style="margin-top: 20px;">
+            <!--            {{contentDetail}}-->
+            <div style="margin-top: 20px">
                 <!--                <el-button @click="update" v-show="status">修改</el-button>-->
                 <!--                <el-button @click="confirm" v-show="!status">保存</el-button>-->
                 <el-button type="primary" @click="confirm">保存</el-button>
             </div>
-
         </el-row>
     </div>
-
 </template>
 
 <script setup>
     import { ref } from 'vue';
-    import { getContent,listContent, updateContent } from "@/api/system/system/content";
-    import ImageUpload from "@/components/ImageUpload/index.vue"
+    import { getContent, listContent, updateContent } from '@/api/system/system/content';
+    import ImageUpload from '@/components/ImageUpload/index.vue';
     const { proxy } = getCurrentInstance();
 
-    const loginLogoModelValue = ref([])
-    const logoModelValue = ref([])
-    const carouselImageModelValue = ref([])
+    const loginLogoModelValue = ref([]);
+    const logoModelValue = ref([]);
+    const carouselImageModelValue = ref([]);
 
     //存储平台名称
-    const platForm = ref('aliyun-oss-qt')
+    const platForm = ref('aliyun-oss-qt');
     //存储到服务器本地
     // const platForm = ref('')
 
-    const status = ref(true)
+    const status = ref(true);
     // 初始化 contentDetail 数据
     const contentDetail = ref({
         sysName: '',
@@ -147,52 +166,52 @@
         contactNumber: '',
         email: '',
         copyright: '',
-        recordNumber: '',
+        recordNumber: ''
     });
 
     const loginLogoUpdate = (updatedFileList) => {
-        contentDetail.value.loginLogo = updatedFileList
+        contentDetail.value.loginLogo = updatedFileList;
     };
 
     const logoUpdate = (updatedFileList) => {
-        contentDetail.value.logo = updatedFileList
+        contentDetail.value.logo = updatedFileList;
     };
 
     const carouselImageUpdate = (updatedFileList) => {
-        contentDetail.value.carouselImage = updatedFileList
+        contentDetail.value.carouselImage = updatedFileList;
     };
 
     // 使用 getContent 来获取数据，而不是重新定义一个 getContent 函数
     const fetchContent = async () => {
         try {
-            contentDetail.value = {}
+            contentDetail.value = {};
             // 调用你从 API 导入的 getContent 方法
-            const res = await getContent(1);  // 假设请求的是 id 为 1 的数据
-            if(res.code == 200){
-                const data = res.data
-                if(data.loginLogo){
-                    const loginLogoList = data.loginLogo.split(',')
-                    const arr = []
-                    loginLogoList.forEach(e=>{
-                        arr.push({url: e})
-                    })
-                    loginLogoModelValue.value = arr
+            const res = await getContent(1); // 假设请求的是 id 为 1 的数据
+            if (res.code == 200) {
+                const data = res.data;
+                if (data.loginLogo) {
+                    const loginLogoList = data.loginLogo.split(',');
+                    const arr = [];
+                    loginLogoList.forEach((e) => {
+                        arr.push({ url: e });
+                    });
+                    loginLogoModelValue.value = arr;
                 }
-                if(data.logo){
-                    const logoList = data.logo.split(',')
-                    const arr = []
-                    logoList.forEach(e=>{
-                        arr.push({url: e})
-                    })
-                    logoModelValue.value = arr
+                if (data.logo) {
+                    const logoList = data.logo.split(',');
+                    const arr = [];
+                    logoList.forEach((e) => {
+                        arr.push({ url: e });
+                    });
+                    logoModelValue.value = arr;
                 }
-                if(data.carouselImage){
-                    const carouselImageList = data.carouselImage.split(',')
-                    const arr = []
-                    carouselImageList.forEach(e=>{
-                        arr.push({url: e})
-                    })
-                    carouselImageModelValue.value = arr
+                if (data.carouselImage) {
+                    const carouselImageList = data.carouselImage.split(',');
+                    const arr = [];
+                    carouselImageList.forEach((e) => {
+                        arr.push({ url: e });
+                    });
+                    carouselImageModelValue.value = arr;
                 }
                 contentDetail.value = {
                     id: data.id,
@@ -203,7 +222,7 @@
                     contactNumber: data.contactNumber,
                     email: data.email,
                     copyright: data.copyright,
-                    recordNumber: data.recordNumber,
+                    recordNumber: data.recordNumber
                 };
                 // console.log('------contentDetail.value-------',contentDetail.value)
             }
@@ -223,29 +242,33 @@
 
     // 更新按钮点击事件
     const update = () => {
-        status.value = !status.value
+        status.value = !status.value;
     };
 
     // 确认按钮点击事件
-    const confirm =  () => {
-        proxy.$modal.confirm('是否确认保存？').then(function() {}).then(async () => {
-            status.value = !status.value
-            try {
-                const item = contentDetail.value
-                const res = await updateContent(item)
-                if (res.code == 200) {
-                    fetchContent();
-                    proxy.$modal.msgSuccess("保存成功");
-                } else {
-                    // 如果响应 code 不是 200，表示请求失败
-                    proxy.$modal.msgError("保存失败，请重试！");
+    const confirm = () => {
+        proxy.$modal
+            .confirm('是否确认保存？')
+            .then(function () {})
+            .then(async () => {
+                status.value = !status.value;
+                try {
+                    const item = contentDetail.value;
+                    const res = await updateContent(item);
+                    if (res.code == 200) {
+                        fetchContent();
+                        proxy.$modal.msgSuccess('保存成功');
+                    } else {
+                        // 如果响应 code 不是 200，表示请求失败
+                        proxy.$modal.msgError('保存失败，请重试！');
+                    }
+                } catch (error) {
+                    // 捕获网络错误或请求失败的情况
+                    console.error('请求失败:', error);
+                    proxy.$modal.msgError('保存异常:' + error.message);
                 }
-            } catch (error) {
-                // 捕获网络错误或请求失败的情况
-                console.error("请求失败:", error);
-                proxy.$modal.msgError("保存异常:" + error.message);
-            }
-        }).catch(() => {});
+            })
+            .catch(() => {});
     };
 </script>
 
@@ -258,7 +281,7 @@
     .form-container {
         padding: 20px;
         /*background-color: #f9f9f9;*/
-        background-color: #FFFFFF;
+        background-color: #ffffff;
         border-radius: 2px;
         box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
     }

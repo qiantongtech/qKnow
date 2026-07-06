@@ -1,33 +1,19 @@
 <!--
-  Copyright © 2026 Qiantong Technology Co., Ltd.
-  qKnow Knowledge Platform
-   *
-  License:
-  Released under the Apache License, Version 2.0.
-  You may use, modify, and distribute this software for commercial purposes
-  under the terms of the License.
-   *
-  Special Notice:
-  All derivative versions are strictly prohibited from modifying or removing
-  the default system logo and copyright information.
-  For brand customization, please apply for brand customization authorization via official channels.
-   *
-  More information: https://qknow.qiantong.tech/business.html
-   *
-  ============================================================================
-   *
-  版权所有 © 2026 江苏千桐科技有限公司
-  qKnow 知识平台（开源版）
-   *
-  许可协议：
-  本项目基于 Apache License 2.0 开源协议发布，
-  允许在遵守协议的前提下进行商用、修改和分发。
-   *
-  特别说明：
-  所有衍生版本不得修改或移除系统默认的 LOGO 和版权信息；
-  如需定制品牌，请通过官方渠道申请品牌定制授权。
-   *
-  更多信息请访问：https://qknow.qiantong.tech/business.html
+ Copyright © 2025-present Jiangsu Qiantong Technology Co., Ltd.
+ 
+ This file is part of qKnow Intelligent Agent Building Platform (Open Source Edition).
+ 
+ qKnow is licensed under Apache License 2.0 with additional qKnow terms.
+ You may use qKnow for commercial purposes, but you may not remove, hide,
+ modify, or replace the qKnow logo, copyright notices, license notices,
+ or attribution information without a separate commercial license.
+ 
+ White-label use, OEM distribution, rebranding, or presenting qKnow as
+ another product requires separate commercial authorization from
+ Jiangsu Qiantong Technology Co., Ltd.
+ 
+ Business License: https://community.qknow.ai/business/policy.html
+ See the LICENSE file in the project root for full license information.
 -->
 
 <template>
@@ -76,17 +62,13 @@
                     >
                         <i class="iconfont-mini icon-a-zu22377 mr5"></i>查询
                     </el-button>
-                    <el-button
-                        @click="resetQuery"
-                        @mousedown="(e) => e.preventDefault()"
-                    >
+                    <el-button @click="resetQuery" @mousedown="(e) => e.preventDefault()">
                         <i class="iconfont-mini icon-a-shuaxinxianxing mr5"></i>重置
                     </el-button>
                 </el-form-item>
             </el-form>
         </div>
-        <div  class="pagecont-bottom">
-
+        <div class="pagecont-bottom">
             <div class="justify-between mb15">
                 <el-row :gutter="10" class="btn-style">
                     <el-col :span="1.5">
@@ -95,37 +77,27 @@
                         </el-button>
                     </el-col>
                 </el-row>
-                <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+                <right-toolbar
+                    v-model:showSearch="showSearch"
+                    @queryTable="getList"
+                ></right-toolbar>
             </div>
 
-            <el-table stripe   v-loading="loading" :data="msgList">
-                <el-table-column
-                    label="消息标题"
-                    align="center"
-                    key="title"
-                    prop="title"
-                />
+            <el-table stripe v-loading="loading" :data="msgList">
+                <el-table-column label="消息标题" align="center" key="title" prop="title" />
                 <el-table-column label="消息类型" align="center" key="category">
                     <template #default="scope">
-                        <dict-tag
-                            :options="message_category"
-                            :value="scope.row.category"
-                        />
+                        <dict-tag :options="message_category" :value="scope.row.category" />
                     </template>
                 </el-table-column>
                 <el-table-column label="是否已读" align="center" key="hasRead">
                     <template #default="scope">
                         <el-tag :type="scope.row.hasRead ? 'success' : 'danger'">
-                            {{ scope.row.hasRead ? "已读" : "未读" }}
+                            {{ scope.row.hasRead ? '已读' : '未读' }}
                         </el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column
-                    label="消息内容"
-                    align="center"
-                    key="content"
-                    prop="content"
-                />
+                <el-table-column label="消息内容" align="center" key="content" prop="content" />
 
                 <el-table-column
                     label="创建时间"
@@ -142,12 +114,7 @@
                     width="240"
                 >
                     <template #default="scope">
-                        <el-button
-                            link
-                            type="primary"
-                            icon="View"
-                            @click="handleView(scope.row)"
-                        >
+                        <el-button link type="primary" icon="View" @click="handleView(scope.row)">
                             详情
                         </el-button>
                         <el-button
@@ -191,22 +158,15 @@
                     <el-col :span="12">
                         <el-form-item label="类型：">
                             <div class="form-value-ifon">
-                                <dict-tag
-                                    :options="message_category"
-                                    :value="viewData.category"
-                                />
+                                <dict-tag :options="message_category" :value="viewData.category" />
                             </div>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="是否已读：">
                             <div class="form-value-ifon">
-                                <el-tag
-                                    :type="
-                                        viewData.hasRead ? 'success' : 'danger'
-                                    "
-                                >
-                                    {{ viewData.hasRead ? "已读" : "未读" }}
+                                <el-tag :type="viewData.hasRead ? 'success' : 'danger'">
+                                    {{ viewData.hasRead ? '已读' : '未读' }}
                                 </el-tag>
                             </div>
                         </el-form-item>
@@ -237,116 +197,116 @@
 </template>
 
 <script setup name="Message">
-import { getCurrentInstance, ref } from "vue";
-import useUserStore from "@/store/system/user";
-import {
-    listMessage,
-    delMessage,
-    read,
-    readAll,
-    updateMessage
-} from "@/api/system/system/message/message";
+    import { getCurrentInstance, ref } from 'vue';
+    import useUserStore from '@/store/system/user';
+    import {
+        listMessage,
+        delMessage,
+        read,
+        readAll,
+        updateMessage
+    } from '@/api/system/system/message/message';
 
-const openView = ref(false);
-const viewData = ref({});
-const userStore = useUserStore();
-const queryParams = ref({
-    dateRange: [],
-    pageNum: 1,
-    pageSize: 10,
-    receiverId: userStore.userId,
-});
-const total = ref(0);
+    const openView = ref(false);
+    const viewData = ref({});
+    const userStore = useUserStore();
+    const queryParams = ref({
+        dateRange: [],
+        pageNum: 1,
+        pageSize: 10,
+        receiverId: userStore.userId
+    });
+    const total = ref(0);
 
-const loading = ref(false);
-const showSearch = ref(true);
-const msgList = ref([]);
-const { proxy } = getCurrentInstance();
-const { message_category } = proxy.useDict("message_category");
+    const loading = ref(false);
+    const showSearch = ref(true);
+    const msgList = ref([]);
+    const { proxy } = getCurrentInstance();
+    const { message_category } = proxy.useDict('message_category');
 
-const handleQuery = () => {
-    console.log(queryParams.value);
-    getList()
-};
+    const handleQuery = () => {
+        console.log(queryParams.value);
+        getList();
+    };
 
-const resetQuery = () => {
-    queryParams.value = {};
-};
+    const resetQuery = () => {
+        queryParams.value = {};
+    };
 
-const handleView = (e) => {
-    e.hasRead = '1'
-    e.delFlag = 1
-    updateMessage(e);
-    msgList.value = msgList.value.map(item => {
-        if (e.id == item.id) {
-            return { ...item, hasRead: '1' }; // 创建一个新对象，修改 hasRead
+    const handleView = (e) => {
+        e.hasRead = '1';
+        e.delFlag = 1;
+        updateMessage(e);
+        msgList.value = msgList.value.map((item) => {
+            if (e.id == item.id) {
+                return { ...item, hasRead: '1' }; // 创建一个新对象，修改 hasRead
+            }
+            return item; // 保持其他项不变
+        });
+        openView.value = true;
+        viewData.value = e;
+    };
+
+    const startTime = ref(null);
+    const endTime = ref(null);
+    const getList = () => {
+        const reqData = {
+            category: queryParams.value.category,
+            receiverId: userStore.userId,
+            pageNum: queryParams.value.pageNum,
+            pageSize: queryParams.value.pageSize
+        };
+        if (queryParams.value.dateRange && queryParams.value.dateRange.length > 0) {
+            ((reqData.startTime = queryParams.value.dateRange[0]),
+                (reqData.endTime = queryParams.value.dateRange[1]));
         }
-        return item; // 保持其他项不变
-    });
-    openView.value = true;
-    viewData.value = e;
-};
+        listMessage(reqData).then((response) => {
+            msgList.value = response.data.rows;
+            total.value = response.data.total;
+        });
+    };
+    getList();
 
-const startTime = ref(null)
-const endTime = ref(null)
-const getList = () => {
-    const reqData = {
-        category: queryParams.value.category,
-        receiverId: userStore.userId,
-        pageNum: queryParams.value.pageNum,
-        pageSize: queryParams.value.pageSize,
+    /** 全部已读 */
+    function readAllMsg() {
+        ElMessageBox.confirm('确定全部设为已读吗？')
+            .then(() => {
+                return readAll();
+            })
+            .then((res) => {
+                console.log('------设置为已读----', res);
+                getList();
+                ElMessage.success('操作成功');
+            })
+            .catch(() => {});
     }
-    if(queryParams.value.dateRange && queryParams.value.dateRange.length > 0){
-        reqData.startTime= queryParams.value.dateRange[0],
-        reqData.endTime= queryParams.value.dateRange[1]
+    /** 删除 */
+    function deleteMsg(id) {
+        ElMessageBox.confirm('确定删除改条消息吗？')
+            .then(() => {
+                return delMessage(id);
+            })
+            .then(() => {
+                getList();
+                ElMessage.success('操作成功');
+            })
+            .catch(() => {});
     }
-    listMessage(reqData).then((response) => {
-        msgList.value = response.data.rows;
-        total.value = response.data.total;
-    });
-};
-getList();
 
-/** 全部已读 */
-function readAllMsg() {
-    ElMessageBox.confirm("确定全部设为已读吗？")
-        .then(() => {
-            return readAll();
-        })
-        .then((res) => {
-            console.log('------设置为已读----',res)
-            getList();
-            ElMessage.success("操作成功");
-        })
-        .catch(() => {});
-}
-/** 删除 */
-function deleteMsg(id) {
-    ElMessageBox.confirm("确定删除改条消息吗？")
-        .then(() => {
-            return delMessage(id);
-        })
-        .then(() => {
-            getList();
-            ElMessage.success("操作成功");
-        })
-        .catch(() => {});
-}
-
-// /**
-//  * 修改状态为已读
-//  * @param id
-//  */
-// function updateMsg(row) {
-//     row.hasRead = '1'
-//     updateMessage(row);
-// }
+    // /**
+    //  * 修改状态为已读
+    //  * @param id
+    //  */
+    // function updateMsg(row) {
+    //     row.hasRead = '1'
+    //     updateMessage(row);
+    // }
 </script>
 
 <style lang="scss">
-.msg-dialog {
-    .el-dialog__body {
-        height: 300px !important;
+    .msg-dialog {
+        .el-dialog__body {
+            height: 300px !important;
+        }
     }
-}
 </style>

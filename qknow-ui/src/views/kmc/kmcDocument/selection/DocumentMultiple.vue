@@ -1,109 +1,63 @@
 <!--
-  Copyright (c) 2026 Jiangsu Qiantong Technology Co., Ltd.
-   *
-  Software Name: qKnow Knowledge Platform (Business Edition)
-  Software Copyright Registration No. 15980140
-   *
-  [RIGHTS AND LICENSE STATEMENT]
-  This file contains non-public commercial source code of which Jiangsu Qiantong
-  Technology Co., Ltd. lawfully possesses complete intellectual property rights.
-   *
-  Access and use are limited to entities or individuals who have signed a valid
-  commercial license agreement, within the scope stipulated in the agreement.
-  The "accessibility" of this source code is premised on lawful authorization
-  and does not constitute any form of transfer of intellectual property rights
-  or implied licensing.
-   *
-  [PROHIBITIONS]
-  Unless explicitly agreed in the license agreement, the following acts in any
-  form are strictly prohibited:
-  1. Copying, disseminating, disclosing, selling, renting, or redistributing
-  this source code;
-  2. Providing the software's functionality to third parties via SaaS, PaaS,
-  cloud hosting, or other means;
-  3. Using this software or its derivative versions to develop products that
-  compete with the Right Holder;
-  4. Providing or displaying this source code or related technical information
-  to unauthorized third parties;
-  5. Tampering with, circumventing, or destroying copyright notices, license
-  verifications, or other technical protection measures.
-   *
-  [LEGAL LIABILITY]
-  Any unauthorized use constitutes an infringement of trade secrets and
-  intellectual property rights.
-   *
-  The Right Holder will strictly pursue liability for breach of contract and
-  infringement in accordance with the commercial agreement and laws such as
-  the "Copyright Law of the People's Republic of China" and the "Anti-Unfair
-  Competition Law".
-   *
-  ============================================================================
-   *
-  Copyright (c) 2026 江苏千桐科技有限公司
-   *
-  软件名称：qKnow 知识平台（商业版） | 软著登字第15980140号
-   *
-  【权利与授权声明】
-  本文件属于江苏千桐科技有限公司依法享有完全知识产权的非公开商业源代码。
-  仅限已签署有效商业授权合同的单位或个人在约定范围内查阅和使用。
-  源代码的“可访问性”均以合法授权为前提，不构成任何形式的知识产权转让或默示授权。
-   *
-  【禁止事项】
-  除授权合同明确约定外，严禁任何形式的：
-  1. 复制、传播、披露、出售、出租或再分发本源代码；
-  2. 通过 SaaS、PaaS、云托管等方式向第三方提供本软件功能；
-  3. 将本软件或其衍生版本用于开发与权利人构成竞争的产品；
-  4. 向未授权第三方提供或展示本源代码或相关技术信息；
-  5. 篡改、规避或破坏版权标识、授权校验及其他技术保护措施。
-   *
-  【法律责任】
-  任何未经授权的利用行为，均构成对商业秘密及知识产权的侵害。
-  权利人将依据商业合同及《中华人民共和国著作权法》《反不正当竞争法》
-  等法律法规，严厉追究违约与侵权责任。
+ Copyright © 2025-present Jiangsu Qiantong Technology Co., Ltd.
+ 
+ This file is part of qKnow Intelligent Agent Building Platform (Open Source Edition).
+ 
+ qKnow is licensed under Apache License 2.0 with additional qKnow terms.
+ You may use qKnow for commercial purposes, but you may not remove, hide,
+ modify, or replace the qKnow logo, copyright notices, license notices,
+ or attribution information without a separate commercial license.
+ 
+ White-label use, OEM distribution, rebranding, or presenting qKnow as
+ another product requires separate commercial authorization from
+ Jiangsu Qiantong Technology Co., Ltd.
+ 
+ Business License: https://community.qknow.ai/business/policy.html
+ See the LICENSE file in the project root for full license information.
 -->
 
 <template>
     <el-dialog
-            title="知识文件"
-            v-model="visible"
-            width="1200px"
-            :append-to="$refs['app-container']"
-            draggable
-            destroy-on-close
-            @close="handleClose"
+        title="知识文件"
+        v-model="visible"
+        width="1200px"
+        :append-to="$refs['app-container']"
+        draggable
+        destroy-on-close
+        @close="handleClose"
     >
         <el-form
-                class="btn-style"
-                :model="queryParams"
-                ref="queryRef"
-                :inline="true"
-                v-show="showSearch"
-                label-width="68px"
+            class="btn-style"
+            :model="queryParams"
+            ref="queryRef"
+            :inline="true"
+            v-show="showSearch"
+            label-width="68px"
         >
             <el-form-item label="文件名称" prop="name">
                 <el-input
-                        style="width:240px"
-                        v-model="queryParams.name"
-                        placeholder="请输入文件名称"
-                        clearable
-                        @keyup.enter="handleQuery"
+                    style="width: 240px"
+                    v-model="queryParams.name"
+                    placeholder="请输入文件名称"
+                    clearable
+                    @keyup.enter="handleQuery"
                 />
             </el-form-item>
-<!--            <el-form-item label="创建时间" prop="createTime">-->
-<!--                <el-date-picker style="width:240px"-->
-<!--                                clearable-->
-<!--                                v-model="queryParams.createTime"-->
-<!--                                type="date"-->
-<!--                                value-format="YYYY-MM-DD"-->
-<!--                                placeholder="请选择创建时间">-->
-<!--                </el-date-picker>-->
-<!--            </el-form-item>-->
+            <!--            <el-form-item label="创建时间" prop="createTime">-->
+            <!--                <el-date-picker style="width:240px"-->
+            <!--                                clearable-->
+            <!--                                v-model="queryParams.createTime"-->
+            <!--                                type="date"-->
+            <!--                                value-format="YYYY-MM-DD"-->
+            <!--                                placeholder="请选择创建时间">-->
+            <!--                </el-date-picker>-->
+            <!--            </el-form-item>-->
             <el-form-item>
                 <el-button
-                        plain
-                        type="primary"
-                        @click="handleQuery"
-                        @mousedown="(e) => e.preventDefault()"
+                    plain
+                    type="primary"
+                    @click="handleQuery"
+                    @mousedown="(e) => e.preventDefault()"
                 >
                     <i class="iconfont-mini icon-a-zu22377 mr5"></i>查询
                 </el-button>
@@ -114,15 +68,15 @@
         </el-form>
 
         <el-table
-                ref="multipletableRef"
-                stripe
-                height="420px"
-                v-loading="loading"
-                :data="dataList"
-                reserve-selection
-                row-key="id"
-                @selection-change="handleSelectionChange"
-                @row-click="handleRowClick"
+            ref="multipletableRef"
+            stripe
+            height="420px"
+            v-loading="loading"
+            :data="dataList"
+            reserve-selection
+            row-key="id"
+            @selection-change="handleSelectionChange"
+            @row-click="handleRowClick"
         >
             <el-table-column type="selection" width="55" align="center" />
             <el-table-column label="知识分类名称" align="center" prop="categoryName">
@@ -158,28 +112,25 @@
         </el-table>
 
         <pagination
-                v-show="total > 0"
-                :total="total"
-                v-model:page="queryParams.pageNum"
-                v-model:limit="queryParams.pageSize"
-                @pagination="getList"
+            v-show="total > 0"
+            :total="total"
+            v-model:page="queryParams.pageNum"
+            v-model:limit="queryParams.pageSize"
+            @pagination="getList"
         />
         <template #footer>
             <div class="dialog-footer">
                 <el-button size="mini" @click="cancel">取 消</el-button>
-                <el-button type="primary" size="mini" @click="confirm">
-                    确 定
-                </el-button>
+                <el-button type="primary" size="mini" @click="confirm"> 确 定 </el-button>
             </div>
         </template>
     </el-dialog>
 </template>
 
 <script setup name="DocumentMultiple">
-    import { listDocument } from "@/api/kmc/kmcDocument/kmcDocument";
-    import { ref } from "vue";
+    import { listDocument } from '@/api/kmc/kmcDocument/kmcDocument';
+    import { ref } from 'vue';
     const { proxy } = getCurrentInstance();
-
 
     const dataList = ref([]);
     const loading = ref(true);
@@ -198,7 +149,7 @@
             name: null,
             path: null,
             description: null,
-            createTime: null,
+            createTime: null
         }
     });
     const { queryParams, form } = toRefs(data);
@@ -221,21 +172,22 @@
     // 当前界面table
     const multipletableRef = ref([]);
 
-    const emit = defineEmits(["open", "confirm", "cancel"]);
+    const emit = defineEmits(['open', 'confirm', 'cancel']);
 
-    watch(() => props.visible, (newOpen) => {
-        console.log('------visible改变------',newOpen)
-        visible.value = newOpen;
-        if(visible){
-            getList()
+    watch(
+        () => props.visible,
+        (newOpen) => {
+            console.log('------visible改变------', newOpen);
+            visible.value = newOpen;
+            if (visible) {
+                getList();
+            }
         }
-    });
+    );
 
     function handleClose() {
         emit('close-dialog');
     }
-
-
 
     /** 多选框选中事件 */
     function handleSelectionChange(selection) {
@@ -246,17 +198,13 @@
                 oldSelection.value.forEach((item) => {
                     let index = selection.findIndex((ece) => ece.id == item.id);
                     if (index == -1) {
-                        multiple.value = multiple.value.filter(
-                            (ece) => item.id != ece.id
-                        );
+                        multiple.value = multiple.value.filter((ece) => item.id != ece.id);
                     }
                 });
             }
             if (multiple.value.length > 0) {
                 selection.forEach((item) => {
-                    let index = multiple.value.findIndex(
-                        (ece) => ece.id == item.id
-                    );
+                    let index = multiple.value.findIndex((ece) => ece.id == item.id);
                     if (index == -1) {
                         multiple.value.push(item);
                     }
@@ -271,9 +219,7 @@
                 oldSelection.value.forEach((item) => {
                     let index = selection.findIndex((ece) => ece.id == item.id);
                     if (index == -1) {
-                        multiple.value = multiple.value.filter(
-                            (ece) => item.id != ece.id
-                        );
+                        multiple.value = multiple.value.filter((ece) => item.id != ece.id);
                     }
                 });
             }
@@ -284,11 +230,11 @@
     /** 行点击事件 */
     function handleRowClick(row) {
         // 检查当前行是否已经在 multiple 中
-        const index = multiple.value.findIndex(item => item.id === row.id);
+        const index = multiple.value.findIndex((item) => item.id === row.id);
 
         // 如果行已经被选中，移除它
         if (index > -1) {
-            multiple.value = multiple.value.filter(item => item.id !== row.id);
+            multiple.value = multiple.value.filter((item) => item.id !== row.id);
         } else {
             // 如果行未被选中，添加到 multiple 中
             multiple.value.push(row);
@@ -315,10 +261,10 @@
         }
     }
 
-    function rest(){
-        oldSelection.value = []
+    function rest() {
+        oldSelection.value = [];
         queryParams.value.pageNum = 1;
-        proxy.resetForm("queryRef");
+        proxy.resetForm('queryRef');
     }
 
     /**
@@ -327,7 +273,7 @@
      */
     function open(val) {
         if (!Array.isArray(val)) {
-            val = [val];  // 将非可迭代值转化为数组
+            val = [val]; // 将非可迭代值转化为数组
         }
         visible.value = true;
         multiple.value = [...val];
@@ -349,10 +295,10 @@
      */
     function confirm() {
         if (multiple.value.length == 0) {
-            proxy.$modal.msgWarning("未选择数据！");
+            proxy.$modal.msgWarning('未选择数据！');
             return;
         }
-        emit("confirm", [...multiple.value]);
+        emit('confirm', [...multiple.value]);
         rest();
         visible.value = false;
     }

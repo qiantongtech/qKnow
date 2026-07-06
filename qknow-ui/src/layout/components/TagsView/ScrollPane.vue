@@ -1,139 +1,126 @@
 <!--
-  Copyright © 2026 Qiantong Technology Co., Ltd.
-  qKnow Knowledge Platform
-   *
-  License:
-  Released under the Apache License, Version 2.0.
-  You may use, modify, and distribute this software for commercial purposes
-  under the terms of the License.
-   *
-  Special Notice:
-  All derivative versions are strictly prohibited from modifying or removing
-  the default system logo and copyright information.
-  For brand customization, please apply for brand customization authorization via official channels.
-   *
-  More information: https://qknow.qiantong.tech/business.html
-   *
-  ============================================================================
-   *
-  版权所有 © 2026 江苏千桐科技有限公司
-  qKnow 知识平台（开源版）
-   *
-  许可协议：
-  本项目基于 Apache License 2.0 开源协议发布，
-  允许在遵守协议的前提下进行商用、修改和分发。
-   *
-  特别说明：
-  所有衍生版本不得修改或移除系统默认的 LOGO 和版权信息；
-  如需定制品牌，请通过官方渠道申请品牌定制授权。
-   *
-  更多信息请访问：https://qknow.qiantong.tech/business.html
+ Copyright © 2025-present Jiangsu Qiantong Technology Co., Ltd.
+ 
+ This file is part of qKnow Intelligent Agent Building Platform (Open Source Edition).
+ 
+ qKnow is licensed under Apache License 2.0 with additional qKnow terms.
+ You may use qKnow for commercial purposes, but you may not remove, hide,
+ modify, or replace the qKnow logo, copyright notices, license notices,
+ or attribution information without a separate commercial license.
+ 
+ White-label use, OEM distribution, rebranding, or presenting qKnow as
+ another product requires separate commercial authorization from
+ Jiangsu Qiantong Technology Co., Ltd.
+ 
+ Business License: https://community.qknow.ai/business/policy.html
+ See the LICENSE file in the project root for full license information.
 -->
 
 <template>
-  <el-scrollbar
-    ref="scrollContainer"
-    :vertical="false"
-    class="scroll-container"
-    @wheel.prevent="handleScroll"
-  >
-    <slot />
-  </el-scrollbar>
+    <el-scrollbar
+        ref="scrollContainer"
+        :vertical="false"
+        class="scroll-container"
+        @wheel.prevent="handleScroll"
+    >
+        <slot />
+    </el-scrollbar>
 </template>
 
 <script setup>
-import useTagsViewStore from '@/store/system/tagsView'
+    import useTagsViewStore from '@/store/system/tagsView';
 
-const tagAndTagSpacing = ref(4);
-const { proxy } = getCurrentInstance();
+    const tagAndTagSpacing = ref(4);
+    const { proxy } = getCurrentInstance();
 
-const scrollWrapper = computed(() => proxy.$refs.scrollContainer.$refs.wrapRef);
+    const scrollWrapper = computed(() => proxy.$refs.scrollContainer.$refs.wrapRef);
 
-onMounted(() => {
-  scrollWrapper.value.addEventListener('scroll', emitScroll, true)
-})
+    onMounted(() => {
+        scrollWrapper.value.addEventListener('scroll', emitScroll, true);
+    });
 
-onBeforeUnmount(() => {
-  scrollWrapper.value.removeEventListener('scroll', emitScroll)
-})
+    onBeforeUnmount(() => {
+        scrollWrapper.value.removeEventListener('scroll', emitScroll);
+    });
 
-function handleScroll(e) {
-  const eventDelta = e.wheelDelta || -e.deltaY * 40
-  const $scrollWrapper = scrollWrapper.value;
-  $scrollWrapper.scrollLeft = $scrollWrapper.scrollLeft + eventDelta / 4
-}
-
-const emits = defineEmits()
-const emitScroll = () => {
-  emits('scroll')
-}
-
-const tagsViewStore = useTagsViewStore()
-const visitedViews = computed(() => tagsViewStore.visitedViews);
-
-function moveToTarget(currentTag) {
-  const $container = proxy.$refs.scrollContainer.$el
-  const $containerWidth = $container.offsetWidth
-  const $scrollWrapper = scrollWrapper.value;
-
-  let firstTag = null
-  let lastTag = null
-
-  // find first tag and last tag
-  if (visitedViews.value.length > 0) {
-    firstTag = visitedViews.value[0]
-    lastTag = visitedViews.value[visitedViews.value.length - 1]
-  }
-
-  if (firstTag === currentTag) {
-    $scrollWrapper.scrollLeft = 0
-  } else if (lastTag === currentTag) {
-    $scrollWrapper.scrollLeft = $scrollWrapper.scrollWidth - $containerWidth
-  } else {
-    const tagListDom = document.getElementsByClassName('tags-view-item');
-    const currentIndex = visitedViews.value.findIndex(item => item === currentTag)
-    let prevTag = null
-    let nextTag = null
-    for (const k in tagListDom) {
-      if (k !== 'length' && Object.hasOwnProperty.call(tagListDom, k)) {
-        if (tagListDom[k].dataset.path === visitedViews.value[currentIndex - 1].path) {
-          prevTag = tagListDom[k];
-        }
-        if (tagListDom[k].dataset.path === visitedViews.value[currentIndex + 1].path) {
-          nextTag = tagListDom[k];
-        }
-      }
+    function handleScroll(e) {
+        const eventDelta = e.wheelDelta || -e.deltaY * 40;
+        const $scrollWrapper = scrollWrapper.value;
+        $scrollWrapper.scrollLeft = $scrollWrapper.scrollLeft + eventDelta / 4;
     }
 
-    // the tag's offsetLeft after of nextTag
-    const afterNextTagOffsetLeft = nextTag.offsetLeft + nextTag.offsetWidth + tagAndTagSpacing.value
+    const emits = defineEmits();
+    const emitScroll = () => {
+        emits('scroll');
+    };
 
-    // the tag's offsetLeft before of prevTag
-    const beforePrevTagOffsetLeft = prevTag.offsetLeft - tagAndTagSpacing.value
-    if (afterNextTagOffsetLeft > $scrollWrapper.scrollLeft + $containerWidth) {
-      $scrollWrapper.scrollLeft = afterNextTagOffsetLeft - $containerWidth
-    } else if (beforePrevTagOffsetLeft < $scrollWrapper.scrollLeft) {
-      $scrollWrapper.scrollLeft = beforePrevTagOffsetLeft
+    const tagsViewStore = useTagsViewStore();
+    const visitedViews = computed(() => tagsViewStore.visitedViews);
+
+    function moveToTarget(currentTag) {
+        const $container = proxy.$refs.scrollContainer.$el;
+        const $containerWidth = $container.offsetWidth;
+        const $scrollWrapper = scrollWrapper.value;
+
+        let firstTag = null;
+        let lastTag = null;
+
+        // find first tag and last tag
+        if (visitedViews.value.length > 0) {
+            firstTag = visitedViews.value[0];
+            lastTag = visitedViews.value[visitedViews.value.length - 1];
+        }
+
+        if (firstTag === currentTag) {
+            $scrollWrapper.scrollLeft = 0;
+        } else if (lastTag === currentTag) {
+            $scrollWrapper.scrollLeft = $scrollWrapper.scrollWidth - $containerWidth;
+        } else {
+            const tagListDom = document.getElementsByClassName('tags-view-item');
+            const currentIndex = visitedViews.value.findIndex((item) => item === currentTag);
+            let prevTag = null;
+            let nextTag = null;
+            for (const k in tagListDom) {
+                if (k !== 'length' && Object.hasOwnProperty.call(tagListDom, k)) {
+                    if (tagListDom[k].dataset.path === visitedViews.value[currentIndex - 1].path) {
+                        prevTag = tagListDom[k];
+                    }
+                    if (tagListDom[k].dataset.path === visitedViews.value[currentIndex + 1].path) {
+                        nextTag = tagListDom[k];
+                    }
+                }
+            }
+
+            // the tag's offsetLeft after of nextTag
+            const afterNextTagOffsetLeft =
+                nextTag.offsetLeft + nextTag.offsetWidth + tagAndTagSpacing.value;
+
+            // the tag's offsetLeft before of prevTag
+            const beforePrevTagOffsetLeft = prevTag.offsetLeft - tagAndTagSpacing.value;
+            if (afterNextTagOffsetLeft > $scrollWrapper.scrollLeft + $containerWidth) {
+                $scrollWrapper.scrollLeft = afterNextTagOffsetLeft - $containerWidth;
+            } else if (beforePrevTagOffsetLeft < $scrollWrapper.scrollLeft) {
+                $scrollWrapper.scrollLeft = beforePrevTagOffsetLeft;
+            }
+        }
     }
-  }
-}
 
-defineExpose({
-  moveToTarget,
-})
+    defineExpose({
+        moveToTarget
+    });
 </script>
 
-<style lang='scss' scoped>
-.scroll-container {
-  white-space: nowrap;
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  :deep(.el-scrollbar__bar) {
-    bottom: 0px;
-  }
-  :deep(.el-scrollbar__wrap) {
-    height: 39px;
-  }
-}
+<style lang="scss" scoped>
+    .scroll-container {
+        white-space: nowrap;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        :deep(.el-scrollbar__bar) {
+            bottom: 0px;
+        }
+        :deep(.el-scrollbar__wrap) {
+            height: 39px;
+        }
+    }
 </style>

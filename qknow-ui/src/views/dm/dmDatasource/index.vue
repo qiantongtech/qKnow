@@ -1,33 +1,19 @@
 <!--
-  Copyright © 2026 Qiantong Technology Co., Ltd.
-  qKnow Knowledge Platform
-   *
-  License:
-  Released under the Apache License, Version 2.0.
-  You may use, modify, and distribute this software for commercial purposes
-  under the terms of the License.
-   *
-  Special Notice:
-  All derivative versions are strictly prohibited from modifying or removing
-  the default system logo and copyright information.
-  For brand customization, please apply for brand customization authorization via official channels.
-   *
-  More information: https://qknow.qiantong.tech/business.html
-   *
-  ============================================================================
-   *
-  版权所有 © 2026 江苏千桐科技有限公司
-  qKnow 知识平台（开源版）
-   *
-  许可协议：
-  本项目基于 Apache License 2.0 开源协议发布，
-  允许在遵守协议的前提下进行商用、修改和分发。
-   *
-  特别说明：
-  所有衍生版本不得修改或移除系统默认的 LOGO 和版权信息；
-  如需定制品牌，请通过官方渠道申请品牌定制授权。
-   *
-  更多信息请访问：https://qknow.qiantong.tech/business.html
+ Copyright © 2025-present Jiangsu Qiantong Technology Co., Ltd.
+ 
+ This file is part of qKnow Intelligent Agent Building Platform (Open Source Edition).
+ 
+ qKnow is licensed under Apache License 2.0 with additional qKnow terms.
+ You may use qKnow for commercial purposes, but you may not remove, hide,
+ modify, or replace the qKnow logo, copyright notices, license notices,
+ or attribution information without a separate commercial license.
+ 
+ White-label use, OEM distribution, rebranding, or presenting qKnow as
+ another product requires separate commercial authorization from
+ Jiangsu Qiantong Technology Co., Ltd.
+ 
+ Business License: https://community.qknow.ai/business/policy.html
+ See the LICENSE file in the project root for full license information.
 -->
 
 <template>
@@ -209,9 +195,9 @@
                     prop="description"
                     show-overflow-tooltip
                 >
-                  <template #default="scope">
-                    {{ scope.row.createBy || '-' }}
-                  </template>
+                    <template #default="scope">
+                        {{ scope.row.createBy || '-' }}
+                    </template>
                 </el-table-column>
                 <el-table-column
                     v-if="getColumnVisibility(8)"
@@ -223,9 +209,7 @@
                     :sort-orders="['descending', 'ascending']"
                 >
                     <template #default="scope">
-                        <span>{{
-                            parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}')
-                        }}</span>
+                        <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}') }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -240,10 +224,12 @@
                         <el-button
                             link
                             type="primary"
-                            @click="handleTestConnection(scope.row,'table')"
+                            @click="handleTestConnection(scope.row, 'table')"
                             v-hasPermi="['dm:datasource:datasource:edit']"
                         >
-                            <template #icon><el-icon :size="14"><Connection /></el-icon></template>
+                            <template #icon
+                                ><el-icon :size="14"><Connection /></el-icon
+                            ></template>
                             测试连接
                         </el-button>
                         <el-button
@@ -252,13 +238,17 @@
                             @click="handleDetail(scope.row)"
                             v-hasPermi="['dm:datasource:datasource:edit']"
                         >
-                            <template #icon><el-icon :size="14"><View /></el-icon></template>
+                            <template #icon
+                                ><el-icon :size="14"><View /></el-icon
+                            ></template>
                             详情
                         </el-button>
                         <el-popover placement="bottom" :width="150" trigger="click">
                             <template #reference>
                                 <el-button type="primary" link @click.stop>
-                                    <template #icon><el-icon :size="14"><ArrowDown /></el-icon></template>
+                                    <template #icon
+                                        ><el-icon :size="14"><ArrowDown /></el-icon
+                                    ></template>
                                     更多
                                 </el-button>
                             </template>
@@ -271,7 +261,9 @@
                                     style="margin-left: 28px"
                                     :disabled="scope.row.validFlag"
                                 >
-                                    <template #icon><el-icon :size="14"><Edit /></el-icon></template>
+                                    <template #icon
+                                        ><el-icon :size="14"><Edit /></el-icon
+                                    ></template>
                                     修改
                                 </el-button>
                                 <el-button
@@ -282,7 +274,9 @@
                                     style="margin-left: 28px"
                                     :disabled="scope.row.validFlag"
                                 >
-                                    <template #icon><el-icon :size="14"><Delete /></el-icon></template>
+                                    <template #icon
+                                        ><el-icon :size="14"><Delete /></el-icon
+                                    ></template>
                                     删除
                                 </el-button>
                             </div>
@@ -339,7 +333,10 @@
 
                     <el-col :span="12">
                         <el-form-item label="数据连接类型" prop="datasourceType">
-                            <el-select v-model="form.datasourceType" placeholder="请选择数据连接类型">
+                            <el-select
+                                v-model="form.datasourceType"
+                                placeholder="请选择数据连接类型"
+                            >
                                 <el-option
                                     v-for="dict in datasource_type"
                                     :key="dict.value"
@@ -393,7 +390,11 @@
                     </el-col>
                     <el-col
                         :span="12"
-                        v-if="form.datasourceType !== null && form.datasourceType !== 'DM8' && form.datasourceType !== 'MySql'"
+                        v-if="
+                            form.datasourceType !== null &&
+                            form.datasourceType !== 'DM8' &&
+                            form.datasourceType !== 'MySql'
+                        "
                     >
                         <el-form-item label="模式" prop="sid">
                             <el-input v-model="form.sid" placeholder="请输入模式" />
@@ -444,7 +445,12 @@
             </el-form>
             <template #footer>
                 <div class="dialog-footer">
-                    <el-button type="primary" size="mini" @click="handleTestConnection(form.value,'dialog')">测试连接</el-button>
+                    <el-button
+                        type="primary"
+                        size="mini"
+                        @click="handleTestConnection(form.value, 'dialog')"
+                        >测试连接</el-button
+                    >
                     <el-button size="mini" @click="cancel">取 消</el-button>
                     <el-button type="primary" size="mini" @click="submitForm">确 定</el-button>
                 </div>
@@ -473,7 +479,18 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="数据源类型" prop="datasourceType">
-                            <div style="display: flex; align-items: center; border: 1px solid var(--el-input-border-color, #e4e7ed); border-radius: 2px; padding: 1px 11px; background-color: var(--el-fill-color-light, #f5f7fa); height: 32px; width: 100%;">
+                            <div
+                                style="
+                                    display: flex;
+                                    align-items: center;
+                                    border: 1px solid var(--el-input-border-color, #e4e7ed);
+                                    border-radius: 2px;
+                                    padding: 1px 11px;
+                                    background-color: var(--el-fill-color-light, #f5f7fa);
+                                    height: 32px;
+                                    width: 100%;
+                                "
+                            >
                                 <el-tag size="small">
                                     {{ getDatasourceLabel(form.datasourceType) }}
                                 </el-tag>
@@ -513,7 +530,11 @@
                     </el-col>
                     <el-col
                         :span="12"
-                        v-if="form.datasourceType !== null && form.datasourceType !== 'DM8' && form.datasourceType !== 'MySql'"
+                        v-if="
+                            form.datasourceType !== null &&
+                            form.datasourceType !== 'DM8' &&
+                            form.datasourceType !== 'MySql'
+                        "
                     >
                         <el-form-item label="模式" prop="sid">
                             <el-input :value="form.sid" disabled />
@@ -532,14 +553,24 @@
                 <el-row :gutter="20">
                     <el-col :span="24">
                         <el-form-item label="描述" prop="description">
-                            <el-input type="textarea" :value="form.description || '-'" disabled class="no-resize-textarea" />
+                            <el-input
+                                type="textarea"
+                                :value="form.description || '-'"
+                                disabled
+                                class="no-resize-textarea"
+                            />
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row :gutter="20">
                     <el-col :span="24">
                         <el-form-item label="备注" prop="remark">
-                            <el-input type="textarea" :value="form.remark || '-'" disabled class="no-resize-textarea" />
+                            <el-input
+                                type="textarea"
+                                :value="form.remark || '-'"
+                                disabled
+                                class="no-resize-textarea"
+                            />
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -619,7 +650,7 @@
     const daDatasourceList = ref([]);
 
     const getDatasourceLabel = (value) => {
-        const dict = datasource_type.value.find(item => item.value === value);
+        const dict = datasource_type.value.find((item) => item.value === value);
         return dict ? dict.label : value;
     };
 
@@ -687,12 +718,14 @@
             dataSize: null,
             description: null,
             createTime: null,
-            orderByColumn: "createTime",
-            isAsc: "desc",
+            orderByColumn: 'createTime',
+            isAsc: 'desc'
         },
         rules: {
             datasourceName: [{ required: true, message: '数据连接名称不能为空', trigger: 'blur' }],
-            datasourceType: [{ required: true, message: '数据连接类型不能为空', trigger: 'change' }],
+            datasourceType: [
+                { required: true, message: '数据连接类型不能为空', trigger: 'change' }
+            ],
             datasourceConfig: [
                 { required: true, message: '数据源配置(json字符串)不能为空', trigger: 'blur' }
             ],
@@ -821,7 +854,7 @@
     }
 
     /** 测试连接按钮操作 */
-    function handleTestConnection(row,type) {
+    function handleTestConnection(row, type) {
         if (type == 'dialog') {
             proxy.$refs['daDatasourceRef'].validate((valid) => {
                 if (valid) {
@@ -886,8 +919,8 @@
 
     /** 状态切换操作 */
     function handleStatusChange(row) {
-        console.log(row,'rowcjyyyyy');
-        let text = row.validFlag === true ? "启用" : "禁用";
+        console.log(row, 'rowcjyyyyy');
+        let text = row.validFlag === true ? '启用' : '禁用';
         row.validFlag = row.validFlag === true ? true : false;
         proxy.$modal
             .confirm('确认要' + text + '"' + row.datasourceName + '"数据连接吗？')
@@ -993,37 +1026,37 @@
     getList();
 </script>
 <style scoped lang="scss">
-.card-button-group {
-  width: 100px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
+    .card-button-group {
+        width: 100px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
 
-::v-deep .el-dialog__body {
-  height: auto !important;
-}
+    ::v-deep .el-dialog__body {
+        height: auto !important;
+    }
 
-::v-deep .no-resize-textarea textarea {
-  resize: none !important;
-}
+    ::v-deep .no-resize-textarea textarea {
+        resize: none !important;
+    }
 
-/* 表格单元格悬浮提示样式 - 多行显示 */
-::v-deep .el-table .cell.el-tooltip {
-  display: -webkit-box !important;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-break: break-all;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical !important;
-  white-space: normal;
-}
+    /* 表格单元格悬浮提示样式 - 多行显示 */
+    ::v-deep .el-table .cell.el-tooltip {
+        display: -webkit-box !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: break-all;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical !important;
+        white-space: normal;
+    }
 
-::v-deep .el-popper.is-light {
-    box-shadow: 0px 2px 8px 1px rgba(0, 0, 0, 0.15);
-    max-width: 600px;
-    font-size: 14px;
-    padding: 16px;
-    line-height: 22px;
-}
+    ::v-deep .el-popper.is-light {
+        box-shadow: 0px 2px 8px 1px rgba(0, 0, 0, 0.15);
+        max-width: 600px;
+        font-size: 14px;
+        padding: 16px;
+        line-height: 22px;
+    }
 </style>
