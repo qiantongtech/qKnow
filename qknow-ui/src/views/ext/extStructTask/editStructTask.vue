@@ -1,40 +1,32 @@
 <!--
-  Copyright © 2026 Qiantong Technology Co., Ltd.
-  qKnow Knowledge Platform
-   *
-  License:
-  Released under the Apache License, Version 2.0.
-  You may use, modify, and distribute this software for commercial purposes
-  under the terms of the License.
-   *
-  Special Notice:
-  All derivative versions are strictly prohibited from modifying or removing
-  the default system logo and copyright information.
-  For brand customization, please apply for brand customization authorization via official channels.
-   *
-  More information: https://qknow.qiantong.tech/business.html
-   *
-  ============================================================================
-   *
-  版权所有 © 2026 江苏千桐科技有限公司
-  qKnow 知识平台（开源版）
-   *
-  许可协议：
-  本项目基于 Apache License 2.0 开源协议发布，
-  允许在遵守协议的前提下进行商用、修改和分发。
-   *
-  特别说明：
-  所有衍生版本不得修改或移除系统默认的 LOGO 和版权信息；
-  如需定制品牌，请通过官方渠道申请品牌定制授权。
-   *
-  更多信息请访问：https://qknow.qiantong.tech/business.html
+ Copyright © 2025-present Jiangsu Qiantong Technology Co., Ltd.
+ 
+ This file is part of qKnow Intelligent Agent Building Platform (Open Source Edition).
+ 
+ qKnow is licensed under Apache License 2.0 with additional qKnow terms.
+ You may use qKnow for commercial purposes, but you may not remove, hide,
+ modify, or replace the qKnow logo, copyright notices, license notices,
+ or attribution information without a separate commercial license.
+ 
+ White-label use, OEM distribution, rebranding, or presenting qKnow as
+ another product requires separate commercial authorization from
+ Jiangsu Qiantong Technology Co., Ltd.
+ 
+ Business License: https://community.qknow.ai/business/policy.html
+ See the LICENSE file in the project root for full license information.
 -->
 
 <template>
     <!-- 仅修改模板结构部分 -->
     <div class="app-container" ref="app-container">
         <div class="pagecont-top">
-            <el-form ref="extStructRef" :model="form" :rules="rules" style="width: 75%;" label-width="100px">
+            <el-form
+                ref="extStructRef"
+                :model="form"
+                :rules="rules"
+                style="width: 75%"
+                label-width="100px"
+            >
                 <!-- 结构化抽取任务区块 -->
                 <div class="module-block">
                     <div class="module-header">
@@ -43,39 +35,44 @@
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item label="任务名称" prop="name">
-                                <el-input v-model="form.name" placeholder="请输入任务名称"/>
+                                <el-input v-model="form.name" placeholder="请输入任务名称" />
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item label="数据源" prop="dataSourceId">
-                                <el-select @change="changeDataSource" v-model="form.dataSourceId" placeholder="请选择">
+                                <el-select
+                                    @change="changeDataSource"
+                                    v-model="form.dataSourceId"
+                                    placeholder="请选择"
+                                >
                                     <el-option
-                                            v-for="item in dataSourceList"
-                                            :key="item.id"
-                                            :label="item.datasourceName"
-                                            :value="item.id">
+                                        v-for="item in dataSourceList"
+                                        :key="item.id"
+                                        :label="item.datasourceName"
+                                        :value="item.id"
+                                    >
                                     </el-option>
                                 </el-select>
-
-
                             </el-form-item>
                         </el-col>
 
                         <el-col :span="12">
                             <div>
-                                <el-button type="primary" plain @click="testConnection">测试连接</el-button>
+                                <el-button type="primary" plain @click="testConnection"
+                                    >测试连接</el-button
+                                >
                                 <!-- 条件渲染绿色圆形对号图标 -->
                                 <div v-if="connectionSuccess" class="success-icon">
-                                    <el-icon style="color: white;">
-                                        <check/>
+                                    <el-icon style="color: white">
+                                        <check />
                                     </el-icon>
                                 </div>
                                 <!-- 条件渲染红色圆形 X 图标 -->
                                 <div v-if="connectionError" class="error-icon">
-                                    <el-icon style="color: white;">
-                                        <close/>
+                                    <el-icon style="color: white">
+                                        <close />
                                     </el-icon>
                                 </div>
                             </div>
@@ -84,57 +81,57 @@
                 </div>
 
                 <!-- 数据映射区块 -->
-                <div class="module-block" style="margin-top: 15px;">
+                <div class="module-block" style="margin-top: 15px">
                     <div class="module-header">
                         <span class="module-title">数据映射</span>
                         <div class="header-actions">
-                            <el-button type="primary" plain @click="openImportTable">导入表</el-button>
+                            <el-button type="primary" plain @click="openImportTable"
+                                >导入表</el-button
+                            >
                             <el-icon class="tip-icon" size="20" style="">
-                                <InfoFilled/>
+                                <InfoFilled />
                             </el-icon>
                             <span class="tip-text">注：导入表之前需确保数据库连接信息正确</span>
                         </div>
                     </div>
-                    <el-table :data="tableData" >
-                        <el-table-column
-                                prop="tableName"
-                                label="表名">
-                        </el-table-column>
-                        <el-table-column
-                                prop="tableComment"
-                                label="表显示名称">
+                    <el-table :data="tableData">
+                        <el-table-column prop="tableName" label="表名"> </el-table-column>
+                        <el-table-column prop="tableComment" label="表显示名称">
                             <template #default="scope">
                                 {{ scope.row.tableComment ? scope.row.tableComment : '-' }}
                             </template>
                         </el-table-column>
-                        <el-table-column
-                                prop="operate"
-                                label="对应概念">
+                        <el-table-column prop="operate" label="对应概念">
                             <template #default="scope">
                                 {{ scope.row.operate ? scope.row.operate : '-' }}
                             </template>
                         </el-table-column>
-                        <el-table-column
-                                prop="status"
-                                label="状态"
-                                align="center"
-                                width="180">
+                        <el-table-column prop="status" label="状态" align="center" width="180">
                             <template #default="scope">
                                 <div>
-                                    <dict-tag :options="ext_mapping_status" :value="scope.row.status"/>
+                                    <dict-tag
+                                        :options="ext_mapping_status"
+                                        :value="scope.row.status"
+                                    />
                                 </div>
                             </template>
                         </el-table-column>
-                        <el-table-column
-                                prop="operate"
-                                align="center"
-                                label="操作"
-                                width="180">
+                        <el-table-column prop="operate" align="center" label="操作" width="180">
                             <template #default="scope">
                                 <div>
-                                    <el-button link type="primary" icon="Edit" @click="mappingClick(scope.row)">映射
+                                    <el-button
+                                        link
+                                        type="primary"
+                                        icon="Edit"
+                                        @click="mappingClick(scope.row)"
+                                        >映射
                                     </el-button>
-                                    <el-button link type="danger" icon="Delete" @click="tableDataDeleteClick(scope.row)">
+                                    <el-button
+                                        link
+                                        type="danger"
+                                        icon="Delete"
+                                        @click="tableDataDeleteClick(scope.row)"
+                                    >
                                         删除
                                     </el-button>
                                 </div>
@@ -144,43 +141,45 @@
                 </div>
 
                 <!-- 底部按钮保持原位 -->
-                <div class="dialog-footer" style="width: 30%;float: right;margin: -75px -163px 0px 0px;">
+                <div
+                    class="dialog-footer"
+                    style="width: 30%; float: right; margin: -75px -163px 0px 0px"
+                >
                     <el-button @click="handleBack">取 消</el-button>
                     <el-button type="primary" @click="submitFileForm">确 定</el-button>
                 </div>
             </el-form>
         </div>
-        <import-table v-show="importShow" ref="importRef" @importDataTable="importDataTable"/>
-        <Mapping class="custom-mapping" v-show="mappingShow" ref="MappingRef" @ok="mappingOk"/>
+        <import-table v-show="importShow" ref="importRef" @importDataTable="importDataTable" />
+        <Mapping class="custom-mapping" v-show="mappingShow" ref="MappingRef" @ok="mappingOk" />
     </div>
 </template>
 
-
 <script setup name="addStructTask">
-    import {ref} from "vue";
+    import { ref } from 'vue';
     // import {listDatasource, getTestConnection} from "@/api/ext/extDatasource/datasource"
-    import { listDaDatasource, clientsTest } from "@/api/da/datasource/daDatasource";
-    import {updateExtStructDataMapping, getExtStruct} from "@/api/ext/extStructTask/extStruct"
+    import { listDaDatasource, clientsTest } from '@/api/da/datasource/daDatasource';
+    import { updateExtStructDataMapping, getExtStruct } from '@/api/ext/extStructTask/extStruct';
     // import {getTableList} from "@/api/ext/extDatasource/datasource";
-    import {getDaDatasourceTableList} from "@/api/da/datasource/daDatasource";
+    import { getDaDatasourceTableList } from '@/api/da/datasource/daDatasource';
     //导入表页面
-    import importTable from "./importTable.vue";
+    import importTable from './importTable.vue';
     //数据映射页面
-    import Mapping from "./mapping.vue";
+    import Mapping from './mapping.vue';
 
     const router = useRouter();
-    const {proxy} = getCurrentInstance();
-    const {ext_mapping_status} = proxy.useDict('ext_mapping_status');
+    const { proxy } = getCurrentInstance();
+    const { ext_mapping_status } = proxy.useDict('ext_mapping_status');
     const open = ref(true);
-    const title = ref('temp')
-    const titleId = ref(null)
-    const connectionSuccess = ref(false)
-    const connectionError = ref(false)
+    const title = ref('temp');
+    const titleId = ref(null);
+    const connectionSuccess = ref(false);
+    const connectionError = ref(false);
 
-    const dataSourceList = ref(null)
-    const dataTableList = ref(null)
+    const dataSourceList = ref(null);
+    const dataTableList = ref(null);
     // const tableData = ref(null)
-    const tableData = ref([])
+    const tableData = ref([]);
     const data = reactive({
         form: {
             dataSourceId: null,
@@ -198,11 +197,11 @@
             publishBy: null,
             datasourceId: null,
             datasourceName: null,
-            createTime: null,
+            createTime: null
         },
         rules: {
-            name: [{required: true, message: "任务名称不能为空", trigger: "blur"}],
-            dataSourceId: [{required: true, message: "数据源不能为空", trigger: "blur"}],
+            name: [{ required: true, message: '任务名称不能为空', trigger: 'blur' }],
+            dataSourceId: [{ required: true, message: '数据源不能为空', trigger: 'blur' }]
             // workspaceId: [{required: true, message: "工作区id不能为空", trigger: "blur"}],
             // status: [{required: true, message: "任务状态不能为空", trigger: "change"}],
             // publishStatus: [{required: true, message: "发布状态不能为空", trigger: "change"}],
@@ -218,7 +217,7 @@
 
     const queqryInfo = ref({
         id: null
-    })
+    });
     watch(
         () => router.currentRoute.value.query.id,
         (val) => {
@@ -226,111 +225,116 @@
                 queqryInfo.value = router.currentRoute.value.query;
             }
         },
-        {immediate: true}
+        { immediate: true }
     );
 
-    const {queryParams, form, rules} = toRefs(data);
+    const { queryParams, form, rules } = toRefs(data);
 
     onMounted(() => {
         getDataSourceList();
         getExtStructInfo();
     });
 
-    const dbTableList = ref([])
+    const dbTableList = ref([]);
     const getExtStructInfo = async () => {
         form.value = {
             dataSourceId: null
-        }
+        };
 
         await getExtStruct(queqryInfo.value.id).then(async (res) => {
-            let structTask = res.data.structTask
+            let structTask = res.data.structTask;
 
             await getTableName(structTask.datasourceId);
 
             let formData = {
                 name: structTask.name,
-                dataSourceId: structTask.datasourceId,
-            }
+                dataSourceId: structTask.datasourceId
+            };
             form.value = formData;
 
             //导入过的表
-            let tableMappingList = res.data.tableMappingList
+            let tableMappingList = res.data.tableMappingList;
 
-            let schemaMappingList = res.data.schemaMappingList
-            let attributeMappingList = res.data.attributeMappingList
-            let relationMappingList = res.data.relationMappingList
-            let customMappingList = res.data.customMappingList
+            let schemaMappingList = res.data.schemaMappingList;
+            let attributeMappingList = res.data.attributeMappingList;
+            let relationMappingList = res.data.relationMappingList;
+            let customMappingList = res.data.customMappingList;
 
             // attributeMappingList = attributeMappingList.filter(item => item.attributeId != null)
 
-            tableMappingList.forEach(e => {
-                e.operate = e.schemaName
-                if(!e.tableComment){
-                    dbTableList.value.forEach(db => {
+            tableMappingList.forEach((e) => {
+                e.operate = e.schemaName;
+                if (!e.tableComment) {
+                    dbTableList.value.forEach((db) => {
                         if (e.tableName == db.tableName) {
-                            e.tableComment = db.tableComment
+                            e.tableComment = db.tableComment;
                         }
-                    })
+                    });
                 }
-                e.status = e.status == true ? 1 : 0
+                e.status = e.status == true ? 1 : 0;
 
-                let mappingData = {}
+                let mappingData = {};
                 // 对应概念
-                schemaMappingList.forEach(sch => {
+                schemaMappingList.forEach((sch) => {
                     if (e.tableName == sch.tableName) {
-                        mappingData.concept = sch.schemaId
-                        mappingData.conceptName = sch.schemaName
-                        mappingData.entityNameField = sch.entityNameField
+                        mappingData.concept = sch.schemaId;
+                        mappingData.conceptName = sch.schemaName;
+                        mappingData.entityNameField = sch.entityNameField;
                         return;
                     }
-                })
+                });
 
                 // 属性映射
-                let attList = []
-                let attributeMapping = attributeMappingList.filter(item => e.tableName == item.tableName && item.attributeId)
-                attributeMapping.forEach(e => {
+                let attList = [];
+                let attributeMapping = attributeMappingList.filter(
+                    (item) => e.tableName == item.tableName && item.attributeId
+                );
+                attributeMapping.forEach((e) => {
                     attList.push({
                         field: e.fieldName,
                         fieldDescription: e.fieldComment,
                         conceptId: e.attributeId,
                         conceptName: e.attributeName
-                    })
-                })
-                mappingData.attributeList = attList
+                    });
+                });
+                mappingData.attributeList = attList;
 
                 //关系映射
-                let relList = []
-                let relationMapping = relationMappingList.filter(item => e.tableName == item.tableName)
-                relationMapping.forEach(e => {
+                let relList = [];
+                let relationMapping = relationMappingList.filter(
+                    (item) => e.tableName == item.tableName
+                );
+                relationMapping.forEach((e) => {
                     relList.push({
                         relation: e.relation,
                         field: e.fieldName,
                         associationTable: e.relationTable,
                         associationTableField: e.relationField,
-                        associationTableEntityField: e.relationNameField,
-
-                    })
-                })
-                mappingData.relationshipList = relList
+                        associationTableEntityField: e.relationNameField
+                    });
+                });
+                mappingData.relationshipList = relList;
 
                 //自定义映射
-                let cusList = []
-                let customMapping = customMappingList.filter(item => e.tableName == item.tableName)
-                customMapping.forEach(e => {
+                let cusList = [];
+                let customMapping = customMappingList.filter(
+                    (item) => e.tableName == item.tableName
+                );
+                customMapping.forEach((e) => {
                     cusList.push({
                         field: e.fieldName,
                         customSQL: e.sqlStatement
-                    })
-                })
-                mappingData.customList = cusList
+                    });
+                });
+                mappingData.customList = cusList;
 
-                console.log('---data-----mappingData----', mappingData)
-                e.mappingData = mappingData
-            })
-            console.log('--导入过的表---tableMappingList---', tableMappingList)
-            tableData.value = tableMappingList
-        })
-    }
+                console.log('---data-----mappingData----', mappingData);
+                e.mappingData = mappingData;
+            });
+            console.log('--导入过的表---tableMappingList---', tableMappingList);
+            tableData.value = tableMappingList;
+        });
+    };
 
     const getTableName = async (datasourceId) => {
         // await getTableList({
@@ -338,38 +342,37 @@
         // }).then(res => {
         //     dbTableList.value = res.data.list;
         // })
-        await getDaDatasourceTableList(datasourceId).then(res => {
+        await getDaDatasourceTableList(datasourceId).then((res) => {
             dbTableList.value = res.data;
-        })
-    }
+        });
+    };
 
     function getDataSourceList() {
         // listDatasource().then(res => {
         //     dataSourceList.value = res.data.list
         //     console.log('============>', res)
         // })
-        listDaDatasource().then(res => {
-            dataSourceList.value = res.data.list
-        })
+        listDaDatasource().then((res) => {
+            dataSourceList.value = res.data.list;
+        });
     }
 
     /** 打开导入表弹窗 */
     function openImportTable() {
         if (connectionSuccess.value) {
-            proxy.$refs["importRef"].show({dataSourceId: form.value.dataSourceId});
+            proxy.$refs['importRef'].show({ dataSourceId: form.value.dataSourceId });
         } else if (connectionError.value) {
-            proxy.$modal.msgError("数据库连接失败");
+            proxy.$modal.msgError('数据库连接失败');
         } else {
-            proxy.$modal.msgError("请先测试连接数据库");
+            proxy.$modal.msgError('请先测试连接数据库');
         }
-
     }
 
     /**
      * 测试连接
      */
     function testConnection() {
-        console.log('-------form-', form.value.dataSourceId)
+        console.log('-------form-', form.value.dataSourceId);
         // getTestConnection(form.value.dataSourceId).then(res => {
         //     if (res && res.code == 200) {
         //         connectionSuccess.value = true
@@ -379,21 +382,21 @@
         // }).catch(res => {
         //     connectionError.value = true
         // })
-        clientsTest(form.value.dataSourceId).then(res=>{
+        clientsTest(form.value.dataSourceId).then((res) => {
             if (res && res.code == 200) {
-                connectionSuccess.value = true
+                connectionSuccess.value = true;
             } else {
-                connectionError.value = true
+                connectionError.value = true;
             }
-        })
+        });
     }
 
     /**
      * 切换数据源
      */
     function changeDataSource() {
-        connectionSuccess.value = false
-        connectionError.value = false
+        connectionSuccess.value = false;
+        connectionError.value = false;
     }
 
     /**
@@ -401,7 +404,7 @@
      */
     const handleBack = () => {
         router.push({
-            path: "/ext/extStructTask"
+            path: '/ext/extStructTask'
         });
     };
 
@@ -410,10 +413,10 @@
      * @param val
      */
     function importDataTable(val) {
-        console.log('-------dataTableList---111------', val)
-        val.forEach(e => {
+        console.log('-------dataTableList---111------', val);
+        val.forEach((e) => {
             // 检查 tableData 中是否已经包含该 tableName
-            const exists = tableData.value.some(item => item.tableName === e.tableName);
+            const exists = tableData.value.some((item) => item.tableName === e.tableName);
             if (!exists) {
                 // 如果没有重复的表名，则添加新的表格数据
                 tableData.value.push({
@@ -424,7 +427,7 @@
                     mappingData: null
                 });
             }
-        })
+        });
     }
 
     /**
@@ -432,16 +435,16 @@
      * @param row
      */
     function mappingClick(row) {
-        console.log('--点击映射--mappingClick----row---', row)
+        console.log('--点击映射--mappingClick----row---', row);
         if (connectionSuccess.value) {
-            let tables = []
-            tableData.value.forEach(e => {
+            let tables = [];
+            tableData.value.forEach((e) => {
                 tables.push({
                     tableName: e.tableName,
-                    tableComment: e.tableName + "(" + e.tableComment + ")"
-                })
-            })
-            proxy.$refs["MappingRef"].show({
+                    tableComment: e.tableName + '(' + e.tableComment + ')'
+                });
+            });
+            proxy.$refs['MappingRef'].show({
                 title: `数据映射 - ${row.tableName} (${row.tableComment})`,
                 dataSourceId: form.value.dataSourceId,
                 tableName: row.tableName,
@@ -451,9 +454,9 @@
                 mappingData: row.mappingData
             });
         } else if (connectionError.value) {
-            proxy.$modal.msgError("数据库连接失败");
+            proxy.$modal.msgError('数据库连接失败');
         } else {
-            proxy.$modal.msgError("请先测试连接数据库");
+            proxy.$modal.msgError('请先测试连接数据库');
         }
     }
 
@@ -462,7 +465,7 @@
      * @param row
      */
     function tableDataDeleteClick(row) {
-        tableData.value = tableData.value.filter(e => e.tableName != row.tableName)
+        tableData.value = tableData.value.filter((e) => e.tableName != row.tableName);
     }
 
     /**
@@ -471,41 +474,41 @@
      * @param row
      */
     const mappingOk = (val) => {
-        console.log('-----mappingData----', val)
-        tableData.value.forEach(tableItem => {
+        console.log('-----mappingData----', val);
+        tableData.value.forEach((tableItem) => {
             if (tableItem.tableName == val.tableName) {
-                tableItem.operate = val.conceptName
-                tableItem.status = 1
-                tableItem.mappingData = val
+                tableItem.operate = val.conceptName;
+                tableItem.status = 1;
+                tableItem.mappingData = val;
             }
-        })
-    }
+        });
+    };
 
     /**
      * 提交结构化抽取任务
      * @param val
      */
     const submitFileForm = () => {
-        proxy.$refs["extStructRef"].validate(valid => {
+        proxy.$refs['extStructRef'].validate((valid) => {
             if (valid) {
-                console.log('---提交结构化抽取任务--tableData----', tableData.value)
-                let data = tableData.value.filter(e => e.status == 1)
+                console.log('---提交结构化抽取任务--tableData----', tableData.value);
+                let data = tableData.value.filter((e) => e.status == 1);
                 updateExtStructDataMapping({
                     taskName: form.value.name,
                     taskId: queqryInfo.value.id,
                     dataSourceId: form.value.dataSourceId,
                     tableData: data
-                }).then(res => {
+                }).then((res) => {
                     if (res && res.code == 200) {
                         //添加结构化抽取任务成功
                         router.push({
-                            path: "/ext/extStructTask"
+                            path: '/ext/extStructTask'
                         });
                     }
-                })
+                });
             }
-        })
-    }
+        });
+    };
 </script>
 
 <style scoped>
@@ -516,7 +519,7 @@
         background: #fff;
         padding: 10px 20px;
         margin-bottom: 20px;
-        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     }
 
     .module-header {
@@ -537,7 +540,7 @@
     }
 
     .module-title::before {
-        content: "";
+        content: '';
         position: absolute;
         left: 0;
         top: 50%;
@@ -563,7 +566,6 @@
     .tip-text {
         color: #909399;
         font-size: 12px;
-
     }
 
     /* 调整原有样式 */
@@ -582,7 +584,8 @@
     }
 
     /* 调整状态图标位置 */
-    .success-icon, .error-icon {
+    .success-icon,
+    .error-icon {
         margin: -28.5px 0px 0px 102px;
         transform: translateY(2px);
         /*display: inline-block;*/
@@ -602,7 +605,8 @@
         background-color: rgba(246, 2, 2, 0.97); /* 失败时红色背景 */
     }
 
-    .success-icon el-icon, .error-icon el-icon {
+    .success-icon el-icon,
+    .error-icon el-icon {
         font-size: 16px;
     }
 

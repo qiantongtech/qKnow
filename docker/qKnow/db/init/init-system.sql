@@ -802,10 +802,7 @@ INSERT INTO `system_dict_data` VALUES (42, 1, '进行中', '1', 'ext_task_status
 INSERT INTO `system_dict_data` VALUES (43, 2, '已完成', '2', 'ext_task_status', '', 'success', 'N', '0', '吴同', '2026-04-20 09:32:54', '', NULL, '已完成状态');
 INSERT INTO `system_dict_data` VALUES (44, 3, '执行失败', '3', 'ext_task_status', '', 'danger', 'N', '0', '吴同', '2026-04-20 09:32:54', '', NULL, '执行失败状态');
 INSERT INTO `system_dict_data` VALUES (45, 1, 'MySql', 'MySql', 'datasource_type', '', 'primary', 'N', '0', '吴同', '2026-04-20 09:32:54', '', NULL, 'MySql数据库');
-INSERT INTO `system_dict_data` VALUES (46, 2, 'DM8', 'DM8', 'datasource_type', '', 'primary', 'N', '0', '吴同', '2026-04-20 09:32:54', '吴同', '2026-05-09 16:18:00', '达梦8数据库');
 INSERT INTO `system_dict_data` VALUES (47, 3, 'Oracle', 'Oracle', 'datasource_type', '', 'primary', 'N', '0', '吴同', '2026-04-20 09:32:54', '吴同', '2026-05-09 16:18:03', 'Oracle数据库');
-INSERT INTO `system_dict_data` VALUES (48, 4, 'Oracle11', 'Oracle11', 'datasource_type', '', 'primary', 'N', '0', '吴同', '2026-04-20 09:32:54', '吴同', '2026-05-09 16:18:06', 'Oracle11数据库');
-INSERT INTO `system_dict_data` VALUES (49, 5, 'Kingbase8', 'Kingbase8', 'datasource_type', '', 'primary', 'N', '0', '吴同', '2026-04-20 09:32:54', '吴同', '2026-05-09 16:18:09', '人大金仓8数据库');
 INSERT INTO `system_dict_data` VALUES (50, 0, '未映射', '0', 'ext_mapping_status', NULL, 'warning', 'N', '0', '吴同', '2026-04-20 09:32:54', '吴同', '2026-04-20 09:32:54', NULL);
 INSERT INTO `system_dict_data` VALUES (51, 1, '已映射', '1', 'ext_mapping_status', NULL, 'success', 'N', '0', '吴同', '2026-04-20 09:32:54', '', NULL, NULL);
 INSERT INTO `system_dict_data` VALUES (52, 1, '失败', '0', 'ext_log_status', NULL, 'danger', 'N', '0', '吴同', '2026-04-20 09:36:58', '', NULL, NULL);
@@ -1654,8 +1651,8 @@ CREATE TABLE `system_user`  (
 -- ----------------------------
 -- Records of system_user
 -- ----------------------------
-INSERT INTO `system_user` VALUES (1, 100, 'qKnow', '小桐', '00', 'support@qiantong.tech', '15888888888', '0', '', '$2a$10$M9QTlVS3URMVLDMMmJYYress8MgeKE0ahcNQSwO.T/TI8/U1U7pF6', '0', '0', '127.0.0.1', '2026-05-18 09:28:59', '吴同', '2026-04-20 09:32:53', '', '2026-05-18 09:28:58', '管理员');
-INSERT INTO `system_user` VALUES (100, 100, 'wutong', '吴同', '00', '', '18888888888', '0', '', '$2a$10$.GvAEzXclpKHi8e3k4SqZOyqE7sRlnvUBCQqRXfYyy7odE6wkOziq', '0', '0', '', NULL, '吴同', '2026-06-03 14:48:53', '', NULL, NULL);
+INSERT INTO `system_user` VALUES (1, 100, 'admin', '超级管理员', '00', 'support@qiantong.tech', '15888888888', '0', '', '$2a$10$.GvAEzXclpKHi8e3k4SqZOyqE7sRlnvUBCQqRXfYyy7odE6wkOziq', '0', '0', '127.0.0.1', '2026-05-18 09:28:59', '吴同', '2026-04-20 09:32:53', '', '2026-05-18 09:28:58', '管理员');
+INSERT INTO `system_user` VALUES (100, 100, 'qKnow', '吴同', '00', '', '18888888888', '0', '', '$2a$10$M9QTlVS3URMVLDMMmJYYress8MgeKE0ahcNQSwO.T/TI8/U1U7pF6', '0', '0', '', NULL, '吴同', '2026-06-03 14:48:53', '', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for system_user_post

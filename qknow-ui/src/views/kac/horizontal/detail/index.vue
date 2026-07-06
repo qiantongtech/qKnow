@@ -1,473 +1,407 @@
 <!--
-  Copyright (c) 2026 Jiangsu Qiantong Technology Co., Ltd.
-   *
-  Software Name: qKnow Knowledge Platform (Business Edition)
-  Software Copyright Registration No. 15980140
-   *
-  [RIGHTS AND LICENSE STATEMENT]
-  This file contains non-public commercial source code of which Jiangsu Qiantong
-  Technology Co., Ltd. lawfully possesses complete intellectual property rights.
-   *
-  Access and use are limited to entities or individuals who have signed a valid
-  commercial license agreement, within the scope stipulated in the agreement.
-  The "accessibility" of this source code is premised on lawful authorization
-  and does not constitute any form of transfer of intellectual property rights
-  or implied licensing.
-   *
-  [PROHIBITIONS]
-  Unless explicitly agreed in the license agreement, the following acts in any
-  form are strictly prohibited:
-  1. Copying, disseminating, disclosing, selling, renting, or redistributing
-  this source code;
-  2. Providing the software's functionality to third parties via SaaS, PaaS,
-  cloud hosting, or other means;
-  3. Using this software or its derivative versions to develop products that
-  compete with the Right Holder;
-  4. Providing or displaying this source code or related technical information
-  to unauthorized third parties;
-  5. Tampering with, circumventing, or destroying copyright notices, license
-  verifications, or other technical protection measures.
-   *
-  [LEGAL LIABILITY]
-  Any unauthorized use constitutes an infringement of trade secrets and
-  intellectual property rights.
-   *
-  The Right Holder will strictly pursue liability for breach of contract and
-  infringement in accordance with the commercial agreement and laws such as
-  the "Copyright Law of the People's Republic of China" and the "Anti-Unfair
-  Competition Law".
-   *
-  ============================================================================
-   *
-  Copyright (c) 2026 江苏千桐科技有限公司
-   *
-  软件名称：qKnow 知识平台（商业版） | 软著登字第15980140号
-   *
-  【权利与授权声明】
-  本文件属于江苏千桐科技有限公司依法享有完全知识产权的非公开商业源代码。
-  仅限已签署有效商业授权合同的单位或个人在约定范围内查阅和使用。
-  源代码的“可访问性”均以合法授权为前提，不构成任何形式的知识产权转让或默示授权。
-   *
-  【禁止事项】
-  除授权合同明确约定外，严禁任何形式的：
-  1. 复制、传播、披露、出售、出租或再分发本源代码；
-  2. 通过 SaaS、PaaS、云托管等方式向第三方提供本软件功能；
-  3. 将本软件或其衍生版本用于开发与权利人构成竞争的产品；
-  4. 向未授权第三方提供或展示本源代码或相关技术信息；
-  5. 篡改、规避或破坏版权标识、授权校验及其他技术保护措施。
-   *
-  【法律责任】
-  任何未经授权的利用行为，均构成对商业秘密及知识产权的侵害。
-  权利人将依据商业合同及《中华人民共和国著作权法》《反不正当竞争法》
-  等法律法规，严厉追究违约与侵权责任。
+ Copyright © 2025-present Jiangsu Qiantong Technology Co., Ltd.
+ 
+ This file is part of qKnow Intelligent Agent Building Platform (Open Source Edition).
+ 
+ qKnow is licensed under Apache License 2.0 with additional qKnow terms.
+ You may use qKnow for commercial purposes, but you may not remove, hide,
+ modify, or replace the qKnow logo, copyright notices, license notices,
+ or attribution information without a separate commercial license.
+ 
+ White-label use, OEM distribution, rebranding, or presenting qKnow as
+ another product requires separate commercial authorization from
+ Jiangsu Qiantong Technology Co., Ltd.
+ 
+ Business License: https://community.qknow.ai/business/policy.html
+ See the LICENSE file in the project root for full license information.
 -->
 
 <template>
-  <div
-    class="app-container app-detail-page"
-    ref="appContainer"
-    v-loading="loading"
-  >
-    <section class="detail-hero" :style="{ backgroundImage: `url(${heroBg})` }">
-      <div class="hero-main">
-        <div class="app-logo">
-          <img :src="getAppIcon(applyDetail)" alt="" />
-        </div>
-        <div class="hero-info">
-          <div class="hero-title-row">
-            <h1>{{ applyDetail.name || "-" }}</h1>
-            <span class="status-pill" :class="{ disabled: isDisabled }">
-              <i></i>
-              {{ statusText }}
-            </span>
-            <span class="category-text">{{ categoryLabel }}</span>
-          </div>
-          <p class="hero-desc">
-            {{ applyDetail.description || "暂无应用描述" }}
-          </p>
-          <div class="hero-tags">
-            <span v-for="tag in displayTags" :key="tag.name" class="hero-tag">
-              {{ tag.name }}
-            </span>
-          </div>
-        </div>
-      </div>
-      <div class="hero-actions">
-        <el-button
-          type="primary"
-          plain
-          icon="CopyDocument"
-          @click="showCopyDialog('copy')"
-          @mousedown="(e) => e.preventDefault()"
-        >
-          复制应用
-        </el-button>
-        <el-button
-          type="primary"
-          icon="Promotion"
-          @click="handleUse(applyDetail)"
-          @mousedown="(e) => e.preventDefault()"
-        >
-          立即体验
-        </el-button>
-      </div>
-    </section>
-
-    <div
-      class="detail-content"
-      :class="{
-        'detail-content--single': !visibleMountedResourceGroups.length,
-      }"
-    >
-      <main class="main-panel" ref="mainPanelRef">
-        <section class="content-section">
-          <div class="section-title">
-            <span></span>
-            核心价值
-          </div>
-          <div
-            class="value-card"
-            :style="{ backgroundImage: `url(${valueBg})` }"
-          >
-            <p v-html="coreValueHtml"></p>
-            <div class="value-metrics">
-              <div v-for="item in coreMetrics" :key="item.title">
-                <strong>{{ item.title }}</strong>
-                <small>{{ item.desc }}</small>
-              </div>
+    <div class="app-container app-detail-page" ref="appContainer" v-loading="loading">
+        <section class="detail-hero" :style="{ backgroundImage: `url(${heroBg})` }">
+            <div class="hero-main">
+                <div class="app-logo">
+                    <img :src="getAppIcon(applyDetail)" alt="" />
+                </div>
+                <div class="hero-info">
+                    <div class="hero-title-row">
+                        <h1>{{ applyDetail.name || '-' }}</h1>
+                        <span class="status-pill" :class="{ disabled: isDisabled }">
+                            <i></i>
+                            {{ statusText }}
+                        </span>
+                        <span class="category-text">{{ categoryLabel }}</span>
+                    </div>
+                    <p class="hero-desc">
+                        {{ applyDetail.description || '暂无应用描述' }}
+                    </p>
+                    <div class="hero-tags">
+                        <span v-for="tag in displayTags" :key="tag.name" class="hero-tag">
+                            {{ tag.name }}
+                        </span>
+                    </div>
+                </div>
             </div>
-          </div>
+            <div class="hero-actions">
+                <el-button
+                    type="primary"
+                    plain
+                    icon="CopyDocument"
+                    @click="showCopyDialog('copy')"
+                    @mousedown="(e) => e.preventDefault()"
+                >
+                    复制应用
+                </el-button>
+                <el-button
+                    type="primary"
+                    icon="Promotion"
+                    @click="handleUse(applyDetail)"
+                    @mousedown="(e) => e.preventDefault()"
+                >
+                    立即体验
+                </el-button>
+            </div>
         </section>
 
-        <section class="content-section">
-          <div class="section-title">
-            <span></span>
-            核心能力优势
-          </div>
-          <div class="ability-grid">
-            <article
-              v-for="item in capabilityCards"
-              :key="item.title"
-              class="ability-card"
-            >
-              <h3>{{ item.title }}</h3>
-              <p>{{ item.desc }}</p>
-            </article>
-          </div>
-        </section>
-
-        <section class="content-section scene-section">
-          <div class="section-title">
-            <span></span>
-            使用场景
-          </div>
-          <div class="scene-grid">
-            <article
-              v-for="item in scenarioCards"
-              :key="item.title"
-              class="scene-card"
-            >
-              <div class="scene-card-cover">
-                <img :src="item.image" alt="" />
-              </div>
-              <div class="scene-card-content">
-                <h3 class="scene-card-title">{{ item.title }}</h3>
-                <div class="scene-card-tags">
-                  <el-tag
-                    v-for="tag in item.tags"
-                    :key="tag"
-                    class="scene-card-tag"
-                  >
-                    {{ tag }}
-                  </el-tag>
-                </div>
-                <p class="scene-card-desc">{{ item.desc }}</p>
-                <div class="scene-card-meta">
-                  <span class="scene-card-heat">
-                    <img
-                      class="scene-card-heat-icon"
-                      :src="heatFlameIcon"
-                      alt=""
-                    />
-                    <span>{{ item.heatValue }}</span>
-                  </span>
-                  <span class="scene-card-date">
-                    <el-icon class="scene-card-date-icon"><Clock /></el-icon>
-                    <span>{{ item.createTime }}</span>
-                  </span>
-                </div>
-              </div>
-            </article>
-          </div>
-        </section>
-      </main>
-
-      <aside
-        v-if="visibleMountedResourceGroups.length"
-        class="resource-panel"
-        :style="
-          mainPanelHeight ? { maxHeight: `${mainPanelHeight}px` } : undefined
-        "
-      >
-        <div class="section-title resource-title">
-          <span></span>
-          挂载资源
-        </div>
-        <section
-          v-for="group in visibleMountedResourceGroups"
-          :key="group.type"
-          class="resource-group"
+        <div
+            class="detail-content"
+            :class="{
+                'detail-content--single': !visibleMountedResourceGroups.length
+            }"
         >
-          <div class="resource-group-title">
-            <span class="resource-icon-wrap" :class="group.type">
-              <img :src="group.icon" alt="" />
-            </span>
-            {{ group.title }}
-          </div>
-          <div class="resource-list">
-            <article
-              v-for="item in group.items"
-              :key="`${group.type}-${item.relationId || item.id}`"
-              class="resource-card"
-              :class="group.type"
+            <main class="main-panel" ref="mainPanelRef">
+                <section class="content-section">
+                    <div class="section-title">
+                        <span></span>
+                        核心价值
+                    </div>
+                    <div class="value-card" :style="{ backgroundImage: `url(${valueBg})` }">
+                        <p v-html="coreValueHtml"></p>
+                        <div class="value-metrics">
+                            <div v-for="item in coreMetrics" :key="item.title">
+                                <strong>{{ item.title }}</strong>
+                                <small>{{ item.desc }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <div class="section-title">
+                        <span></span>
+                        核心能力优势
+                    </div>
+                    <div class="ability-grid">
+                        <article
+                            v-for="item in capabilityCards"
+                            :key="item.title"
+                            class="ability-card"
+                        >
+                            <h3>{{ item.title }}</h3>
+                            <p>{{ item.desc }}</p>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="content-section scene-section">
+                    <div class="section-title">
+                        <span></span>
+                        使用场景
+                    </div>
+                    <div class="scene-grid">
+                        <article v-for="item in scenarioCards" :key="item.title" class="scene-card">
+                            <div class="scene-card-cover">
+                                <img :src="item.image" alt="" />
+                            </div>
+                            <div class="scene-card-content">
+                                <h3 class="scene-card-title">{{ item.title }}</h3>
+                                <div class="scene-card-tags">
+                                    <el-tag
+                                        v-for="tag in item.tags"
+                                        :key="tag"
+                                        class="scene-card-tag"
+                                    >
+                                        {{ tag }}
+                                    </el-tag>
+                                </div>
+                                <p class="scene-card-desc">{{ item.desc }}</p>
+                                <div class="scene-card-meta">
+                                    <span class="scene-card-heat">
+                                        <img
+                                            class="scene-card-heat-icon"
+                                            :src="heatFlameIcon"
+                                            alt=""
+                                        />
+                                        <span>{{ item.heatValue }}</span>
+                                    </span>
+                                    <span class="scene-card-date">
+                                        <el-icon class="scene-card-date-icon"><Clock /></el-icon>
+                                        <span>{{ item.createTime }}</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+            </main>
+
+            <aside
+                v-if="visibleMountedResourceGroups.length"
+                class="resource-panel"
+                :style="mainPanelHeight ? { maxHeight: `${mainPanelHeight}px` } : undefined"
             >
-              <span class="resource-card-icon" :class="group.type">
-                <img :src="group.cardIcon" alt="" />
-              </span>
-              <div>
-                <h3>{{ item.name }}</h3>
-                <p>{{ item.description }}</p>
-              </div>
-              <el-button
-                v-if="isMyAppSource"
-                type="primary"
-                plain
-                icon="Switch"
-                @click="openResourceDialog(group.type)"
-              >
-                切换
-              </el-button>
-            </article>
-          </div>
-        </section>
-      </aside>
-    </div>
-
-    <el-dialog
-      :title="resourceDialogTitle"
-      v-model="resourceDialogOpen"
-      width="1100px"
-      append-to-body
-      destroy-on-close
-      class="resource-manager-dialog"
-      @closed="handleResourceDialogClosed"
-    >
-      <Kmc
-        v-if="resourceDialogOpen && resourceDialogType === 'knowledge'"
-        :applyId="applyDetail.id"
-        :knowledgeBaseList="knowledgeBaseList"
-        :source="getSource()"
-        :key="`knowledge-${applyDetail.id}`"
-      />
-      <Kg
-        v-if="resourceDialogOpen && resourceDialogType === 'graph'"
-        :applyId="applyDetail.id"
-        :graphList="graphList"
-        :source="getSource()"
-        :key="`graph-${applyDetail.id}`"
-      />
-      <Bot
-        v-if="resourceDialogOpen && resourceDialogType === 'bot'"
-        :applyId="applyDetail.id"
-        :botList="botList"
-        :source="getSource()"
-        :key="`bot-${applyDetail.id}`"
-      />
-    </el-dialog>
-
-    <el-dialog :title="title" v-model="open" width="800px" draggable>
-      <el-form ref="applyRef" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="应用名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入应用名称" />
-        </el-form-item>
-        <el-form-item label="描述" prop="description">
-          <el-input
-            v-model="form.description"
-            type="textarea"
-            placeholder="请输入描述"
-            maxlength="512"
-            show-word-limit
-          />
-        </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input
-            v-model="form.remark"
-            type="textarea"
-            placeholder="请输入备注"
-            maxlength="512"
-            show-word-limit
-          />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button size="mini" @click="cancel">取消</el-button>
-          <el-button type="primary" size="mini" @click="submitForm">
-            确定
-          </el-button>
+                <div class="section-title resource-title">
+                    <span></span>
+                    挂载资源
+                </div>
+                <section
+                    v-for="group in visibleMountedResourceGroups"
+                    :key="group.type"
+                    class="resource-group"
+                >
+                    <div class="resource-group-title">
+                        <span class="resource-icon-wrap" :class="group.type">
+                            <img :src="group.icon" alt="" />
+                        </span>
+                        {{ group.title }}
+                    </div>
+                    <div class="resource-list">
+                        <article
+                            v-for="item in group.items"
+                            :key="`${group.type}-${item.relationId || item.id}`"
+                            class="resource-card"
+                            :class="group.type"
+                        >
+                            <span class="resource-card-icon" :class="group.type">
+                                <img :src="group.cardIcon" alt="" />
+                            </span>
+                            <div>
+                                <h3>{{ item.name }}</h3>
+                                <p>{{ item.description }}</p>
+                            </div>
+                            <el-button
+                                v-if="isMyAppSource"
+                                type="primary"
+                                plain
+                                icon="Switch"
+                                @click="openResourceDialog(group.type)"
+                            >
+                                切换
+                            </el-button>
+                        </article>
+                    </div>
+                </section>
+            </aside>
         </div>
-      </template>
-    </el-dialog>
-  </div>
+
+        <el-dialog
+            :title="resourceDialogTitle"
+            v-model="resourceDialogOpen"
+            width="1100px"
+            append-to-body
+            destroy-on-close
+            class="resource-manager-dialog"
+            @closed="handleResourceDialogClosed"
+        >
+            <Kmc
+                v-if="resourceDialogOpen && resourceDialogType === 'knowledge'"
+                :applyId="applyDetail.id"
+                :knowledgeBaseList="knowledgeBaseList"
+                :source="getSource()"
+                :key="`knowledge-${applyDetail.id}`"
+            />
+            <Kg
+                v-if="resourceDialogOpen && resourceDialogType === 'graph'"
+                :applyId="applyDetail.id"
+                :graphList="graphList"
+                :source="getSource()"
+                :key="`graph-${applyDetail.id}`"
+            />
+            <Bot
+                v-if="resourceDialogOpen && resourceDialogType === 'bot'"
+                :applyId="applyDetail.id"
+                :botList="botList"
+                :source="getSource()"
+                :key="`bot-${applyDetail.id}`"
+            />
+        </el-dialog>
+
+        <el-dialog :title="title" v-model="open" width="800px" draggable>
+            <el-form ref="applyRef" :model="form" :rules="rules" label-width="80px">
+                <el-form-item label="应用名称" prop="name">
+                    <el-input v-model="form.name" placeholder="请输入应用名称" />
+                </el-form-item>
+                <el-form-item label="描述" prop="description">
+                    <el-input
+                        v-model="form.description"
+                        type="textarea"
+                        placeholder="请输入描述"
+                        maxlength="512"
+                        show-word-limit
+                    />
+                </el-form-item>
+                <el-form-item label="备注" prop="remark">
+                    <el-input
+                        v-model="form.remark"
+                        type="textarea"
+                        placeholder="请输入备注"
+                        maxlength="512"
+                        show-word-limit
+                    />
+                </el-form-item>
+            </el-form>
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button size="mini" @click="cancel">取消</el-button>
+                    <el-button type="primary" size="mini" @click="submitForm"> 确定 </el-button>
+                </div>
+            </template>
+        </el-dialog>
+    </div>
 </template>
 
 <script setup name="Horizontal">
-import { useRoute, useRouter } from "vue-router";
-import {
-  computed,
-  getCurrentInstance,
-  nextTick,
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  ref,
-  toRefs,
-  watch,
-} from "vue";
-import { Clock } from "@element-plus/icons-vue";
-import Kmc from "@/views/kac/horizontal/detail/kmc.vue";
-import Kg from "@/views/kac/horizontal/detail/kg.vue";
-import Bot from "@/views/kac/horizontal/detail/bot.vue";
-import {
-  copy,
-  getApply,
-  getByApplyIdId,
-  updateApply,
-} from "@/api/kac/apply/apply.js";
-import { listKnowledge as listKacKnowledge } from "@/api/kac/applyKnowledge/applyKnowledge.js";
-import { listKacGraph } from "@/api/kac/applyGraph/applyGraph.js";
-import { listKacBot } from "@/api/kac/applyBot/applyBot.js";
-import { listKnowledgeBase } from "@/api/kmc/knowledgeBase/knowledgeBase.js";
-// import { listSimple } from "@/api/kg/graph/graph.js";
-import { listBot } from "@/api/kb/bot/bot.js";
-import { ElMessage } from "element-plus";
+    import { useRoute, useRouter } from 'vue-router';
+    import {
+        computed,
+        getCurrentInstance,
+        nextTick,
+        onBeforeUnmount,
+        onMounted,
+        reactive,
+        ref,
+        toRefs,
+        watch
+    } from 'vue';
+    import { Clock } from '@element-plus/icons-vue';
+    import Kmc from '@/views/kac/horizontal/detail/kmc.vue';
+    import Kg from '@/views/kac/horizontal/detail/kg.vue';
+    import Bot from '@/views/kac/horizontal/detail/bot.vue';
+    import { copy, getApply, getByApplyIdId, updateApply } from '@/api/kac/apply/apply.js';
+    import { listKnowledge as listKacKnowledge } from '@/api/kac/applyKnowledge/applyKnowledge.js';
+    import { listKacGraph } from '@/api/kac/applyGraph/applyGraph.js';
+    import { listKacBot } from '@/api/kac/applyBot/applyBot.js';
+    import { listKnowledgeBase } from '@/api/kmc/knowledgeBase/knowledgeBase.js';
+    // import { listSimple } from "@/api/kg/graph/graph.js";
+    import { listBot } from '@/api/kb/bot/bot.js';
+    import { ElMessage } from 'element-plus';
 
-import heroBg from "@/assets/kac/app-detail/hero-banner.png";
-import valueBg from "@/assets/kac/app-detail/value-bg.png";
-import appFeather from "@/assets/kac/app-detail/app-feather.png";
-import sceneMedia from "@/assets/kac/app-detail/scene-media.png";
-import sceneWriting from "@/assets/kac/app-detail/scene-writing.png";
-import sceneTranslation from "@/assets/kac/app-detail/scene-translation.png";
-import heatFlameIcon from "@/assets/kac/overview/heat-flame.svg";
-import kbIcon from "@/assets/kac/app-detail/icon-kb.png";
-import iconKbCard from "@/assets/kac/app-detail/icon-kb-card.png";
-import graphIcon from "@/assets/kac/app-detail/icon-graph.png";
-import botIcon from "@/assets/kac/app-detail/icon-bot.png";
-import botCardIcon from "@/assets/kac/app-detail/icon-bot-card.png";
+    import heroBg from '@/assets/kac/app-detail/hero-banner.png';
+    import valueBg from '@/assets/kac/app-detail/value-bg.png';
+    import appFeather from '@/assets/kac/app-detail/app-feather.png';
+    import sceneMedia from '@/assets/kac/app-detail/scene-media.png';
+    import sceneWriting from '@/assets/kac/app-detail/scene-writing.png';
+    import sceneTranslation from '@/assets/kac/app-detail/scene-translation.png';
+    import heatFlameIcon from '@/assets/kac/overview/heat-flame.svg';
+    import kbIcon from '@/assets/kac/app-detail/icon-kb.png';
+    import iconKbCard from '@/assets/kac/app-detail/icon-kb-card.png';
+    import graphIcon from '@/assets/kac/app-detail/icon-graph.png';
+    import botIcon from '@/assets/kac/app-detail/icon-bot.png';
+    import botCardIcon from '@/assets/kac/app-detail/icon-bot-card.png';
 
-const route = useRoute();
-const router = useRouter();
-const { proxy } = getCurrentInstance();
+    const route = useRoute();
+    const router = useRouter();
+    const { proxy } = getCurrentInstance();
 
-const id = ref(route.query.id || null);
-const loading = ref(false);
-const open = ref(false);
-const title = ref("");
-const resourceDialogOpen = ref(false);
-const resourceDialogType = ref("knowledge");
-const appContainer = ref(null);
-const mainPanelRef = ref(null);
-const mainPanelHeight = ref(0);
-let mainPanelResizeObserver = null;
+    const id = ref(route.query.id || null);
+    const loading = ref(false);
+    const open = ref(false);
+    const title = ref('');
+    const resourceDialogOpen = ref(false);
+    const resourceDialogType = ref('knowledge');
+    const appContainer = ref(null);
+    const mainPanelRef = ref(null);
+    const mainPanelHeight = ref(0);
+    let mainPanelResizeObserver = null;
 
-const knowledgeBaseList = ref([]);
-const graphList = ref([]);
-const botList = ref([]);
-const mountedKnowledgeList = ref([]);
-const mountedGraphList = ref([]);
-const mountedBotList = ref([]);
+    const knowledgeBaseList = ref([]);
+    const graphList = ref([]);
+    const botList = ref([]);
+    const mountedKnowledgeList = ref([]);
+    const mountedGraphList = ref([]);
+    const mountedBotList = ref([]);
 
-const rules = reactive({
-  name: [
-    { required: true, message: "请输入应用名称", trigger: "blur" },
-    { max: 100, message: "应用名称不能超过100个字符", trigger: "blur" },
-  ],
-});
+    const rules = reactive({
+        name: [
+            { required: true, message: '请输入应用名称', trigger: 'blur' },
+            { max: 100, message: '应用名称不能超过100个字符', trigger: 'blur' }
+        ]
+    });
 
-const data = reactive({
-  applyDetail: {},
-  form: {},
-});
-const { applyDetail, form } = toRefs(data);
+    const data = reactive({
+        applyDetail: {},
+        form: {}
+    });
+    const { applyDetail, form } = toRefs(data);
 
-const defaultCoreValueHtml =
-  "文章编写应用的核心价值在于大幅<span>降低创作门槛</span>并显著提升内容产出效率。它通过<span>智能辅助</span>与实时纠错，帮助创作者快速跨越构思与表达的障碍，将繁琐的文字组织工作自动化。最终，插件让创作者得以从重复性的劳动中解放出来，将更多<span>精力聚焦</span>于核心观点的创新与情感价值的传递。";
+    const defaultCoreValueHtml =
+        '文章编写应用的核心价值在于大幅<span>降低创作门槛</span>并显著提升内容产出效率。它通过<span>智能辅助</span>与实时纠错，帮助创作者快速跨越构思与表达的障碍，将繁琐的文字组织工作自动化。最终，插件让创作者得以从重复性的劳动中解放出来，将更多<span>精力聚焦</span>于核心观点的创新与情感价值的传递。';
 
-const defaultCoreMetrics = [
-  { title: "提升效率", desc: "智能生成，高效创作" },
-  { title: "降低门槛", desc: "简化流程，轻松上手" },
-  { title: "智能辅助", desc: "实时优化，质量提升" },
-];
+    const defaultCoreMetrics = [
+        { title: '提升效率', desc: '智能生成，高效创作' },
+        { title: '降低门槛', desc: '简化流程，轻松上手' },
+        { title: '智能辅助', desc: '实时优化，质量提升' }
+    ];
 
-const defaultCapabilityCards = [
-  {
-    title: "知识库精准赋能",
-    desc: "关联垂直领域知识库，为AI提供专业语料支撑，让生成内容言之有物。",
-  },
-  {
-    title: "多Bot协同作业",
-    desc: "集成多个功能型Bot分工协作，从选题构思到最终润色，一站式完成。",
-  },
-  {
-    title: "多场景模板生成",
-    desc: "内置新媒体、电商、办公等多种场景模板，一键生成各类文章。",
-  },
-  {
-    title: "智能润色与纠错",
-    desc: "实时识别语法错误并优化文笔，根据目标风格自动调整。",
-  },
-];
+    const defaultCapabilityCards = [
+        {
+            title: '知识库精准赋能',
+            desc: '关联垂直领域知识库，为AI提供专业语料支撑，让生成内容言之有物。'
+        },
+        {
+            title: '多Bot协同作业',
+            desc: '集成多个功能型Bot分工协作，从选题构思到最终润色，一站式完成。'
+        },
+        {
+            title: '多场景模板生成',
+            desc: '内置新媒体、电商、办公等多种场景模板，一键生成各类文章。'
+        },
+        {
+            title: '智能润色与纠错',
+            desc: '实时识别语法错误并优化文笔，根据目标风格自动调整。'
+        }
+    ];
 
-const defaultScenarioCards = [
-  {
-    title: "新媒体内容创作",
-    desc: "辅助生成标题与大纲，撰写公众号、小红书文案，缩短成稿周期。",
-    image: sceneMedia,
-    tags: ["写作", "内容"],
-    heatValue: "1.2k",
-    createTime: "2026.05.09",
-  },
-  {
-    title: "文学与创意写作",
-    desc: "提供情节与人物描写灵感，帮助创作者突破卡文瓶颈，激发创意。",
-    image: sceneWriting,
-    tags: ["创意", "润色"],
-    heatValue: "980",
-    createTime: "2026.05.09",
-  },
-  {
-    title: "跨境电商与翻译",
-    desc: "协助撰写地道外语详情页与广告语，纠正语法，符合目标市场习惯。",
-    image: sceneTranslation,
-    tags: ["翻译", "电商"],
-    heatValue: "860",
-    createTime: "2026.05.09",
-  },
-];
+    const defaultScenarioCards = [
+        {
+            title: '新媒体内容创作',
+            desc: '辅助生成标题与大纲，撰写公众号、小红书文案，缩短成稿周期。',
+            image: sceneMedia,
+            tags: ['写作', '内容'],
+            heatValue: '1.2k',
+            createTime: '2026.05.09'
+        },
+        {
+            title: '文学与创意写作',
+            desc: '提供情节与人物描写灵感，帮助创作者突破卡文瓶颈，激发创意。',
+            image: sceneWriting,
+            tags: ['创意', '润色'],
+            heatValue: '980',
+            createTime: '2026.05.09'
+        },
+        {
+            title: '跨境电商与翻译',
+            desc: '协助撰写地道外语详情页与广告语，纠正语法，符合目标市场习惯。',
+            image: sceneTranslation,
+            tags: ['翻译', '电商'],
+            heatValue: '860',
+            createTime: '2026.05.09'
+        }
+    ];
 
-function createMockIcon({ bgStart, bgEnd, accent, symbol }) {
-  const symbols = {
-    wrench: `
+    function createMockIcon({ bgStart, bgEnd, accent, symbol }) {
+        const symbols = {
+            wrench: `
       <path d="M42 18a13 13 0 0 0 15 18L36 57a8 8 0 0 1-11-11l21-21a13 13 0 0 0-4-7Z" fill="white" opacity=".96"/>
       <path d="M25 51l7 7" stroke="${accent}" stroke-width="4" stroke-linecap="round"/>
     `,
-    health: `
+            health: `
       <rect x="18" y="24" width="44" height="32" rx="8" fill="white" opacity=".95"/>
       <path d="M40 31v18M31 40h18" stroke="${accent}" stroke-width="5" stroke-linecap="round"/>
       <path d="M22 20c8-9 28-9 36 0" stroke="white" stroke-width="5" stroke-linecap="round" opacity=".75"/>
-    `,
-  };
-  const svg = `
+    `
+        };
+        const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
       <defs>
         <linearGradient id="bg" x1="12" y1="10" x2="68" y2="70" gradientUnits="userSpaceOnUse">
@@ -481,1491 +415,1560 @@ function createMockIcon({ bgStart, bgEnd, accent, symbol }) {
       ${symbols[symbol]}
     </svg>
   `;
-  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
-}
-
-const verticalMockIcons = {
-  fault: createMockIcon({
-    bgStart: "#ff9f43",
-    bgEnd: "#f45b69",
-    accent: "#f97316",
-    symbol: "wrench",
-  }),
-  health: createMockIcon({
-    bgStart: "#35d0ba",
-    bgEnd: "#0ea5e9",
-    accent: "#0ea5e9",
-    symbol: "health",
-  }),
-};
-
-const mockKnowledgeBaseList = [
-  {
-    id: 901,
-    name: "泵站机组故障案例知识库",
-    description:
-      "收录泵站机组典型故障实例，包含故障现象、原因分析、排查流程、处置方案及复盘总结，为运维检修、技能培训和问题溯源提供参考。",
-  },
-  {
-    id: 902,
-    name: "泵站设备故障诊断知识库",
-    description:
-      "面向泵站运行维护与设备管理，围绕水泵、电机、阀门、管道、传感器、控制柜等关键设备整理常见故障诊断知识。",
-  },
-  {
-    id: 903,
-    name: "泵站常见故障排查及解决方案库",
-    description:
-      "汇集泵站全设备常见故障，明确故障现象、排查步骤、处理方法及预防措施，适配给排水、排涝、污水泵站等场景。",
-  },
-];
-
-const mockBotList = [
-  {
-    id: 801,
-    name: "泵站安防与智能巡检助手",
-    description: "联动监控视频与传感器，自动识别异常状态并预警，辅助实现无人值守。",
-    type: "Agent",
-  },
-  {
-    id: 802,
-    name: "泵站气象预警与调度助手",
-    description:
-      "实时接入气象局雷达回波与降雨量数据，结合泵站水位监测，提供短临降雨预报及排涝启停建议。",
-    type: "Agent",
-  },
-  {
-    id: 803,
-    name: "qKnow-知识问答(知识库+知识图谱)",
-    description: "知识问答(知识库+知识图谱)",
-    type: "Chatflow",
-  },
-  {
-    id: 804,
-    name: "设备故障咨询问答",
-    description: "根据数据来回答设备故障相关问题。",
-    type: "Chatflow",
-  },
-  {
-    id: 805,
-    name: "qKnow-智能写作-日报生成",
-    description: "智能写作助手",
-    type: "工作流",
-  },
-  {
-    id: 806,
-    name: "qKnow-智能写作-周报生成",
-    description: "智能写作助手",
-    type: "工作流",
-  },
-  {
-    id: 807,
-    name: "qKnow-智能写作-月报生成",
-    description: "智能写作助手",
-    type: "工作流",
-  },
-  {
-    id: 808,
-    name: "故障诊断报告自动生成",
-    description: "根据所提供的数据自动生成诊断报告。",
-    type: "工作流",
-  },
-  {
-    id: 811,
-    name: "qKnow-知识问答(图谱)",
-    description: "知识问答(图谱)",
-    type: "工作流",
-  },
-  {
-    id: 812,
-    name: "qKnow-意图检索",
-    description: "意图检索",
-    type: "工作流",
-  },
-  {
-    id: 813,
-    name: "qKnow-图谱语义检索",
-    description: "图谱语义检索",
-    type: "工作流",
-  },
-  {
-    id: 814,
-    name: "qKnow-知识检索",
-    description: "知识检索",
-    type: "工作流",
-  },
-  {
-    id: 815,
-    name: "qKnow-图谱模型提取",
-    description: "图谱模型提取",
-    type: "工作流",
-  },
-  {
-    id: 816,
-    name: "qKnow-三元组抽取",
-    description: "三元组抽取",
-    type: "工作流",
-  },
-  {
-    id: 817,
-    name: "qKnow-合规性检查",
-    description: "合规性检查",
-    type: "工作流",
-  },
-  {
-    id: 818,
-    name: "qKnow-问答建议",
-    description: "问答建议",
-    type: "工作流",
-  },
-  {
-    id: 819,
-    name: "qKnow-智能写作-大纲内容提取",
-    description: "智能写作助手",
-    type: "工作流",
-  },
-  {
-    id: 820,
-    name: "qKnow-智能写作-生成文章",
-    description: "智能写作助手",
-    type: "工作流",
-  },
-];
-
-const mockApplyKnowledgeRelations = mockKnowledgeBaseList.map((item, index) => ({
-  id: 10000 + index,
-  knowledgeId: item.id,
-  name: item.name,
-  knowledgeBaseName: item.name,
-  description: item.description,
-}));
-
-const mockApplyBotRelations = mockBotList
-  .filter((item) => [801, 802, 803, 804, 808].includes(item.id))
-  .map((item, index) => ({
-    id: 11000 + index,
-    botId: item.id,
-    name: item.name,
-    botName: item.name,
-    description: item.description,
-  }));
-
-const mockHealthBotRelations = mockBotList
-  .filter((item) => ![805, 806, 807].includes(item.id))
-  .map((item, index) => ({
-    id: 12000 + index,
-    botId: item.id,
-    name: item.name,
-    botName: item.name,
-    description: item.description,
-  }));
-
-const horizontalBotList = [
-  { id: 1, name: "qKnow-知识问答(图谱)", description: "知识问答(图谱)", type: 0, builtinFlag: 1 },
-  { id: 3, name: "qKnow-意图检索", description: "意图检索", type: 0, builtinFlag: 1 },
-  { id: 4, name: "qKnow-图谱语义检索", description: "图谱语义检索", type: 0, builtinFlag: 1 },
-  { id: 5, name: "qKnow-知识检索", description: "知识检索", type: 0, builtinFlag: 1 },
-  { id: 6, name: "qKnow-图谱模型提取", description: "图谱模型提取", type: 0, builtinFlag: 1 },
-  { id: 7, name: "qKnow-三元组抽取", description: "三元组抽取", type: 0, builtinFlag: 1 },
-  { id: 8, name: "qKnow-合规性检查", description: "合规性检查", type: 0, builtinFlag: 1 },
-  { id: 9, name: "qKnow-问答建议", description: "问答建议", type: 0, builtinFlag: 1 },
-  { id: 11, name: "qKnow-智能写作-大纲内容提取", description: "智能写作助手", type: 0, builtinFlag: 1 },
-  { id: 12, name: "qKnow-智能写作-生成文章", description: "智能写作助手", type: 0, builtinFlag: 1 },
-  { id: 13, name: "qKnow-智能写作-智能续写", description: "智能写作助手", type: 0, builtinFlag: 1 },
-  { id: 14, name: "qKnow-智能写作-智能扩写", description: "智能写作助手", type: 0, builtinFlag: 1 },
-  { id: 15, name: "qKnow-智能写作-智能润色", description: "智能写作助手", type: 0, builtinFlag: 1 },
-  { id: 16, name: "qKnow-智能写作-智能缩写", description: "智能写作助手", type: 0, builtinFlag: 1 },
-  { id: 17, name: "qKnow-智能写作-模板生成", description: "智能写作助手", type: 0, builtinFlag: 1 },
-  { id: 18, name: "qKnow-智能写作-生成摘要", description: "智能写作助手", type: 0, builtinFlag: 1 },
-  { id: 19, name: "qKnow-智能写作-生成大纲", description: "智能写作助手", type: 0, builtinFlag: 1 },
-  { id: 20, name: "qKnow-智能写作-标题优化", description: "智能写作助手", type: 0, builtinFlag: 1 },
-  { id: 21, name: "qKnow-智能写作-大纲内容优化", description: "智能写作助手", type: 0, builtinFlag: 1 },
-  { id: 22, name: "qKnow-智能写作-文章内容优化", description: "智能写作助手", type: 0, builtinFlag: 1 },
-].map((item) => ({
-  ...item,
-  createBy: "吴同",
-  createTime: "2026-06-04 09:19:00",
-  updateTime: "2026-06-04 09:19:00",
-}));
-
-const horizontalApplyKnowledgeRelations = mockKnowledgeBaseList.map((item, index) => ({
-  id: 13000 + index,
-  knowledgeId: item.id,
-  name: item.name,
-  knowledgeBaseName: item.name,
-  description: item.description,
-}));
-
-const horizontalApplyBotRelations = horizontalBotList.map((item, index) => ({
-  id: 14000 + index,
-  botId: item.id,
-  name: item.name,
-  botName: item.name,
-  description: item.description,
-}));
-
-const horizontalMockDetailMap = {
-  20: {
-    applyDetail: {
-      id: 20,
-      icon: "/2026/05/11/6a01a88de4b0d389f4f52e8e.png",
-      name: "文章编写",
-      category: 0,
-      description:
-        "文章编写插件是一类旨在辅助用户更高效、更高质量地完成文本创作任务的软件工具或扩展程序。",
-      status: 1,
-      tags: '[{"name":"写作"},{"name":"文章"}]',
-      myApplyFlag: false,
-      kacApplyKnowledgeList: horizontalApplyKnowledgeRelations,
-      kacApplyGraphList: [],
-      kacApplyBotList: horizontalApplyBotRelations,
-    },
-    coreValueHtml:
-      "文章编写应用通过多类智能写作 Bot 协同，覆盖大纲提取、文章生成、续写、扩写、润色、摘要和标题优化等环节，帮助用户把分散素材快速整理为<span>结构完整、表达清晰</span>的专业内容。",
-    coreMetrics: [
-      { title: "提升写作效率", desc: "多 Bot 协同生成内容" },
-      { title: "优化内容质量", desc: "润色、缩写、扩写一体化" },
-      { title: "沉淀知识素材", desc: "关联知识库支撑创作" },
-    ],
-  },
-  8: {
-    applyDetail: {
-      id: 8,
-      icon: "/2026/05/11/6a01a9a0e4b0d389f4f52e90.png",
-      name: "批量检索",
-      category: 0,
-      description:
-        "支持一次性上传多个查询条件并行处理，汇总输出结果。大幅提升效率，适用于多项目数据对比或大规模文献调研。",
-      status: 1,
-      tags: '[{"name":"效率"},{"name":"工具"}]',
-      myApplyFlag: false,
-      kacApplyKnowledgeList: horizontalApplyKnowledgeRelations,
-      kacApplyGraphList: [],
-      kacApplyBotList: horizontalApplyBotRelations,
-    },
-    coreValueHtml:
-      "批量检索应用整合知识检索、意图检索、图谱语义检索、问答建议和智能写作类 Bot，适合在大量查询任务中快速完成<span>批量召回、结果归纳</span>和报告输出。",
-    coreMetrics: [
-      { title: "批量处理", desc: "一次提交多个检索任务" },
-      { title: "多策略检索", desc: "覆盖知识、语义和意图检索" },
-      { title: "自动汇总", desc: "检索结果快速整理输出" },
-    ],
-  },
-};
-
-const verticalMockDetailMap = {
-  101: {
-    applyDetail: {
-      id: 101,
-      icon: verticalMockIcons.fault,
-      name: "故障快速排查与维修指导",
-      category: 1,
-      description:
-        "面向设备运维场景，结合故障现象、报警代码和历史维修记录，快速定位可能原因并生成维修步骤建议。",
-      status: 1,
-      tags: '[{"name":"运维"},{"name":"维修"}]',
-      myApplyFlag: false,
-      kacApplyKnowledgeList: mockApplyKnowledgeRelations,
-      kacApplyGraphList: [],
-      kacApplyBotList: mockApplyBotRelations,
-    },
-    coreValueHtml:
-      "故障快速排查与维修指导的核心价值在于把现场现象、报警代码、设备档案和历史案例统一串联，帮助运维人员快速形成<span>故障定位判断</span>和<span>可执行维修步骤</span>。它减少反复查资料和等待专家确认的时间，让维修过程更标准、更可追溯，也能持续沉淀企业自己的设备维修经验。",
-    coreMetrics: [
-      { title: "缩短排查时间", desc: "快速聚合线索定位原因" },
-      { title: "规范维修步骤", desc: "输出可执行处理流程" },
-      { title: "沉淀维修经验", desc: "复用历史案例与知识" },
-    ],
-    capabilityCards: [
-      {
-        title: "故障现象归因",
-        desc: "根据报警代码、运行参数和现场描述，推断高概率故障原因并给出排查顺序。",
-      },
-      {
-        title: "维修步骤编排",
-        desc: "按安全确认、部件检查、处理动作和复测验收生成标准化维修指导。",
-      },
-      {
-        title: "历史案例复用",
-        desc: "关联相似设备与历史工单，提取有效处置经验，减少重复试错。",
-      },
-      {
-        title: "风险与备件提示",
-        desc: "同步提示安全风险、所需工具、备件清单和停机影响，辅助现场准备。",
-      },
-    ],
-    scenarioCards: [
-      {
-        title: "现场故障抢修",
-        desc: "值班人员录入报警信息和现场现象后，快速获得排查路径与处理建议。",
-        image: sceneMedia,
-        tags: ["抢修", "排障"],
-        heatValue: "1.1k",
-        createTime: "2026.05.12",
-      },
-      {
-        title: "远程专家协同",
-        desc: "将排查过程、判断依据和关键截图汇总，方便专家远程复核与指导。",
-        image: sceneWriting,
-        tags: ["协同", "专家"],
-        heatValue: "920",
-        createTime: "2026.05.12",
-      },
-      {
-        title: "维修复盘归档",
-        desc: "自动整理故障原因、处置步骤、耗材使用和复测结果，形成标准案例。",
-        image: sceneTranslation,
-        tags: ["复盘", "工单"],
-        heatValue: "760",
-        createTime: "2026.05.12",
-      },
-    ],
-  },
-  102: {
-    applyDetail: {
-      id: 102,
-      icon: verticalMockIcons.health,
-      name: "设备健康诊断与报告编写",
-      category: 1,
-      description:
-        "汇总巡检、运行、告警和检修数据，自动评估设备健康状态，输出结构化诊断结论和专业分析报告。",
-      status: 1,
-      tags: '[{"name":"设备"},{"name":"诊断"}]',
-      myApplyFlag: false,
-      kacApplyKnowledgeList: mockApplyKnowledgeRelations,
-      kacApplyGraphList: [],
-      kacApplyBotList: mockHealthBotRelations,
-    },
-    coreValueHtml:
-      "设备健康诊断与报告编写的核心价值在于把巡检、运行、告警和检修数据转化为清晰的<span>健康状态判断</span>。系统可以自动归纳关键风险、生成专业报告并给出检修建议，帮助管理人员从分散数据中快速看清设备趋势，提前安排<span>预防性维护</span>。",
-    coreMetrics: [
-      { title: "健康状态评估", desc: "汇总指标形成诊断结论" },
-      { title: "报告自动成稿", desc: "结构化输出专业报告" },
-      { title: "风险提前预警", desc: "识别趋势异常与隐患" },
-    ],
-    capabilityCards: [
-      {
-        title: "多源数据汇总",
-        desc: "整合巡检记录、运行曲线、告警事件和检修台账，形成统一诊断输入。",
-      },
-      {
-        title: "健康评分分析",
-        desc: "围绕负载、温度、振动、告警频次等指标生成设备健康评分与等级。",
-      },
-      {
-        title: "诊断报告生成",
-        desc: "自动组织设备概况、异常说明、风险判断和处置建议，减少人工编写成本。",
-      },
-      {
-        title: "检修建议闭环",
-        desc: "根据风险等级推荐检查项目、检修窗口和跟踪事项，支撑后续闭环管理。",
-      },
-    ],
-    scenarioCards: [
-      {
-        title: "月度健康评估",
-        desc: "按设备或区域生成月度健康报告，辅助管理层掌握整体运行状态。",
-        image: sceneMedia,
-        tags: ["评估", "报告"],
-        heatValue: "1.3k",
-        createTime: "2026.05.12",
-      },
-      {
-        title: "检修计划编排",
-        desc: "根据健康评分和风险等级，辅助安排检修优先级、窗口期和备件准备。",
-        image: sceneWriting,
-        tags: ["检修", "计划"],
-        heatValue: "980",
-        createTime: "2026.05.12",
-      },
-      {
-        title: "异常趋势预警",
-        desc: "对连续升温、振动增大、告警频发等趋势生成分析说明和处置建议。",
-        image: sceneTranslation,
-        tags: ["预警", "趋势"],
-        heatValue: "860",
-        createTime: "2026.05.12",
-      },
-    ],
-  },
-};
-
-const activeVerticalMockDetail = computed(() => {
-  const source = getSource();
-  if (!["vertical", "myApp"].includes(source)) {
-    return null;
-  }
-  const mockDetail = verticalMockDetailMap[Number(id.value)] || null;
-  if (!mockDetail || source !== "myApp") {
-    return mockDetail;
-  }
-  return {
-    ...mockDetail,
-    applyDetail: {
-      ...mockDetail.applyDetail,
-      status: 1,
-      myApplyFlag: true,
-    },
-  };
-});
-
-const activeHorizontalMockDetail = computed(() => {
-  const source = getSource();
-  if (!["horizontal", "myApp"].includes(source)) {
-    return null;
-  }
-  const mockDetail = horizontalMockDetailMap[Number(id.value)] || null;
-  if (!mockDetail || source !== "myApp") {
-    return mockDetail;
-  }
-  return {
-    ...mockDetail,
-    applyDetail: {
-      ...mockDetail.applyDetail,
-      status: 1,
-      myApplyFlag: true,
-    },
-  };
-});
-
-const activeMockDetail = computed(
-  () => activeHorizontalMockDetail.value || activeVerticalMockDetail.value
-);
-
-const coreValueHtml = computed(
-  () => activeMockDetail.value?.coreValueHtml || defaultCoreValueHtml
-);
-const coreMetrics = computed(
-  () => activeMockDetail.value?.coreMetrics || defaultCoreMetrics
-);
-const capabilityCards = computed(
-  () =>
-    activeMockDetail.value?.capabilityCards || defaultCapabilityCards
-);
-const scenarioCards = computed(
-  () => activeMockDetail.value?.scenarioCards || defaultScenarioCards
-);
-
-const isDisabled = computed(() => Number(applyDetail.value.status) === 0);
-const statusText = computed(() => (isDisabled.value ? "停用" : "正常"));
-const isMyAppSource = computed(() => getSource() === "myApp");
-const isMyAppVerticalMockDetail = computed(
-  () => isMyAppSource.value && Boolean(verticalMockDetailMap[Number(id.value)])
-);
-const isMockVerticalDetail = computed(() => Boolean(activeMockDetail.value));
-const categoryLabel = computed(() => {
-  if (Number(applyDetail.value.category) === 1) {
-    return "纵向行业应用";
-  }
-  if (Number(applyDetail.value.category) === 0) {
-    return "横向通用应用";
-  }
-  return "-";
-});
-const displayTags = computed(() => {
-  const tags = getTags(applyDetail.value);
-  return tags.length ? tags : [];
-});
-
-function getAppIcon(row = {}) {
-  if (!row.icon) {
-    return appFeather;
-  }
-  if (/^(data:|blob:|https?:\/\/)/.test(row.icon)) {
-    return row.icon;
-  }
-  return `${import.meta.env.VITE_APP_BASE_API}/profile${row.icon}`;
-}
-
-const resourceDialogTitle = computed(() => {
-  const map = {
-    knowledge: "切换关联知识库",
-    graph: "切换关联知识图谱",
-    bot: "切换关联 Bot",
-  };
-  return map[resourceDialogType.value] || "切换挂载资源";
-});
-const knowledgeResourceItems = computed(() =>
-  normalizeResourceRows(
-    getMountedRows(
-      mountedKnowledgeList.value,
-      applyDetail.value.kacApplyKnowledgeList
-    ),
-    knowledgeBaseList.value,
-    ["knowledgeId", "knowledgeBaseId", "kbId", "id"],
-    ["name", "knowledgeName", "knowledgeBaseName"],
-    ["description", "remark"],
-    "暂无挂载描述"
-  )
-);
-const graphResourceItems = computed(() =>
-  normalizeResourceRows(
-    getMountedRows(mountedGraphList.value, applyDetail.value.kacApplyGraphList),
-    graphList.value,
-    ["graphId", "kgId", "id"],
-    ["name", "graphName"],
-    ["description", "remark"],
-    "暂无挂载描述"
-  )
-);
-const botResourceItems = computed(() =>
-  normalizeResourceRows(
-    getMountedRows(mountedBotList.value, applyDetail.value.kacApplyBotList),
-    botList.value,
-    ["botId", "id"],
-    ["name", "botName"],
-    ["description", "remark"],
-    "暂无挂载描述"
-  )
-);
-const mountedResourceGroups = computed(() => [
-  {
-    type: "knowledge",
-    title: "知识库",
-    icon: kbIcon,
-    cardIcon: iconKbCard,
-    items: knowledgeResourceItems.value,
-  },
-  {
-    type: "graph",
-    title: "知识图谱",
-    icon: graphIcon,
-    cardIcon: graphIcon,
-    items: graphResourceItems.value,
-  },
-  {
-    type: "bot",
-    title: "Bot",
-    icon: botIcon,
-    cardIcon: botCardIcon,
-    items: botResourceItems.value,
-  },
-]);
-const visibleMountedResourceGroups = computed(() =>
-  mountedResourceGroups.value.filter((group) => group.items.length > 0)
-);
-
-function getSource() {
-  const routeName = route.name;
-  const routePath = route.path || "";
-  if (routeName === "myAppDetail") {
-    return "myApp";
-  }
-  if (routeName === "verticalDetail" || routePath.includes("/kac/vertical/")) {
-    return "vertical";
-  }
-  return "horizontal";
-}
-
-function isApplyDetailRoute() {
-  return ["horizontalDetail", "verticalDetail", "myAppDetail"].includes(route.name);
-}
-
-function updateMainPanelHeight() {
-  if (!mainPanelRef.value) {
-    mainPanelHeight.value = 0;
-    return;
-  }
-  mainPanelHeight.value = Math.ceil(mainPanelRef.value.offsetHeight);
-}
-
-onMounted(() => {
-  nextTick(() => {
-    updateMainPanelHeight();
-    if (window.ResizeObserver && mainPanelRef.value) {
-      mainPanelResizeObserver = new ResizeObserver(updateMainPanelHeight);
-      mainPanelResizeObserver.observe(mainPanelRef.value);
-    }
-  });
-});
-
-onBeforeUnmount(() => {
-  if (mainPanelResizeObserver) {
-    mainPanelResizeObserver.disconnect();
-    mainPanelResizeObserver = null;
-  }
-});
-
-function reset() {
-  form.value = {
-    id: null,
-    workspaceId: null,
-    pluginId: null,
-    name: null,
-    category: null,
-    description: null,
-    status: null,
-    source: null,
-    tags: null,
-    useScene: null,
-    useCount: null,
-    kacApplyKnowledgeList: [],
-    kacApplyGraphList: [],
-    kacApplyBotList: [],
-    validFlag: null,
-    delFlag: null,
-    createBy: null,
-    creatorId: null,
-    createTime: null,
-    updateBy: null,
-    updaterId: null,
-    updateTime: null,
-    remark: null,
-  };
-  proxy.resetForm("applyRef");
-}
-
-function showDevelopingMessage() {
-  ElMessage({
-    message: "功能正在开发中",
-    type: "warning",
-  });
-}
-
-function showCopyDialog(action) {
-  if (isMockVerticalDetail.value) {
-    showDevelopingMessage();
-    return;
-  }
-  reset();
-  const _id = applyDetail.value.id;
-  getByApplyIdId(_id).then((res) => {
-    form.value = res.data;
-    if (action === "copy") {
-      title.value = "复制应用";
-      form.value.id = null;
-      form.value.name = `${form.value.name || ""}（副本）`;
-    }
-    open.value = true;
-  });
-}
-
-watch(
-  () => [route.name, route.query.id],
-  ([, newId]) => {
-    if (!isApplyDetailRoute()) {
-      loading.value = false;
-      return;
-    }
-    if (!newId) {
-      loading.value = false;
-      return;
-    }
-    id.value = newId;
-    getApplyDetailById();
-  },
-  { immediate: true }
-);
-
-async function getApplyDetailById() {
-  if (!isApplyDetailRoute() || !id.value) {
-    loading.value = false;
-    return;
-  }
-
-  loading.value = true;
-  try {
-    const mockDetail = activeMockDetail.value;
-    if (mockDetail) {
-      applyDetail.value = { ...mockDetail.applyDetail };
-      knowledgeBaseList.value =
-        mockDetail.knowledgeBaseList || mockKnowledgeBaseList;
-      graphList.value = mockDetail.graphList || [];
-      botList.value =
-        mockDetail.botList ||
-        (activeHorizontalMockDetail.value ? horizontalBotList : mockBotList);
-      mountedKnowledgeList.value =
-        mockDetail.applyDetail.kacApplyKnowledgeList || [];
-      mountedGraphList.value = [];
-      mountedBotList.value = mockDetail.applyDetail.kacApplyBotList || [];
-      await nextTick();
-      updateMainPanelHeight();
-      return;
+        return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
     }
 
-    const response = await getApply(id.value);
-    applyDetail.value = response.data || {};
-    await loadMountedResources();
-  } finally {
-    loading.value = false;
-  }
-}
-
-function loadMountedResources() {
-  const params = { pageSize: 1000, pageNum: 1, applyId: id.value };
-  return Promise.allSettled([
-    listKacKnowledge(params).then((res) => {
-      mountedKnowledgeList.value = res.data?.rows || [];
-    }),
-    listKacGraph(params).then((res) => {
-      mountedGraphList.value = res.data?.rows || [];
-    }),
-    listKacBot(params).then((res) => {
-      mountedBotList.value = res.data?.rows || [];
-    }),
-  ]);
-}
-
-function loadDropdownData() {
-  listKnowledgeBase({ pageSize: 1000, pageNum: 1 }).then((res) => {
-    knowledgeBaseList.value = res.data?.rows || [];
-  });
-
-  // listSimple({ pageSize: 1000, pageNum: 1 }).then((res) => {
-  //   graphList.value = res.data?.rows || [];
-  // });
-
-  listBot({ pageSize: 1000, pageNum: 1 }).then((res) => {
-    botList.value = res.data?.rows || [];
-  });
-}
-
-function getTags(row) {
-  if (!row?.tags) {
-    return [];
-  }
-  if (Array.isArray(row.tags)) {
-    return row.tags;
-  }
-  try {
-    return JSON.parse(row.tags);
-  } catch {
-    return [];
-  }
-}
-
-function getFirstValue(source, keys) {
-  if (!source) {
-    return "";
-  }
-  for (const key of keys) {
-    const value = source[key];
-    if (value !== undefined && value !== null && value !== "") {
-      return value;
-    }
-  }
-  return "";
-}
-
-function getMountedRows(primaryRows, fallbackRows) {
-  if (Array.isArray(primaryRows) && primaryRows.length) {
-    return primaryRows;
-  }
-  return Array.isArray(fallbackRows) ? fallbackRows : [];
-}
-
-function normalizeResourceRows(
-  relationRows,
-  allRows,
-  idKeys,
-  nameKeys,
-  descKeys,
-  fallbackDescription
-) {
-  return (relationRows || []).map((row) => {
-    const resourceId = getFirstValue(row, idKeys);
-    const matched = (allRows || []).find((item) => item.id == resourceId) || {};
-    const name =
-      getFirstValue(matched, nameKeys) || getFirstValue(row, nameKeys) || "-";
-    const description = getFirstValue(row, descKeys) || fallbackDescription;
-    return {
-      relationId: row.id,
-      id: resourceId || row.id,
-      name,
-      description,
+    const verticalMockIcons = {
+        fault: createMockIcon({
+            bgStart: '#ff9f43',
+            bgEnd: '#f45b69',
+            accent: '#f97316',
+            symbol: 'wrench'
+        }),
+        health: createMockIcon({
+            bgStart: '#35d0ba',
+            bgEnd: '#0ea5e9',
+            accent: '#0ea5e9',
+            symbol: 'health'
+        })
     };
-  });
-}
 
-function handleUse(row) {
-  if (isMockVerticalDetail.value) {
-    showDevelopingMessage();
-    return;
-  }
+    const mockKnowledgeBaseList = [
+        {
+            id: 901,
+            name: '泵站机组故障案例知识库',
+            description:
+                '收录泵站机组典型故障实例，包含故障现象、原因分析、排查流程、处置方案及复盘总结，为运维检修、技能培训和问题溯源提供参考。'
+        },
+        {
+            id: 902,
+            name: '泵站设备故障诊断知识库',
+            description:
+                '面向泵站运行维护与设备管理，围绕水泵、电机、阀门、管道、传感器、控制柜等关键设备整理常见故障诊断知识。'
+        },
+        {
+            id: 903,
+            name: '泵站常见故障排查及解决方案库',
+            description:
+                '汇集泵站全设备常见故障，明确故障现象、排查步骤、处理方法及预防措施，适配给排水、排涝、污水泵站等场景。'
+        }
+    ];
 
-  let path = "";
-  const source = getSource();
+    const mockBotList = [
+        {
+            id: 801,
+            name: '泵站安防与智能巡检助手',
+            description: '联动监控视频与传感器，自动识别异常状态并预警，辅助实现无人值守。',
+            type: 'Agent'
+        },
+        {
+            id: 802,
+            name: '泵站气象预警与调度助手',
+            description:
+                '实时接入气象局雷达回波与降雨量数据，结合泵站水位监测，提供短临降雨预报及排涝启停建议。',
+            type: 'Agent'
+        },
+        {
+            id: 803,
+            name: 'qKnow-知识问答(知识库+知识图谱)',
+            description: '知识问答(知识库+知识图谱)',
+            type: 'Chatflow'
+        },
+        {
+            id: 804,
+            name: '设备故障咨询问答',
+            description: '根据数据来回答设备故障相关问题。',
+            type: 'Chatflow'
+        },
+        {
+            id: 805,
+            name: 'qKnow-智能写作-日报生成',
+            description: '智能写作助手',
+            type: '工作流'
+        },
+        {
+            id: 806,
+            name: 'qKnow-智能写作-周报生成',
+            description: '智能写作助手',
+            type: '工作流'
+        },
+        {
+            id: 807,
+            name: 'qKnow-智能写作-月报生成',
+            description: '智能写作助手',
+            type: '工作流'
+        },
+        {
+            id: 808,
+            name: '故障诊断报告自动生成',
+            description: '根据所提供的数据自动生成诊断报告。',
+            type: '工作流'
+        },
+        {
+            id: 811,
+            name: 'qKnow-知识问答(图谱)',
+            description: '知识问答(图谱)',
+            type: '工作流'
+        },
+        {
+            id: 812,
+            name: 'qKnow-意图检索',
+            description: '意图检索',
+            type: '工作流'
+        },
+        {
+            id: 813,
+            name: 'qKnow-图谱语义检索',
+            description: '图谱语义检索',
+            type: '工作流'
+        },
+        {
+            id: 814,
+            name: 'qKnow-知识检索',
+            description: '知识检索',
+            type: '工作流'
+        },
+        {
+            id: 815,
+            name: 'qKnow-图谱模型提取',
+            description: '图谱模型提取',
+            type: '工作流'
+        },
+        {
+            id: 816,
+            name: 'qKnow-三元组抽取',
+            description: '三元组抽取',
+            type: '工作流'
+        },
+        {
+            id: 817,
+            name: 'qKnow-合规性检查',
+            description: '合规性检查',
+            type: '工作流'
+        },
+        {
+            id: 818,
+            name: 'qKnow-问答建议',
+            description: '问答建议',
+            type: '工作流'
+        },
+        {
+            id: 819,
+            name: 'qKnow-智能写作-大纲内容提取',
+            description: '智能写作助手',
+            type: '工作流'
+        },
+        {
+            id: 820,
+            name: 'qKnow-智能写作-生成文章',
+            description: '智能写作助手',
+            type: '工作流'
+        }
+    ];
 
-  if (source === "vertical") {
-    path = "/kac/vertical/pluginApply";
-  } else if (source === "horizontal") {
-    path = "/kac/horizontal/pluginApply";
-  } else if (source === "myApp") {
-    path = "/kac/myApp/pluginApply";
-  } else if (row.pluginId != null) {
-    path = "/kac/horizontal/pluginApply";
-  } else {
-    ElMessage({
-      message: "功能正常开发中",
-      type: "warning",
+    const mockApplyKnowledgeRelations = mockKnowledgeBaseList.map((item, index) => ({
+        id: 10000 + index,
+        knowledgeId: item.id,
+        name: item.name,
+        knowledgeBaseName: item.name,
+        description: item.description
+    }));
+
+    const mockApplyBotRelations = mockBotList
+        .filter((item) => [801, 802, 803, 804, 808].includes(item.id))
+        .map((item, index) => ({
+            id: 11000 + index,
+            botId: item.id,
+            name: item.name,
+            botName: item.name,
+            description: item.description
+        }));
+
+    const mockHealthBotRelations = mockBotList
+        .filter((item) => ![805, 806, 807].includes(item.id))
+        .map((item, index) => ({
+            id: 12000 + index,
+            botId: item.id,
+            name: item.name,
+            botName: item.name,
+            description: item.description
+        }));
+
+    const horizontalBotList = [
+        {
+            id: 1,
+            name: 'qKnow-知识问答(图谱)',
+            description: '知识问答(图谱)',
+            type: 0,
+            builtinFlag: 1
+        },
+        { id: 3, name: 'qKnow-意图检索', description: '意图检索', type: 0, builtinFlag: 1 },
+        { id: 4, name: 'qKnow-图谱语义检索', description: '图谱语义检索', type: 0, builtinFlag: 1 },
+        { id: 5, name: 'qKnow-知识检索', description: '知识检索', type: 0, builtinFlag: 1 },
+        { id: 6, name: 'qKnow-图谱模型提取', description: '图谱模型提取', type: 0, builtinFlag: 1 },
+        { id: 7, name: 'qKnow-三元组抽取', description: '三元组抽取', type: 0, builtinFlag: 1 },
+        { id: 8, name: 'qKnow-合规性检查', description: '合规性检查', type: 0, builtinFlag: 1 },
+        { id: 9, name: 'qKnow-问答建议', description: '问答建议', type: 0, builtinFlag: 1 },
+        {
+            id: 11,
+            name: 'qKnow-智能写作-大纲内容提取',
+            description: '智能写作助手',
+            type: 0,
+            builtinFlag: 1
+        },
+        {
+            id: 12,
+            name: 'qKnow-智能写作-生成文章',
+            description: '智能写作助手',
+            type: 0,
+            builtinFlag: 1
+        },
+        {
+            id: 13,
+            name: 'qKnow-智能写作-智能续写',
+            description: '智能写作助手',
+            type: 0,
+            builtinFlag: 1
+        },
+        {
+            id: 14,
+            name: 'qKnow-智能写作-智能扩写',
+            description: '智能写作助手',
+            type: 0,
+            builtinFlag: 1
+        },
+        {
+            id: 15,
+            name: 'qKnow-智能写作-智能润色',
+            description: '智能写作助手',
+            type: 0,
+            builtinFlag: 1
+        },
+        {
+            id: 16,
+            name: 'qKnow-智能写作-智能缩写',
+            description: '智能写作助手',
+            type: 0,
+            builtinFlag: 1
+        },
+        {
+            id: 17,
+            name: 'qKnow-智能写作-模板生成',
+            description: '智能写作助手',
+            type: 0,
+            builtinFlag: 1
+        },
+        {
+            id: 18,
+            name: 'qKnow-智能写作-生成摘要',
+            description: '智能写作助手',
+            type: 0,
+            builtinFlag: 1
+        },
+        {
+            id: 19,
+            name: 'qKnow-智能写作-生成大纲',
+            description: '智能写作助手',
+            type: 0,
+            builtinFlag: 1
+        },
+        {
+            id: 20,
+            name: 'qKnow-智能写作-标题优化',
+            description: '智能写作助手',
+            type: 0,
+            builtinFlag: 1
+        },
+        {
+            id: 21,
+            name: 'qKnow-智能写作-大纲内容优化',
+            description: '智能写作助手',
+            type: 0,
+            builtinFlag: 1
+        },
+        {
+            id: 22,
+            name: 'qKnow-智能写作-文章内容优化',
+            description: '智能写作助手',
+            type: 0,
+            builtinFlag: 1
+        }
+    ].map((item) => ({
+        ...item,
+        createBy: '吴同',
+        createTime: '2026-06-04 09:19:00',
+        updateTime: '2026-06-04 09:19:00'
+    }));
+
+    const horizontalApplyKnowledgeRelations = mockKnowledgeBaseList.map((item, index) => ({
+        id: 13000 + index,
+        knowledgeId: item.id,
+        name: item.name,
+        knowledgeBaseName: item.name,
+        description: item.description
+    }));
+
+    const horizontalApplyBotRelations = horizontalBotList.map((item, index) => ({
+        id: 14000 + index,
+        botId: item.id,
+        name: item.name,
+        botName: item.name,
+        description: item.description
+    }));
+
+    const horizontalMockDetailMap = {
+        20: {
+            applyDetail: {
+                id: 20,
+                icon: '/2026/05/11/6a01a88de4b0d389f4f52e8e.png',
+                name: '文章编写',
+                category: 0,
+                description:
+                    '文章编写插件是一类旨在辅助用户更高效、更高质量地完成文本创作任务的软件工具或扩展程序。',
+                status: 1,
+                tags: '[{"name":"写作"},{"name":"文章"}]',
+                myApplyFlag: false,
+                kacApplyKnowledgeList: horizontalApplyKnowledgeRelations,
+                kacApplyGraphList: [],
+                kacApplyBotList: horizontalApplyBotRelations
+            },
+            coreValueHtml:
+                '文章编写应用通过多类智能写作 Bot 协同，覆盖大纲提取、文章生成、续写、扩写、润色、摘要和标题优化等环节，帮助用户把分散素材快速整理为<span>结构完整、表达清晰</span>的专业内容。',
+            coreMetrics: [
+                { title: '提升写作效率', desc: '多 Bot 协同生成内容' },
+                { title: '优化内容质量', desc: '润色、缩写、扩写一体化' },
+                { title: '沉淀知识素材', desc: '关联知识库支撑创作' }
+            ]
+        },
+        8: {
+            applyDetail: {
+                id: 8,
+                icon: '/2026/05/11/6a01a9a0e4b0d389f4f52e90.png',
+                name: '批量检索',
+                category: 0,
+                description:
+                    '支持一次性上传多个查询条件并行处理，汇总输出结果。大幅提升效率，适用于多项目数据对比或大规模文献调研。',
+                status: 1,
+                tags: '[{"name":"效率"},{"name":"工具"}]',
+                myApplyFlag: false,
+                kacApplyKnowledgeList: horizontalApplyKnowledgeRelations,
+                kacApplyGraphList: [],
+                kacApplyBotList: horizontalApplyBotRelations
+            },
+            coreValueHtml:
+                '批量检索应用整合知识检索、意图检索、图谱语义检索、问答建议和智能写作类 Bot，适合在大量查询任务中快速完成<span>批量召回、结果归纳</span>和报告输出。',
+            coreMetrics: [
+                { title: '批量处理', desc: '一次提交多个检索任务' },
+                { title: '多策略检索', desc: '覆盖知识、语义和意图检索' },
+                { title: '自动汇总', desc: '检索结果快速整理输出' }
+            ]
+        }
+    };
+
+    const verticalMockDetailMap = {
+        101: {
+            applyDetail: {
+                id: 101,
+                icon: verticalMockIcons.fault,
+                name: '故障快速排查与维修指导',
+                category: 1,
+                description:
+                    '面向设备运维场景，结合故障现象、报警代码和历史维修记录，快速定位可能原因并生成维修步骤建议。',
+                status: 1,
+                tags: '[{"name":"运维"},{"name":"维修"}]',
+                myApplyFlag: false,
+                kacApplyKnowledgeList: mockApplyKnowledgeRelations,
+                kacApplyGraphList: [],
+                kacApplyBotList: mockApplyBotRelations
+            },
+            coreValueHtml:
+                '故障快速排查与维修指导的核心价值在于把现场现象、报警代码、设备档案和历史案例统一串联，帮助运维人员快速形成<span>故障定位判断</span>和<span>可执行维修步骤</span>。它减少反复查资料和等待专家确认的时间，让维修过程更标准、更可追溯，也能持续沉淀企业自己的设备维修经验。',
+            coreMetrics: [
+                { title: '缩短排查时间', desc: '快速聚合线索定位原因' },
+                { title: '规范维修步骤', desc: '输出可执行处理流程' },
+                { title: '沉淀维修经验', desc: '复用历史案例与知识' }
+            ],
+            capabilityCards: [
+                {
+                    title: '故障现象归因',
+                    desc: '根据报警代码、运行参数和现场描述，推断高概率故障原因并给出排查顺序。'
+                },
+                {
+                    title: '维修步骤编排',
+                    desc: '按安全确认、部件检查、处理动作和复测验收生成标准化维修指导。'
+                },
+                {
+                    title: '历史案例复用',
+                    desc: '关联相似设备与历史工单，提取有效处置经验，减少重复试错。'
+                },
+                {
+                    title: '风险与备件提示',
+                    desc: '同步提示安全风险、所需工具、备件清单和停机影响，辅助现场准备。'
+                }
+            ],
+            scenarioCards: [
+                {
+                    title: '现场故障抢修',
+                    desc: '值班人员录入报警信息和现场现象后，快速获得排查路径与处理建议。',
+                    image: sceneMedia,
+                    tags: ['抢修', '排障'],
+                    heatValue: '1.1k',
+                    createTime: '2026.05.12'
+                },
+                {
+                    title: '远程专家协同',
+                    desc: '将排查过程、判断依据和关键截图汇总，方便专家远程复核与指导。',
+                    image: sceneWriting,
+                    tags: ['协同', '专家'],
+                    heatValue: '920',
+                    createTime: '2026.05.12'
+                },
+                {
+                    title: '维修复盘归档',
+                    desc: '自动整理故障原因、处置步骤、耗材使用和复测结果，形成标准案例。',
+                    image: sceneTranslation,
+                    tags: ['复盘', '工单'],
+                    heatValue: '760',
+                    createTime: '2026.05.12'
+                }
+            ]
+        },
+        102: {
+            applyDetail: {
+                id: 102,
+                icon: verticalMockIcons.health,
+                name: '设备健康诊断与报告编写',
+                category: 1,
+                description:
+                    '汇总巡检、运行、告警和检修数据，自动评估设备健康状态，输出结构化诊断结论和专业分析报告。',
+                status: 1,
+                tags: '[{"name":"设备"},{"name":"诊断"}]',
+                myApplyFlag: false,
+                kacApplyKnowledgeList: mockApplyKnowledgeRelations,
+                kacApplyGraphList: [],
+                kacApplyBotList: mockHealthBotRelations
+            },
+            coreValueHtml:
+                '设备健康诊断与报告编写的核心价值在于把巡检、运行、告警和检修数据转化为清晰的<span>健康状态判断</span>。系统可以自动归纳关键风险、生成专业报告并给出检修建议，帮助管理人员从分散数据中快速看清设备趋势，提前安排<span>预防性维护</span>。',
+            coreMetrics: [
+                { title: '健康状态评估', desc: '汇总指标形成诊断结论' },
+                { title: '报告自动成稿', desc: '结构化输出专业报告' },
+                { title: '风险提前预警', desc: '识别趋势异常与隐患' }
+            ],
+            capabilityCards: [
+                {
+                    title: '多源数据汇总',
+                    desc: '整合巡检记录、运行曲线、告警事件和检修台账，形成统一诊断输入。'
+                },
+                {
+                    title: '健康评分分析',
+                    desc: '围绕负载、温度、振动、告警频次等指标生成设备健康评分与等级。'
+                },
+                {
+                    title: '诊断报告生成',
+                    desc: '自动组织设备概况、异常说明、风险判断和处置建议，减少人工编写成本。'
+                },
+                {
+                    title: '检修建议闭环',
+                    desc: '根据风险等级推荐检查项目、检修窗口和跟踪事项，支撑后续闭环管理。'
+                }
+            ],
+            scenarioCards: [
+                {
+                    title: '月度健康评估',
+                    desc: '按设备或区域生成月度健康报告，辅助管理层掌握整体运行状态。',
+                    image: sceneMedia,
+                    tags: ['评估', '报告'],
+                    heatValue: '1.3k',
+                    createTime: '2026.05.12'
+                },
+                {
+                    title: '检修计划编排',
+                    desc: '根据健康评分和风险等级，辅助安排检修优先级、窗口期和备件准备。',
+                    image: sceneWriting,
+                    tags: ['检修', '计划'],
+                    heatValue: '980',
+                    createTime: '2026.05.12'
+                },
+                {
+                    title: '异常趋势预警',
+                    desc: '对连续升温、振动增大、告警频发等趋势生成分析说明和处置建议。',
+                    image: sceneTranslation,
+                    tags: ['预警', '趋势'],
+                    heatValue: '860',
+                    createTime: '2026.05.12'
+                }
+            ]
+        }
+    };
+
+    const activeVerticalMockDetail = computed(() => {
+        const source = getSource();
+        if (!['vertical', 'myApp'].includes(source)) {
+            return null;
+        }
+        const mockDetail = verticalMockDetailMap[Number(id.value)] || null;
+        if (!mockDetail || source !== 'myApp') {
+            return mockDetail;
+        }
+        return {
+            ...mockDetail,
+            applyDetail: {
+                ...mockDetail.applyDetail,
+                status: 1,
+                myApplyFlag: true
+            }
+        };
     });
-    return;
-  }
-  router.push({
-    path,
-    query: {
-      applyId: applyDetail.value.id,
-      title: applyDetail.value.name,
-    },
-  });
-}
 
-function openResourceDialog(type) {
-  if (isMockVerticalDetail.value) {
-    showDevelopingMessage();
-    return;
-  }
-  resourceDialogType.value = type;
-  resourceDialogOpen.value = true;
-}
+    const activeHorizontalMockDetail = computed(() => {
+        const source = getSource();
+        if (!['horizontal', 'myApp'].includes(source)) {
+            return null;
+        }
+        const mockDetail = horizontalMockDetailMap[Number(id.value)] || null;
+        if (!mockDetail || source !== 'myApp') {
+            return mockDetail;
+        }
+        return {
+            ...mockDetail,
+            applyDetail: {
+                ...mockDetail.applyDetail,
+                status: 1,
+                myApplyFlag: true
+            }
+        };
+    });
 
-function handleResourceDialogClosed() {
-  loadMountedResources();
-}
+    const activeMockDetail = computed(
+        () => activeHorizontalMockDetail.value || activeVerticalMockDetail.value
+    );
 
-function cancel() {
-  open.value = false;
-  reset();
-}
+    const coreValueHtml = computed(
+        () => activeMockDetail.value?.coreValueHtml || defaultCoreValueHtml
+    );
+    const coreMetrics = computed(() => activeMockDetail.value?.coreMetrics || defaultCoreMetrics);
+    const capabilityCards = computed(
+        () => activeMockDetail.value?.capabilityCards || defaultCapabilityCards
+    );
+    const scenarioCards = computed(
+        () => activeMockDetail.value?.scenarioCards || defaultScenarioCards
+    );
 
-function submitForm() {
-  proxy.$refs["applyRef"].validate((valid) => {
-    if (!valid) {
-      return;
+    const isDisabled = computed(() => Number(applyDetail.value.status) === 0);
+    const statusText = computed(() => (isDisabled.value ? '停用' : '正常'));
+    const isMyAppSource = computed(() => getSource() === 'myApp');
+    const isMyAppVerticalMockDetail = computed(
+        () => isMyAppSource.value && Boolean(verticalMockDetailMap[Number(id.value)])
+    );
+    const isMockVerticalDetail = computed(() => Boolean(activeMockDetail.value));
+    const categoryLabel = computed(() => {
+        if (Number(applyDetail.value.category) === 1) {
+            return '纵向行业应用';
+        }
+        if (Number(applyDetail.value.category) === 0) {
+            return '横向通用应用';
+        }
+        return '-';
+    });
+    const displayTags = computed(() => {
+        const tags = getTags(applyDetail.value);
+        return tags.length ? tags : [];
+    });
+
+    function getAppIcon(row = {}) {
+        if (!row.icon) {
+            return appFeather;
+        }
+        if (/^(data:|blob:|https?:\/\/)/.test(row.icon)) {
+            return row.icon;
+        }
+        return `${import.meta.env.VITE_APP_BASE_API}/profile${row.icon}`;
     }
-    if (form.value.id != null) {
-      updateApply(form.value).then(() => {
-        proxy.$modal.msgSuccess("修改成功");
+
+    const resourceDialogTitle = computed(() => {
+        const map = {
+            knowledge: '切换关联知识库',
+            graph: '切换关联知识图谱',
+            bot: '切换关联 Bot'
+        };
+        return map[resourceDialogType.value] || '切换挂载资源';
+    });
+    const knowledgeResourceItems = computed(() =>
+        normalizeResourceRows(
+            getMountedRows(mountedKnowledgeList.value, applyDetail.value.kacApplyKnowledgeList),
+            knowledgeBaseList.value,
+            ['knowledgeId', 'knowledgeBaseId', 'kbId', 'id'],
+            ['name', 'knowledgeName', 'knowledgeBaseName'],
+            ['description', 'remark'],
+            '暂无挂载描述'
+        )
+    );
+    const graphResourceItems = computed(() =>
+        normalizeResourceRows(
+            getMountedRows(mountedGraphList.value, applyDetail.value.kacApplyGraphList),
+            graphList.value,
+            ['graphId', 'kgId', 'id'],
+            ['name', 'graphName'],
+            ['description', 'remark'],
+            '暂无挂载描述'
+        )
+    );
+    const botResourceItems = computed(() =>
+        normalizeResourceRows(
+            getMountedRows(mountedBotList.value, applyDetail.value.kacApplyBotList),
+            botList.value,
+            ['botId', 'id'],
+            ['name', 'botName'],
+            ['description', 'remark'],
+            '暂无挂载描述'
+        )
+    );
+    const mountedResourceGroups = computed(() => [
+        {
+            type: 'knowledge',
+            title: '知识库',
+            icon: kbIcon,
+            cardIcon: iconKbCard,
+            items: knowledgeResourceItems.value
+        },
+        {
+            type: 'graph',
+            title: '知识图谱',
+            icon: graphIcon,
+            cardIcon: graphIcon,
+            items: graphResourceItems.value
+        },
+        {
+            type: 'bot',
+            title: 'Bot',
+            icon: botIcon,
+            cardIcon: botCardIcon,
+            items: botResourceItems.value
+        }
+    ]);
+    const visibleMountedResourceGroups = computed(() =>
+        mountedResourceGroups.value.filter((group) => group.items.length > 0)
+    );
+
+    function getSource() {
+        const routeName = route.name;
+        const routePath = route.path || '';
+        if (routeName === 'myAppDetail') {
+            return 'myApp';
+        }
+        if (routeName === 'verticalDetail' || routePath.includes('/kac/vertical/')) {
+            return 'vertical';
+        }
+        return 'horizontal';
+    }
+
+    function isApplyDetailRoute() {
+        return ['horizontalDetail', 'verticalDetail', 'myAppDetail'].includes(route.name);
+    }
+
+    function updateMainPanelHeight() {
+        if (!mainPanelRef.value) {
+            mainPanelHeight.value = 0;
+            return;
+        }
+        mainPanelHeight.value = Math.ceil(mainPanelRef.value.offsetHeight);
+    }
+
+    onMounted(() => {
+        nextTick(() => {
+            updateMainPanelHeight();
+            if (window.ResizeObserver && mainPanelRef.value) {
+                mainPanelResizeObserver = new ResizeObserver(updateMainPanelHeight);
+                mainPanelResizeObserver.observe(mainPanelRef.value);
+            }
+        });
+    });
+
+    onBeforeUnmount(() => {
+        if (mainPanelResizeObserver) {
+            mainPanelResizeObserver.disconnect();
+            mainPanelResizeObserver = null;
+        }
+    });
+
+    function reset() {
+        form.value = {
+            id: null,
+            workspaceId: null,
+            pluginId: null,
+            name: null,
+            category: null,
+            description: null,
+            status: null,
+            source: null,
+            tags: null,
+            useScene: null,
+            useCount: null,
+            kacApplyKnowledgeList: [],
+            kacApplyGraphList: [],
+            kacApplyBotList: [],
+            validFlag: null,
+            delFlag: null,
+            createBy: null,
+            creatorId: null,
+            createTime: null,
+            updateBy: null,
+            updaterId: null,
+            updateTime: null,
+            remark: null
+        };
+        proxy.resetForm('applyRef');
+    }
+
+    function showDevelopingMessage() {
+        ElMessage({
+            message: '功能正在开发中',
+            type: 'warning'
+        });
+    }
+
+    function showCopyDialog(action) {
+        if (isMockVerticalDetail.value) {
+            showDevelopingMessage();
+            return;
+        }
+        reset();
+        const _id = applyDetail.value.id;
+        getByApplyIdId(_id).then((res) => {
+            form.value = res.data;
+            if (action === 'copy') {
+                title.value = '复制应用';
+                form.value.id = null;
+                form.value.name = `${form.value.name || ''}（副本）`;
+            }
+            open.value = true;
+        });
+    }
+
+    watch(
+        () => [route.name, route.query.id],
+        ([, newId]) => {
+            if (!isApplyDetailRoute()) {
+                loading.value = false;
+                return;
+            }
+            if (!newId) {
+                loading.value = false;
+                return;
+            }
+            id.value = newId;
+            getApplyDetailById();
+        },
+        { immediate: true }
+    );
+
+    async function getApplyDetailById() {
+        if (!isApplyDetailRoute() || !id.value) {
+            loading.value = false;
+            return;
+        }
+
+        loading.value = true;
+        try {
+            const mockDetail = activeMockDetail.value;
+            if (mockDetail) {
+                applyDetail.value = { ...mockDetail.applyDetail };
+                knowledgeBaseList.value = mockDetail.knowledgeBaseList || mockKnowledgeBaseList;
+                graphList.value = mockDetail.graphList || [];
+                botList.value =
+                    mockDetail.botList ||
+                    (activeHorizontalMockDetail.value ? horizontalBotList : mockBotList);
+                mountedKnowledgeList.value = mockDetail.applyDetail.kacApplyKnowledgeList || [];
+                mountedGraphList.value = [];
+                mountedBotList.value = mockDetail.applyDetail.kacApplyBotList || [];
+                await nextTick();
+                updateMainPanelHeight();
+                return;
+            }
+
+            const response = await getApply(id.value);
+            applyDetail.value = response.data || {};
+            await loadMountedResources();
+        } finally {
+            loading.value = false;
+        }
+    }
+
+    function loadMountedResources() {
+        const params = { pageSize: 1000, pageNum: 1, applyId: id.value };
+        return Promise.allSettled([
+            listKacKnowledge(params).then((res) => {
+                mountedKnowledgeList.value = res.data?.rows || [];
+            }),
+            listKacGraph(params).then((res) => {
+                mountedGraphList.value = res.data?.rows || [];
+            }),
+            listKacBot(params).then((res) => {
+                mountedBotList.value = res.data?.rows || [];
+            })
+        ]);
+    }
+
+    function loadDropdownData() {
+        listKnowledgeBase({ pageSize: 1000, pageNum: 1 }).then((res) => {
+            knowledgeBaseList.value = res.data?.rows || [];
+        });
+
+        // listSimple({ pageSize: 1000, pageNum: 1 }).then((res) => {
+        //   graphList.value = res.data?.rows || [];
+        // });
+
+        listBot({ pageSize: 1000, pageNum: 1 }).then((res) => {
+            botList.value = res.data?.rows || [];
+        });
+    }
+
+    function getTags(row) {
+        if (!row?.tags) {
+            return [];
+        }
+        if (Array.isArray(row.tags)) {
+            return row.tags;
+        }
+        try {
+            return JSON.parse(row.tags);
+        } catch {
+            return [];
+        }
+    }
+
+    function getFirstValue(source, keys) {
+        if (!source) {
+            return '';
+        }
+        for (const key of keys) {
+            const value = source[key];
+            if (value !== undefined && value !== null && value !== '') {
+                return value;
+            }
+        }
+        return '';
+    }
+
+    function getMountedRows(primaryRows, fallbackRows) {
+        if (Array.isArray(primaryRows) && primaryRows.length) {
+            return primaryRows;
+        }
+        return Array.isArray(fallbackRows) ? fallbackRows : [];
+    }
+
+    function normalizeResourceRows(
+        relationRows,
+        allRows,
+        idKeys,
+        nameKeys,
+        descKeys,
+        fallbackDescription
+    ) {
+        return (relationRows || []).map((row) => {
+            const resourceId = getFirstValue(row, idKeys);
+            const matched = (allRows || []).find((item) => item.id == resourceId) || {};
+            const name = getFirstValue(matched, nameKeys) || getFirstValue(row, nameKeys) || '-';
+            const description = getFirstValue(row, descKeys) || fallbackDescription;
+            return {
+                relationId: row.id,
+                id: resourceId || row.id,
+                name,
+                description
+            };
+        });
+    }
+
+    function handleUse(row) {
+        if (isMockVerticalDetail.value) {
+            showDevelopingMessage();
+            return;
+        }
+
+        let path = '';
+        const source = getSource();
+
+        if (source === 'vertical') {
+            path = '/kac/vertical/pluginApply';
+        } else if (source === 'horizontal') {
+            path = '/kac/horizontal/pluginApply';
+        } else if (source === 'myApp') {
+            path = '/kac/myApp/pluginApply';
+        } else if (row.pluginId != null) {
+            path = '/kac/horizontal/pluginApply';
+        } else {
+            ElMessage({
+                message: '功能正常开发中',
+                type: 'warning'
+            });
+            return;
+        }
+        router.push({
+            path,
+            query: {
+                applyId: applyDetail.value.id,
+                title: applyDetail.value.name
+            }
+        });
+    }
+
+    function openResourceDialog(type) {
+        if (isMockVerticalDetail.value) {
+            showDevelopingMessage();
+            return;
+        }
+        resourceDialogType.value = type;
+        resourceDialogOpen.value = true;
+    }
+
+    function handleResourceDialogClosed() {
+        loadMountedResources();
+    }
+
+    function cancel() {
         open.value = false;
-        getApplyDetailById();
-      });
-      return;
+        reset();
     }
-    form.value.source = applyDetail.value.name;
-    form.value.updateBy = null;
-    form.value.updateTime = null;
-    copy(form.value).then((response) => {
-      proxy.$modal.msgSuccess("复制成功");
-      open.value = false;
-      const newId = response.data;
-      proxy.$router.push({
-        name: "myAppDetail",
-        query: { id: newId },
-      });
-    });
-  });
-}
 
-if (!activeMockDetail.value) {
-  loadDropdownData();
-}
+    function submitForm() {
+        proxy.$refs['applyRef'].validate((valid) => {
+            if (!valid) {
+                return;
+            }
+            if (form.value.id != null) {
+                updateApply(form.value).then(() => {
+                    proxy.$modal.msgSuccess('修改成功');
+                    open.value = false;
+                    getApplyDetailById();
+                });
+                return;
+            }
+            form.value.source = applyDetail.value.name;
+            form.value.updateBy = null;
+            form.value.updateTime = null;
+            copy(form.value).then((response) => {
+                proxy.$modal.msgSuccess('复制成功');
+                open.value = false;
+                const newId = response.data;
+                proxy.$router.push({
+                    name: 'myAppDetail',
+                    query: { id: newId }
+                });
+            });
+        });
+    }
+
+    if (!activeMockDetail.value) {
+        loadDropdownData();
+    }
 </script>
 
 <style scoped lang="scss">
-.app-detail-page {
-  background: #f0f2f5;
-  color: #101828;
-}
-
-.detail-hero {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 150px;
-  padding: 20px 50px 20px 30px;
-  background-color: #f7fbff;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  border-radius: 0;
-}
-
-.hero-main {
-  display: flex;
-  align-items: center;
-  min-width: 0;
-}
-
-.app-logo {
-  width: 64px;
-  height: 64px;
-  flex: 0 0 64px;
-  overflow: hidden;
-  border-radius: 6px;
-  // background: linear-gradient(135deg, #8eb6ff, #4c75ff);
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-}
-
-.hero-info {
-  min-width: 0;
-  margin-left: 30px;
-}
-
-.hero-title-row {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px 16px;
-
-  h1 {
-    margin: 0;
-    color: #1f2937;
-    font-size: 28px;
-    font-weight: 600;
-    line-height: 34px;
-    font-size: 24px;
-  }
-}
-
-.status-pill {
-  display: inline-flex;
-  align-items: center;
-  height: 24px;
-  padding: 0 10px;
-  border: 1px solid #9ee4b0;
-  border-radius: 12px;
-  background: #eaffef;
-  color: #21b352;
-  font-size: 14px;
-
-  i {
-    width: 6px;
-    height: 6px;
-    margin-right: 6px;
-    border-radius: 50%;
-    background: currentColor;
-  }
-
-  &.disabled {
-    border-color: #d8dce6;
-    background: #f5f7fa;
-    color: #909399;
-  }
-}
-
-.category-text {
-  color: #6b7280;
-  font-size: 15px;
-}
-
-.hero-desc {
-  max-width: 980px;
-  margin: 12px 0 16px;
-  color: #1f2937;
-  font-size: 16px;
-  line-height: 24px;
-}
-
-.hero-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.hero-tag {
-  display: inline-flex;
-  align-items: center;
-  height: 30px;
-  padding: 0 18px;
-  border-radius: 2px;
-  background: rgba(38, 102, 251, 0.08);
-  color: #2666fb;
-  font-size: 14px;
-}
-
-.hero-actions {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-left: 24px;
-
-  :deep(.el-button) {
-    height: 40px;
-    padding: 0 20px;
-    border-radius: 4px;
-    font-size: 14px;
-  }
-}
-
-.detail-content {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 540px;
-  align-items: start;
-  gap: 16px;
-  margin-top: 16px;
-}
-
-.detail-content--single {
-  grid-template-columns: minmax(0, 1fr);
-}
-
-.main-panel,
-.resource-panel {
-  background: #fff;
-}
-
-.main-panel {
-  padding: 20px;
-}
-
-.resource-panel {
-  padding: 20px;
-  align-self: start;
-  overflow-y: auto;
-  scrollbar-gutter: stable;
-}
-
-.content-section + .content-section {
-  margin-top: 18px;
-  padding-top: 18px;
-  border-top: 1px solid #edf0f5;
-}
-
-.section-title {
-  display: flex;
-  align-items: center;
-  margin-bottom: 16px;
-  color: #1f2937;
-  font-size: 16px;
-  font-weight: 600;
-
-  span {
-    width: 6px;
-    height: 16px;
-    margin-right: 10px;
-    border-radius: 3px;
-    background: #2666fb;
-  }
-}
-
-.value-card {
-  min-height: 174px;
-  padding: 20px;
-  background-color: #f7fbff;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  border-radius: 4px;
-
-  p {
-    // max-width: 920px;
-    margin: 0;
-    color: #374151;
-    font-size: 16px;
-    line-height: 32px;
-  }
-
-  span {
-    color: #2666fb;
-  }
-}
-
-.value-metrics {
-  display: grid;
-  grid-template-columns: repeat(3, 170px);
-  gap: 20px;
-  margin-top: 18px;
-
-  div {
-    height: 60px;
-    padding: 9px 12px;
-    border-radius: 4px;
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.95),
-      rgba(232, 241, 255, 0.95)
-    );
-    text-align: center;
-  }
-
-  strong,
-  small {
-    display: block;
-  }
-
-  strong {
-    color: #1f2937;
-    font-size: 14px;
-    line-height: 22px;
-  }
-
-  small {
-    color: #6b7280;
-    font-size: 12px;
-    line-height: 18px;
-  }
-}
-
-.ability-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 20px;
-}
-
-.ability-card {
-  min-height: 116px;
-  padding: 20px;
-  border: 1px solid #e5ebf5;
-  border-radius: 4px;
-  background: linear-gradient(180deg, #fff, #f8fbff);
-
-  h3 {
-    margin: 0 0 10px;
-    color: #1f2937;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 22px;
-  }
-
-  p {
-    margin: 0;
-    color: #4b5563;
-    font-size: 14px;
-    line-height: 24px;
-  }
-}
-
-.scene-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
-}
-
-.scene-card {
-  min-width: 0;
-  overflow: hidden;
-  border: 1px solid #e5ebf5;
-  border-radius: 4px;
-  background: #fff;
-  cursor: pointer;
-}
-
-.scene-card-cover {
-  height: 119px;
-  border-bottom: 1px solid #eef1f6;
-  background: linear-gradient(180deg, #f6f8fc 0%, #eef2f8 100%);
-}
-
-.scene-card-cover img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.scene-card-content {
-  padding: 16px 20px;
-}
-
-.scene-card-title {
-  margin: 0;
-  color: #1f2937;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 24px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.scene-card-tags {
-  min-height: 24px;
-  margin-top: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  gap: 10px;
-}
-
-.scene-card-tag {
-  height: 24px;
-  margin: 0;
-  padding: 0 14px;
-  border: none !important;
-  border-radius: 2px;
-  background: #eaf3ff !important;
-  color: #2b70f4 !important;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 22px;
-}
-
-.scene-card-desc {
-  min-height: 44px;
-  margin: 12px 0 0;
-  color: #4b5563;
-  font-size: 14px;
-  line-height: 22px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.scene-card-meta {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  margin-top: 12px;
-  color: #9aa3af;
-  font-size: 14px;
-  line-height: 20px;
-}
-
-.scene-card-heat,
-.scene-card-date {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  height: 20px;
-  line-height: 20px;
-
-  span {
-    display: block;
-    height: 14px;
-    line-height: 14px;
-  }
-}
-
-.scene-card-heat-icon {
-  width: 14px;
-  height: 14px;
-  display: block;
-  flex-shrink: 0;
-  object-fit: contain;
-  margin-top: -3px;
-}
-
-.scene-card-date-icon {
-  width: 14px;
-  height: 14px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: -1px;
-  color: #9aa3af;
-  font-size: 14px;
-}
-
-:deep(.scene-card-date-icon svg) {
-  width: 14px;
-  height: 14px;
-}
-
-.resource-title {
-  margin-bottom: 28px;
-}
-
-.resource-group + .resource-group {
-  margin-top: 22px;
-}
-
-.resource-group-title {
-  display: flex;
-  align-items: center;
-  margin-bottom: 16px;
-  color: #1f2937;
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.resource-icon-wrap {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  margin-right: 12px;
-  border-radius: 4px;
-
-  &.knowledge {
-    background: rgba(38, 102, 251, 0.08);
-  }
-
-  &.graph {
-    background: rgba(248, 136, 37, 0.08);
-  }
-
-  &.bot {
-    background: rgba(38, 202, 85, 0.08);
-  }
-
-  img {
-    width: 20px;
-    height: 20px;
-    object-fit: contain;
-  }
-}
-
-.resource-list {
-  display: grid;
-  gap: 20px;
-}
-
-.resource-card {
-  display: grid;
-  grid-template-columns: 54px minmax(0, 1fr) auto;
-  align-items: center;
-  column-gap: 20px;
-  min-height: 100px;
-  padding: 18px 18px 18px 20px;
-  border: 1px solid #e5ebf5;
-  border-radius: 4px;
-  background: #fff;
-
-  :deep(.el-button) {
-    height: 30px;
-    border-radius: 4px;
-  }
-}
-
-.resource-card {
-  &.knowledge {
-    background: linear-gradient(180deg, #fff, #fbfdff);
-  }
-
-  &.graph {
-    border-color: #f4e7d6;
-    background: linear-gradient(180deg, #fff, #fffaf4);
-  }
-
-  &.bot {
-    border-color: #dff3e6;
-    background: linear-gradient(180deg, #fff, #f9fffb);
-  }
-
-  h3 {
-    margin: 0 0 8px;
-    overflow: hidden;
-    color: #1f2937;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 22px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  p {
-    margin: 0;
-    overflow: hidden;
-    color: #6b7280;
-    font-size: 14px;
-    line-height: 20px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-}
-
-.resource-card-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 54px;
-  height: 54px;
-  overflow: hidden;
-  border-radius: 8px;
-
-  &.knowledge {
-    img {
-      width: 54px;
-      height: 54px;
+    .app-detail-page {
+        background: #f0f2f5;
+        color: #101828;
     }
-  }
 
-  &.graph {
-    img {
-      width: 54px;
-      height: 54px;
+    .detail-hero {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 150px;
+        padding: 20px 50px 20px 30px;
+        background-color: #f7fbff;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        border-radius: 0;
     }
-  }
 
-  &.bot {
-    img {
-      width: 54px;
-      height: 54px;
+    .hero-main {
+        display: flex;
+        align-items: center;
+        min-width: 0;
     }
-  }
 
-  img {
-    display: block;
-    object-fit: contain;
-  }
-}
+    .app-logo {
+        width: 64px;
+        height: 64px;
+        flex: 0 0 64px;
+        overflow: hidden;
+        border-radius: 6px;
+        // background: linear-gradient(135deg, #8eb6ff, #4c75ff);
 
-:global(.resource-manager-dialog .el-dialog__body) {
-  padding-top: 10px;
-}
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
 
-@media (max-width: 1440px) {
-  .detail-content {
-    grid-template-columns: minmax(0, 1fr) 420px;
-  }
+    .hero-info {
+        min-width: 0;
+        margin-left: 30px;
+    }
 
-  .ability-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
+    .hero-title-row {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px 16px;
 
-@media (max-width: 1200px) {
-  .detail-hero,
-  .detail-content {
-    display: block;
-  }
+        h1 {
+            margin: 0;
+            color: #1f2937;
+            font-size: 28px;
+            font-weight: 600;
+            line-height: 34px;
+            font-size: 24px;
+        }
+    }
 
-  .hero-actions {
-    justify-content: flex-end;
-    margin-top: 20px;
-    margin-left: 94px;
-  }
+    .status-pill {
+        display: inline-flex;
+        align-items: center;
+        height: 24px;
+        padding: 0 10px;
+        border: 1px solid #9ee4b0;
+        border-radius: 12px;
+        background: #eaffef;
+        color: #21b352;
+        font-size: 14px;
 
-  .resource-panel {
-    margin-top: 16px;
-    max-height: none !important;
-    overflow: visible;
-  }
-}
+        i {
+            width: 6px;
+            height: 6px;
+            margin-right: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
 
-@media (max-width: 768px) {
-  .app-detail-page {
-    padding: 10px;
-  }
+        &.disabled {
+            border-color: #d8dce6;
+            background: #f5f7fa;
+            color: #909399;
+        }
+    }
 
-  .detail-hero,
-  .main-panel,
-  .resource-panel {
-    padding: 18px 14px;
-  }
+    .category-text {
+        color: #6b7280;
+        font-size: 15px;
+    }
 
-  .hero-main {
-    align-items: flex-start;
-  }
+    .hero-desc {
+        max-width: 980px;
+        margin: 12px 0 16px;
+        color: #1f2937;
+        font-size: 16px;
+        line-height: 24px;
+    }
 
-  .hero-info {
-    margin-left: 14px;
-  }
+    .hero-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
 
-  .hero-title-row h1 {
-    font-size: 22px;
-    line-height: 28px;
-  }
+    .hero-tag {
+        display: inline-flex;
+        align-items: center;
+        height: 30px;
+        padding: 0 18px;
+        border-radius: 2px;
+        background: rgba(38, 102, 251, 0.08);
+        color: #2666fb;
+        font-size: 14px;
+    }
 
-  .hero-actions {
-    margin-left: 0;
-  }
+    .hero-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-left: 24px;
 
-  .value-metrics,
-  .scene-grid,
-  .ability-grid {
-    grid-template-columns: 1fr;
-  }
-}
-aside {
-  margin-bottom: 0;
-}
+        :deep(.el-button) {
+            height: 40px;
+            padding: 0 20px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+    }
+
+    .detail-content {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 540px;
+        align-items: start;
+        gap: 16px;
+        margin-top: 16px;
+    }
+
+    .detail-content--single {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .main-panel,
+    .resource-panel {
+        background: #fff;
+    }
+
+    .main-panel {
+        padding: 20px;
+    }
+
+    .resource-panel {
+        padding: 20px;
+        align-self: start;
+        overflow-y: auto;
+        scrollbar-gutter: stable;
+    }
+
+    .content-section + .content-section {
+        margin-top: 18px;
+        padding-top: 18px;
+        border-top: 1px solid #edf0f5;
+    }
+
+    .section-title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 16px;
+        color: #1f2937;
+        font-size: 16px;
+        font-weight: 600;
+
+        span {
+            width: 6px;
+            height: 16px;
+            margin-right: 10px;
+            border-radius: 3px;
+            background: #2666fb;
+        }
+    }
+
+    .value-card {
+        min-height: 174px;
+        padding: 20px;
+        background-color: #f7fbff;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        border-radius: 4px;
+
+        p {
+            // max-width: 920px;
+            margin: 0;
+            color: #374151;
+            font-size: 16px;
+            line-height: 32px;
+        }
+
+        span {
+            color: #2666fb;
+        }
+    }
+
+    .value-metrics {
+        display: grid;
+        grid-template-columns: repeat(3, 170px);
+        gap: 20px;
+        margin-top: 18px;
+
+        div {
+            height: 60px;
+            padding: 9px 12px;
+            border-radius: 4px;
+            background: linear-gradient(
+                180deg,
+                rgba(255, 255, 255, 0.95),
+                rgba(232, 241, 255, 0.95)
+            );
+            text-align: center;
+        }
+
+        strong,
+        small {
+            display: block;
+        }
+
+        strong {
+            color: #1f2937;
+            font-size: 14px;
+            line-height: 22px;
+        }
+
+        small {
+            color: #6b7280;
+            font-size: 12px;
+            line-height: 18px;
+        }
+    }
+
+    .ability-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 20px;
+    }
+
+    .ability-card {
+        min-height: 116px;
+        padding: 20px;
+        border: 1px solid #e5ebf5;
+        border-radius: 4px;
+        background: linear-gradient(180deg, #fff, #f8fbff);
+
+        h3 {
+            margin: 0 0 10px;
+            color: #1f2937;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 22px;
+        }
+
+        p {
+            margin: 0;
+            color: #4b5563;
+            font-size: 14px;
+            line-height: 24px;
+        }
+    }
+
+    .scene-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 20px;
+    }
+
+    .scene-card {
+        min-width: 0;
+        overflow: hidden;
+        border: 1px solid #e5ebf5;
+        border-radius: 4px;
+        background: #fff;
+        cursor: pointer;
+    }
+
+    .scene-card-cover {
+        height: 119px;
+        border-bottom: 1px solid #eef1f6;
+        background: linear-gradient(180deg, #f6f8fc 0%, #eef2f8 100%);
+    }
+
+    .scene-card-cover img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .scene-card-content {
+        padding: 16px 20px;
+    }
+
+    .scene-card-title {
+        margin: 0;
+        color: #1f2937;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 24px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .scene-card-tags {
+        min-height: 24px;
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        gap: 10px;
+    }
+
+    .scene-card-tag {
+        height: 24px;
+        margin: 0;
+        padding: 0 14px;
+        border: none !important;
+        border-radius: 2px;
+        background: #eaf3ff !important;
+        color: #2b70f4 !important;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 22px;
+    }
+
+    .scene-card-desc {
+        min-height: 44px;
+        margin: 12px 0 0;
+        color: #4b5563;
+        font-size: 14px;
+        line-height: 22px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .scene-card-meta {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        margin-top: 12px;
+        color: #9aa3af;
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .scene-card-heat,
+    .scene-card-date {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: 20px;
+        line-height: 20px;
+
+        span {
+            display: block;
+            height: 14px;
+            line-height: 14px;
+        }
+    }
+
+    .scene-card-heat-icon {
+        width: 14px;
+        height: 14px;
+        display: block;
+        flex-shrink: 0;
+        object-fit: contain;
+        margin-top: -3px;
+    }
+
+    .scene-card-date-icon {
+        width: 14px;
+        height: 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: -1px;
+        color: #9aa3af;
+        font-size: 14px;
+    }
+
+    :deep(.scene-card-date-icon svg) {
+        width: 14px;
+        height: 14px;
+    }
+
+    .resource-title {
+        margin-bottom: 28px;
+    }
+
+    .resource-group + .resource-group {
+        margin-top: 22px;
+    }
+
+    .resource-group-title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 16px;
+        color: #1f2937;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .resource-icon-wrap {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        margin-right: 12px;
+        border-radius: 4px;
+
+        &.knowledge {
+            background: rgba(38, 102, 251, 0.08);
+        }
+
+        &.graph {
+            background: rgba(248, 136, 37, 0.08);
+        }
+
+        &.bot {
+            background: rgba(38, 202, 85, 0.08);
+        }
+
+        img {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
+    }
+
+    .resource-list {
+        display: grid;
+        gap: 20px;
+    }
+
+    .resource-card {
+        display: grid;
+        grid-template-columns: 54px minmax(0, 1fr) auto;
+        align-items: center;
+        column-gap: 20px;
+        min-height: 100px;
+        padding: 18px 18px 18px 20px;
+        border: 1px solid #e5ebf5;
+        border-radius: 4px;
+        background: #fff;
+
+        :deep(.el-button) {
+            height: 30px;
+            border-radius: 4px;
+        }
+    }
+
+    .resource-card {
+        &.knowledge {
+            background: linear-gradient(180deg, #fff, #fbfdff);
+        }
+
+        &.graph {
+            border-color: #f4e7d6;
+            background: linear-gradient(180deg, #fff, #fffaf4);
+        }
+
+        &.bot {
+            border-color: #dff3e6;
+            background: linear-gradient(180deg, #fff, #f9fffb);
+        }
+
+        h3 {
+            margin: 0 0 8px;
+            overflow: hidden;
+            color: #1f2937;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 22px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        p {
+            margin: 0;
+            overflow: hidden;
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 20px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    .resource-card-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 54px;
+        height: 54px;
+        overflow: hidden;
+        border-radius: 8px;
+
+        &.knowledge {
+            img {
+                width: 54px;
+                height: 54px;
+            }
+        }
+
+        &.graph {
+            img {
+                width: 54px;
+                height: 54px;
+            }
+        }
+
+        &.bot {
+            img {
+                width: 54px;
+                height: 54px;
+            }
+        }
+
+        img {
+            display: block;
+            object-fit: contain;
+        }
+    }
+
+    :global(.resource-manager-dialog .el-dialog__body) {
+        padding-top: 10px;
+    }
+
+    @media (max-width: 1440px) {
+        .detail-content {
+            grid-template-columns: minmax(0, 1fr) 420px;
+        }
+
+        .ability-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 1200px) {
+        .detail-hero,
+        .detail-content {
+            display: block;
+        }
+
+        .hero-actions {
+            justify-content: flex-end;
+            margin-top: 20px;
+            margin-left: 94px;
+        }
+
+        .resource-panel {
+            margin-top: 16px;
+            max-height: none !important;
+            overflow: visible;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .app-detail-page {
+            padding: 10px;
+        }
+
+        .detail-hero,
+        .main-panel,
+        .resource-panel {
+            padding: 18px 14px;
+        }
+
+        .hero-main {
+            align-items: flex-start;
+        }
+
+        .hero-info {
+            margin-left: 14px;
+        }
+
+        .hero-title-row h1 {
+            font-size: 22px;
+            line-height: 28px;
+        }
+
+        .hero-actions {
+            margin-left: 0;
+        }
+
+        .value-metrics,
+        .scene-grid,
+        .ability-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    aside {
+        margin-bottom: 0;
+    }
 </style>
