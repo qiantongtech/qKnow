@@ -64,6 +64,7 @@
 
 package tech.qiantong.qknow.module.kb.controller.admin.tool;
 
+import cn.hutool.core.date.DateUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -73,99 +74,90 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import tech.qiantong.qknow.common.annotation.Log;
 import tech.qiantong.qknow.common.core.controller.BaseController;
+import tech.qiantong.qknow.common.core.domain.AjaxResult;
 import tech.qiantong.qknow.common.core.domain.CommonResult;
-import tech.qiantong.qknow.common.core.page.PageResult;
 import tech.qiantong.qknow.common.enums.BusinessType;
 import tech.qiantong.qknow.common.utils.object.BeanUtils;
-import tech.qiantong.qknow.module.kb.controller.admin.tool.vo.KbToolPageReqVO;
-import tech.qiantong.qknow.module.kb.controller.admin.tool.vo.KbToolRespVO;
-import tech.qiantong.qknow.module.kb.controller.admin.tool.vo.KbToolSaveReqVO;
-import tech.qiantong.qknow.module.kb.convert.tool.KbToolConvert;
-import tech.qiantong.qknow.module.kb.dal.dataobject.tool.KbToolDO;
+import tech.qiantong.qknow.module.kb.controller.admin.tool.vo.KbToolCategorySaveReqVO;
+import tech.qiantong.qknow.module.kb.dal.dataobject.tool.KbToolCategoryDO;
 import tech.qiantong.qknow.module.kb.service.tool.IKbToolCategoryService;
-import tech.qiantong.qknow.module.kb.service.tool.IKbToolService;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 /**
- * 工具管理Controller
+ * 工具分类Controller
  *
  * @author qknow
- * @date 2026-03-19
+ * @date 2025-02-13
  */
-@Tag(name = "工具管理")
+@Tag(name = "工具分类")
 @RestController
-@RequestMapping("/kb/tool")
+@RequestMapping("/kb/toolCategory")
 @Validated
-public class KbToolController extends BaseController {
-    @Resource
-    private IKbToolService kbToolService;
+public class KbToolCategoryController extends BaseController {
     @Resource
     private IKbToolCategoryService toolCategoryService;
 
-    @Operation(summary = "查询工具管理列表")
-    @PreAuthorize("@ss.hasPermi('kb:tool:tool:list')")
-    @GetMapping("/list")
-    public CommonResult<PageResult<KbToolRespVO>> list(KbToolPageReqVO kbTool) {
-        PageResult<KbToolDO> page = kbToolService.getKbToolPage(kbTool);
-        List<KbToolDO> list = page.getList();
-        Map<Long, String> categoryMap = toolCategoryService.getCategoryMap();
-        // 填充属性名字段
-        List<KbToolRespVO> voList = list.stream().map(entity -> BeanUtils.toBean(entity, KbToolRespVO.class))
-                .peek(entity -> entity.setCategoryName(categoryMap.get(entity.getCategoryId())))
-                .toList();
-
-        return CommonResult.success(new PageResult<>(voList, page.getTotal()));
-    }
-
-    @Operation(summary = "获取工具管理详细信息")
-    @PreAuthorize("@ss.hasPermi('kb:tool:tool:query')")
+    @Operation(summary = "获取工具分类详细信息")
+//    @PreAuthorize("@ss.hasPermi('kmc:kmcCategory:kmcCategory:query')")
     @GetMapping(value = "/{id}")
-    public CommonResult<KbToolRespVO> getInfo(@PathVariable("id") Long id) {
-        KbToolDO kbToolDO = kbToolService.getKbToolById(id);
-        return CommonResult.success(KbToolConvert.INSTANCE.convertToRespVO(kbToolDO));
+    public CommonResult<KbToolCategoryDO> getInfo(@PathVariable("id") Long id) {
+        KbToolCategoryDO kmcCategoryDO = toolCategoryService.getToolCategoryById(id);
+        return CommonResult.success(BeanUtils.toBean(kmcCategoryDO, KbToolCategoryDO.class));
     }
 
-    @Operation(summary = "新增工具管理")
-    @PreAuthorize("@ss.hasPermi('kb:tool:tool:add')")
-    @Log(title = "工具管理", businessType = BusinessType.INSERT)
+    @Operation(summary = "新增工具分类")
+//    @PreAuthorize("@ss.hasPermi('kmc:kmcCategory:kmcCategory:add')")
+    @Log(title = "工具分类", businessType = BusinessType.INSERT)
     @PostMapping
-    public CommonResult<Long> add(@Valid @RequestBody KbToolSaveReqVO kbTool) {
-        kbTool.setWorkspaceId(super.getWorkSpaceId());
-        kbTool.setCreatorId(getUserId());
-        kbTool.setCreateBy(getUsername());
-        return CommonResult.toAjax(kbToolService.createKbTool(kbTool));
+    public CommonResult<Long> add(@Valid @RequestBody KbToolCategorySaveReqVO category) {
+        category.setCreatorId(getUserId());
+        category.setCreateBy(getNickName());
+        category.setCreateTime(DateUtil.date());
+        category.setWorkspaceId(super.getWorkSpaceId());
+        return CommonResult.toAjax(toolCategoryService.createToolCategory(category));
     }
 
-    @Operation(summary = "修改工具管理")
-    @PreAuthorize("@ss.hasPermi('kb:tool:tool:edit')")
-    @Log(title = "工具管理", businessType = BusinessType.UPDATE)
+    @Operation(summary = "修改工具分类")
+    @PreAuthorize("@ss.hasPermi('kmc:kmcCategory:kmcCategory:edit')")
+    @Log(title = "工具分类", businessType = BusinessType.UPDATE)
     @PutMapping
-    public CommonResult<Integer> edit(@Valid @RequestBody KbToolSaveReqVO kbTool) {
-        kbTool.setUpdateBy(getUsername());
-        kbTool.setUpdaterId(getUserId());
-        return CommonResult.toAjax(kbToolService.updateKbTool(kbTool));
+    public CommonResult<Integer> edit(@Valid @RequestBody KbToolCategorySaveReqVO category) {
+        category.setUpdaterId(getUserId());
+        category.setUpdateBy(getNickName());
+        category.setUpdateTime(DateUtil.date());
+        return CommonResult.toAjax(toolCategoryService.updateToolCategory(category));
     }
 
-
-    @Operation(summary = "修改启用状态")
-    @PreAuthorize("@ss.hasPermi('kb:tool:tool:edit')")
-    @Log(title = "修改启用状态", businessType = BusinessType.UPDATE)
-    @PostMapping("updateStatus")
-    public CommonResult<Boolean> updateStatus(@RequestBody KbToolSaveReqVO kbTool) {
-        kbTool.setUpdateBy(getUsername());
-        kbTool.setUpdaterId(getUserId());
-        return CommonResult.toAjax(kbToolService.updateStatus(kbTool));
-    }
-
-    @Operation(summary = "删除工具管理")
-    @PreAuthorize("@ss.hasPermi('kb:tool:tool:remove')")
-    @Log(title = "工具管理", businessType = BusinessType.DELETE)
+    @Operation(summary = "删除工具分类")
+    @PreAuthorize("@ss.hasPermi('kmc:kmcCategory:kmcCategory:remove')")
+    @Log(title = "工具分类", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public CommonResult<Integer> remove(@PathVariable Long[] ids) {
-        return CommonResult.toAjax(kbToolService.removeKbTool(Arrays.asList(ids)));
+        return CommonResult.toAjax(toolCategoryService.removeToolCategory(Arrays.asList(ids)));
+    }
+
+    @Operation(summary = "查询全部工具分类")
+    @GetMapping("/allList")
+    public CommonResult<List<KbToolCategoryDO>> getKmcCategoryAllList(KbToolCategoryDO categoryDO) {
+        categoryDO.setDelFlag(false);
+        List<KbToolCategoryDO> list = toolCategoryService.getToolCategoryAllList(categoryDO);
+        return CommonResult.success(list);
+    }
+
+    @Operation(summary = "查询工具分类树列表")
+    @GetMapping("/kmcCategoryTree")
+    public AjaxResult kmcCategoryTree(KbToolCategoryDO categoryDO) {
+        return success(toolCategoryService.selectCategoryTreeList(categoryDO));
+    }
+
+    @Operation(summary = "获取分类树形结构数据")
+    @GetMapping("/tree")
+    public CommonResult<List<Map<String, Object>>> tree() {
+        List<Map<String, Object>> list = toolCategoryService.getTreeList();
+        return CommonResult.success(list);
     }
 
 }

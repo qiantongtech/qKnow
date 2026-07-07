@@ -18,15 +18,15 @@
 
 package tech.qiantong.qknow.module.kb.service.tool;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Collection;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.ai.tool.ToolCallbackProvider;
 import tech.qiantong.qknow.common.core.page.PageResult;
-import tech.qiantong.qknow.module.kb.controller.admin.tool.vo.KbToolSaveReqVO;
 import tech.qiantong.qknow.module.kb.controller.admin.tool.vo.KbToolPageReqVO;
-import tech.qiantong.qknow.module.kb.controller.admin.tool.vo.KbToolRespVO;
+import tech.qiantong.qknow.module.kb.controller.admin.tool.vo.KbToolSaveReqVO;
 import tech.qiantong.qknow.module.kb.dal.dataobject.tool.KbToolDO;
+
+import java.util.Collection;
+
 /**
  * 工具管理Service接口
  *
@@ -74,28 +74,18 @@ public interface IKbToolService extends IService<KbToolDO> {
     KbToolDO getKbToolById(Long id);
 
     /**
-     * 获得全部工具管理列表
+     * 获取工具回调提供者
      *
-     * @return 工具管理列表
+     * @param toolIds 工具ID
+     * @return 工具回调提供者
      */
-    List<KbToolDO> getKbToolList();
+    ToolCallbackProvider getToolCallbackProvider(String toolIds);
 
     /**
-     * 获得全部工具管理 Map
+     * 更新工具状态
      *
-     * @return 工具管理 Map
+     * @param kbTool 工具信息
+     * @return 更新结果
      */
-    Map<Long, KbToolDO> getKbToolMap();
-
-
-    /**
-     * 导入工具管理数据
-     *
-     * @param importExcelList 工具管理数据列表
-     * @param isUpdateSupport 是否更新支持，如果已存在，则进行更新数据
-     * @param operName 操作用户
-     * @return 结果
-     */
-    String importKbTool(List<KbToolRespVO> importExcelList, boolean isUpdateSupport, String operName);
-
+    Boolean updateStatus(KbToolSaveReqVO kbTool);
 }

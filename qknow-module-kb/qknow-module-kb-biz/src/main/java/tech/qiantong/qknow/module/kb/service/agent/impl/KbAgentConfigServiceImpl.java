@@ -34,18 +34,18 @@ import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.function.FunctionToolCallback;
 import org.springframework.ai.tool.resolution.ToolCallbackResolver;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import tech.qiantong.qknow.ai.enums.model.MessageTypeEnums;
-import tech.qiantong.qknow.ai.service.IChatModelService;
+import tech.qiantong.qknow.common.core.page.PageResult;
+import tech.qiantong.qknow.common.core.utils.object.BeanUtils;
 import tech.qiantong.qknow.common.exception.ServiceException;
 import tech.qiantong.qknow.common.utils.DateUtils;
 import tech.qiantong.qknow.common.utils.StringUtils;
-import tech.qiantong.qknow.common.core.page.PageResult;
-import tech.qiantong.qknow.common.core.utils.object.BeanUtils;
 import tech.qiantong.qknow.module.ai.api.modelMarket.IAiModelApiService;
 import tech.qiantong.qknow.module.kb.controller.admin.agent.vo.*;
 import tech.qiantong.qknow.module.kb.dal.dataobject.agent.KbAgentConfigDO;
@@ -53,6 +53,7 @@ import tech.qiantong.qknow.module.kb.dal.dataobject.tool.KbToolMethodDO;
 import tech.qiantong.qknow.module.kb.dal.mapper.agent.KbAgentConfigMapper;
 import tech.qiantong.qknow.module.kb.service.agent.IKbAgentConfigService;
 import tech.qiantong.qknow.module.kb.service.tool.IKbToolMethodService;
+import tech.qiantong.qknow.module.kb.service.tool.IKbToolService;
 import tech.qiantong.qknow.module.kb.tool.function.SearchKnowledgeTool;
 import tech.qiantong.qknow.module.kb.tool.function.query.knowledgeQuery;
 import tech.qiantong.qknow.module.kb.utils.NodeUtils;
@@ -62,6 +63,7 @@ import tech.qiantong.qknow.mybatis.core.query.LambdaQueryWrapperX;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
 /**
  * agent配置Service业务层处理
  *
@@ -71,7 +73,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class KbAgentConfigServiceImpl  extends ServiceImpl<KbAgentConfigMapper,KbAgentConfigDO> implements IKbAgentConfigService {
+public class KbAgentConfigServiceImpl extends ServiceImpl<KbAgentConfigMapper, KbAgentConfigDO> implements IKbAgentConfigService {
     @Resource
     private KbAgentConfigMapper kbAgentConfigMapper;
     @Resource
@@ -80,6 +82,8 @@ public class KbAgentConfigServiceImpl  extends ServiceImpl<KbAgentConfigMapper,K
     private IAiModelApiService aiModelService;
     @Resource
     private IKmcApiService kmcApiService;
+    @Resource
+    private IKbToolService kbToolService;
 
     @Resource
     private ToolCallbackResolver resolver;
@@ -104,6 +108,7 @@ public class KbAgentConfigServiceImpl  extends ServiceImpl<KbAgentConfigMapper,K
         KbAgentConfigDO updateObj = BeanUtils.toBean(updateReqVO, KbAgentConfigDO.class);
         return kbAgentConfigMapper.updateById(updateObj);
     }
+
     @Override
     public int removeKbAgentConfig(Collection<Long> idList) {
         // 批量删除agent配置
@@ -144,69 +149,69 @@ public class KbAgentConfigServiceImpl  extends ServiceImpl<KbAgentConfigMapper,K
      *
      * @param importExcelList agent配置数据列表
      * @param isUpdateSupport 是否更新支持，如果已存在，则进行更新数据
-     * @param operName 操作用户
+     * @param operName        操作用户
      * @return 结果
      */
     @Override
     public String importKbAgentConfig(List<KbAgentConfigRespVO> importExcelList, boolean isUpdateSupport, String operName) {
-            if (StringUtils.isNull(importExcelList) || importExcelList.size() == 0) {
-                throw new ServiceException("导入数据不能为空！");
-            }
+        if (StringUtils.isNull(importExcelList) || importExcelList.size() == 0) {
+            throw new ServiceException("导入数据不能为空！");
+        }
 
-            int successNum = 0;
-            int failureNum = 0;
-            List<String> successMessages = new ArrayList<>();
-            List<String> failureMessages = new ArrayList<>();
+        int successNum = 0;
+        int failureNum = 0;
+        List<String> successMessages = new ArrayList<>();
+        List<String> failureMessages = new ArrayList<>();
 
-            for (KbAgentConfigRespVO respVO : importExcelList) {
-                try {
-                    KbAgentConfigDO kbAgentConfigDO = BeanUtils.toBean(respVO, KbAgentConfigDO.class);
-                    Long kbAgentConfigId = respVO.getId();
-                    if (isUpdateSupport) {
-                        if (kbAgentConfigId != null) {
-                            KbAgentConfigDO existingKbAgentConfig = kbAgentConfigMapper.selectById(kbAgentConfigId);
-                            if (existingKbAgentConfig != null) {
-                                kbAgentConfigMapper.updateById(kbAgentConfigDO);
-                                successNum++;
-                                successMessages.add("数据更新成功，ID为 " + kbAgentConfigId + " 的agent配置记录。");
-                            } else {
-                                failureNum++;
-                                failureMessages.add("数据更新失败，ID为 " + kbAgentConfigId + " 的agent配置记录不存在。");
-                            }
+        for (KbAgentConfigRespVO respVO : importExcelList) {
+            try {
+                KbAgentConfigDO kbAgentConfigDO = BeanUtils.toBean(respVO, KbAgentConfigDO.class);
+                Long kbAgentConfigId = respVO.getId();
+                if (isUpdateSupport) {
+                    if (kbAgentConfigId != null) {
+                        KbAgentConfigDO existingKbAgentConfig = kbAgentConfigMapper.selectById(kbAgentConfigId);
+                        if (existingKbAgentConfig != null) {
+                            kbAgentConfigMapper.updateById(kbAgentConfigDO);
+                            successNum++;
+                            successMessages.add("数据更新成功，ID为 " + kbAgentConfigId + " 的agent配置记录。");
                         } else {
                             failureNum++;
-                            failureMessages.add("数据更新失败，某条记录的ID不存在。");
+                            failureMessages.add("数据更新失败，ID为 " + kbAgentConfigId + " 的agent配置记录不存在。");
                         }
                     } else {
-                        QueryWrapper<KbAgentConfigDO> queryWrapper = new QueryWrapper<>();
-                        queryWrapper.eq("id", kbAgentConfigId);
-                        KbAgentConfigDO existingKbAgentConfig = kbAgentConfigMapper.selectOne(queryWrapper);
-                        if (existingKbAgentConfig == null) {
-                            kbAgentConfigMapper.insert(kbAgentConfigDO);
-                            successNum++;
-                            successMessages.add("数据插入成功，ID为 " + kbAgentConfigId + " 的agent配置记录。");
-                        } else {
-                            failureNum++;
-                            failureMessages.add("数据插入失败，ID为 " + kbAgentConfigId + " 的agent配置记录已存在。");
-                        }
+                        failureNum++;
+                        failureMessages.add("数据更新失败，某条记录的ID不存在。");
                     }
-                } catch (Exception e) {
-                    failureNum++;
-                    String errorMsg = "数据导入失败，错误信息：" + e.getMessage();
-                    failureMessages.add(errorMsg);
-                    log.error(errorMsg, e);
+                } else {
+                    QueryWrapper<KbAgentConfigDO> queryWrapper = new QueryWrapper<>();
+                    queryWrapper.eq("id", kbAgentConfigId);
+                    KbAgentConfigDO existingKbAgentConfig = kbAgentConfigMapper.selectOne(queryWrapper);
+                    if (existingKbAgentConfig == null) {
+                        kbAgentConfigMapper.insert(kbAgentConfigDO);
+                        successNum++;
+                        successMessages.add("数据插入成功，ID为 " + kbAgentConfigId + " 的agent配置记录。");
+                    } else {
+                        failureNum++;
+                        failureMessages.add("数据插入失败，ID为 " + kbAgentConfigId + " 的agent配置记录已存在。");
+                    }
                 }
+            } catch (Exception e) {
+                failureNum++;
+                String errorMsg = "数据导入失败，错误信息：" + e.getMessage();
+                failureMessages.add(errorMsg);
+                log.error(errorMsg, e);
             }
-            StringBuilder resultMsg = new StringBuilder();
-            if (failureNum > 0) {
-                resultMsg.append("很抱歉，导入失败！共 ").append(failureNum).append(" 条数据格式不正确，错误如下：");
-                resultMsg.append("<br/>").append(String.join("<br/>", failureMessages));
-                throw new ServiceException(resultMsg.toString());
-            } else {
-                resultMsg.append("恭喜您，数据已全部导入成功！共 ").append(successNum).append(" 条。");
-            }
-            return resultMsg.toString();
         }
+        StringBuilder resultMsg = new StringBuilder();
+        if (failureNum > 0) {
+            resultMsg.append("很抱歉，导入失败！共 ").append(failureNum).append(" 条数据格式不正确，错误如下：");
+            resultMsg.append("<br/>").append(String.join("<br/>", failureMessages));
+            throw new ServiceException(resultMsg.toString());
+        } else {
+            resultMsg.append("恭喜您，数据已全部导入成功！共 ").append(successNum).append(" 条。");
+        }
+        return resultMsg.toString();
+    }
 
     @Override
     public Flux<KbChatMessageSendRespVO> chatMessage(KbAgentConfigReqVO kbAgentConfig) throws GraphRunnerException {
@@ -225,13 +230,13 @@ public class KbAgentConfigServiceImpl  extends ServiceImpl<KbAgentConfigMapper,K
         );
 
         // 获取知识库
-       List<ToolCallback> tools = Lists.newArrayList();
+        List<ToolCallback> tools = Lists.newArrayList();
         if (StringUtils.isNotEmpty(kbAgentConfig.getKnowledgeIds())) {
             Set<String> idSet = StringUtils.str2Set(kbAgentConfig.getKnowledgeIds(), ",");
             List<KmcKnowledgeBaseRespDTO> knowledgeBaseList = kmcApiService.getKnowledgeBaseByIds(idSet.stream().map(Long::parseLong).toList());
             knowledgeBaseList.forEach(knowledgeBase -> {
                 FunctionToolCallback<knowledgeQuery, String> toolCallback = FunctionToolCallback.builder("knowledgeBase" + knowledgeBase.getId(),
-                         new SearchKnowledgeTool(kmcApiService, knowledgeBase.getId()))
+                                new SearchKnowledgeTool(kmcApiService, knowledgeBase.getId()))
                         .inputType(knowledgeQuery.class)
                         .description("当需要查询" + knowledgeBase.getName() + "相关的信息时调用")
                         .build();
@@ -255,6 +260,7 @@ public class KbAgentConfigServiceImpl  extends ServiceImpl<KbAgentConfigMapper,K
 
         messages.add(new UserMessage(kbAgentConfig.getQuestion()));
 
+        ToolCallbackProvider toolCallbackProvider = kbToolService.getToolCallbackProvider(kbAgentConfig.getToolMethodIds());
         // 配置agent
         ReactAgent agent = ReactAgent.builder()
                 .name("my_agent")
@@ -262,8 +268,7 @@ public class KbAgentConfigServiceImpl  extends ServiceImpl<KbAgentConfigMapper,K
                 // 限制最多调用 5 次
                 .hooks(ModelCallLimitHook.builder().runLimit(10).build())
                 .systemPrompt(systemPrompt)
-                .toolNames(toolNames)
-                .tools(tools)
+                .toolCallbackProviders(toolCallbackProvider)
                 .resolver(resolver)
                 .build();
 

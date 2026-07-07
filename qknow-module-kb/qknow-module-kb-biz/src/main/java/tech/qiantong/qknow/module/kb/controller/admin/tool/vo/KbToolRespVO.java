@@ -107,4 +107,19 @@ public class KbToolRespVO implements Serializable {
     @Schema(description = "备注", example = "")
     private String remark;
 
+    @Schema(description = "分类id", example = "")
+    private Long categoryId;
+
+    @Schema(description = "分类名", example = "")
+    private String categoryName;
+
+    @Schema(description = "工具内容", example = "")
+    private String content;
+
+    @Schema(description = "参数定义", example = "")
+    private String paramSchema;
+
+    @Schema(description = "状态", example = "")
+    private Integer status;
+
 }

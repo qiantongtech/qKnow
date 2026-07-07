@@ -67,5 +67,15 @@ public class KbToolSaveReqVO extends BaseEntity {
     @Size(max = 512, message = "备注长度不能超过512个字符")
     private String remark;
 
+    @Schema(description = "分类id", example = "")
+    private Long categoryId;
 
+    @Schema(description = "工具内容", example = "")
+    private String content;
+
+    @Schema(description = "参数定义", example = "")
+    private String paramSchema;
+
+    @Schema(description = "状态", example = "")
+    private Integer status;
 }

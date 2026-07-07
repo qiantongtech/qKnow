@@ -60,3 +60,15 @@ export function delTool(id) {
         method: 'delete'
     });
 }
+
+// 修改 mcp 状态
+export function updateMcpStatus(mcpId, newStatus) {
+    return request({
+        url: '/kb/tool/updateStatus',
+        method: 'post',
+        data: {
+            "id": mcpId,
+            "status": newStatus
+        }
+    })
+}

@@ -49,6 +49,8 @@ public interface KbToolMapper extends BaseMapperX<KbToolDO> {
                 .eqIfPresent(KbToolDO::getType, reqVO.getType())
                 .eqIfPresent(KbToolDO::getSource, reqVO.getSource())
                 .eqIfPresent(KbToolDO::getCreateTime, reqVO.getCreateTime())
+                .eqIfPresent(KbToolDO::getStatus, reqVO.getStatus())
+                .inIfPresent(KbToolDO::getCategoryId, reqVO.getCategoryIdList())
                 // 如果 reqVO.getName() 不为空，则添加 name 的精确匹配条件（name = '<name>'）
                 // .likeIfPresent(KbToolDO::getName, reqVO.getName())
                 // 按照 createTime 字段降序排序

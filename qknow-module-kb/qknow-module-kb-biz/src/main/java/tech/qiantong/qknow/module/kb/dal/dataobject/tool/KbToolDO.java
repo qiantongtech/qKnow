@@ -70,6 +70,20 @@ public class KbToolDO extends BaseEntity {
     /** 是否有效 */
     private Boolean validFlag;
 
+    /** 分类id */
+    private Long categoryId;
+
+    /** 工具内容 */
+    private String content;
+
+    /** 参数定义 */
+    private String paramSchema;
+
+    /**
+     * 状态
+     */
+    private Integer status;
+
     /** 删除标志 */
     @TableLogic
     private Boolean delFlag;

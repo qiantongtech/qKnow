@@ -18,27 +18,30 @@
 
 package tech.qiantong.qknow.module.kb.service.tool.impl;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.stream.Collectors;
-import lombok.extern.slf4j.Slf4j;
-import jakarta.annotation.Resource;
-import tech.qiantong.qknow.common.core.page.PageResult;
-import tech.qiantong.qknow.common.core.utils.object.BeanUtils;
-import tech.qiantong.qknow.common.utils.StringUtils;
-import tech.qiantong.qknow.common.exception.ServiceException;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.tool.StaticToolCallbackProvider;
+import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.tool.ToolCallbackProvider;
+import org.springframework.ai.tool.function.FunctionToolCallback;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tech.qiantong.qknow.common.core.page.PageResult;
 import tech.qiantong.qknow.module.kb.controller.admin.tool.vo.KbToolPageReqVO;
-import tech.qiantong.qknow.module.kb.controller.admin.tool.vo.KbToolRespVO;
 import tech.qiantong.qknow.module.kb.controller.admin.tool.vo.KbToolSaveReqVO;
+import tech.qiantong.qknow.module.kb.convert.tool.KbToolConvert;
 import tech.qiantong.qknow.module.kb.dal.dataobject.tool.KbToolDO;
 import tech.qiantong.qknow.module.kb.dal.mapper.tool.KbToolMapper;
 import tech.qiantong.qknow.module.kb.service.tool.IKbToolService;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import java.util.*;
+import java.util.function.Function;
+
 /**
  * 工具管理Service业务层处理
  *
@@ -48,20 +51,18 @@ import tech.qiantong.qknow.module.kb.service.tool.IKbToolService;
 @Slf4j
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class KbToolServiceImpl  extends ServiceImpl<KbToolMapper,KbToolDO> implements IKbToolService {
-    @Resource
-    private KbToolMapper kbToolMapper;
+public class KbToolServiceImpl extends ServiceImpl<KbToolMapper, KbToolDO> implements IKbToolService {
 
     @Override
     public PageResult<KbToolDO> getKbToolPage(KbToolPageReqVO pageReqVO) {
-        return kbToolMapper.selectPage(pageReqVO);
+        return baseMapper.selectPage(pageReqVO);
     }
 
     @Override
     public Long createKbTool(KbToolSaveReqVO createReqVO) {
-        KbToolDO dictType = BeanUtils.toBean(createReqVO, KbToolDO.class);
-        kbToolMapper.insert(dictType);
-        return dictType.getId();
+        KbToolDO kbToolDO = KbToolConvert.INSTANCE.convertToDO(createReqVO);
+        baseMapper.insert(kbToolDO);
+        return kbToolDO.getId();
     }
 
     @Override
@@ -69,104 +70,78 @@ public class KbToolServiceImpl  extends ServiceImpl<KbToolMapper,KbToolDO> imple
         // 相关校验
 
         // 更新工具管理
-        KbToolDO updateObj = BeanUtils.toBean(updateReqVO, KbToolDO.class);
-        return kbToolMapper.updateById(updateObj);
+        KbToolDO updateObj = KbToolConvert.INSTANCE.convertToDO(updateReqVO);
+        return baseMapper.updateById(updateObj);
     }
+
     @Override
     public int removeKbTool(Collection<Long> idList) {
         // 批量删除工具管理
-        return kbToolMapper.deleteBatchIds(idList);
+        return baseMapper.deleteByIds(idList);
     }
 
     @Override
     public KbToolDO getKbToolById(Long id) {
-        return kbToolMapper.selectById(id);
+        return baseMapper.selectById(id);
     }
 
+    /**
+     * 获取工具回调提供者
+     *
+     * @param toolIds 工具ID
+     * @return 工具回调提供者
+     */
     @Override
-    public List<KbToolDO> getKbToolList() {
-        return kbToolMapper.selectList();
-    }
-
-    @Override
-    public Map<Long, KbToolDO> getKbToolMap() {
-        List<KbToolDO> kbToolList = kbToolMapper.selectList();
-        return kbToolList.stream()
-                .collect(Collectors.toMap(
-                        KbToolDO::getId,
-                        kbToolDO -> kbToolDO,
-                        // 保留已存在的值
-                        (existing, replacement) -> existing
-                ));
-    }
-
-
-        /**
-         * 导入工具管理数据
-         *
-         * @param importExcelList 工具管理数据列表
-         * @param isUpdateSupport 是否更新支持，如果已存在，则进行更新数据
-         * @param operName 操作用户
-         * @return 结果
-         */
-        @Override
-        public String importKbTool(List<KbToolRespVO> importExcelList, boolean isUpdateSupport, String operName) {
-            if (StringUtils.isNull(importExcelList) || importExcelList.size() == 0) {
-                throw new ServiceException("导入数据不能为空！");
-            }
-
-            int successNum = 0;
-            int failureNum = 0;
-            List<String> successMessages = new ArrayList<>();
-            List<String> failureMessages = new ArrayList<>();
-
-            for (KbToolRespVO respVO : importExcelList) {
-                try {
-                    KbToolDO kbToolDO = BeanUtils.toBean(respVO, KbToolDO.class);
-                    Long kbToolId = respVO.getId();
-                    if (isUpdateSupport) {
-                        if (kbToolId != null) {
-                            KbToolDO existingKbTool = kbToolMapper.selectById(kbToolId);
-                            if (existingKbTool != null) {
-                                kbToolMapper.updateById(kbToolDO);
-                                successNum++;
-                                successMessages.add("数据更新成功，ID为 " + kbToolId + " 的工具管理记录。");
-                            } else {
-                                failureNum++;
-                                failureMessages.add("数据更新失败，ID为 " + kbToolId + " 的工具管理记录不存在。");
-                            }
-                        } else {
-                            failureNum++;
-                            failureMessages.add("数据更新失败，某条记录的ID不存在。");
-                        }
-                    } else {
-                        QueryWrapper<KbToolDO> queryWrapper = new QueryWrapper<>();
-                        queryWrapper.eq("id", kbToolId);
-                        KbToolDO existingKbTool = kbToolMapper.selectOne(queryWrapper);
-                        if (existingKbTool == null) {
-                            kbToolMapper.insert(kbToolDO);
-                            successNum++;
-                            successMessages.add("数据插入成功，ID为 " + kbToolId + " 的工具管理记录。");
-                        } else {
-                            failureNum++;
-                            failureMessages.add("数据插入失败，ID为 " + kbToolId + " 的工具管理记录已存在。");
-                        }
-                    }
-                } catch (Exception e) {
-                    failureNum++;
-                    String errorMsg = "数据导入失败，错误信息：" + e.getMessage();
-                    failureMessages.add(errorMsg);
-                    log.error(errorMsg, e);
-                }
-            }
-            StringBuilder resultMsg = new StringBuilder();
-            if (failureNum > 0) {
-                resultMsg.append("很抱歉，导入失败！共 ").append(failureNum).append(" 条数据格式不正确，错误如下：");
-                resultMsg.append("<br/>").append(String.join("<br/>", failureMessages));
-                throw new ServiceException(resultMsg.toString());
-            } else {
-                resultMsg.append("恭喜您，数据已全部导入成功！共 ").append(successNum).append(" 条。");
-            }
-            return resultMsg.toString();
+    public ToolCallbackProvider getToolCallbackProvider(String toolIds) {
+        if (StrUtil.isBlank(toolIds)) {
+            return new StaticToolCallbackProvider(new ArrayList<>(0));
         }
+        List<Long> toolIdList = Arrays.stream(toolIds.split(",")).map(Long::parseLong).toList();
+        List<KbToolDO> kbToolDOList = super.listByIds(toolIdList);
+
+        List<ToolCallback> toolList = new ArrayList<>(kbToolDOList.size());
+        for (KbToolDO kbToolDO : kbToolDOList) {
+            // 单独定义标准Function，类型清晰
+            Function<Map<String, Object>, String> codeFunc = params -> {
+                try {
+                    Object result = runCode(kbToolDO.getContent(), params);
+                    return "结果：" + result;
+                } catch (Exception e) {
+                    return "异常：" + e.getMessage();
+                }
+            };
+            // 手动构建动态代码工具回调
+            FunctionToolCallback<Map<String, Object>, String> codeTool = FunctionToolCallback.builder(kbToolDO.getName(), codeFunc).description(kbToolDO.getDescription()).inputSchema(kbToolDO.getParamSchema()).inputType(Map.class).build();
+            toolList.add(codeTool);
+        }
+
+        // 使用 StaticToolCallbackProvider 装载自定义工具
+        return new StaticToolCallbackProvider(toolList);
+    }
+
+    /**
+     * 更新工具状态
+     *
+     * @param kbTool 工具信息
+     * @return 更新结果
+     */
+    @Override
+    public Boolean updateStatus(KbToolSaveReqVO kbTool) {
+        LambdaUpdateWrapper<KbToolDO> updateWrapper = Wrappers.<KbToolDO>lambdaUpdate().set(KbToolDO::getStatus, kbTool.getStatus()).eq(KbToolDO::getId, kbTool.getId());
+        return super.update(updateWrapper);
+    }
+
+    /**
+     * 脚本引擎执行代码
+     *
+     * @param code   脚本
+     * @param params 参数
+     * @return 执行结果
+     * @throws Exception 脚本执行异常
+     */
+    private Object runCode(String code, Map<String, Object> params) throws Exception {
+        ScriptEngine engine = new ScriptEngineManager().getEngineByName("groovy");
+        engine.put("params", params);
+        return engine.eval(code);
+    }
 }

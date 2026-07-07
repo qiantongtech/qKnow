@@ -22,6 +22,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import tech.qiantong.qknow.common.core.page.PageParam;
 
+import java.util.List;
+
 /**
  * 工具管理 Request VO 对象 kb_tool
  *
@@ -53,6 +55,9 @@ public class KbToolPageReqVO extends PageParam {
     @Schema(description = "来源", example = "")
     private String source;
 
-    @Schema(description = "方法数", example = "")
-    private Integer methodNum;
+    @Schema(description = "状态", example = "")
+    private Integer status;
+
+    @Schema(description = "所属分类", example = "")
+    private List<Long> categoryIdList;
 }
