@@ -483,3 +483,145 @@ INSERT INTO kb_runtime (id, workspace_id, bot_id, `input`, `output`, status, run
 INSERT INTO kb_runtime (id, workspace_id, bot_id, `input`, `output`, status, runtime, valid_flag, del_flag, create_by, creator_id, create_time, update_by, updater_id, update_time, remark) VALUES(null, 1001, 7, '{"query":"","summaryCount":"1","title":"预防糖尿病"}', '{"text":"[\\"预防糖尿病的关键在于健康的生活方式，包括均衡饮食、定期运动和保持正常体重。应减少高糖、高脂肪食物的摄入，增加蔬菜和全谷物的比例。定期监测血糖水平，并遵循医生建议进行必要的药物治疗。此外，戒烟限酒也是预防糖尿病的重要措施。\\"]"}', 1, 8768, 1, 0, '小桐', 1, '2026-04-24 09:31:07', '超级管理员', NULL, '2026-04-24 09:31:07', NULL);
 INSERT INTO kb_runtime (id, workspace_id, bot_id, `input`, `output`, status, runtime, valid_flag, del_flag, create_by, creator_id, create_time, update_by, updater_id, update_time, remark) VALUES(null, 1001, 7, '{"word_count":"1000","query":"预防糖尿病的关键在于健康的生活方式，包括均衡饮食、定期运动和保持正常体重。应减少高糖、高脂肪食物的摄入，增加蔬菜和全谷物的比例。定期监测血糖水平，并遵循医生建议进行必要的药物治疗。此外，戒烟限酒也是预防糖尿病的重要措施。","title":"预防糖尿病"}', '{"text":"\\n","name":"text"}', 1, 15648, 1, 0, '小桐', NULL, '2026-04-24 09:31:21', NULL, NULL, '2026-04-24 09:31:21', NULL);
 INSERT INTO kb_runtime (id, workspace_id, bot_id, `input`, `output`, status, runtime, valid_flag, del_flag, create_by, creator_id, create_time, update_by, updater_id, update_time, remark) VALUES(null, 1001, 7, '{"title":"预防糖尿病"}', '{"text":"[\\"糖尿病预防策略：科学饮食与生活方式调整\\",\\"基于最新研究的糖尿病早期预防措施\\",\\"糖尿病高风险人群的有效管理方案\\",\\"实用指南：通过运动和监测血糖预防糖尿病\\",\\"综合方法探讨：如何有效降低糖尿病发病风险\\"]"}', 1, 8157, 1, 0, '小桐', 2, '2026-04-24 15:58:49', '吴同', NULL, '2026-04-24 15:58:49', NULL);
+
+-- 2026.7.7
+
+-- ------------------------------------------------------------
+-- 新增表：工具分类（kb_tool_category）
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `kb_tool_category`  (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `workspace_id` bigint(20) NOT NULL COMMENT '工作区id',
+    `parent_id` bigint(20) NOT NULL COMMENT '父级id',
+    `name` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '分类名称',
+    `order_num` int(11) NULL DEFAULT NULL COMMENT '显示顺序',
+    `ancestors` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '祖级列表',
+    `valid_flag` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否有效;0：无效，1：有效',
+    `del_flag` tinyint(1) NOT NULL DEFAULT 0 COMMENT '删除标志;1：已删除，0：未删除',
+    `create_by` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+    `creator_id` bigint(20) NULL DEFAULT NULL COMMENT '创建人id',
+    `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_by` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新人',
+    `updater_id` bigint(20) NULL DEFAULT NULL COMMENT '更新人id',
+    `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+    `remark` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '工具分类' ROW_FORMAT = DYNAMIC;
+
+-- ------------------------------------------------------------
+-- 工具分类、状态、脚本内容及参数定义
+-- ------------------------------------------------------------
+ALTER TABLE `kb_tool`
+    ADD COLUMN `category_id` bigint(20) NULL DEFAULT NULL COMMENT '分类id' AFTER `source`,
+    ADD COLUMN `status` tinyint(4) NULL DEFAULT 0 COMMENT '状态' AFTER `category_id`,
+    ADD COLUMN `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '工具内容' AFTER `status`,
+    ADD COLUMN `param_schema` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '参数定义' AFTER `content`;
+
+-- 工具管理菜单
+delete from system_menu sm where sm.menu_id in (2472,2396,2397,2398,2399,2400,2401,2395,2471);
+INSERT INTO system_menu VALUES(2395, '工具管理', 2472, 2, 'tool', 'kb/tool/index', NULL, 'kbTool', 1, 0, 'C', '0', '0', 'kb:tool:tool:list', '#', '吴同', '2026-04-21 16:15:27', '吴同', '2026-06-24 17:48:30', '工具管理菜单');
+INSERT INTO system_menu VALUES(2396, '工具管理查询', 2395, 1, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kb:tool:tool:query', '#', '吴同', '2026-04-21 16:15:27', '', NULL, '');
+INSERT INTO system_menu VALUES(2397, '工具管理新增', 2395, 2, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kb:tool:tool:add', '#', '吴同', '2026-04-21 16:15:27', '', NULL, '');
+INSERT INTO system_menu VALUES(2398, '工具管理修改', 2395, 3, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kb:tool:tool:edit', '#', '吴同', '2026-04-21 16:15:27', '', NULL, '');
+INSERT INTO system_menu VALUES(2399, '工具管理删除', 2395, 4, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kb:tool:tool:remove', '#', '吴同', '2026-04-21 16:15:27', '', NULL, '');
+INSERT INTO system_menu VALUES(2400, '工具管理导出', 2395, 5, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kb:tool:tool:export', '#', '吴同', '2026-04-21 16:15:27', '', NULL, '');
+INSERT INTO system_menu VALUES(2401, '工具管理导入', 2395, 6, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kb:tool:tool:import', '#', '吴同', '2026-04-21 16:15:27', '', NULL, '');
+INSERT INTO system_menu VALUES(2471, '工具分类', 2472, 1, 'toolCategory', 'kb/toolCategory/index', NULL, 'toolCategory', 1, 0, 'C', '0', '0', NULL, '#', '吴同', '2026-06-24 17:19:01', '', NULL, '');
+INSERT INTO system_menu VALUES(2472, '工具管理', 2057, 12, 'tool', NULL, NULL, '', 1, 0, 'M', '0', '0', '', 'tool_new_icon', '吴同', '2026-06-24 17:48:09', '吴同', '2026-07-07 10:56:24', '');
+
+delete from system_role_menu where role_id = 100 and menu_id in (2472,2396,2397,2398,2399,2400,2401,2395,2471);
+insert into system_role_menu values(100,2472);
+insert into system_role_menu values(100,2396);
+insert into system_role_menu values(100,2397);
+insert into system_role_menu values(100,2398);
+insert into system_role_menu values(100,2399);
+insert into system_role_menu values(100,2400);
+insert into system_role_menu values(100,2401);
+insert into system_role_menu values(100,2395);
+insert into system_role_menu values(100,2471);
+
+-- 演示数据
+INSERT INTO kb_tool_category VALUES(1, 1001, 0, '日期操作', 1, '0', 1, 0, '吴同', 2, '2026-06-25 11:35:03', NULL, NULL, '2026-06-25 11:35:04', '时间计算、周期判断、节假日处理专用工具集');
+INSERT INTO kb_tool_category VALUES(2, 1001, 1, '当前时间', 1, '0,1', 1, 0, '吴同', 2, '2026-06-25 11:35:29', '吴同', 2, '2026-06-25 19:22:14', '获取某地的当前日期和时间');
+INSERT INTO kb_tool_category VALUES(3, 1001, 1, '日期推移计算', 2, '0,1', 1, 0, '吴同', 2, '2026-06-25 11:35:58', '吴同', 2, '2026-06-25 19:21:27', '按年/月/日向前、向后推算日期');
+INSERT INTO kb_tool_category VALUES(4, 1001, 0, '文档解析', 2, '0', 1, 0, '吴同', 2, '2026-06-25 11:33:15', NULL, NULL, '2026-06-25 11:33:15', '多格式文件内容提取、文本解析');
+INSERT INTO kb_tool_category VALUES(5, 1001, 4, 'Word 文档解析', 1, '0,4', 1, 0, '吴同', 2, '2026-06-25 11:37:11', NULL, NULL, '2026-06-25 11:37:12', '读取docx正文、标题、段落样式');
+INSERT INTO kb_tool_category VALUES(6, 1001, 4, 'Excel 表格读取', 2, '0,4', 1, 0, '吴同', 2, '2026-06-25 11:37:04', NULL, NULL, '2026-06-25 11:37:05', '读取工作表、行列数据转JSON');
+INSERT INTO kb_tool_category VALUES(7, 1001, 4, 'PDF 解析', 3, '0,4', 1, 0, '吴同', 2, '2026-06-25 11:36:57', NULL, NULL, '2026-06-25 11:36:58', '提取PDF文字、表格、签章信息');
+INSERT INTO kb_tool_category VALUES(8, 1001, 0, '文件操作', 3, '0', 1, 0, '吴同', 2, '2026-06-25 11:37:33', NULL, NULL, '2026-06-25 11:37:34', '文件上传、下载、重命名、存储读写');
+INSERT INTO kb_tool_category VALUES(9, 1001, 8, '本地文件读取', 1, '0,8', 1, 0, '吴同', 2, '2026-06-25 11:37:50', NULL, NULL, '2026-06-25 11:37:51', '读取服务本地临时文件内容');
+INSERT INTO kb_tool_category VALUES(10, 1001, 8, 'OSS 文件上传', 2, '0,8', 1, 0, '吴同', 2, '2026-06-25 11:37:42', NULL, NULL, '2026-06-25 11:37:43', '对象存储上传文档、图片附件');
+INSERT INTO kb_tool_category VALUES(11, 1001, 0, 'API 调用', 4, '0', 1, 0, '吴同', 2, '2026-06-25 11:32:28', NULL, NULL, '2026-06-25 11:32:29', '外部开放接口、MCP标准能力调用');
+INSERT INTO kb_tool_category VALUES(12, 1001, 11, '邮件发送', 1, '0,11', 1, 0, '吴同', 2, '2026-06-25 11:32:42', '吴同', 2, '2026-06-25 19:26:01', '业务通知、验证码邮件发送');
+INSERT INTO kb_tool_category VALUES(13, 1001, 11, '地图', 2, '0,11', 1, 0, '吴同', 2, '2026-06-25 11:32:54', NULL, NULL, '2026-06-25 11:32:55', 'GET/POST/PUT通用接口请求封装');
+INSERT INTO kb_tool_category VALUES(32, 1001, 0, '天气查询', 5, '0', 1, 0, '吴同', 2, '2026-06-25 19:22:50', NULL, NULL, '2026-06-25 19:22:51', '地理和天气相关工具');
+INSERT INTO kb_tool_category VALUES(33, 1001, 32, '具体天气', 1, '0,32', 1, 0, '吴同', 2, '2026-06-25 19:23:10', '吴同', 2, '2026-06-25 19:24:34', '获取当前天气情况');
+INSERT INTO kb_tool_category VALUES(34, 1001, 32, '位置信息', 0, '0,32', 1, 0, '吴同', 2, '2026-06-25 19:23:36', NULL, NULL, '2026-06-25 19:23:37', '根据位置信息查询该位置的具体经纬度');
+
+INSERT INTO kb_tool (id, workspace_id, name, description, tags, `type`, source, category_id, status, content, param_schema, method_num, valid_flag, del_flag, create_by, creator_id, create_time, update_by, updater_id, update_time, remark) VALUES(1, 1001, '获取当前时间', '获取当前时间', '[{"name":"时间计算"}]', NULL, NULL, 1, 1, 'import java.text.SimpleDateFormat
+
+def sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+def now = sdf.format(new Date())
+return [code:0, time:now]', '{"type":"object","properties":{},"required":[]}', NULL, 1, 0, '吴同', 2, '2026-06-25 20:24:01', '吴同', 2, '2026-06-25 15:10:14', NULL);
+INSERT INTO kb_tool (id, workspace_id, name, description, tags, `type`, source, category_id, status, content, param_schema, method_num, valid_flag, del_flag, create_by, creator_id, create_time, update_by, updater_id, update_time, remark) VALUES(2, 1001, '获取城市天气', '获取某个城市的天气情况', '[{"name":"地理"}]', NULL, NULL, 33, 0, '', '{"type":"object","properties":{},"required":[]}', NULL, 1, 0, '吴同', 2, '2026-05-11 14:33:27', '吴同', 2, '2026-06-25 19:33:36', NULL);
+INSERT INTO kb_tool (id, workspace_id, name, description, tags, `type`, source, category_id, status, content, param_schema, method_num, valid_flag, del_flag, create_by, creator_id, create_time, update_by, updater_id, update_time, remark) VALUES(3, 1001, '获取当前地理位置', '获取当前所属的地理位置', '[{"name":"地理"}]', NULL, NULL, 34, 0, 'return current;', '{"type":"object","properties":{},"required":[]}', NULL, 1, 0, '吴同', 2, '2026-06-18 16:21:12', '吴同', 2, '2026-06-25 19:33:18', NULL);
+INSERT INTO kb_tool (id, workspace_id, name, description, tags, `type`, source, category_id, status, content, param_schema, method_num, valid_flag, del_flag, create_by, creator_id, create_time, update_by, updater_id, update_time, remark) VALUES(4, 1001, '天气查询', '查询某个城市的天气情况', '[{"name":"天气"}]', NULL, NULL, 3, 0, 'String city = params.get("city");
+if ("郑州".equals(city)) {
+   System.out.println(city+"今天晴天，温度35度");
+   return city+"今天晴天，温度35度";
+}else {
+   System.out.println(city+"今天大雨，温度28度");
+   return city+"今天大雨，温度28度";
+}', '{"type":"object","properties":{"city":{"type":"string","description":"需要查询天气的城市名称，例如：郑州、北京、上海、西安"}},"required":["city"]}', NULL, 1, 0, '吴同', 2, '2026-06-24 10:18:35', '吴同', 2, '2026-06-25 14:02:23', NULL);
+INSERT INTO kb_tool (id, workspace_id, name, description, tags, `type`, source, category_id, status, content, param_schema, method_num, valid_flag, del_flag, create_by, creator_id, create_time, update_by, updater_id, update_time, remark) VALUES(5, 1001, '时间偏移工具', '计算今天之后的n天的日期是多少', '[{"name":"时间计算"}]', NULL, NULL, 3, 1, 'import java.text.SimpleDateFormat
+int days = params.get("days")
+def sdf = new SimpleDateFormat("yyyy-MM-dd")
+def date = new Date()
+date.setTime(date.getTime() + days * 24 * 3600 * 1000)
+return [code:0, res:sdf.format(date)]', '{"type":"object","properties":{"days":{"type":"int","description":"要推测的多少天之后的时间"}},"required":["days"]}', NULL, 1, 0, '吴同', 2, '2026-06-25 20:02:35', '吴同', 2, '2026-06-25 19:25:15', NULL);
+INSERT INTO kb_tool (id, workspace_id, name, description, tags, `type`, source, category_id, status, content, param_schema, method_num, valid_flag, del_flag, create_by, creator_id, create_time, update_by, updater_id, update_time, remark) VALUES(6, 1001, '数字求和计算', '计算多个参数进行求和计算', '[{"name":"数据计算"}]', NULL, NULL, 5, 0, 'def sum = params.nums.sum()
+return [code:0, total:sum]', '{"type":"object","properties":{},"required":[]}', NULL, 1, 0, '吴同', 2, '2026-06-25 19:06:53', '吴同', NULL, '2026-06-25 19:06:53', NULL);
+INSERT INTO kb_tool (id, workspace_id, name, description, tags, `type`, source, category_id, status, content, param_schema, method_num, valid_flag, del_flag, create_by, creator_id, create_time, update_by, updater_id, update_time, remark) VALUES(7, 1001, 'JSON 格式化工具', '将 json 字符串按照固定格式进行数据格式化输出', '[{"name":"数据美化"}]', NULL, NULL, 4, 0, 'import groovy.json.JsonOutput
+def obj = new groovy.json.JsonSlurper().parseText(params.json)
+return [code:0, data:JsonOutput.prettyPrint(obj)]', '{"type":"object","properties":{},"required":[]}', NULL, 1, 0, '吴同', 2, '2026-06-25 19:10:57', '吴同', NULL, '2026-06-25 19:10:57', NULL);
+INSERT INTO kb_tool (id, workspace_id, name, description, tags, `type`, source, category_id, status, content, param_schema, method_num, valid_flag, del_flag, create_by, creator_id, create_time, update_by, updater_id, update_time, remark) VALUES(8, 1001, 'MySQL 简易查询', '链接 mysql 数据库并进行简易的数据查询', '[{"name":"数据库操作"}]', NULL, NULL, 4, 0, 'import groovy.sql.Sql
+def sql = Sql.newInstance(params.url, params.user, params.pwd, params.driver)
+def list = sql.rows(params.sql)
+sql.close()
+return [code:0, list:list]', '{"type":"object","properties":{},"required":[]}', NULL, 1, 0, '吴同', 2, '2026-06-25 19:13:12', '吴同', NULL, '2026-06-25 19:13:12', NULL);
+INSERT INTO kb_tool (id, workspace_id, name, description, tags, `type`, source, category_id, status, content, param_schema, method_num, valid_flag, del_flag, create_by, creator_id, create_time, update_by, updater_id, update_time, remark) VALUES(9, 1001, '邮件发送工具', '发送业务邮件', '[{"name":"通讯"}]', NULL, NULL, 12, 0, 'import javax.mail.*
+import javax.mail.internet.InternetAddress
+import javax.mail.internet.MimeMessage
+
+def props = new Properties()
+props["mail.smtp.host"] = "smtp.qq.com"
+props["mail.smtp.port"] = "587"
+def session = Session.getInstance(props)
+MimeMessage msg = new MimeMessage(session)
+msg.setFrom(new InternetAddress("notify@xxx.com"))
+msg.addRecipient(Message.RecipientType.TO, new InternetAddress(params.to))
+msg.setSubject(params.subject)
+msg.setText(params.content)
+Transport.send(msg)
+return [code:0, msg:"邮件发送完成"]', '{"type":"object","properties":{},"required":[]}', NULL, 1, 0, '吴同', 2, '2026-06-25 19:14:41', '吴同', NULL, '2026-06-25 19:14:41', NULL);
+INSERT INTO kb_tool (id, workspace_id, name, description, tags, `type`, source, category_id, status, content, param_schema, method_num, valid_flag, del_flag, create_by, creator_id, create_time, update_by, updater_id, update_time, remark) VALUES(10, 1001, 'OSS 文件上传工具', '上传本地文件至对象存储', '[{"name":"文件操作"}]', NULL, NULL, 10, 0, 'import com.aliyun.oss.OSSClientBuilder
+
+def ossClient = new OSSClientBuilder().build("oss-cn-beijing.aliyuncs.com", "ak", "sk")
+File localFile = new File(params.localPath)
+String ossKey = params.saveKey
+ossClient.putObject("bucket-name", ossKey, localFile)
+ossClient.shutdown()
+return [code:0, url:"https://bucket-name.oss-cn-beijing.aliyuncs.com/" + ossKey]', '{"type":"object","properties":{},"required":[]}', NULL, 1, 0, '吴同', 2, '2026-06-25 19:15:11', '吴同', NULL, '2026-06-25 19:15:11', NULL);
+INSERT INTO kb_tool (id, workspace_id, name, description, tags, `type`, source, category_id, status, content, param_schema, method_num, valid_flag, del_flag, create_by, creator_id, create_time, update_by, updater_id, update_time, remark) VALUES(11, 1001, 'PDF 解析工具', '读取PDF文本内容', '[{"name":"文件操作"}]', NULL, NULL, 7, 0, 'import org.apache.pdfbox.pdmodel.PDDocument
+import org.apache.pdfbox.text.PDFTextStripper
+
+String filePath = params.filePath
+File pdfFile = new File(filePath)
+if(!pdfFile.exists()) return [code:-1, msg:"文件不存在"]
+
+PDDocument doc = PDDocument.load(pdfFile)
+PDFTextStripper stripper = new PDFTextStripper()
+String text = stripper.getText(doc)
+doc.close()
+
+return [code:0, content:text]', '{"type":"object","properties":{},"required":[]}', NULL, 1, 0, '吴同', 2, '2026-06-25 19:15:43', '吴同', NULL, '2026-06-25 19:15:43', NULL);
