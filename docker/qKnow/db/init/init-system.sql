@@ -1,10 +1,4 @@
 /*
- Generated from latest初始化(1).sql.
- Classification target: init-system.sql / 不需要重置的数据.
- Source condition files are only used as table-classification rules.
-*/
-
-/*
  Navicat Premium Data Transfer
 
  Source Server         : 本地
@@ -17,11 +11,12 @@
  Target Server Version : 80017
  File Encoding         : 65001
 
- Date: 18/05/2026 09:48:04
+ Date: 08/07/2026 11:46:18
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
 
 CREATE DATABASE IF NOT EXISTS qknow_demo
   DEFAULT CHARACTER SET utf8mb4
@@ -29,6 +24,7 @@ CREATE DATABASE IF NOT EXISTS qknow_demo
 USE qknow_demo;
 
 -- ----------------------------
+
 -- Table structure for ai_api_key
 -- ----------------------------
 DROP TABLE IF EXISTS `ai_api_key`;
@@ -42,7 +38,7 @@ CREATE TABLE `ai_api_key`  (
   `platform_tag` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '平台标签',
   `description` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '描述',
   `deploy_type` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '部署方式',
-  `status` tinyint(4) UNSIGNED NULL DEFAULT NULL COMMENT '状态',
+  `status` tinyint(3) UNSIGNED NULL DEFAULT NULL COMMENT '状态',
   `valid_flag` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否有效;0：无效，1：有效',
   `del_flag` tinyint(1) NOT NULL DEFAULT 0 COMMENT '删除标志;1：已删除，0：未删除',
   `create_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '创建人',
@@ -53,15 +49,15 @@ CREATE TABLE `ai_api_key`  (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `remark` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = 'API秘钥' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = 'API秘钥' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ai_api_key
 -- ----------------------------
-INSERT INTO `ai_api_key` VALUES (1, 1001, '通义千问', 'sk-797df8d943694c978bbe7ea753e07c3b', 'TongYi', NULL, '1,2,3,4,5,6', '通义千问提供的模型。', '2', 2, 1, 0, NULL, NULL, '2026-04-29 09:27:03', '吴同', NULL, '2026-05-07 15:36:00', NULL);
-INSERT INTO `ai_api_key` VALUES (2, 1001, 'DeepSeek', NULL, 'DeepSeek', NULL, '1,2,3', '深度求索提供的模型，例如 deepseek-chat、deepseek-coder 。', '2', 0, 1, 1, NULL, NULL, '2026-04-29 09:27:03', '吴同', NULL, '2026-04-29 10:28:58', NULL);
-INSERT INTO `ai_api_key` VALUES (3, 1001, 'Ollama', NULL, 'Ollama', NULL, '1,2,3', 'ollama', '1', 0, 1, 1, NULL, NULL, '2026-04-29 09:27:03', '吴同', NULL, '2026-04-29 10:29:04', NULL);
-INSERT INTO `ai_api_key` VALUES (4, 1001, 'OpenAI', 'ldfef#01', 'OpenAI', 'http://192.144.173.87:7001', '1,2,3,4,5,6', '符合 openai 规范的模型', '1', 2, 1, 0, NULL, NULL, '2026-04-21 13:57:13', '吴同', NULL, '2026-04-21 16:33:47', NULL);
+INSERT INTO `ai_api_key` VALUES (1, 1001, '通义千问', 'sk-797df8d943694c978bbe7ea753e07c3b', 'TongYi', NULL, '1,2,3,4,5,6', '通义千问提供的模型。', '2', 2, 1, 0, '吴同', 2, '2026-04-29 09:27:03', '吴同', NULL, '2026-05-07 15:36:00', NULL);
+INSERT INTO `ai_api_key` VALUES (2, 1001, 'DeepSeek', NULL, 'DeepSeek', NULL, '1,2,3', '深度求索提供的模型，例如 deepseek-chat、deepseek-coder 。', '2', 0, 1, 1, '吴同', 2, '2026-04-29 09:27:03', '吴同', NULL, '2026-04-29 10:28:58', NULL);
+INSERT INTO `ai_api_key` VALUES (3, 1001, 'Ollama', NULL, 'Ollama', NULL, '1,2,3', 'ollama', '1', 0, 1, 1, '吴同', 2, '2026-04-29 09:27:03', '吴同', NULL, '2026-04-29 10:29:04', NULL);
+INSERT INTO `ai_api_key` VALUES (4, 1001, 'OpenAI', 'ldfef#01', 'OpenAI', 'http://192.144.173.87:7001', '1,2,3,4,5,6', '符合 openai 规范的模型', '1', 2, 1, 0, '吴同', 2, '2026-04-21 13:57:13', '吴同', NULL, '2026-04-21 16:33:47', NULL);
 
 -- ----------------------------
 -- Table structure for ai_model
@@ -74,9 +70,9 @@ CREATE TABLE `ai_model`  (
   `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '模型名称',
   `model` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '模型标志',
   `platform` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '平台',
-  `type` tinyint(4) UNSIGNED NULL DEFAULT NULL COMMENT '类型',
+  `type` tinyint(3) UNSIGNED NULL DEFAULT NULL COMMENT '类型',
   `sort` int(11) NULL DEFAULT NULL COMMENT '排序值',
-  `status` tinyint(4) UNSIGNED NULL DEFAULT NULL COMMENT '状态',
+  `status` tinyint(3) UNSIGNED NULL DEFAULT NULL COMMENT '状态',
   `valid_flag` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否有效;0：无效，1：有效',
   `del_flag` tinyint(1) NOT NULL DEFAULT 0 COMMENT '删除标志;1：已删除，0：未删除',
   `create_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '创建人',
@@ -87,493 +83,493 @@ CREATE TABLE `ai_model`  (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `remark` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1642 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = 'AI 模型' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1642 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = 'AI 模型' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ai_model
 -- ----------------------------
-INSERT INTO `ai_model` VALUES (1160, 1001, 1, 'qwen3-tts-vd-2026-01-26', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1161, 1001, 1, 'vidu/viduq3-turbo_img2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1162, 1001, 1, 'qwen3-vl-235b-a22b-thinking', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1163, 1001, 1, 'qwen-vl-plus-2025-05-07', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1164, 1001, 1, 'pixverse/pixverse-v5.6-t2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1165, 1001, 1, 'paraformer-v2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1166, 1001, 1, 'pixverse/pixverse-c1-it2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1167, 1001, 1, 'paraformer-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1168, 1001, 1, 'qwen2.5-vl-3b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1169, 1001, 1, 'qwen-max', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1170, 1001, 1, 'qwen-mt-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1171, 1001, 1, 'qwen2.5-14b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1172, 1001, 1, 'tongyi-embedding-vision-flash', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1173, 1001, 1, 'qwen3-32b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1174, 1001, 1, 'qwen-omni-turbo-2025-03-26', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1175, 1001, 1, 'wan2.6-image', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1176, 1001, 1, 'qwen3.6-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1177, 1001, 1, 'sambert-perla-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1178, 1001, 1, 'pixverse/pixverse-v6-t2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1179, 1001, 1, 'qwen-omni-turbo-realtime-2025-05-08', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1180, 1001, 1, 'qwen-max-2025-01-25', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1181, 1001, 1, 'qwen3-tts-vd-realtime-2026-01-15', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1182, 1001, 1, 'emoji-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1183, 1001, 1, 'siliconflow/deepseek-v3.1-terminus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1184, 1001, 1, 'shoemodel-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1185, 1001, 1, 'qwen-tts-realtime-2025-07-15', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1186, 1001, 1, 'happyhorse-1.0-t2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1187, 1001, 1, 'wanx2.1-t2v-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1188, 1001, 1, 'qwen3-vl-flash-2025-10-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1189, 1001, 1, 'qwen3-livetranslate-flash-2025-12-01', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1190, 1001, 1, 'qwen3-omni-flash-realtime-2025-12-01', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1191, 1001, 1, 'gui-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1192, 1001, 1, 'qwen3-0.6b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1193, 1001, 1, 'fun-asr-2025-08-25', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1194, 1001, 1, 'qwen3-coder-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1195, 1001, 1, 'sambert-betty-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1196, 1001, 1, 'qwen3-next-80b-a3b-thinking', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1197, 1001, 1, 'qwen3-tts-flash', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1198, 1001, 1, 'qwen-math-turbo-0919', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1199, 1001, 1, 'qwen3-vl-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1200, 1001, 1, 'qwen2.5-32b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1201, 1001, 1, 'qwen-math-plus-0919', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1202, 1001, 1, 'vidu/viduq2-pro-fast_img2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1203, 1001, 1, 'kling/kling-v3-image-generation', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1204, 1001, 1, 'qwen-image-edit-max', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1205, 1001, 1, 'qwen-image-2.0-pro-2026-03-03', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1206, 1001, 1, 'qwen-plus-2025-12-01', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1207, 1001, 1, 'deepseek-r1-distill-qwen-14b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1208, 1001, 1, 'animate-anyone-template-gen2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1209, 1001, 1, 'MiniMax/speech-2.8-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1210, 1001, 1, 'qwen-math-turbo-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1211, 1001, 1, 'wan2.7-image-pro', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1212, 1001, 1, 'qvq-max-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1213, 1001, 1, 'qwen-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1214, 1001, 1, 'sambert-camila-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1215, 1001, 1, 'sambert-zhijing-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1216, 1001, 1, 'vidu/viduq3-turbo_text2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1217, 1001, 1, 'kimi-k2.5', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1218, 1001, 1, 'kimi-k2.6', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1219, 1001, 1, 'qwen2.5-vl-embedding', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1220, 1001, 1, 'qwen-coder-plus-1106', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1221, 1001, 1, 'qwen-vl-ocr-2025-11-20', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1222, 1001, 1, 'sambert-zhide-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1223, 1001, 1, 'qwen-image-edit-plus', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1224, 1001, 1, 'sambert-zhiyue-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1225, 1001, 1, 'qwen-image-edit-plus-2025-10-30', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1226, 1001, 1, 'wan2.7-i2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1227, 1001, 1, 'qwen3-tts-instruct-flash-2026-01-26', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1228, 1001, 1, 'qwen-vl-plus-0102', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1229, 1001, 1, 'pixverse/pixverse-v6-kf2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1230, 1001, 1, 'wanx2.0-t2i-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1231, 1001, 1, 'qwen3-tts-vc-realtime-2025-11-27', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1232, 1001, 1, 'fun-music-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1233, 1001, 1, 'qwen3-tts-instruct-flash-realtime', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1234, 1001, 1, 'qwen-turbo-2025-02-11', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1235, 1001, 1, 'qwen-image-edit-max-2026-01-16', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1236, 1001, 1, 'Moonshot-Kimi-K2-Instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1237, 1001, 1, 'qwen-plus-2025-09-11', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1238, 1001, 1, 'aitryon', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1239, 1001, 1, 'fun-asr', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1240, 1001, 1, 'happyhorse-1.0-r2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1241, 1001, 1, 'wanx2.1-vace-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1242, 1001, 1, 'sambert-zhigui-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1243, 1001, 1, 'qwen-vl-max', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1244, 1001, 1, 'wan2.5-t2i-preview', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1245, 1001, 1, 'qwen3-tts-vc-realtime-2026-01-15', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1246, 1001, 1, 'wan2.2-i2v-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1247, 1001, 1, 'pixverse/pixverse-v6-it2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1248, 1001, 1, 'qwen3-vl-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1249, 1001, 1, 'wan2.2-t2i-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1250, 1001, 1, 'qwen3-vl-embedding', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1251, 1001, 1, 'deepseek-r1-distill-qwen-1.5b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1252, 1001, 1, 'qwen3-30b-a3b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1253, 1001, 1, 'qwen-mt-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1254, 1001, 1, 'qwen-coder-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1255, 1001, 1, 'kling/kling-v3-omni-image-generation', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1256, 1001, 1, 'pixverse/pixverse-c1-kf2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1257, 1001, 1, 'tongyi-embedding-vision-plus', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1258, 1001, 1, 'sambert-zhiyuan-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1259, 1001, 1, 'wan2.2-s2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1260, 1001, 1, 'qwen3-coder-flash-2025-07-28', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1261, 1001, 1, 'qwen3.5-omni-flash-2026-03-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1262, 1001, 1, 'qwen3-asr-flash-realtime', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1263, 1001, 1, 'qwen-image-2.0-pro', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1264, 1001, 1, 'qwen3-omni-flash-realtime', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1265, 1001, 1, 'sambert-zhiwei-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1266, 1001, 1, 'vanchin/deepseek-v3.1-terminus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1267, 1001, 1, 'qwen-omni-turbo-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1268, 1001, 1, 'qwen2.5-math-72b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1269, 1001, 1, 'deepseek-r1-0528', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1270, 1001, 1, 'deepseek-v3.2-exp', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1271, 1001, 1, 'qvq-max-2025-03-25', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1272, 1001, 1, 'qwen-coder-turbo-0919', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1273, 1001, 1, 'pixverse/pixverse-v5.6-it2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1274, 1001, 1, 'qwen2.5-vl-72b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1275, 1001, 1, 'sambert-zhishu-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1276, 1001, 1, 'qwen-vl-plus-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1277, 1001, 1, 'deepseek-r1-distill-qwen-7b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1278, 1001, 1, 'vidu/viduq3_reference2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1279, 1001, 1, 'emo-detect-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1280, 1001, 1, 'qwen3.6-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1281, 1001, 1, 'qwen-vl-max-2025-08-13', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1282, 1001, 1, 'deepseek-r1-distill-qwen-32b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1283, 1001, 1, 'qwen-image-edit', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1284, 1001, 1, 'paraformer-realtime-v2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1285, 1001, 1, 'paraformer-realtime-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1286, 1001, 1, 'qwen-long', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1287, 1001, 1, 'qwen-coder-plus-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1288, 1001, 1, 'qwen3-tts-instruct-flash', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1289, 1001, 1, 'wan2.2-animate-move', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1290, 1001, 1, 'sambert-zhilun-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1291, 1001, 1, 'wanx2.1-t2v-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1292, 1001, 1, 'sambert-zhimao-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1293, 1001, 1, 'qwen2.5-0.5b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1294, 1001, 1, 'qwen3-max-preview', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1295, 1001, 1, 'vidu/viduq3-turbo_reference2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1296, 1001, 1, 'qwen3-asr-flash-2025-09-08', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1297, 1001, 1, 'qwen3-omni-30b-a3b-captioner', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1298, 1001, 1, 'sambert-zhixiao-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1299, 1001, 1, 'qwen3-omni-flash-realtime-2025-09-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1300, 1001, 1, 'gte-rerank-v2', NULL, 'TongYi', 6, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1301, 1001, 1, 'vidu/viduq2_text2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1302, 1001, 1, 'qwen2.5-coder-14b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1303, 1001, 1, 'qwen-vl-max-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1304, 1001, 1, 'pixverse/pixverse-v5.6-kf2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1305, 1001, 1, 'qwen-turbo-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1306, 1001, 1, 'MiniMax-M2.5', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1307, 1001, 1, 'qwen3-max-2025-09-23', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1308, 1001, 1, 'qwen-flash-character', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1309, 1001, 1, 'MiniMax-M2.1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1310, 1001, 1, 'qwen-image-plus', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1311, 1001, 1, 'qwen-image-plus-2026-01-09', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1312, 1001, 1, 'wanx2.1-kf2v-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1313, 1001, 1, 'wan2.6-r2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1314, 1001, 1, 'qwen3-livetranslate-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1315, 1001, 1, 'qwen3-asr-flash-filetrans', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1316, 1001, 1, 'qwen-flash-2025-07-28', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1317, 1001, 1, 'qwen3-omni-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1318, 1001, 1, 'fun-asr-flash-8k-realtime-2026-01-28', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1319, 1001, 1, 'vanchin/deepseek-r1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1320, 1001, 1, 'qwen3.5-plus-2026-04-20', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1321, 1001, 1, 'sambert-cally-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1322, 1001, 1, 'qwen-long-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1323, 1001, 1, 'sambert-zhishuo-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1324, 1001, 1, 'qwen-vl-ocr-2025-04-13', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1325, 1001, 1, 'qwen3-max', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1326, 1001, 1, 'facechain-generation', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1327, 1001, 1, 'qwen3.5-plus-2026-02-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1328, 1001, 1, 'qvq-plus-2025-05-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1329, 1001, 1, 'liveportrait-detect', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1330, 1001, 1, 'MiniMax/speech-2.8-hd', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1331, 1001, 1, 'sambert-zhiya-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1332, 1001, 1, 'qwen-doc-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1333, 1001, 1, 'liveportrait', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1334, 1001, 1, 'text-embedding-v1', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1335, 1001, 1, 'text-embedding-v3', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1336, 1001, 1, 'qwen3-vl-plus-2025-09-23', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1337, 1001, 1, 'text-embedding-v2', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1338, 1001, 1, 'qwen3-coder-next', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1339, 1001, 1, 'text-embedding-v4', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1340, 1001, 1, 'sambert-zhistella-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1341, 1001, 1, 'sambert-zhihao-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1342, 1001, 1, 'deepseek-v4-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1343, 1001, 1, 'qwen-image-max-2025-12-30', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1344, 1001, 1, 'qwq-32b-preview', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1345, 1001, 1, 'sambert-zhichu-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1346, 1001, 1, 'tongyi-embedding-vision-flash-2026-03-06', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1347, 1001, 1, 'wanx2.1-t2i-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1348, 1001, 1, 'qwen3-asr-flash-filetrans-2025-11-17', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1349, 1001, 1, 'qwen3-vl-flash-2026-01-22', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1350, 1001, 1, 'kling/kling-v3-omni-video-generation', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1351, 1001, 1, 'qwen3-vl-235b-a22b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1352, 1001, 1, 'wanx2.1-i2v-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1353, 1001, 1, 'qwen-mt-lite', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1354, 1001, 1, 'qwen-plus-2025-01-25', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1355, 1001, 1, 'wan2.7-i2v-2026-04-25', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1356, 1001, 1, 'qwen3-1.7b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1357, 1001, 1, 'qwen-max-0919', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1358, 1001, 1, 'wan2.2-s2v-detect', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1359, 1001, 1, 'image-out-painting', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1360, 1001, 1, 'qwen3-omni-flash-2025-09-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1361, 1001, 1, 'sambert-zhijia-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1362, 1001, 1, 'emoji-detect-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1363, 1001, 1, 'sambert-clara-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1364, 1001, 1, 'animate-anyone-detect-gen2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1365, 1001, 1, 'image-erase-completion', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1366, 1001, 1, 'sambert-waan-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1367, 1001, 1, 'fun-asr-realtime', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1368, 1001, 1, 'virtualmodel-v2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1369, 1001, 1, 'qwen-image-2.0-pro-2026-04-22', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1370, 1001, 1, 'wan2.7-image', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1371, 1001, 1, 'vidu/viduq2-pro_img2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1372, 1001, 1, 'tongyi-embedding-vision-plus-2026-03-06', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1373, 1001, 1, 'qwen-math-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1374, 1001, 1, 'wanx-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1375, 1001, 1, 'qwen2.5-math-7b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1376, 1001, 1, 'qwen3-vl-32b-thinking', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1377, 1001, 1, 'fun-asr-mtl', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1378, 1001, 1, 'qwen-omni-turbo-realtime-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1379, 1001, 1, 'glm-5', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1380, 1001, 1, 'sambert-eva-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1381, 1001, 1, 'qwen3-vl-30b-a3b-thinking', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1382, 1001, 1, 'qwen3-livetranslate-flash-realtime-2025-09-22', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1383, 1001, 1, 'siliconflow/deepseek-r1-0528', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1384, 1001, 1, 'qwen-vl-ocr-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1385, 1001, 1, 'qwen2.5-7b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1386, 1001, 1, 'sambert-indah-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1387, 1001, 1, 'sambert-cindy-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1388, 1001, 1, 'qwen-vl-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1389, 1001, 1, 'vidu/viduq3-pro_start-end2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1390, 1001, 1, 'wan2.2-t2v-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1391, 1001, 1, 'wan2.7-t2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1392, 1001, 1, 'qwen3.5-35b-a3b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1393, 1001, 1, 'glm-4.5-air', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1394, 1001, 1, 'wanx2.1-i2v-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1395, 1001, 1, 'qwen3-coder-480b-a35b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1396, 1001, 1, 'qwen3-omni-flash-2025-12-01', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1397, 1001, 1, 'wordart-texture', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1398, 1001, 1, 'vidu/viduq3-pro_text2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1399, 1001, 1, 'kling/kling-v3-video-generation', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1400, 1001, 1, 'qwen2.5-14b-instruct-1m', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1401, 1001, 1, 'qwen-plus-0112', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1402, 1001, 1, 'qwen-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1403, 1001, 1, 'qwen-math-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1404, 1001, 1, 'qwen-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1405, 1001, 1, 'voice-enrollment', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1406, 1001, 1, 'qvq-max', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1407, 1001, 1, 'paraformer-8k-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1408, 1001, 1, 'paraformer-8k-v2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1409, 1001, 1, 'vidu/viduq2-pro_reference2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1410, 1001, 1, 'qwen3-tts-vc-2026-01-22', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1411, 1001, 1, 'tongyi-xiaomi-analysis-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1412, 1001, 1, 'deepseek-r1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1413, 1001, 1, 'cosyvoice-v2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1414, 1001, 1, 'cosyvoice-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1415, 1001, 1, 'qwen-plus-character', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1416, 1001, 1, 'qwen-tts-realtime', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1417, 1001, 1, 'animate-anyone-gen2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1418, 1001, 1, 'paraformer-mtl-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1419, 1001, 1, 'sambert-zhifei-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1420, 1001, 1, 'fun-asr-flash-8k-realtime', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1421, 1001, 1, 'vidu/viduq3-pro_img2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1422, 1001, 1, 'qwen-max-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1423, 1001, 1, 'MiniMax/speech-02-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1424, 1001, 1, 'wan2.6-i2v-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1425, 1001, 1, 'speech-biasing', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1426, 1001, 1, 'qwen2.5-coder-32b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1427, 1001, 1, 'qwen-max-0428', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1428, 1001, 1, 'qwen-plus-1220', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1429, 1001, 1, 'qwen-voice-design', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1430, 1001, 1, 'kimi/kimi-k2.5', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1431, 1001, 1, 'kimi/kimi-k2.6', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1432, 1001, 1, 'qwen3.5-122b-a10b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1433, 1001, 1, 'qwen2.5-7b-instruct-1m', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1434, 1001, 1, 'qwen3-tts-flash-2025-09-18', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1435, 1001, 1, 'siliconflow/deepseek-v3.2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1436, 1001, 1, 'glm-5.1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1437, 1001, 1, 'sambert-beth-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1438, 1001, 1, 'kimi-k2-thinking', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1439, 1001, 1, 'qwen3.6-max-preview', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1440, 1001, 1, 'qwen2.5-omni-7b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1441, 1001, 1, 'deepseek-v3.1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1442, 1001, 1, 'qwen3.5-397b-a17b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1443, 1001, 1, 'wan2.6-t2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1444, 1001, 1, 'deepseek-v3.2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1445, 1001, 1, 'qwen-image', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1446, 1001, 1, 'tongyi-xiaomi-analysis-pro', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1447, 1001, 1, 'qwen3.5-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1448, 1001, 1, 'qwen3.5-omni-plus-2026-03-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1449, 1001, 1, 'wanx-x-painting', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1450, 1001, 1, 'wanx2.1-imageedit', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1451, 1001, 1, 'qwen-image-2.0', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1452, 1001, 1, 'wan2.7-r2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1453, 1001, 1, 'qwen3-30b-a3b-thinking-2507', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1454, 1001, 1, 'qvq-max-2025-05-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1455, 1001, 1, 'qwen2.5-72b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1456, 1001, 1, 'siliconflow/deepseek-v3-0324', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1457, 1001, 1, 'aitryon-parsing-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1458, 1001, 1, 'qwen3-livetranslate-flash-realtime', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1459, 1001, 1, 'vidu/viduq2-turbo_img2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1460, 1001, 1, 'qwen-turbo-1101', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1461, 1001, 1, 'qwen3-rerank', NULL, 'TongYi', 6, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1462, 1001, 1, 'qwen-deep-research', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1463, 1001, 1, 'MiniMax/speech-02-hd', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1464, 1001, 1, 'farui-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1465, 1001, 1, 'qwen3-coder-30b-a3b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1466, 1001, 1, 'qwen3.6-27b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1467, 1001, 1, 'qwen3-235b-a22b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1468, 1001, 1, 'cosyvoice-v3-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1469, 1001, 1, 'sambert-zhiming-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1470, 1001, 1, 'sambert-brian-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1471, 1001, 1, 'qwen-vl-plus-2025-01-25', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1472, 1001, 1, 'qwen3.6-flash-2026-04-16', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1473, 1001, 1, 'wan2.5-i2v-preview', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1474, 1001, 1, 'qwen-turbo-2025-07-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1475, 1001, 1, 'wan2.2-t2i-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1476, 1001, 1, 'sambert-donna-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1477, 1001, 1, 'wan2.2-i2v-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1478, 1001, 1, 'qwen2.5-vl-32b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1479, 1001, 1, 'glm-4.5', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1480, 1001, 1, 'glm-4.6', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1481, 1001, 1, 'glm-4.7', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1482, 1001, 1, 'qwen3.5-omni-flash-realtime', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1483, 1001, 1, 'sambert-zhixiang-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1484, 1001, 1, 'qwen3-asr-flash-realtime-2025-10-27', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1485, 1001, 1, 'qwq-32b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1486, 1001, 1, 'deepseek-v3', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1487, 1001, 1, 'gui-plus-2026-02-26', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1488, 1001, 1, 'qwen3-tts-vd-realtime-2025-12-16', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1489, 1001, 1, 'qwen3-vl-plus-2025-12-19', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1490, 1001, 1, 'MiniMax/MiniMax-M2.1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1491, 1001, 1, 'qwen-plus-2025-04-28', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1492, 1001, 1, 'qwen-mt-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1493, 1001, 1, 'gummy-chat-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1494, 1001, 1, 'MiniMax/MiniMax-M2.5', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1495, 1001, 1, 'qwen-vl-max-2025-01-25', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1496, 1001, 1, 'qwen3.5-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1497, 1001, 1, 'wanx-poster-generation-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1498, 1001, 1, 'vidu/viduq3-turbo_start-end2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1499, 1001, 1, 'wan2.6-t2i', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1500, 1001, 1, 'qwen-math-plus-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1501, 1001, 1, 'qvq-72b-preview', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1502, 1001, 1, 'vanchin/deepseek-v3', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1503, 1001, 1, 'qwen3.6-plus-2026-04-02', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1504, 1001, 1, 'fun-asr-realtime-2026-02-28', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1505, 1001, 1, 'wanx-background-generation-v2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1506, 1001, 1, 'image-instance-segmentation', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1507, 1001, 1, 'wan2.6-r2v-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1508, 1001, 1, 'happyhorse-1.0-i2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1509, 1001, 1, 'MiniMax/MiniMax-M2.7', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1510, 1001, 1, 'cosyvoice-v3.5-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1511, 1001, 1, 'Tripo/Tripo-H3.1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1512, 1001, 1, 'sambert-zhina-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1513, 1001, 1, 'cosyvoice-v3.5-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1514, 1001, 1, 'gummy-realtime-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1515, 1001, 1, 'sambert-zhida-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1516, 1001, 1, 'qwen-plus-2025-07-28', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1517, 1001, 1, 'paraformer-realtime-8k-v2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1518, 1001, 1, 'paraformer-realtime-8k-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1519, 1001, 1, 'qwen-omni-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1520, 1001, 1, 'sambert-zhiye-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1521, 1001, 1, 'qwen-tts-2025-05-22', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1522, 1001, 1, 'qwen-tts-realtime-latest', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1523, 1001, 1, 'qwen3.5-omni-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1524, 1001, 1, 'fun-asr-2025-11-07', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1525, 1001, 1, 'fun-asr-realtime-2025-09-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1526, 1001, 1, 'wordart-semantic', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1527, 1001, 1, 'sambert-zhiying-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1528, 1001, 1, 'z-image-turbo', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1529, 1001, 1, 'wan2.6-i2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1530, 1001, 1, 'qwen-vl-plus-2025-07-10', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1531, 1001, 1, 'wan2.5-t2v-preview', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1532, 1001, 1, 'qwen-omni-turbo-realtime', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1533, 1001, 1, 'qwen3-coder-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1534, 1001, 1, 'qwen3-vl-8b-thinking', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1535, 1001, 1, 'qwen-tts-latest', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1536, 1001, 1, 'qwen2.5-1.5b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1537, 1001, 1, 'qwen3.5-flash-2026-02-23', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1538, 1001, 1, 'qwen-vl-ocr-1028', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1539, 1001, 1, 'qwen3-8b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1540, 1001, 1, 'qwen3-asr-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1541, 1001, 1, 'qwen-omni-turbo-2025-01-19', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1542, 1001, 1, 'qwen-mt-image', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1543, 1001, 1, 'sambert-zhimo-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1544, 1001, 1, 'happyhorse-1.0-video-edit', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1545, 1001, 1, 'qwen-vl-plus-2025-08-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1546, 1001, 1, 'pixverse/pixverse-c1-t2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1547, 1001, 1, 'sambert-zhiru-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1548, 1001, 1, 'qwen3.5-27b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1549, 1001, 1, 'qwen3.5-omni-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1550, 1001, 1, 'qwen3-tts-flash-realtime-2025-09-18', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1551, 1001, 1, 'qvq-plus-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1552, 1001, 1, 'sambert-zhiqi-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1553, 1001, 1, 'aitryon-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1554, 1001, 1, 'vidu/viduq2-pro_start-end2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1555, 1001, 1, 'qwen3-14b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1556, 1001, 1, 'qwen3-tts-flash-2025-11-27', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1557, 1001, 1, 'qwen-image-max', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1558, 1001, 1, 'deepseek-v4-pro', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1559, 1001, 1, 'wan2.5-i2i-preview', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1560, 1001, 1, 'qwen-deep-research-2025-12-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1561, 1001, 1, 'qwen3-30b-a3b-instruct-2507', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1562, 1001, 1, 'fun-asr-mtl-2025-08-25', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1563, 1001, 1, 'wan2.2-animate-mix', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1564, 1001, 1, 'qwen3-235b-a22b-instruct-2507', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1565, 1001, 1, 'qwen3-coder-plus-2025-07-22', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1566, 1001, 1, 'qwen-image-edit-plus-2025-12-15', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1567, 1001, 1, 'wan2.7-t2v-2026-04-25', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1568, 1001, 1, 'qwen-vl-ocr', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1569, 1001, 1, 'sambert-zhimiao-emo-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1570, 1001, 1, 'Tripo/Tripo-P1.0', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1571, 1001, 1, 'qwen-vl-max-2025-04-02', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1572, 1001, 1, 'qwen-vl-max-1119', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1573, 1001, 1, 'qwen-vl-max-2025-04-08', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1574, 1001, 1, 'qwen3-tts-flash-realtime', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1575, 1001, 1, 'qwen-voice-enrollment', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1576, 1001, 1, 'tongyi-intent-detect-v3', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1577, 1001, 1, 'wan2.7-videoedit', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1578, 1001, 1, 'qwen-vl-max-1230', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1579, 1001, 1, 'vidu/viduq3-mix_reference2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1580, 1001, 1, 'qwen3-235b-a22b-thinking-2507', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1581, 1001, 1, 'qwen2.5-vl-7b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1582, 1001, 1, 'qwq-plus-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1583, 1001, 1, 'multimodal-embedding-v1', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1584, 1001, 1, 'qwen-tts-2025-04-10', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1585, 1001, 1, 'wanx-sketch-to-image-lite', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1586, 1001, 1, 'pixverse/pixverse-v5.6-r2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1587, 1001, 1, 'wanx-virtualmodel', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1588, 1001, 1, 'qwen-tts', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1589, 1001, 1, 'qwen-math-plus-0816', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1590, 1001, 1, 'vidu/viduq2-turbo_start-end2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1591, 1001, 1, 'qwen3-vl-32b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1592, 1001, 1, 'qwen3-tts-instruct-flash-realtime-2026-01-22', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1593, 1001, 1, 'vidu/viduq2_reference2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1594, 1001, 1, 'videoretalk', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1595, 1001, 1, 'qwen3-coder-plus-2025-09-23', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1596, 1001, 1, 'qwen2.5-3b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1597, 1001, 1, 'qwen3.5-omni-flash-realtime-2026-03-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1598, 1001, 1, 'qwen-plus-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1599, 1001, 1, 'qwen3-max-2026-01-23', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1600, 1001, 1, 'wanx-style-repaint-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1601, 1001, 1, 'wan2.2-kf2v-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1602, 1001, 1, 'qwen3.5-omni-plus-realtime', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1603, 1001, 1, 'qwen3-vl-30b-a3b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1604, 1001, 1, 'aitryon-refiner', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1605, 1001, 1, 'qwen-flash-character-2026-02-26', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1606, 1001, 1, 'sambert-zhinan-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1607, 1001, 1, 'qwen3-4b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1608, 1001, 1, 'text-embedding-async-v1', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1609, 1001, 1, 'text-embedding-async-v2', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1610, 1001, 1, 'qwen2.5-coder-7b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1611, 1001, 1, 'qwen-coder-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1612, 1001, 1, 'pixverse/pixverse-c1-r2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1613, 1001, 1, 'fun-asr-realtime-2025-11-07', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1614, 1001, 1, 'qwen3-vl-rerank', NULL, 'TongYi', 6, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1615, 1001, 1, 'wanx2.1-t2i-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1616, 1001, 1, 'emo-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1617, 1001, 1, 'sambert-hanna-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1618, 1001, 1, 'qwen3-asr-flash-realtime-2026-02-10', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1619, 1001, 1, 'qwen-coder-turbo-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1620, 1001, 1, 'qwen-turbo-2025-04-28', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1621, 1001, 1, 'qwen-image-2.0-2026-03-03', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1622, 1001, 1, 'sambert-zhiting-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1623, 1001, 1, 'qwen3-vl-8b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1624, 1001, 1, 'qwen-vl-ocr-2025-08-28', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1625, 1001, 1, 'qvq-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1626, 1001, 1, 'qwen3.5-omni-plus-realtime-2026-03-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1627, 1001, 1, 'cosyvoice-v3-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1628, 1001, 1, 'qwen3-asr-flash-2026-02-10', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1629, 1001, 1, 'video-style-transform', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1630, 1001, 1, 'qwen-long-2025-01-25', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1631, 1001, 1, 'qwen3.6-35b-a3b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1632, 1001, 1, 'vanchin/deepseek-ocr', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1633, 1001, 1, 'qwen-plus-2025-07-14', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1634, 1001, 1, 'qwq-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1635, 1001, 1, 'qwen3-tts-flash-realtime-2025-11-27', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1636, 1001, 1, 'facechain-facedetect', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1637, 1001, 1, 'qwq-plus-2025-03-05', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1638, 1001, 1, 'qwen3-next-80b-a3b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1639, 1001, 1, 'cosyvoice-clone-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1640, 1001, 1, 'sambert-zhiqian-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
-INSERT INTO `ai_model` VALUES (1641, 1001, 1, 'vanchin/deepseek-v3.2-think', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 1, '2026-05-08 17:21:46', '吴同', NULL, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1160, 1001, 1, 'qwen3-tts-vd-2026-01-26', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1161, 1001, 1, 'vidu/viduq3-turbo_img2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1162, 1001, 1, 'qwen3-vl-235b-a22b-thinking', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1163, 1001, 1, 'qwen-vl-plus-2025-05-07', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1164, 1001, 1, 'pixverse/pixverse-v5.6-t2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1165, 1001, 1, 'paraformer-v2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1166, 1001, 1, 'pixverse/pixverse-c1-it2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1167, 1001, 1, 'paraformer-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1168, 1001, 1, 'qwen2.5-vl-3b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1169, 1001, 1, 'qwen-max', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1170, 1001, 1, 'qwen-mt-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1171, 1001, 1, 'qwen2.5-14b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1172, 1001, 1, 'tongyi-embedding-vision-flash', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1173, 1001, 1, 'qwen3-32b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1174, 1001, 1, 'qwen-omni-turbo-2025-03-26', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1175, 1001, 1, 'wan2.6-image', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1176, 1001, 1, 'qwen3.6-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1177, 1001, 1, 'sambert-perla-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1178, 1001, 1, 'pixverse/pixverse-v6-t2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1179, 1001, 1, 'qwen-omni-turbo-realtime-2025-05-08', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1180, 1001, 1, 'qwen-max-2025-01-25', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1181, 1001, 1, 'qwen3-tts-vd-realtime-2026-01-15', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1182, 1001, 1, 'emoji-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1183, 1001, 1, 'siliconflow/deepseek-v3.1-terminus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1184, 1001, 1, 'shoemodel-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1185, 1001, 1, 'qwen-tts-realtime-2025-07-15', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1186, 1001, 1, 'happyhorse-1.0-t2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1187, 1001, 1, 'wanx2.1-t2v-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1188, 1001, 1, 'qwen3-vl-flash-2025-10-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1189, 1001, 1, 'qwen3-livetranslate-flash-2025-12-01', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1190, 1001, 1, 'qwen3-omni-flash-realtime-2025-12-01', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1191, 1001, 1, 'gui-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1192, 1001, 1, 'qwen3-0.6b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1193, 1001, 1, 'fun-asr-2025-08-25', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1194, 1001, 1, 'qwen3-coder-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1195, 1001, 1, 'sambert-betty-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1196, 1001, 1, 'qwen3-next-80b-a3b-thinking', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1197, 1001, 1, 'qwen3-tts-flash', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1198, 1001, 1, 'qwen-math-turbo-0919', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1199, 1001, 1, 'qwen3-vl-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1200, 1001, 1, 'qwen2.5-32b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1201, 1001, 1, 'qwen-math-plus-0919', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1202, 1001, 1, 'vidu/viduq2-pro-fast_img2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1203, 1001, 1, 'kling/kling-v3-image-generation', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1204, 1001, 1, 'qwen-image-edit-max', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1205, 1001, 1, 'qwen-image-2.0-pro-2026-03-03', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1206, 1001, 1, 'qwen-plus-2025-12-01', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1207, 1001, 1, 'deepseek-r1-distill-qwen-14b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1208, 1001, 1, 'animate-anyone-template-gen2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1209, 1001, 1, 'MiniMax/speech-2.8-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1210, 1001, 1, 'qwen-math-turbo-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1211, 1001, 1, 'wan2.7-image-pro', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1212, 1001, 1, 'qvq-max-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1213, 1001, 1, 'qwen-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1214, 1001, 1, 'sambert-camila-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1215, 1001, 1, 'sambert-zhijing-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1216, 1001, 1, 'vidu/viduq3-turbo_text2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1217, 1001, 1, 'kimi-k2.5', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1218, 1001, 1, 'kimi-k2.6', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1219, 1001, 1, 'qwen2.5-vl-embedding', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1220, 1001, 1, 'qwen-coder-plus-1106', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1221, 1001, 1, 'qwen-vl-ocr-2025-11-20', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1222, 1001, 1, 'sambert-zhide-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1223, 1001, 1, 'qwen-image-edit-plus', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1224, 1001, 1, 'sambert-zhiyue-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1225, 1001, 1, 'qwen-image-edit-plus-2025-10-30', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1226, 1001, 1, 'wan2.7-i2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1227, 1001, 1, 'qwen3-tts-instruct-flash-2026-01-26', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1228, 1001, 1, 'qwen-vl-plus-0102', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1229, 1001, 1, 'pixverse/pixverse-v6-kf2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1230, 1001, 1, 'wanx2.0-t2i-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1231, 1001, 1, 'qwen3-tts-vc-realtime-2025-11-27', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1232, 1001, 1, 'fun-music-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1233, 1001, 1, 'qwen3-tts-instruct-flash-realtime', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1234, 1001, 1, 'qwen-turbo-2025-02-11', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1235, 1001, 1, 'qwen-image-edit-max-2026-01-16', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1236, 1001, 1, 'Moonshot-Kimi-K2-Instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1237, 1001, 1, 'qwen-plus-2025-09-11', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1238, 1001, 1, 'aitryon', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1239, 1001, 1, 'fun-asr', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1240, 1001, 1, 'happyhorse-1.0-r2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1241, 1001, 1, 'wanx2.1-vace-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1242, 1001, 1, 'sambert-zhigui-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1243, 1001, 1, 'qwen-vl-max', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1244, 1001, 1, 'wan2.5-t2i-preview', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1245, 1001, 1, 'qwen3-tts-vc-realtime-2026-01-15', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1246, 1001, 1, 'wan2.2-i2v-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1247, 1001, 1, 'pixverse/pixverse-v6-it2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1248, 1001, 1, 'qwen3-vl-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1249, 1001, 1, 'wan2.2-t2i-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1250, 1001, 1, 'qwen3-vl-embedding', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1251, 1001, 1, 'deepseek-r1-distill-qwen-1.5b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1252, 1001, 1, 'qwen3-30b-a3b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1253, 1001, 1, 'qwen-mt-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1254, 1001, 1, 'qwen-coder-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1255, 1001, 1, 'kling/kling-v3-omni-image-generation', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1256, 1001, 1, 'pixverse/pixverse-c1-kf2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1257, 1001, 1, 'tongyi-embedding-vision-plus', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1258, 1001, 1, 'sambert-zhiyuan-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1259, 1001, 1, 'wan2.2-s2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1260, 1001, 1, 'qwen3-coder-flash-2025-07-28', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1261, 1001, 1, 'qwen3.5-omni-flash-2026-03-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1262, 1001, 1, 'qwen3-asr-flash-realtime', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1263, 1001, 1, 'qwen-image-2.0-pro', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1264, 1001, 1, 'qwen3-omni-flash-realtime', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1265, 1001, 1, 'sambert-zhiwei-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1266, 1001, 1, 'vanchin/deepseek-v3.1-terminus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1267, 1001, 1, 'qwen-omni-turbo-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1268, 1001, 1, 'qwen2.5-math-72b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1269, 1001, 1, 'deepseek-r1-0528', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1270, 1001, 1, 'deepseek-v3.2-exp', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1271, 1001, 1, 'qvq-max-2025-03-25', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1272, 1001, 1, 'qwen-coder-turbo-0919', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1273, 1001, 1, 'pixverse/pixverse-v5.6-it2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1274, 1001, 1, 'qwen2.5-vl-72b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1275, 1001, 1, 'sambert-zhishu-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1276, 1001, 1, 'qwen-vl-plus-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1277, 1001, 1, 'deepseek-r1-distill-qwen-7b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1278, 1001, 1, 'vidu/viduq3_reference2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1279, 1001, 1, 'emo-detect-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1280, 1001, 1, 'qwen3.6-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1281, 1001, 1, 'qwen-vl-max-2025-08-13', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1282, 1001, 1, 'deepseek-r1-distill-qwen-32b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1283, 1001, 1, 'qwen-image-edit', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1284, 1001, 1, 'paraformer-realtime-v2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1285, 1001, 1, 'paraformer-realtime-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1286, 1001, 1, 'qwen-long', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1287, 1001, 1, 'qwen-coder-plus-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1288, 1001, 1, 'qwen3-tts-instruct-flash', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1289, 1001, 1, 'wan2.2-animate-move', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1290, 1001, 1, 'sambert-zhilun-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1291, 1001, 1, 'wanx2.1-t2v-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1292, 1001, 1, 'sambert-zhimao-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1293, 1001, 1, 'qwen2.5-0.5b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1294, 1001, 1, 'qwen3-max-preview', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1295, 1001, 1, 'vidu/viduq3-turbo_reference2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1296, 1001, 1, 'qwen3-asr-flash-2025-09-08', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1297, 1001, 1, 'qwen3-omni-30b-a3b-captioner', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1298, 1001, 1, 'sambert-zhixiao-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1299, 1001, 1, 'qwen3-omni-flash-realtime-2025-09-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1300, 1001, 1, 'gte-rerank-v2', NULL, 'TongYi', 6, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1301, 1001, 1, 'vidu/viduq2_text2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1302, 1001, 1, 'qwen2.5-coder-14b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1303, 1001, 1, 'qwen-vl-max-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1304, 1001, 1, 'pixverse/pixverse-v5.6-kf2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1305, 1001, 1, 'qwen-turbo-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1306, 1001, 1, 'MiniMax-M2.5', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1307, 1001, 1, 'qwen3-max-2025-09-23', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1308, 1001, 1, 'qwen-flash-character', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1309, 1001, 1, 'MiniMax-M2.1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1310, 1001, 1, 'qwen-image-plus', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1311, 1001, 1, 'qwen-image-plus-2026-01-09', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1312, 1001, 1, 'wanx2.1-kf2v-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1313, 1001, 1, 'wan2.6-r2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1314, 1001, 1, 'qwen3-livetranslate-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1315, 1001, 1, 'qwen3-asr-flash-filetrans', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1316, 1001, 1, 'qwen-flash-2025-07-28', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1317, 1001, 1, 'qwen3-omni-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1318, 1001, 1, 'fun-asr-flash-8k-realtime-2026-01-28', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1319, 1001, 1, 'vanchin/deepseek-r1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1320, 1001, 1, 'qwen3.5-plus-2026-04-20', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1321, 1001, 1, 'sambert-cally-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1322, 1001, 1, 'qwen-long-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1323, 1001, 1, 'sambert-zhishuo-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1324, 1001, 1, 'qwen-vl-ocr-2025-04-13', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1325, 1001, 1, 'qwen3-max', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1326, 1001, 1, 'facechain-generation', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1327, 1001, 1, 'qwen3.5-plus-2026-02-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1328, 1001, 1, 'qvq-plus-2025-05-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1329, 1001, 1, 'liveportrait-detect', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1330, 1001, 1, 'MiniMax/speech-2.8-hd', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1331, 1001, 1, 'sambert-zhiya-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1332, 1001, 1, 'qwen-doc-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1333, 1001, 1, 'liveportrait', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1334, 1001, 1, 'text-embedding-v1', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1335, 1001, 1, 'text-embedding-v3', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1336, 1001, 1, 'qwen3-vl-plus-2025-09-23', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1337, 1001, 1, 'text-embedding-v2', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1338, 1001, 1, 'qwen3-coder-next', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1339, 1001, 1, 'text-embedding-v4', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1340, 1001, 1, 'sambert-zhistella-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1341, 1001, 1, 'sambert-zhihao-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1342, 1001, 1, 'deepseek-v4-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1343, 1001, 1, 'qwen-image-max-2025-12-30', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1344, 1001, 1, 'qwq-32b-preview', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1345, 1001, 1, 'sambert-zhichu-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1346, 1001, 1, 'tongyi-embedding-vision-flash-2026-03-06', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1347, 1001, 1, 'wanx2.1-t2i-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1348, 1001, 1, 'qwen3-asr-flash-filetrans-2025-11-17', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1349, 1001, 1, 'qwen3-vl-flash-2026-01-22', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1350, 1001, 1, 'kling/kling-v3-omni-video-generation', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1351, 1001, 1, 'qwen3-vl-235b-a22b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1352, 1001, 1, 'wanx2.1-i2v-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1353, 1001, 1, 'qwen-mt-lite', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1354, 1001, 1, 'qwen-plus-2025-01-25', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1355, 1001, 1, 'wan2.7-i2v-2026-04-25', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1356, 1001, 1, 'qwen3-1.7b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1357, 1001, 1, 'qwen-max-0919', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1358, 1001, 1, 'wan2.2-s2v-detect', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1359, 1001, 1, 'image-out-painting', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1360, 1001, 1, 'qwen3-omni-flash-2025-09-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1361, 1001, 1, 'sambert-zhijia-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1362, 1001, 1, 'emoji-detect-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1363, 1001, 1, 'sambert-clara-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1364, 1001, 1, 'animate-anyone-detect-gen2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1365, 1001, 1, 'image-erase-completion', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1366, 1001, 1, 'sambert-waan-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1367, 1001, 1, 'fun-asr-realtime', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1368, 1001, 1, 'virtualmodel-v2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1369, 1001, 1, 'qwen-image-2.0-pro-2026-04-22', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1370, 1001, 1, 'wan2.7-image', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1371, 1001, 1, 'vidu/viduq2-pro_img2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1372, 1001, 1, 'tongyi-embedding-vision-plus-2026-03-06', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1373, 1001, 1, 'qwen-math-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1374, 1001, 1, 'wanx-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1375, 1001, 1, 'qwen2.5-math-7b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1376, 1001, 1, 'qwen3-vl-32b-thinking', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1377, 1001, 1, 'fun-asr-mtl', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1378, 1001, 1, 'qwen-omni-turbo-realtime-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1379, 1001, 1, 'glm-5', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1380, 1001, 1, 'sambert-eva-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1381, 1001, 1, 'qwen3-vl-30b-a3b-thinking', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1382, 1001, 1, 'qwen3-livetranslate-flash-realtime-2025-09-22', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1383, 1001, 1, 'siliconflow/deepseek-r1-0528', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1384, 1001, 1, 'qwen-vl-ocr-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1385, 1001, 1, 'qwen2.5-7b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1386, 1001, 1, 'sambert-indah-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1387, 1001, 1, 'sambert-cindy-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1388, 1001, 1, 'qwen-vl-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1389, 1001, 1, 'vidu/viduq3-pro_start-end2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1390, 1001, 1, 'wan2.2-t2v-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1391, 1001, 1, 'wan2.7-t2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1392, 1001, 1, 'qwen3.5-35b-a3b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1393, 1001, 1, 'glm-4.5-air', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1394, 1001, 1, 'wanx2.1-i2v-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1395, 1001, 1, 'qwen3-coder-480b-a35b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1396, 1001, 1, 'qwen3-omni-flash-2025-12-01', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1397, 1001, 1, 'wordart-texture', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1398, 1001, 1, 'vidu/viduq3-pro_text2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1399, 1001, 1, 'kling/kling-v3-video-generation', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1400, 1001, 1, 'qwen2.5-14b-instruct-1m', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1401, 1001, 1, 'qwen-plus-0112', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1402, 1001, 1, 'qwen-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1403, 1001, 1, 'qwen-math-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1404, 1001, 1, 'qwen-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1405, 1001, 1, 'voice-enrollment', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1406, 1001, 1, 'qvq-max', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1407, 1001, 1, 'paraformer-8k-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1408, 1001, 1, 'paraformer-8k-v2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1409, 1001, 1, 'vidu/viduq2-pro_reference2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1410, 1001, 1, 'qwen3-tts-vc-2026-01-22', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1411, 1001, 1, 'tongyi-xiaomi-analysis-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1412, 1001, 1, 'deepseek-r1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1413, 1001, 1, 'cosyvoice-v2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1414, 1001, 1, 'cosyvoice-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1415, 1001, 1, 'qwen-plus-character', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1416, 1001, 1, 'qwen-tts-realtime', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1417, 1001, 1, 'animate-anyone-gen2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1418, 1001, 1, 'paraformer-mtl-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1419, 1001, 1, 'sambert-zhifei-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1420, 1001, 1, 'fun-asr-flash-8k-realtime', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1421, 1001, 1, 'vidu/viduq3-pro_img2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1422, 1001, 1, 'qwen-max-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1423, 1001, 1, 'MiniMax/speech-02-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1424, 1001, 1, 'wan2.6-i2v-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1425, 1001, 1, 'speech-biasing', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1426, 1001, 1, 'qwen2.5-coder-32b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1427, 1001, 1, 'qwen-max-0428', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1428, 1001, 1, 'qwen-plus-1220', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1429, 1001, 1, 'qwen-voice-design', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1430, 1001, 1, 'kimi/kimi-k2.5', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1431, 1001, 1, 'kimi/kimi-k2.6', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1432, 1001, 1, 'qwen3.5-122b-a10b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1433, 1001, 1, 'qwen2.5-7b-instruct-1m', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1434, 1001, 1, 'qwen3-tts-flash-2025-09-18', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1435, 1001, 1, 'siliconflow/deepseek-v3.2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1436, 1001, 1, 'glm-5.1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1437, 1001, 1, 'sambert-beth-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1438, 1001, 1, 'kimi-k2-thinking', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1439, 1001, 1, 'qwen3.6-max-preview', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1440, 1001, 1, 'qwen2.5-omni-7b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1441, 1001, 1, 'deepseek-v3.1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1442, 1001, 1, 'qwen3.5-397b-a17b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1443, 1001, 1, 'wan2.6-t2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1444, 1001, 1, 'deepseek-v3.2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1445, 1001, 1, 'qwen-image', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1446, 1001, 1, 'tongyi-xiaomi-analysis-pro', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1447, 1001, 1, 'qwen3.5-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1448, 1001, 1, 'qwen3.5-omni-plus-2026-03-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1449, 1001, 1, 'wanx-x-painting', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1450, 1001, 1, 'wanx2.1-imageedit', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1451, 1001, 1, 'qwen-image-2.0', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1452, 1001, 1, 'wan2.7-r2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1453, 1001, 1, 'qwen3-30b-a3b-thinking-2507', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1454, 1001, 1, 'qvq-max-2025-05-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1455, 1001, 1, 'qwen2.5-72b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1456, 1001, 1, 'siliconflow/deepseek-v3-0324', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1457, 1001, 1, 'aitryon-parsing-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1458, 1001, 1, 'qwen3-livetranslate-flash-realtime', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1459, 1001, 1, 'vidu/viduq2-turbo_img2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1460, 1001, 1, 'qwen-turbo-1101', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1461, 1001, 1, 'qwen3-rerank', NULL, 'TongYi', 6, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1462, 1001, 1, 'qwen-deep-research', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1463, 1001, 1, 'MiniMax/speech-02-hd', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1464, 1001, 1, 'farui-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1465, 1001, 1, 'qwen3-coder-30b-a3b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1466, 1001, 1, 'qwen3.6-27b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1467, 1001, 1, 'qwen3-235b-a22b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1468, 1001, 1, 'cosyvoice-v3-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1469, 1001, 1, 'sambert-zhiming-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1470, 1001, 1, 'sambert-brian-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1471, 1001, 1, 'qwen-vl-plus-2025-01-25', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1472, 1001, 1, 'qwen3.6-flash-2026-04-16', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1473, 1001, 1, 'wan2.5-i2v-preview', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1474, 1001, 1, 'qwen-turbo-2025-07-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1475, 1001, 1, 'wan2.2-t2i-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1476, 1001, 1, 'sambert-donna-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1477, 1001, 1, 'wan2.2-i2v-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1478, 1001, 1, 'qwen2.5-vl-32b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1479, 1001, 1, 'glm-4.5', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1480, 1001, 1, 'glm-4.6', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1481, 1001, 1, 'glm-4.7', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1482, 1001, 1, 'qwen3.5-omni-flash-realtime', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1483, 1001, 1, 'sambert-zhixiang-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1484, 1001, 1, 'qwen3-asr-flash-realtime-2025-10-27', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1485, 1001, 1, 'qwq-32b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1486, 1001, 1, 'deepseek-v3', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1487, 1001, 1, 'gui-plus-2026-02-26', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1488, 1001, 1, 'qwen3-tts-vd-realtime-2025-12-16', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1489, 1001, 1, 'qwen3-vl-plus-2025-12-19', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1490, 1001, 1, 'MiniMax/MiniMax-M2.1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1491, 1001, 1, 'qwen-plus-2025-04-28', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1492, 1001, 1, 'qwen-mt-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1493, 1001, 1, 'gummy-chat-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1494, 1001, 1, 'MiniMax/MiniMax-M2.5', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1495, 1001, 1, 'qwen-vl-max-2025-01-25', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1496, 1001, 1, 'qwen3.5-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1497, 1001, 1, 'wanx-poster-generation-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1498, 1001, 1, 'vidu/viduq3-turbo_start-end2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1499, 1001, 1, 'wan2.6-t2i', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1500, 1001, 1, 'qwen-math-plus-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1501, 1001, 1, 'qvq-72b-preview', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1502, 1001, 1, 'vanchin/deepseek-v3', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1503, 1001, 1, 'qwen3.6-plus-2026-04-02', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1504, 1001, 1, 'fun-asr-realtime-2026-02-28', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1505, 1001, 1, 'wanx-background-generation-v2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1506, 1001, 1, 'image-instance-segmentation', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1507, 1001, 1, 'wan2.6-r2v-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1508, 1001, 1, 'happyhorse-1.0-i2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1509, 1001, 1, 'MiniMax/MiniMax-M2.7', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1510, 1001, 1, 'cosyvoice-v3.5-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1511, 1001, 1, 'Tripo/Tripo-H3.1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1512, 1001, 1, 'sambert-zhina-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1513, 1001, 1, 'cosyvoice-v3.5-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1514, 1001, 1, 'gummy-realtime-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1515, 1001, 1, 'sambert-zhida-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1516, 1001, 1, 'qwen-plus-2025-07-28', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1517, 1001, 1, 'paraformer-realtime-8k-v2', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1518, 1001, 1, 'paraformer-realtime-8k-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1519, 1001, 1, 'qwen-omni-turbo', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1520, 1001, 1, 'sambert-zhiye-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1521, 1001, 1, 'qwen-tts-2025-05-22', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1522, 1001, 1, 'qwen-tts-realtime-latest', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1523, 1001, 1, 'qwen3.5-omni-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1524, 1001, 1, 'fun-asr-2025-11-07', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1525, 1001, 1, 'fun-asr-realtime-2025-09-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1526, 1001, 1, 'wordart-semantic', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1527, 1001, 1, 'sambert-zhiying-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1528, 1001, 1, 'z-image-turbo', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1529, 1001, 1, 'wan2.6-i2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1530, 1001, 1, 'qwen-vl-plus-2025-07-10', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1531, 1001, 1, 'wan2.5-t2v-preview', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1532, 1001, 1, 'qwen-omni-turbo-realtime', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1533, 1001, 1, 'qwen3-coder-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1534, 1001, 1, 'qwen3-vl-8b-thinking', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1535, 1001, 1, 'qwen-tts-latest', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1536, 1001, 1, 'qwen2.5-1.5b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1537, 1001, 1, 'qwen3.5-flash-2026-02-23', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1538, 1001, 1, 'qwen-vl-ocr-1028', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1539, 1001, 1, 'qwen3-8b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1540, 1001, 1, 'qwen3-asr-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1541, 1001, 1, 'qwen-omni-turbo-2025-01-19', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1542, 1001, 1, 'qwen-mt-image', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1543, 1001, 1, 'sambert-zhimo-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1544, 1001, 1, 'happyhorse-1.0-video-edit', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1545, 1001, 1, 'qwen-vl-plus-2025-08-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1546, 1001, 1, 'pixverse/pixverse-c1-t2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1547, 1001, 1, 'sambert-zhiru-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1548, 1001, 1, 'qwen3.5-27b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1549, 1001, 1, 'qwen3.5-omni-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1550, 1001, 1, 'qwen3-tts-flash-realtime-2025-09-18', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1551, 1001, 1, 'qvq-plus-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1552, 1001, 1, 'sambert-zhiqi-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1553, 1001, 1, 'aitryon-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1554, 1001, 1, 'vidu/viduq2-pro_start-end2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1555, 1001, 1, 'qwen3-14b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1556, 1001, 1, 'qwen3-tts-flash-2025-11-27', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1557, 1001, 1, 'qwen-image-max', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1558, 1001, 1, 'deepseek-v4-pro', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1559, 1001, 1, 'wan2.5-i2i-preview', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1560, 1001, 1, 'qwen-deep-research-2025-12-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1561, 1001, 1, 'qwen3-30b-a3b-instruct-2507', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1562, 1001, 1, 'fun-asr-mtl-2025-08-25', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1563, 1001, 1, 'wan2.2-animate-mix', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1564, 1001, 1, 'qwen3-235b-a22b-instruct-2507', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1565, 1001, 1, 'qwen3-coder-plus-2025-07-22', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1566, 1001, 1, 'qwen-image-edit-plus-2025-12-15', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1567, 1001, 1, 'wan2.7-t2v-2026-04-25', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1568, 1001, 1, 'qwen-vl-ocr', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1569, 1001, 1, 'sambert-zhimiao-emo-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1570, 1001, 1, 'Tripo/Tripo-P1.0', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1571, 1001, 1, 'qwen-vl-max-2025-04-02', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1572, 1001, 1, 'qwen-vl-max-1119', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1573, 1001, 1, 'qwen-vl-max-2025-04-08', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1574, 1001, 1, 'qwen3-tts-flash-realtime', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1575, 1001, 1, 'qwen-voice-enrollment', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1576, 1001, 1, 'tongyi-intent-detect-v3', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1577, 1001, 1, 'wan2.7-videoedit', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1578, 1001, 1, 'qwen-vl-max-1230', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1579, 1001, 1, 'vidu/viduq3-mix_reference2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1580, 1001, 1, 'qwen3-235b-a22b-thinking-2507', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1581, 1001, 1, 'qwen2.5-vl-7b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1582, 1001, 1, 'qwq-plus-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1583, 1001, 1, 'multimodal-embedding-v1', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1584, 1001, 1, 'qwen-tts-2025-04-10', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1585, 1001, 1, 'wanx-sketch-to-image-lite', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1586, 1001, 1, 'pixverse/pixverse-v5.6-r2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1587, 1001, 1, 'wanx-virtualmodel', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1588, 1001, 1, 'qwen-tts', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1589, 1001, 1, 'qwen-math-plus-0816', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1590, 1001, 1, 'vidu/viduq2-turbo_start-end2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1591, 1001, 1, 'qwen3-vl-32b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1592, 1001, 1, 'qwen3-tts-instruct-flash-realtime-2026-01-22', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1593, 1001, 1, 'vidu/viduq2_reference2video', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1594, 1001, 1, 'videoretalk', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1595, 1001, 1, 'qwen3-coder-plus-2025-09-23', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1596, 1001, 1, 'qwen2.5-3b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1597, 1001, 1, 'qwen3.5-omni-flash-realtime-2026-03-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1598, 1001, 1, 'qwen-plus-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1599, 1001, 1, 'qwen3-max-2026-01-23', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1600, 1001, 1, 'wanx-style-repaint-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1601, 1001, 1, 'wan2.2-kf2v-flash', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1602, 1001, 1, 'qwen3.5-omni-plus-realtime', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1603, 1001, 1, 'qwen3-vl-30b-a3b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1604, 1001, 1, 'aitryon-refiner', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1605, 1001, 1, 'qwen-flash-character-2026-02-26', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1606, 1001, 1, 'sambert-zhinan-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1607, 1001, 1, 'qwen3-4b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1608, 1001, 1, 'text-embedding-async-v1', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1609, 1001, 1, 'text-embedding-async-v2', NULL, 'TongYi', 5, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1610, 1001, 1, 'qwen2.5-coder-7b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1611, 1001, 1, 'qwen-coder-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1612, 1001, 1, 'pixverse/pixverse-c1-r2v', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1613, 1001, 1, 'fun-asr-realtime-2025-11-07', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1614, 1001, 1, 'qwen3-vl-rerank', NULL, 'TongYi', 6, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1615, 1001, 1, 'wanx2.1-t2i-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1616, 1001, 1, 'emo-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1617, 1001, 1, 'sambert-hanna-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1618, 1001, 1, 'qwen3-asr-flash-realtime-2026-02-10', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1619, 1001, 1, 'qwen-coder-turbo-latest', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1620, 1001, 1, 'qwen-turbo-2025-04-28', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1621, 1001, 1, 'qwen-image-2.0-2026-03-03', NULL, 'TongYi', 2, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1622, 1001, 1, 'sambert-zhiting-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1623, 1001, 1, 'qwen3-vl-8b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1624, 1001, 1, 'qwen-vl-ocr-2025-08-28', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1625, 1001, 1, 'qvq-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1626, 1001, 1, 'qwen3.5-omni-plus-realtime-2026-03-15', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1627, 1001, 1, 'cosyvoice-v3-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1628, 1001, 1, 'qwen3-asr-flash-2026-02-10', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1629, 1001, 1, 'video-style-transform', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1630, 1001, 1, 'qwen-long-2025-01-25', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1631, 1001, 1, 'qwen3.6-35b-a3b', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1632, 1001, 1, 'vanchin/deepseek-ocr', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1633, 1001, 1, 'qwen-plus-2025-07-14', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1634, 1001, 1, 'qwq-plus', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1635, 1001, 1, 'qwen3-tts-flash-realtime-2025-11-27', NULL, 'TongYi', 3, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1636, 1001, 1, 'facechain-facedetect', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1637, 1001, 1, 'qwq-plus-2025-03-05', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1638, 1001, 1, 'qwen3-next-80b-a3b-instruct', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1639, 1001, 1, 'cosyvoice-clone-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1640, 1001, 1, 'sambert-zhiqian-v1', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
+INSERT INTO `ai_model` VALUES (1641, 1001, 1, 'vanchin/deepseek-v3.2-think', NULL, 'TongYi', 1, NULL, 1, 1, 0, '吴同', 2, '2026-05-08 17:21:46', '吴同', 2, '2026-05-08 17:21:46', NULL);
 
 -- ----------------------------
 -- Table structure for gen_table
@@ -602,7 +598,7 @@ CREATE TABLE `gen_table`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`table_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '代码生成业务表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '代码生成业务表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gen_table
@@ -636,7 +632,7 @@ CREATE TABLE `gen_table_column`  (
   `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`column_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '代码生成业务表字段' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '代码生成业务表字段' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gen_table_column
@@ -647,7 +643,7 @@ CREATE TABLE `gen_table_column`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `system_config`;
 CREATE TABLE `system_config`  (
-  `config_id` int(5) NOT NULL AUTO_INCREMENT COMMENT '参数主键',
+  `config_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '参数主键',
   `config_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '参数名称',
   `config_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '参数键名',
   `config_value` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '参数键值',
@@ -658,7 +654,7 @@ CREATE TABLE `system_config`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`config_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 100 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '参数配置表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 100 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '参数配置表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_config
@@ -676,7 +672,7 @@ INSERT INTO `system_config` VALUES (7, '非结构化抽取线程数量', 'ext.th
 -- ----------------------------
 DROP TABLE IF EXISTS `system_content`;
 CREATE TABLE `system_content`  (
-  `id` int(16) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `sys_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '系统名称',
   `logo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '系统logo',
   `login_logo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '登录页面logo',
@@ -685,22 +681,22 @@ CREATE TABLE `system_content`  (
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '电子邮箱',
   `copyright` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '版权方',
   `record_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备案号',
-  `del_flag` int(2) NULL DEFAULT NULL COMMENT '删除标记',
-  `status` int(2) NULL DEFAULT NULL COMMENT '状态',
+  `del_flag` int(11) NULL DEFAULT NULL COMMENT '删除标记',
+  `status` int(11) NULL DEFAULT NULL COMMENT '状态',
   `create_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '创建人',
-  `creator_id` int(16) NULL DEFAULT NULL COMMENT '创建人id',
+  `creator_id` int(11) NULL DEFAULT NULL COMMENT '创建人id',
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `update_by` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '修改人',
-  `updater_id` int(16) NULL DEFAULT NULL COMMENT '修改人id',
+  `updater_id` int(11) NULL DEFAULT NULL COMMENT '修改人id',
   `update_time` datetime NULL DEFAULT NULL COMMENT '修改时间',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 100 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 100 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_content
 -- ----------------------------
-INSERT INTO `system_content` VALUES (1, NULL, '', '', '', '400-660-8208', 'support@qiantong.tech', 'Copyright© 2025 江苏千桐科技有限公司 版权所有', '苏ICP备2022008519号-3', 0, NULL, NULL, NULL, NULL, '吴同', 1, '2025-01-13 13:18:06', NULL);
+INSERT INTO `system_content` VALUES (1, NULL, '', '', '', '400-660-8208', 'support@qiantong.tech', 'Copyright© 2025 江苏千桐科技有限公司 版权所有', '苏ICP备2022008519号-3', 0, NULL, NULL, NULL, NULL, '吴同', 2, '2025-01-13 13:18:06', NULL);
 
 -- ----------------------------
 -- Table structure for system_dept
@@ -711,7 +707,7 @@ CREATE TABLE `system_dept`  (
   `parent_id` bigint(20) NULL DEFAULT 0 COMMENT '父部门id',
   `ancestors` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '祖级列表',
   `dept_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '部门名称',
-  `order_num` int(4) NULL DEFAULT 0 COMMENT '显示顺序',
+  `order_num` int(11) NULL DEFAULT 0 COMMENT '显示顺序',
   `leader` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '负责人',
   `phone` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '联系电话',
   `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '邮箱',
@@ -722,7 +718,7 @@ CREATE TABLE `system_dept`  (
   `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`dept_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 200 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '部门表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 203 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '部门表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_dept
@@ -738,7 +734,7 @@ INSERT INTO `system_dept` VALUES (202, 200, '0,100,200', '市场部门', 2, NULL
 DROP TABLE IF EXISTS `system_dict_data`;
 CREATE TABLE `system_dict_data`  (
   `dict_code` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '字典编码',
-  `dict_sort` int(4) NULL DEFAULT 0 COMMENT '字典排序',
+  `dict_sort` int(11) NULL DEFAULT 0 COMMENT '字典排序',
   `dict_label` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '字典标签',
   `dict_value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '字典键值',
   `dict_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '字典类型',
@@ -752,7 +748,7 @@ CREATE TABLE `system_dict_data`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`dict_code`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 182 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '字典数据表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 182 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '字典数据表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_dict_data
@@ -836,7 +832,7 @@ INSERT INTO `system_dict_data` VALUES (162, 3, '通义千问', 'TongYi', 'ai_mod
 INSERT INTO `system_dict_data` VALUES (163, 2, 'Ollama', 'Ollama', 'ai_model_platform', NULL, 'default', 'N', '0', '吴同', '2026-04-24 10:01:38', '吴同', '2026-04-24 10:01:38', NULL);
 INSERT INTO `system_dict_data` VALUES (164, 3, '已配置', '2', 'ai_apikey_status', NULL, 'default', 'N', '0', '吴同', '2026-04-24 10:01:38', '吴同', '2026-04-24 10:01:38', NULL);
 INSERT INTO `system_dict_data` VALUES (172, 4, 'OpenAI', 'OpenAI', 'ai_model_platform', NULL, 'default', 'N', '0', '吴同', '2026-04-21 13:57:05', '吴同', '2026-04-21 13:57:05', NULL);
-INSERT INTO `system_dict_data` VALUES (173, 1, '启用', 'true', 'kmc_know_valid', 'enabled', 'default', 'N', '0', '吴同', '2026-04-21 13:57:05', 'user001', '2026-05-07 14:14:41', NULL);
+INSERT INTO `system_dict_data` VALUES (173, 1, '启用', 'true', 'kmc_know_valid', 'enabled', 'default', 'N', '0', '吴同', '2026-04-21 13:57:05', '吴同', '2026-05-07 14:14:41', NULL);
 INSERT INTO `system_dict_data` VALUES (175, 1, '工作流', '0', 'kg_bot_type', NULL, 'primary', 'N', '0', '吴同', '2026-05-07 16:47:34', '', NULL, NULL);
 INSERT INTO `system_dict_data` VALUES (176, 2, 'Chatflow', '1', 'kg_bot_type', NULL, 'primary', 'N', '0', '吴同', '2026-05-07 16:47:34', '', NULL, NULL);
 INSERT INTO `system_dict_data` VALUES (177, 3, 'Agent', '2', 'kg_bot_type', NULL, 'primary', 'N', '0', '吴同', '2026-05-07 16:47:34', '', NULL, NULL);
@@ -861,7 +857,7 @@ CREATE TABLE `system_dict_type`  (
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`dict_id`) USING BTREE,
   UNIQUE INDEX `dict_type`(`dict_type` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 101 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '字典类型表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 101 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '字典类型表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_dict_type
@@ -916,7 +912,7 @@ CREATE TABLE `system_job`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '备注信息',
   PRIMARY KEY (`job_id`, `job_name`, `job_group`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 103 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '定时任务调度表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 103 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '定时任务调度表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_job
@@ -936,13 +932,13 @@ CREATE TABLE `system_menu`  (
   `menu_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '菜单ID',
   `menu_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '菜单名称',
   `parent_id` bigint(20) NULL DEFAULT 0 COMMENT '父菜单ID',
-  `order_num` int(4) NULL DEFAULT 0 COMMENT '显示顺序',
+  `order_num` int(11) NULL DEFAULT 0 COMMENT '显示顺序',
   `path` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '路由地址',
   `component` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '组件路径',
   `query` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '路由参数',
   `route_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '路由名称',
-  `is_frame` int(1) NULL DEFAULT 1 COMMENT '是否为外链（0是 1否）',
-  `is_cache` int(1) NULL DEFAULT 0 COMMENT '是否缓存（0缓存 1不缓存）',
+  `is_frame` int(11) NULL DEFAULT 1 COMMENT '是否为外链（0是 1否）',
+  `is_cache` int(11) NULL DEFAULT 0 COMMENT '是否缓存（0缓存 1不缓存）',
   `menu_type` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '菜单类型（M目录 C菜单 F按钮）',
   `visible` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '0' COMMENT '菜单状态（0显示 1隐藏）',
   `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '0' COMMENT '菜单状态（0正常 1停用）',
@@ -954,7 +950,7 @@ CREATE TABLE `system_menu`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`menu_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2415 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2473 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '菜单权限表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_menu
@@ -1105,29 +1101,29 @@ INSERT INTO `system_menu` VALUES (2063, '应用中心', 0, 2, 'kac', NULL, NULL,
 INSERT INTO `system_menu` VALUES (2064, '插件中心', 0, 5, 'plugin', NULL, NULL, '', 1, 0, 'M', '0', '0', '', '插件', '吴同', '2026-04-27 09:37:31', '吴同', '2026-05-14 10:46:47', '');
 INSERT INTO `system_menu` VALUES (2079, '产品动态', 2061, 1, 'dynamic', 'system/developing/index', NULL, '', 1, 0, 'C', '1', '0', '', 'education', '吴同', '2026-04-27 15:43:52', '吴同', '2026-05-13 11:47:42', '');
 INSERT INTO `system_menu` VALUES (2080, '模型市场', 1, 11, 'ai', NULL, NULL, '', 1, 0, 'M', '0', '0', '', 'brain-ai-3-line', '吴同', '2026-04-21 13:57:04', '吴同', '2026-05-14 11:15:56', '');
-INSERT INTO `system_menu` VALUES (2124, '知识库', 2000, 0, 'knowledgeBase', 'kmc/knowledgeBase/index', NULL, '', 1, 0, 'C', '1', '0', 'kmc:knowledgeBase:knowledgebase:list', '#', 'admin', '2025-10-14 09:05:56', '吴同', '2025-10-14 09:06:33', '知识库菜单');
-INSERT INTO `system_menu` VALUES (2125, '知识库查询', 2124, 1, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kmc:knowledgeBase:knowledgebase:query', '#', 'admin', '2025-10-14 09:05:56', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2126, '知识库新增', 2124, 2, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kmc:knowledgeBase:knowledgebase:add', '#', 'admin', '2025-10-14 09:05:56', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2127, '知识库修改', 2124, 3, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kmc:knowledgeBase:knowledgebase:edit', '#', 'admin', '2025-10-14 09:05:56', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2128, '知识库删除', 2124, 4, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kmc:knowledgeBase:knowledgebase:remove', '#', 'admin', '2025-10-14 09:05:56', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2129, '知识库导出', 2124, 5, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kmc:knowledgeBase:knowledgebase:export', '#', 'admin', '2025-10-14 09:05:56', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2130, '知识库导入', 2124, 6, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kmc:knowledgeBase:knowledgebase:import', '#', 'admin', '2025-10-14 09:05:56', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2124, '知识库', 2000, 0, 'knowledgeBase', 'kmc/knowledgeBase/index', NULL, '', 1, 0, 'C', '1', '0', 'kmc:knowledgeBase:knowledgebase:list', '#', '吴同', '2025-10-14 09:05:56', '吴同', '2025-10-14 09:06:33', '知识库菜单');
+INSERT INTO `system_menu` VALUES (2125, '知识库查询', 2124, 1, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kmc:knowledgeBase:knowledgebase:query', '#', '吴同', '2025-10-14 09:05:56', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2126, '知识库新增', 2124, 2, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kmc:knowledgeBase:knowledgebase:add', '#', '吴同', '2025-10-14 09:05:56', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2127, '知识库修改', 2124, 3, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kmc:knowledgeBase:knowledgebase:edit', '#', '吴同', '2025-10-14 09:05:56', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2128, '知识库删除', 2124, 4, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kmc:knowledgeBase:knowledgebase:remove', '#', '吴同', '2025-10-14 09:05:56', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2129, '知识库导出', 2124, 5, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kmc:knowledgeBase:knowledgebase:export', '#', '吴同', '2025-10-14 09:05:56', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2130, '知识库导入', 2124, 6, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kmc:knowledgeBase:knowledgebase:import', '#', '吴同', '2025-10-14 09:05:56', '', NULL, '');
 INSERT INTO `system_menu` VALUES (2131, '召回测试', 2000, 3, ':kbId/recall', 'kmc/knowledgeBase/components/recall', NULL, 'recall', 1, 0, 'C', '0', '0', '', 'box-3-line', '吴同', '2025-10-14 16:26:06', '吴同', '2026-05-14 11:05:30', '');
 INSERT INTO `system_menu` VALUES (2223, '知识中心', 2058, 1, 'knowledge', NULL, NULL, '', 1, 0, 'M', '0', '0', '', 'book-open-line', '吴同', '2025-10-20 09:43:47', '吴同', '2026-05-14 10:57:49', '');
-INSERT INTO `system_menu` VALUES (2224, '知识分类', 2223, 1, 'category', 'kg/knowledge/category/index', NULL, '', 1, 0, 'C', '0', '0', 'kg:knowledge:category:list', '#', 'admin', '2025-10-20 09:50:56', '吴同', '2025-10-20 09:56:13', '知识分类菜单');
-INSERT INTO `system_menu` VALUES (2225, '知识分类查询', 2224, 1, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:category:query', '#', 'admin', '2025-10-20 09:50:56', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2226, '知识分类新增', 2224, 2, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:category:add', '#', 'admin', '2025-10-20 09:50:56', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2227, '知识分类修改', 2224, 3, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:category:edit', '#', 'admin', '2025-10-20 09:50:56', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2228, '知识分类删除', 2224, 4, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:category:remove', '#', 'admin', '2025-10-20 09:50:56', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2229, '知识分类导出', 2224, 5, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:category:export', '#', 'admin', '2025-10-20 09:50:56', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2230, '知识分类导入', 2224, 6, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:category:import', '#', 'admin', '2025-10-20 09:50:56', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2231, '知识文件', 2223, 0, 'document', 'kg/knowledge/document/index', NULL, '', 1, 0, 'C', '0', '0', 'kg:knowledge:document:list', '#', 'admin', '2025-10-20 09:51:05', '吴同', '2026-05-13 13:47:33', '知识文件菜单');
-INSERT INTO `system_menu` VALUES (2232, '知识文件查询', 2231, 1, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:document:query', '#', 'admin', '2025-10-20 09:51:05', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2233, '知识文件新增', 2231, 2, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:document:add', '#', 'admin', '2025-10-20 09:51:05', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2234, '知识文件修改', 2231, 3, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:document:edit', '#', 'admin', '2025-10-20 09:51:05', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2235, '知识文件删除', 2231, 4, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:document:remove', '#', 'admin', '2025-10-20 09:51:05', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2236, '知识文件导出', 2231, 5, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:document:export', '#', 'admin', '2025-10-20 09:51:05', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2237, '知识文件导入', 2231, 6, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:document:import', '#', 'admin', '2025-10-20 09:51:05', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2224, '知识分类', 2223, 1, 'category', 'kg/knowledge/category/index', NULL, '', 1, 0, 'C', '0', '0', 'kg:knowledge:category:list', '#', '吴同', '2025-10-20 09:50:56', '吴同', '2025-10-20 09:56:13', '知识分类菜单');
+INSERT INTO `system_menu` VALUES (2225, '知识分类查询', 2224, 1, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:category:query', '#', '吴同', '2025-10-20 09:50:56', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2226, '知识分类新增', 2224, 2, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:category:add', '#', '吴同', '2025-10-20 09:50:56', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2227, '知识分类修改', 2224, 3, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:category:edit', '#', '吴同', '2025-10-20 09:50:56', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2228, '知识分类删除', 2224, 4, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:category:remove', '#', '吴同', '2025-10-20 09:50:56', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2229, '知识分类导出', 2224, 5, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:category:export', '#', '吴同', '2025-10-20 09:50:56', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2230, '知识分类导入', 2224, 6, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:category:import', '#', '吴同', '2025-10-20 09:50:56', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2231, '知识文件', 2223, 0, 'document', 'kg/knowledge/document/index', NULL, '', 1, 0, 'C', '0', '0', 'kg:knowledge:document:list', '#', '吴同', '2025-10-20 09:51:05', '吴同', '2026-05-13 13:47:33', '知识文件菜单');
+INSERT INTO `system_menu` VALUES (2232, '知识文件查询', 2231, 1, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:document:query', '#', '吴同', '2025-10-20 09:51:05', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2233, '知识文件新增', 2231, 2, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:document:add', '#', '吴同', '2025-10-20 09:51:05', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2234, '知识文件修改', 2231, 3, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:document:edit', '#', '吴同', '2025-10-20 09:51:05', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2235, '知识文件删除', 2231, 4, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:document:remove', '#', '吴同', '2025-10-20 09:51:05', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2236, '知识文件导出', 2231, 5, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:document:export', '#', '吴同', '2025-10-20 09:51:05', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2237, '知识文件导入', 2231, 6, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kg:knowledge:document:import', '#', '吴同', '2025-10-20 09:51:05', '', NULL, '');
 INSERT INTO `system_menu` VALUES (2262, '知识库设置', 2000, 4, ':kbId/knowledgeBase', NULL, NULL, '', 1, 0, 'M', '0', '0', '', '知识库', '吴同', '2025-11-05 16:10:31', '吴同', '2026-05-14 11:06:28', '');
 INSERT INTO `system_menu` VALUES (2315, '基础设置', 2262, 0, 'kmcBasic', 'kmc/knowledgeBase/components/settings', NULL, '', 1, 0, 'C', '0', '0', '', '#', '吴同', '2026-04-21 13:57:04', '吴同', '2026-04-21 13:57:04', '');
 INSERT INTO `system_menu` VALUES (2316, '权限设置', 2262, 1, 'roles', 'kmc/knowledgeBase/components/roleTable', NULL, '', 1, 0, 'C', '0', '0', 'kmc:knowledgeBase:role:list', '#', '吴同', '2026-04-21 13:57:04', '吴同', '2026-06-04 14:30:21', '');
@@ -1142,13 +1138,13 @@ INSERT INTO `system_menu` VALUES (2336, '新增 Bot', 2335, 1, '', NULL, NULL, '
 INSERT INTO `system_menu` VALUES (2337, '修改 Bot', 2335, 2, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kb:bot:bot:edit', '#', '吴同', '2026-04-21 13:58:59', '', NULL, '');
 INSERT INTO `system_menu` VALUES (2338, '删除 Bot', 2335, 3, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kb:bot:bot:remove', '#', '吴同', '2026-04-21 13:58:59', '', NULL, '');
 INSERT INTO `system_menu` VALUES (2339, '获取 Bot', 2335, 4, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kb:bot:bot:query', '#', '吴同', '2026-04-21 13:58:59', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2395, '工具管理', 2057, 12, 'tool', 'kb/tool/index', NULL, 'kbTool', 1, 0, 'C', '0', '0', 'kb:tool:tool:list', 'tools-line', 'admin', '2026-04-21 16:15:27', '吴同', '2026-05-14 10:57:06', '工具管理菜单');
-INSERT INTO `system_menu` VALUES (2396, '工具管理查询', 2395, 1, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kb:tool:tool:query', '#', 'admin', '2026-04-21 16:15:27', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2397, '工具管理新增', 2395, 2, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kb:tool:tool:add', '#', 'admin', '2026-04-21 16:15:27', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2398, '工具管理修改', 2395, 3, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kb:tool:tool:edit', '#', 'admin', '2026-04-21 16:15:27', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2399, '工具管理删除', 2395, 4, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kb:tool:tool:remove', '#', 'admin', '2026-04-21 16:15:27', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2400, '工具管理导出', 2395, 5, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kb:tool:tool:export', '#', 'admin', '2026-04-21 16:15:27', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2401, '工具管理导入', 2395, 6, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kb:tool:tool:import', '#', 'admin', '2026-04-21 16:15:27', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2395, '工具管理', 2472, 2, 'tool', 'kb/tool/index', NULL, 'kbTool', 1, 0, 'C', '0', '0', 'kb:tool:tool:list', '#', '吴同', '2026-04-21 16:15:27', '吴同', '2026-06-24 17:48:30', '工具管理菜单');
+INSERT INTO `system_menu` VALUES (2396, '工具管理查询', 2395, 1, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kb:tool:tool:query', '#', '吴同', '2026-04-21 16:15:27', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2397, '工具管理新增', 2395, 2, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kb:tool:tool:add', '#', '吴同', '2026-04-21 16:15:27', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2398, '工具管理修改', 2395, 3, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kb:tool:tool:edit', '#', '吴同', '2026-04-21 16:15:27', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2399, '工具管理删除', 2395, 4, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kb:tool:tool:remove', '#', '吴同', '2026-04-21 16:15:27', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2400, '工具管理导出', 2395, 5, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kb:tool:tool:export', '#', '吴同', '2026-04-21 16:15:27', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2401, '工具管理导入', 2395, 6, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'kb:tool:tool:import', '#', '吴同', '2026-04-21 16:15:27', '', NULL, '');
 INSERT INTO `system_menu` VALUES (2402, '知识资产看板', 2061, 3, 'knowledgeAsset', 'kd/knowledgeAsset/index', NULL, '', 1, 0, 'C', '0', '0', '', 'trello-line', '吴同', '2026-05-13 10:34:41', '吴同', '2026-05-15 09:59:22', '');
 INSERT INTO `system_menu` VALUES (2403, 'Bot运营看板', 2061, 4, 'botOperation', 'kd/botOperation/index', NULL, '', 1, 0, 'C', '0', '0', '', 'slideshow-line', '吴同', '2026-05-13 10:43:41', '吴同', '2026-05-15 09:44:19', '');
 INSERT INTO `system_menu` VALUES (2404, '应用运营看板', 2061, 5, 'appOperations', 'kd/appOperations/index', NULL, '', 1, 0, 'C', '0', '0', '', 'bar-chart-box-ai-line', '吴同', '2026-05-13 10:44:06', '吴同', '2026-05-15 09:42:48', '');
@@ -1162,15 +1158,17 @@ INSERT INTO `system_menu` VALUES (2413, 'Chatflow', 2335, 2, 'chatflow', 'kb/bot
 INSERT INTO `system_menu` VALUES (2414, 'Agent', 2335, 3, 'agent', 'kb/bot/index', '{\"botType\":2}', '', 1, 0, 'C', '0', '0', '', '#', '吴同', '2026-05-14 09:22:48', '吴同', '2026-05-14 09:31:26', '');
 INSERT INTO `system_menu` VALUES (2415, '插件管理删除', 2411, 0, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kac:plugin:plugin:remove', '#', '吴同', '2026-06-05 11:45:01', '', NULL, '');
 INSERT INTO `system_menu` VALUES (2416, '插件管理新增', 2411, 1, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kac:plugin:plugin:add', '#', '吴同', '2026-06-05 11:45:26', '', NULL, '');
-INSERT INTO `system_menu` VALUES (2417, '我的应用修改', 2410, 0, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kac:apply:apply:edit', '#', '吴同', '2026-06-09 09:19:04', '小桐', '2026-06-09 09:20:39', '');
-INSERT INTO `system_menu` VALUES (2418, '我的应用删除', 2410, 1, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kac:apply:apply:remove', '#', '小桐', '2026-06-09 09:21:02', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2417, '我的应用修改', 2410, 0, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kac:apply:apply:edit', '#', '吴同', '2026-06-09 09:19:04', '吴同', '2026-06-09 09:20:39', '');
+INSERT INTO `system_menu` VALUES (2418, '我的应用删除', 2410, 1, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kac:apply:apply:remove', '#', '吴同', '2026-06-09 09:21:02', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2471, '工具分类', 2472, 1, 'toolCategory', 'kb/toolCategory/index', NULL, 'toolCategory', 1, 0, 'C', '0', '0', NULL, '#', '吴同', '2026-06-24 17:19:01', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2472, '工具管理', 2057, 12, 'tool', NULL, NULL, '', 1, 0, 'M', '0', '0', '', 'tool_new_icon', '吴同', '2026-06-24 17:48:09', '吴同', '2026-07-07 10:56:24', '');
 
 -- ----------------------------
 -- Table structure for system_notice
 -- ----------------------------
 DROP TABLE IF EXISTS `system_notice`;
 CREATE TABLE `system_notice`  (
-  `notice_id` int(4) NOT NULL AUTO_INCREMENT COMMENT '公告ID',
+  `notice_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '公告ID',
   `notice_title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '公告标题',
   `notice_type` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '公告类型（1通知 2公告）',
   `notice_content` longblob NULL COMMENT '公告内容',
@@ -1181,13 +1179,13 @@ CREATE TABLE `system_notice`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`notice_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 100 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '通知公告表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 100 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '通知公告表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_notice
 -- ----------------------------
 INSERT INTO `system_notice` VALUES (1, 'qKnow智能体构建平台正式开源！', '2', 0x3C703EE79FA5E8AF86E4B8ADE5BF83E38081E79FA5E8AF86E68ABDE58F96E38081E79FA5E8AF86E59BBEE8B0B1E6A0B8E5BF83E4B889E5A4A7E58A9FE883BDE5B7B2E58F91E5B8833C2F703E, '0', '吴同', '2025-05-28 18:00:00', '吴同', '2026-05-15 13:47:04', NULL);
-INSERT INTO `system_notice` VALUES (2, 'qKnow期待与您携手共建知识体系！', '1', 0xE69C9FE5BE85E682A8E79A84E58AA0E585A5, '0', '吴同', '2026-04-20 09:32:55', '2025-05-28 18:00:00', NULL, NULL);
+INSERT INTO `system_notice` VALUES (2, 'qKnow期待与您携手共建知识体系！', '1', 0xE69C9FE5BE85E682A8E79A84E58AA0E585A5, '0', '吴同', '2026-04-20 09:32:55', '吴同', NULL, NULL);
 INSERT INTO `system_notice` VALUES (3, 'qKnow 1.0.0 正式发布', '2', 0x3C68313EF09F9A8020714B6E6F7720312E302E3020E6ADA3E5BC8FE58F91E5B8833C2F68313E3C703E714B6E6F7720312E302E3020E698AFE68891E4BBACE79A84E9A696E4B8AAE6ADA3E5BC8FE78988E69CACEFBC8CE6A087E5BF97E79D80E79FA5E8AF86E7AEA1E79086E4B88EE699BAE883BDE68ABDE58F96E883BDE58A9BE79A84E585A8E99DA2E890BDE59CB0E38082E69CACE78988E69CACE8819AE784A6E4BA8EE79FA5E8AF86E585A8E7949FE591BDE591A8E69C9FE7AEA1E79086E79A84E6A0B8E5BF83E58A9FE883BDE5BBBAE8AEBEEFBC8CE99B86E68890E58588E8BF9BE79A84E79FA5E8AF86E68ABDE58F96E68A80E69CAFE4B88EE79BB4E8A782E79A84E58FAFE8A786E58C96E68EA2E7B4A2E883BDE58A9BEFBC8CE887B4E58A9BE4BA8EE68993E980A0E4BC81E4B89AE7BAA7E79FA5E8AF86E4B8ADE69EA2E5B9B3E58FB0E380823C2F703E3C68323EE29CA820E6A0B8E5BF83E58A9FE883BDE4BAAEE782B93C2F68323E3C756C3E3C6C693EF09FA7A020E79FA5E8AF86E4B8ADE5BF833C2F6C693E3C6C693EE99B86E4B8ADE58C96E7AEA1E79086E59084E7B1BBE69687E6A1A3E8B584E6BA90EFBC8CE694AFE68C81E5A49AE7BBB4E5BAA6E58886E7B1BBE4B88EE9AB98E69588E6A380E7B4A2EFBC8CE69E84E5BBBAE7BB9FE4B880E79A84E79FA5E8AF86E8B584E4BAA7E5BA93EFBC8CE58AA9E58A9BE794A8E688B7E5BFABE9809FE5AE9AE4BD8DE4B88EE88EB7E58F96E68980E99C80E4BFA1E681AFE380823C2F6C693E3C6C693EF09F94A420E6A682E5BFB5E9858DE7BDAE3C2F6C693E3C6C693EE694AFE68C81E887AAE5AE9AE4B989E79FA5E8AF86E68ABDE58F96E6A682E5BFB5E6A8A1E59E8BE4B88EE8A784E58899EFBC8CE781B5E6B4BBE98082E9858DE4B88DE5908CE4B89AE58AA1E59CBAE699AFEFBC8CE68F90E58D87E585B3E994AEE5AE9EE4BD93E8AF86E588ABE79A84E58786E7A1AEE680A7E4B88EE8AFADE4B989E8A1A8E8BEBEE883BDE58A9BE380823C2F6C693E3C6C693EF09F949720E585B3E7B3BBE9858DE7BDAE3C2F6C693E3C6C693EE58FAFE781B5E6B4BBE5AE9AE4B989E5AE9EE4BD93E997B4E8AFADE4B989E585B3E7B3BBE68ABDE58F96E8A784E58899EFBC8CE5AE9EE78EB0E79FA5E8AF86E997B4E585B3E88194E79A84E7B2BEE7BB86E58C96E5BBBAE6A8A1EFBC8CE5A29EE5BCBAE79FA5E8AF86E7BD91E7BB9CE79A84E7BB93E69E84E58C96E8A1A8E8BEBEE4B88EE68EA8E79086E883BDE58A9BE380823C2F6C693E3C6C693EF09F938420E99D9EE7BB93E69E84E58C96E68ABDE58F963C2F6C693E3C6C693EE59FBAE4BA8E20446565704B4520E7AD89E58588E8BF9BE79FA5E8AF86E68ABDE58F96E5B7A5E585B7EFBC8CE4BB8EE69687E69CACE38081E69687E6A1A3E7AD89E99D9EE7BB93E69E84E58C96E695B0E68DAEE4B8ADE887AAE58AA8E8AF86E588ABE5AE9EE4BD93E38081E5B19EE680A7E58F8AE585B3E7B3BBEFBC8CE9878AE694BEE99A90E680A7E79FA5E8AF86E4BBB7E580BCE380823C2F6C693E3C6C693EF09F92BE20E7BB93E69E84E58C96E68ABDE58F963C2F6C693E3C6C693EE4BB8EE695B0E68DAEE5BA93E38081E8A1A8E6A0BCE7AD89E7BB93E69E84E58C96E695B0E68DAEE6BA90E4B8ADE887AAE58AA8E58C96E68F90E58F96E38081E8BDACE68DA2E5B9B6E58AA0E8BDBDE79FA5E8AF86E58583E7B4A0EFBC8CE5AE9EE78EB0E7BB93E69E84E58C96E4BFA1E681AFE59091E79FA5E8AF86E59BBEE8B0B1E79A84E9AB98E69588E8BF81E7A7BBE4B88EE99B86E68890E380823C2F6C693E3C6C693EF09F8C9020E59BBEE8B0B1E68EA2E7B4A23C2F6C693E3C6C693EE68F90E4BE9BE58FAFE8A786E58C96E38081E4BAA4E4BA92E5BC8FE79FA5E8AF86E59BBEE8B0B1E6B58FE8A788E4B88EE58886E69E90E5B9B3E58FB0EFBC8CE694AFE68C81E585B3E7B3BBE8B7AFE5BE84E8BFBDE8B8AAE38081E5AD90E59BBEE68C96E68E98E4B88EE8AFADE4B989E69FA5E8AFA2EFBC8CE58AA9E58A9BE6B7B1E5BAA6E6B49EE5AF9FE5A48DE69D82E585B3E88194E7BD91E7BB9CE380823C2F6C693E3C6C693EE29A99EFB88F20E7B3BBE7BB9FE7AEA1E790863C2F6C693E3C6C693EE6B6B5E79B96E7B3BBE7BB9FE9858DE7BDAEE38081E794A8E688B7E69D83E99990E7AEA1E79086E38081E8BF90E8A18CE78AB6E68081E79B91E68EA7E38081E6938DE4BD9CE697A5E5BF97E5AEA1E8AEA1E58F8AE69C8DE58AA1E599A8E8B584E6BA90E79B91E68EA7E7AD89E58A9FE883BDEFBC8CE4BF9DE99A9CE7B3BBE7BB9FE5AE89E585A8E38081E7A8B3E5AE9AE4B88EE58FAFE7BBB4E68AA4E680A7E380823C2F6C693E3C2F756C3E3C703EF09F8E8920E789B9E588ABE8AFB4E6988EEFBC9A3C2F703E3C703E714B6E6F7720312E302E3020E4BD9CE4B8BAE9A696E4B8AAE6ADA3E5BC8FE58F91E5B883E78988E69CACEFBC8CE5A5A0E5AE9AE4BA86E5B9B3E58FB0E79A84E6A0B8E5BF83E69EB6E69E84E4B88EE58A9FE883BDE4BD93E7B3BBE38082E68891E4BBACE8AF9AE98280E682A8E5BC80E590AFE79FA5E8AF86E699BAE883BDE58C96E4B98BE69785EFBC8CE585B1E5908CE69E84E5BBBAE58FAFE8BFBDE6BAAFE38081E58FAFE58886E69E90E38081E58FAFE68EA8E79086E79A84E4BC81E4B89AE79FA5E8AF86E5A4A7E88491EFBC813C2F703E, '0', '吴同', '2026-05-15 13:46:35', '', NULL, NULL);
 INSERT INTO `system_notice` VALUES (4, 'qKnow 1.0.3 稳定版发布', '2', 0x3C68313EF09F9A8020714B6E6F7720312E302E3320E7A8B3E5AE9AE78988E58F91E5B8833C2F68313E3C703E714B6E6F7720312E302E3320E698AFE7BBA7E9A696E4B8AAE6ADA3E5BC8FE78988E69CACE5908EE79A84E58F88E4B880E9878DE8A681E8BFADE4BBA3EFBC8CE8819AE784A6E4BA8EE7B3BBE7BB9FE7A8B3E5AE9AE680A7E68F90E58D87E38081E983A8E7BDB2E4BD93E9AA8CE4BC98E58C96E4B88EE5A49AE9A1B9E585B3E994AEE997AEE9A298E4BFAEE5A48DE38082E69CACE78988E69CACE59CA8E4BF9DE68C81E6A0B8E5BF83E79FA5E8AF86E7AEA1E79086E883BDE58A9BE79A84E59FBAE7A180E4B88AEFBC8CE8BF9BE4B880E6ADA5E68993E7A3A8E4BAA7E59381E7BB86E88A82EFBC8CE68F90E58D87E5BC80E58F91E4B88EE4BDBFE794A8E69588E78E87EFBC8CE4B8BAE794A8E688B7E5B8A6E69DA5E69BB4E6B581E79585E38081E58FAFE99DA0E79A84E5B9B3E58FB0E4BD93E9AA8CE380823C2F703E3C68323EE29CA820E69CACE6ACA1E69BB4E696B0E4BAAEE782B93C2F68323E3C756C3E3C6C693EF09F90B320446F636B657220436F6D706F736520E5BFABE9809FE983A8E7BDB2E694AFE68C813C2F6C693E3C6C693EE696B0E5A29EE59FBAE4BA8E20446F636B657220436F6D706F736520E79A84E4B880E994AEE983A8E7BDB2E696B9E6A188EFBC8CE5A4A7E5B985E7AE80E58C96E69CACE59CB0E58F8AE6B58BE8AF95E78EAFE5A283E690ADE5BBBAE6B581E7A88BEFBC8CE58AA9E58A9BE5BC80E58F91E88085E5928CE8BF90E7BBB4E4BABAE59198E5BFABE9809FE590AFE58AA820714B6E6F7720E5B9B3E58FB0E380823C2F6C693E3C6C693EF09F9BA0EFB88F20E5A49AE9A1B9E585B3E994AEE997AEE9A298E4BFAEE5A48D3C2F6C693E3C6C693EE99288E5AFB9E7A4BEE58CBAE58F8DE9A688E4B88EE58685E983A8E6B58BE8AF95E58F91E78EB0E79A84E997AEE9A298EFBC8CE99B86E4B8ADE4BFAEE5A48DE4BBA5E4B88BE58685E5AEB9EFBC9A3C2F6C693E3C6C6920636C6173733D22716C2D696E64656E742D31223EE4BFAEE5A48DE4BE9DE8B596204A415220E58C85E4B88BE8BDBDE8BF87E7A88BE4B8ADE69687E4BBB6E68D9FE59D8FE79A84E997AEE9A298EFBC9B3C2F6C693E3C6C6920636C6173733D22716C2D696E64656E742D31223EE8A7A3E586B3E9A1B9E79BAEE697A0E6B395E6ADA3E5B8B8E68993E58C85E69E84E5BBBAE79A84E69E84E5BBBAE5BC82E5B8B8EFBC9B3C2F6C693E3C6C6920636C6173733D22716C2D696E64656E742D31223EE4BFAEE5A48DE68EA5E58FA3E69687E6A1A3EFBC8853776167676572EFBC89E68993E5BC80E697B6E68AA5E99499E79A84E997AEE9A298EFBC9B3C2F6C693E3C6C6920636C6173733D22716C2D696E64656E742D31223EE4BC98E58C96E6B58FE8A788E599A8E9A1B5E7ADBEE59BBEE6A087E698BEE7A4BAE4B88DE585A8E79A8420554920E997AEE9A298EFBC9B3C2F6C693E3C6C6920636C6173733D22716C2D696E64656E742D31223EE4BFAEE5A48DE69687E4BBB6E4B88BE8BDBDE4B88EE9A284E8A788E58A9FE883BDE4B8ADE79A84E88BA5E5B9B220427567EFBC9B3C2F6C693E3C6C6920636C6173733D22716C2D696E64656E742D31223EE4BFAEE5A48DE696B0E5A29EE6A682E5BFB5E4BF9DE5AD98E5908EE58897E8A1A8E69CAAE6ADA3E7A1AEE588B7E696B0E79A84E698BEE7A4BAE5BC82E5B8B8EFBC9B3C2F6C693E3C6C6920636C6173733D22716C2D696E64656E742D31223EE8A1A5E58585E7BCBAE5A4B1E79A84E99D99E68081E8B7AFE794B1E9858DE7BDAEEFBC8CE7A1AEE4BF9DE5898DE7ABAFE9A1B5E99DA2E8AEBFE997AEE7A8B3E5AE9AE680A7E380823C2F6C693E3C6C693EF09FA7A9204E656F346A20E5889DE5A78BE58C96E695B0E68DAEE4BC98E58C963C2F6C693E3C6C693EE69BB4E696B0204E656F346A20E59BBEE695B0E68DAEE5BA93E79A84E5889DE5A78BE58C96E695B0E68DAEE69687E4BBB6EFBC8CE7A1AEE4BF9DE696B0E983A8E7BDB2E5AE9EE4BE8BE585B7E5A487E69BB4E5AE8CE695B4E38081E8A784E88C83E79A84E5889DE5A78BE79FA5E8AF86E7BB93E69E84E380823C2F6C693E3C6C693EF09F939A20E69687E6A1A3E7AB99E5908CE6ADA5E69BB4E696B03C2F6C693E3C6C693EE5908CE6ADA5E5AE8CE59684E5AE98E696B9E69687E6A1A3E7AB99E58685E5AEB9EFBC8CE6B6B5E79B96E983A8E7BDB2E68C87E58D97E38081E5B8B8E8A781E997AEE9A298E8A7A3E7AD94E58F8A2041504920E4BDBFE794A8E8AFB4E6988EEFBC8CE5B8AEE58AA9E794A8E688B7E69BB4E9AB98E69588E59CB0E4B88AE6898BE4B88EE99B86E6889020714B6E6F77E380823C2F6C693E3C2F756C3E3C703EF09F8E8920E887B4E8B0A2E4B88EE5B195E69C9B3C2F703E3C703EE6849FE8B0A2E6AF8FE4B880E4BD8DE697A9E69C9FE794A8E688B7E79A84E4BFA1E4BBBBE4B88EE58F8DE9A688EFBC81714B6E6F7720312E302E3320E79A84E58F91E5B883E698AFE68891E4BBACE68C81E7BBADE68993E7A3A8E4BAA7E59381E38081E8B4B4E8BF91E794A8E688B7E99C80E6B182E79A84E9878DE8A681E4B880E6ADA5E38082E69CAAE69DA5E68891E4BBACE5B086E7BBA7E7BBADE68EA8E8BF9BE79FA5E8AF86E68ABDE58F96E7B2BEE5BAA6E68F90E58D87E38081E59BBEE8B0B1E68EA8E79086E883BDE58A9BE5A29EE5BCBAE4B88EE5A49AE6BA90E695B0E68DAEE89E8DE59088E7AD89E696B9E59091EFBC8CE68993E980A0E69BB4E699BAE883BDE38081E69BB4E5BC80E694BEE79A84E4BC81E4B89AE7BAA7E79FA5E8AF86E4B8ADE69EA2E380823C2F703E3C703EE7AB8BE58DB3E58D87E7BAA7EFBC8CE4BD93E9AA8CE69BB4E7A8B3E5AE9AE38081E69BB4E4BEBFE68DB7E79A8420714B6E6F7720E79FA5E8AF86E5B9B3E58FB0EFBC813C2F703E, '0', '吴同', '2026-05-15 13:47:26', '', NULL, NULL);
 INSERT INTO `system_notice` VALUES (5, 'qKnow 1.1.0 稳定版发布', '2', 0x3C68313EF09F9A8020714B6E6F7720312E312E3020E7A8B3E5AE9AE78988E58F91E5B8833C2F68313E3C703E714B6E6F7720312E312E3020E698AFE7BBA720312E302E3320E78988E69CACE5908EE79A84E4B880E6ACA1E9878DE8A681E883BDE58A9BE58D87E7BAA7EFBC8CE8819AE784A6E4BA8EE7BB93E69E84E58C96E695B0E68DAEE68ABDE58F96E883BDE58A9BE79A84E6B7B1E5BAA6E689A9E5B195E4B88EE7B3BBE7BB9FE69EB6E69E84E4BC98E58C96E38082E69CACE78988E69CACE59CA8E4BF9DE68C81E5B9B3E58FB0E7A8B3E5AE9AE58FAFE99DA0E79A84E59FBAE7A180E4B88AEFBC8CE585A8E99DA2E5A29EE5BCBAE5AFB9E4B8BBE6B581E695B0E68DAEE5BA93EFBC88E58C85E68BACE59BBDE4BAA7E695B0E68DAEE5BA93EFBC89E79A84E694AFE68C81EFBC8CE5B9B6E5AE8CE59684E5A48DE69D82E8A1A8E7BB93E69E84E4B88BE79A84E79FA5E8AF86E5BBBAE6A8A1E883BDE58A9BEFBC8CE4B8BAE794A8E688B7E68F90E4BE9BE69BB4E781B5E6B4BBE38081E69BB4E7B2BEE58786E79A84E695B0E68DAEE68EA5E585A5E4B88EE59BBEE8B0B1E69E84E5BBBAE4BD93E9AA8CE380823C2F703E3C68323EE29CA820E69CACE6ACA1E69BB4E696B0E4BAAEE782B93C2F68323E3C68333EE7BB93E69E84E58C96E68ABDE58F96E883BDE58A9BE689A9E5B1953C2F68333E3C756C3E3C6C693EF09F94A720E5AE8CE68890E4BBA3E7A081E980BBE8BE91E9878DE69E84EFBC8CE68F90E58D87E58FAFE7BBB4E68AA4E680A73C2F6C693E3C6C693EE5AFB9E7BB93E69E84E58C96E68ABDE58F96E6A0B8E5BF83E6A8A1E59D97E8BF9BE8A18CE7B3BBE7BB9FE680A7E9878DE69E84EFBC8CE4BC98E58C96E6A8A1E59D97E8818CE8B4A3E58892E58886E4B88EE8B083E794A8E993BEE8B7AFEFBC8CE698BEE89197E68F90E58D87E4BBA3E7A081E58FAFE8AFBBE680A7E4B88EE5908EE7BBADE8BFADE4BBA3E69588E78E87E380823C2F6C693E3C6C693EF09F8C9020E696B0E5A29EE5AFB9204F7261636C65E38081E8BEBEE6A2A6E38081506F737467726553514CE38081E4BABAE5A4A7E98791E4BB93E7AD89E4B8BBE6B581E695B0E68DAEE5BA93E79A84E694AFE68C813C2F6C693E3C6C693EE78EB0E5B7B2E694AFE68C81E5A49AE7A78DE585B3E7B3BBE59E8BE695B0E68DAEE5BA93E4BD9CE4B8BAE7BB93E69E84E58C96E695B0E68DAEE6BA90EFBC8CE58C85E68BACE59BBDE4BAA7E695B0E68DAEE5BA9320E8BEBEE6A2A6EFBC88444DEFBC8920E5928C20E4BABAE5A4A7E98791E4BB93EFBC884B696E67626173654553EFBC89E380823C2F6C693E3C6C693EF09F918920E4BDBFE794A8E68F90E7A4BAEFBC9AE9858DE7BDAEE695B0E68DAEE6BA90E697B6EFBC8CE8AFB7E59CA8E9A9B1E58AA8E7B1BBE59E8BE4B88BE68B89E88F9CE58D95E4B8ADE98089E68BA9E5AFB9E5BA94E695B0E68DAEE5BA93E7B1BBE59E8BEFBC8CE7B3BBE7BB9FE5B086E887AAE58AA8E58AA0E8BDBDE98082E9858DE599A8E5B9B6E5AE8CE68890E8BF9EE68EA5E6A0A1E9AA8CE380823C2F6C693E3C6C693EF09F949720E694AFE68C81E5A49AE5AFB9E5A49AE8A1A8E7BB93E69E84E4B88BE79A84E6A682E5BFB5E4B88EE585B3E7B3BBE698A0E5B084E9858DE7BDAE3C2F6C693E3C6C693EE99288E5AFB9E4B89AE58AA1E7B3BBE7BB9FE4B8ADE5B8B8E8A781E79A84E5A49AE5AFB9E5A49AE585B3E88194E59CBAE699AFEFBC88E5A682E794A8E688B72DE8A792E889B22DE69D83E99990E4B8ADE997B4E8A1A8EFBC89EFBC8CE696B0E5A29EE4B893E794A8E698A0E5B084E980BBE8BE91EFBC8CE794A8E688B7E58FAFE9809AE8BF87E58FAFE8A786E58C96E9858DE7BDAEE7B2BEE58786E5AE9AE4B989E8B7A8E8A1A8E5AE9EE4BD93E585B3E7B3BBEFBC8CE68F90E58D87E79FA5E8AF86E59BBEE8B0B1E5BBBAE6A8A1E79A84E5AE8CE695B4E680A7E4B88EE58786E7A1AEE680A7E380823C2F6C693E3C2F756C3E3C703EF09F8E8920E887B4E8B0A2E4B88EE5B195E69C9B3C2F703E3C703EE6849FE8B0A2E5B9BFE5A4A7E794A8E688B7E4B880E79BB4E4BBA5E69DA5E79A84E4BFA1E4BBBBE4B88EE58F8DE9A688EFBC81714B6E6F7720312E312E3020E79A84E58F91E5B883E6A087E5BF97E79D80E68891E4BBACE59CA8E5A4AFE5AE9EE695B0E68DAEE68EA5E585A5E5BA95E5BAA7E38081E68BA5E68AB1E5A49AE58583E68A80E69CAFE7949FE68081E696B9E99DA2E8BF88E587BAE4BA86E59D9AE5AE9EE4B880E6ADA5E38082E69CAAE69DA5EFBC8CE68891E4BBACE5B086E68C81E7BBADE4BC98E58C96E79FA5E8AF86E68ABDE58F96E7B2BEE5BAA6E38081E4B8B0E5AF8CE59BBEE8B0B1E5BBBAE6A8A1E883BDE58A9BEFBC8CE5B9B6E6B7B1E58C96E5AFB9E4BFA1E5889BE78EAFE5A283E79A84E694AFE68C81EFBC8CE887B4E58A9BE4BA8EE68993E980A0E69BB4E699BAE883BDE38081E69BB4E58FAFE99DA0E79A84E4BC81E4B89AE7BAA7E79FA5E8AF86E7AEA1E79086E5B9B3E58FB0E380823C2F703E3C703EE7AB8BE58DB3E58D87E7BAA7EFBC8CE4BD93E9AA8CE69BB4E5BCBAE5A4A7E38081E69BB4E781B5E6B4BBE79A8420714B6E6F7720E7BB93E69E84E58C96E68ABDE58F96E883BDE58A9BEFBC813C2F703E, '0', '吴同', '2026-05-15 13:47:41', '', NULL, NULL);
@@ -1206,7 +1204,7 @@ CREATE TABLE `system_post`  (
   `post_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '岗位ID',
   `post_code` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '岗位编码',
   `post_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '岗位名称',
-  `post_sort` int(4) NOT NULL COMMENT '显示顺序',
+  `post_sort` int(11) NOT NULL COMMENT '显示顺序',
   `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '状态（0正常 1停用）',
   `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '创建者',
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
@@ -1214,7 +1212,7 @@ CREATE TABLE `system_post`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`post_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '岗位信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '岗位信息表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_post
@@ -1235,7 +1233,7 @@ CREATE TABLE `system_role`  (
   `role_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '角色ID',
   `role_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '角色名称',
   `role_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '角色权限字符串',
-  `role_sort` int(4) NOT NULL COMMENT '显示顺序',
+  `role_sort` int(11) NOT NULL COMMENT '显示顺序',
   `data_scope` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '1' COMMENT '数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限）',
   `menu_check_strictly` tinyint(1) NULL DEFAULT 1 COMMENT '菜单树选择项是否关联显示',
   `dept_check_strictly` tinyint(1) NULL DEFAULT 1 COMMENT '部门树选择项是否关联显示',
@@ -1247,14 +1245,14 @@ CREATE TABLE `system_role`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`role_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 100 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '角色信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 101 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '角色信息表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_role
 -- ----------------------------
 INSERT INTO `system_role` VALUES (1, '超级管理员', 'admin', 1, '1', 1, 1, '0', '0', '吴同', '2026-04-20 09:32:53', '', NULL, '超级管理员');
 INSERT INTO `system_role` VALUES (2, '普通角色', 'common', 3, '2', 1, 1, '0', '0', '吴同', '2026-04-20 09:32:53', '吴同', '2026-06-03 11:15:39', '普通角色');
-INSERT INTO `system_role` VALUES (100, '系统管理员', 'system', 2, '1', 1, 1, '0', '0', '吴同', '2026-06-03 11:12:40', '吴同', '2026-06-03 11:15:35', NULL);
+INSERT INTO `system_role` VALUES (100, '系统管理员', 'system', 2, '1', 1, 1, '0', '0', '吴同', '2026-06-03 11:12:40', '超级管理员', '2026-06-29 16:06:48', NULL);
 
 -- ----------------------------
 -- Table structure for system_role_dept
@@ -1264,7 +1262,7 @@ CREATE TABLE `system_role_dept`  (
   `role_id` bigint(20) NOT NULL COMMENT '角色ID',
   `dept_id` bigint(20) NOT NULL COMMENT '部门ID',
   PRIMARY KEY (`role_id`, `dept_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '角色和部门关联表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '角色和部门关联表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_role_dept
@@ -1278,7 +1276,7 @@ CREATE TABLE `system_role_menu`  (
   `role_id` bigint(20) NOT NULL COMMENT '角色ID',
   `menu_id` bigint(20) NOT NULL COMMENT '菜单ID',
   PRIMARY KEY (`role_id`, `menu_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '角色和菜单关联表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '角色和菜单关联表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_role_menu
@@ -1416,9 +1414,6 @@ INSERT INTO `system_role_menu` VALUES (2, 2416);
 INSERT INTO `system_role_menu` VALUES (2, 2417);
 INSERT INTO `system_role_menu` VALUES (2, 2418);
 INSERT INTO `system_role_menu` VALUES (100, 1);
-INSERT INTO `system_role_menu` VALUES (100, 2);
-INSERT INTO `system_role_menu` VALUES (100, 3);
-INSERT INTO `system_role_menu` VALUES (100, 100);
 INSERT INTO `system_role_menu` VALUES (100, 101);
 INSERT INTO `system_role_menu` VALUES (100, 102);
 INSERT INTO `system_role_menu` VALUES (100, 103);
@@ -1427,76 +1422,17 @@ INSERT INTO `system_role_menu` VALUES (100, 105);
 INSERT INTO `system_role_menu` VALUES (100, 106);
 INSERT INTO `system_role_menu` VALUES (100, 107);
 INSERT INTO `system_role_menu` VALUES (100, 108);
-INSERT INTO `system_role_menu` VALUES (100, 109);
-INSERT INTO `system_role_menu` VALUES (100, 110);
-INSERT INTO `system_role_menu` VALUES (100, 111);
-INSERT INTO `system_role_menu` VALUES (100, 112);
-INSERT INTO `system_role_menu` VALUES (100, 113);
-INSERT INTO `system_role_menu` VALUES (100, 114);
-INSERT INTO `system_role_menu` VALUES (100, 115);
 INSERT INTO `system_role_menu` VALUES (100, 500);
 INSERT INTO `system_role_menu` VALUES (100, 501);
-INSERT INTO `system_role_menu` VALUES (100, 1000);
-INSERT INTO `system_role_menu` VALUES (100, 1001);
-INSERT INTO `system_role_menu` VALUES (100, 1002);
-INSERT INTO `system_role_menu` VALUES (100, 1003);
-INSERT INTO `system_role_menu` VALUES (100, 1004);
-INSERT INTO `system_role_menu` VALUES (100, 1005);
-INSERT INTO `system_role_menu` VALUES (100, 1006);
 INSERT INTO `system_role_menu` VALUES (100, 1007);
-INSERT INTO `system_role_menu` VALUES (100, 1008);
-INSERT INTO `system_role_menu` VALUES (100, 1009);
-INSERT INTO `system_role_menu` VALUES (100, 1010);
-INSERT INTO `system_role_menu` VALUES (100, 1011);
 INSERT INTO `system_role_menu` VALUES (100, 1012);
-INSERT INTO `system_role_menu` VALUES (100, 1013);
-INSERT INTO `system_role_menu` VALUES (100, 1014);
-INSERT INTO `system_role_menu` VALUES (100, 1015);
 INSERT INTO `system_role_menu` VALUES (100, 1016);
-INSERT INTO `system_role_menu` VALUES (100, 1017);
-INSERT INTO `system_role_menu` VALUES (100, 1018);
-INSERT INTO `system_role_menu` VALUES (100, 1019);
 INSERT INTO `system_role_menu` VALUES (100, 1020);
-INSERT INTO `system_role_menu` VALUES (100, 1021);
-INSERT INTO `system_role_menu` VALUES (100, 1022);
-INSERT INTO `system_role_menu` VALUES (100, 1023);
-INSERT INTO `system_role_menu` VALUES (100, 1024);
 INSERT INTO `system_role_menu` VALUES (100, 1025);
-INSERT INTO `system_role_menu` VALUES (100, 1026);
-INSERT INTO `system_role_menu` VALUES (100, 1027);
-INSERT INTO `system_role_menu` VALUES (100, 1028);
-INSERT INTO `system_role_menu` VALUES (100, 1029);
 INSERT INTO `system_role_menu` VALUES (100, 1030);
-INSERT INTO `system_role_menu` VALUES (100, 1031);
-INSERT INTO `system_role_menu` VALUES (100, 1032);
-INSERT INTO `system_role_menu` VALUES (100, 1033);
-INSERT INTO `system_role_menu` VALUES (100, 1034);
 INSERT INTO `system_role_menu` VALUES (100, 1035);
-INSERT INTO `system_role_menu` VALUES (100, 1036);
-INSERT INTO `system_role_menu` VALUES (100, 1037);
-INSERT INTO `system_role_menu` VALUES (100, 1038);
 INSERT INTO `system_role_menu` VALUES (100, 1039);
-INSERT INTO `system_role_menu` VALUES (100, 1040);
-INSERT INTO `system_role_menu` VALUES (100, 1041);
 INSERT INTO `system_role_menu` VALUES (100, 1042);
-INSERT INTO `system_role_menu` VALUES (100, 1043);
-INSERT INTO `system_role_menu` VALUES (100, 1044);
-INSERT INTO `system_role_menu` VALUES (100, 1045);
-INSERT INTO `system_role_menu` VALUES (100, 1046);
-INSERT INTO `system_role_menu` VALUES (100, 1047);
-INSERT INTO `system_role_menu` VALUES (100, 1048);
-INSERT INTO `system_role_menu` VALUES (100, 1049);
-INSERT INTO `system_role_menu` VALUES (100, 1050);
-INSERT INTO `system_role_menu` VALUES (100, 1051);
-INSERT INTO `system_role_menu` VALUES (100, 1052);
-INSERT INTO `system_role_menu` VALUES (100, 1053);
-INSERT INTO `system_role_menu` VALUES (100, 1054);
-INSERT INTO `system_role_menu` VALUES (100, 1055);
-INSERT INTO `system_role_menu` VALUES (100, 1056);
-INSERT INTO `system_role_menu` VALUES (100, 1057);
-INSERT INTO `system_role_menu` VALUES (100, 1058);
-INSERT INTO `system_role_menu` VALUES (100, 1059);
-INSERT INTO `system_role_menu` VALUES (100, 1060);
 INSERT INTO `system_role_menu` VALUES (100, 2000);
 INSERT INTO `system_role_menu` VALUES (100, 2001);
 INSERT INTO `system_role_menu` VALUES (100, 2002);
@@ -1620,6 +1556,8 @@ INSERT INTO `system_role_menu` VALUES (100, 2415);
 INSERT INTO `system_role_menu` VALUES (100, 2416);
 INSERT INTO `system_role_menu` VALUES (100, 2417);
 INSERT INTO `system_role_menu` VALUES (100, 2418);
+INSERT INTO `system_role_menu` VALUES (100, 2471);
+INSERT INTO `system_role_menu` VALUES (100, 2472);
 
 -- ----------------------------
 -- Table structure for system_user
@@ -1646,13 +1584,13 @@ CREATE TABLE `system_user`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 100 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 101 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户信息表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_user
 -- ----------------------------
-INSERT INTO `system_user` VALUES (1, 100, 'admin', '超级管理员', '00', 'support@qiantong.tech', '15888888888', '0', '', '$2a$10$.GvAEzXclpKHi8e3k4SqZOyqE7sRlnvUBCQqRXfYyy7odE6wkOziq', '0', '0', '127.0.0.1', '2026-05-18 09:28:59', '吴同', '2026-04-20 09:32:53', '', '2026-05-18 09:28:58', '管理员');
-INSERT INTO `system_user` VALUES (100, 100, 'qKnow', '吴同', '00', '', '18888888888', '0', '', '$2a$10$M9QTlVS3URMVLDMMmJYYress8MgeKE0ahcNQSwO.T/TI8/U1U7pF6', '0', '0', '', NULL, '吴同', '2026-06-03 14:48:53', '', NULL, NULL);
+INSERT INTO `system_user` VALUES (1, 100, 'admin', '超级管理员', '00', 'support@qiantong.tech', '15888888888', '0', '', '$2a$10$QTX16TRIbQ00ssEAZ1RB7Ov7jhhogF3IkBDVQqLSarC0c5e5MU0Wm', '0', '0', '127.0.0.1', '2026-07-08 11:45:08', '吴同', '2026-04-20 09:32:53', '吴同', '2026-07-08 11:45:07', '管理员');
+INSERT INTO `system_user` VALUES (2, 100, 'qKnow', '吴同', '00', '', '18888888888', '0', '', '$2a$10$TXvMO3ea1uL69EMAX2WszenDhXlsMkfBkOGyOBvPK8jd3IInCbdLu', '0', '0', '127.0.0.1', '2026-07-08 11:38:01', '吴同', '2026-06-03 14:48:53', '吴同', '2026-07-08 11:38:00', NULL);
 
 -- ----------------------------
 -- Table structure for system_user_post
@@ -1662,7 +1600,7 @@ CREATE TABLE `system_user_post`  (
   `user_id` bigint(20) NOT NULL COMMENT '用户ID',
   `post_id` bigint(20) NOT NULL COMMENT '岗位ID',
   PRIMARY KEY (`user_id`, `post_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户与岗位关联表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户与岗位关联表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_user_post
@@ -1677,13 +1615,12 @@ CREATE TABLE `system_user_role`  (
   `user_id` bigint(20) NOT NULL COMMENT '用户ID',
   `role_id` bigint(20) NOT NULL COMMENT '角色ID',
   PRIMARY KEY (`user_id`, `role_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户和角色关联表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户和角色关联表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_user_role
 -- ----------------------------
 INSERT INTO `system_user_role` VALUES (1, 1);
-INSERT INTO `system_user_role` VALUES (100, 100);
-
+INSERT INTO `system_user_role` VALUES (2, 100);
 
 SET FOREIGN_KEY_CHECKS = 1;
