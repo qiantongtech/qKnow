@@ -542,6 +542,10 @@
         margin-top: 0px;
     }
 
+    .hideSidebar .topmenu-container .el-sub-menu .el-sub-menu__icon-arrow {
+        margin-right: 20px;
+    }
+
     .topmenu-container .more-top-menu .el-sub-menu__title .svg-icon,
     .topmenu-container .more-top-menu .el-sub-menu__icon-arrow {
         flex-shrink: 0;
