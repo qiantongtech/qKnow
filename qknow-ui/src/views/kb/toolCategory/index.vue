@@ -115,6 +115,7 @@
           </el-col>
           <el-col :span="1.5">
             <el-button
+                class="toggle-expand-all"
                 type="primary"
                 plain
                 @click="toggleExpandAll"
