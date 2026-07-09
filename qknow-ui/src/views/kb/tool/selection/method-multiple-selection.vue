@@ -32,7 +32,6 @@
         ref="queryRef"
         :inline="true"
         v-show="showSearch"
-        label-width="68px"
     >
       <el-form-item label="名称" prop="name">
         <el-input
@@ -65,17 +64,19 @@
         :data="dataList"
         reserve-selection
         row-key="id"
+        :default-sort="defaultSort"
         @selection-change="handleSelectionChange"
         @row-click="handleRowClick"
+        @sort-change="handleSortChange"
     >
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="编码" align="center" prop="id" width="60"/>
+      <el-table-column label="编号" align="center" prop="id" width="80" sortable="custom" :sort-orders="['descending', 'ascending']"/>
       <el-table-column label="名称" align="left" prop="name" min-width="150">
         <template #default="scope">
           {{ scope.row.name || '-' }}
         </template>
       </el-table-column>
-      <el-table-column label="描述" align="left" prop="description" min-width="250">
+      <el-table-column label="描述" align="left" prop="description" min-width="250" :show-overflow-tooltip="{ effect: 'light' }">
         <template #default="scope">
           {{ scope.row.description || '-' }}
         </template>
@@ -100,7 +101,7 @@
           {{ scope.row.createBy || '-' }}
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+      <el-table-column label="创建时间" align="center" prop="createTime" width="180" sortable="custom" :sort-orders="['descending', 'ascending']">
         <template #default="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
@@ -134,6 +135,7 @@ const loading = ref(true);
 const showSearch = ref(true);
 const total = ref(0);
 const dateRange = ref([]);
+const defaultSort = ref({prop: 'createTime', order: 'desc'});
 const data = reactive({
   form: {},
   queryParams: {
@@ -291,6 +293,13 @@ function getList() {
 
 /** 搜索按钮操作 */
 function handleQuery() {
+  getList();
+}
+
+/** 排序触发事件 */
+function handleSortChange(column, prop, order) {
+  queryParams.value.orderByColumn = column.prop;
+  queryParams.value.isAsc = column.order;
   getList();
 }
 

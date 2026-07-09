@@ -66,7 +66,7 @@
                                     placeholder="请输入提示词"
                                     resize="vertical"
                                     show-word-limit
-                                    maxlength="1024"
+                                    maxlength="1024个字符"
                                 />
                             </el-form-item>
                         </el-col>

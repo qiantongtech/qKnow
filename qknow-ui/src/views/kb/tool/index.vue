@@ -365,7 +365,7 @@
                   <i class="iconfont-mini icon-xinzeng mr5"></i>新增
                 </el-button>
                 <el-table :data="form.paramList" style="width: 100%">
-                  <el-table-column label="参数名" width="150" align="center" prop="name">
+                  <el-table-column label="参数名" width="150" align="left" prop="name">
                     <template #default="scope">
                       <el-input v-model="scope.row.name" type="text" placeholder="请输入参数名"/>
                     </template>
@@ -387,7 +387,7 @@
                       </el-select>
                     </template>
                   </el-table-column>
-                  <el-table-column label="描述" align="center" prop="description">
+                  <el-table-column label="描述" align="left" prop="description">
                     <template #default="scope">
                       <el-input v-model="scope.row.description" type="text" placeholder="请输入描述"/>
                     </template>
@@ -414,7 +414,7 @@
           <el-row :gutter="20">
             <el-col :span="24">
               <el-form-item label="工具内容" prop="description">
-                <div style="height: 250px; display: flex;flex-direction: column;align-items: center;width: 100%;">
+                <div style="height: 400px; display: flex;flex-direction: column;align-items: center;width: 100%;">
 
 
                   <div
