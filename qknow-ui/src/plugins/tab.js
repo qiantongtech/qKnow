@@ -19,26 +19,39 @@
 import useTagsViewStore from '@/store/system/tagsView';
 import router from '@/router';
 
+function normalizeQuery(query) {
+    if (typeof query !== 'string') {
+        return query;
+    }
+
+    try {
+        return JSON.parse(query);
+    } catch {
+        return query;
+    }
+}
+
 export default {
     // 刷新当前tab页签
     refreshPage(obj) {
         const { path, query, matched } = router.currentRoute.value;
-        if (obj === undefined) {
+        let target = obj;
+        if (target === undefined) {
             matched.forEach((m) => {
                 if (m.components && m.components.default && m.components.default.name) {
                     if (!['Layout', 'ParentView'].includes(m.components.default.name)) {
-                        obj = { name: m.components.default.name, path: path, query: query };
+                        target = { name: m.components.default.name, path: path, query: query };
                     }
                 }
             });
         }
         return useTagsViewStore()
-            .delCachedView(obj)
+            .delCachedView(target)
             .then(() => {
-                const { path, query } = obj;
+                const { path, query } = target;
                 router.replace({
                     path: '/redirect' + path,
-                    query: query
+                    query: normalizeQuery(query)
                 });
             });
     },
