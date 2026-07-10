@@ -38,7 +38,7 @@ export default {
                 const { path, query } = obj;
                 router.replace({
                     path: '/redirect' + path,
-                    query: query ? JSON.parse(query) : query
+                    query: query
                 });
             });
     },
