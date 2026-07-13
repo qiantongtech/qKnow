@@ -52,7 +52,7 @@ public class KbRuntimeController extends BaseController {
     private IKbRuntimeService kbRuntimeService;
 
     @Operation(summary = "查询bot运行列表")
-    @PreAuthorize("@ss.hasPermi('kb:kb:runtime:list')")
+//    @PreAuthorize("@ss.hasPermi('kb:kb:runtime:list')")
     @GetMapping("/list")
     public CommonResult<PageResult<KbRuntimeRespVO>> list(KbRuntimePageReqVO kbRuntime) {
         PageResult<KbRuntimeDO> page = kbRuntimeService.getKbRuntimePage(kbRuntime);
@@ -60,7 +60,7 @@ public class KbRuntimeController extends BaseController {
     }
 
     @Operation(summary = "获取bot运行详细信息")
-    @PreAuthorize("@ss.hasPermi('kb:kb:runtime:query')")
+//    @PreAuthorize("@ss.hasPermi('kb:kb:runtime:query')")
     @GetMapping(value = "/{id}")
     public CommonResult<KbRuntimeRespVO> getInfo(@PathVariable("id") Long id) {
         KbRuntimeDO kbRuntimeDO = kbRuntimeService.getKbRuntimeById(id);
@@ -68,7 +68,7 @@ public class KbRuntimeController extends BaseController {
     }
 
     @Operation(summary = "删除bot运行")
-    @PreAuthorize("@ss.hasPermi('kb:kb:runtime:remove')")
+//    @PreAuthorize("@ss.hasPermi('kb:kb:runtime:remove')")
     @Log(title = "bot运行", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public CommonResult<Integer> remove(@PathVariable Long[] ids) {
