@@ -70,16 +70,13 @@
  */
 
 // 定义文档基础路径
-const DOCS_BASE_URL = 'http://114.66.57.2:8084/docs';
+const DOCS_BASE_URL = 'https://qknow.qiantong.tech';
 
 export const guideTipConfig = {
-    // 首页
-    index: {
-        title: '重要提醒：本系统为演示站点，<u>每日凌晨 02:30 清除所有用户数据</u>，以保障系统整洁与稳定运行。如需体验完整功能，建议申请试用专属测试环境。',
-        content: `建议先看视频再试用！40分钟完整演示 qKnow 商业版全流程操作，助您高效理解系统能力。 👉 观看视频 <strong><a href="https://www.bilibili.com/video/BV1ojkmBNEm3/" target="_blank">《qKnow智能体构建平台商业版全流程实操演示(2025年11月版)》</a></strong>`,
-        // content: `建议先看视频再试用！60 分钟 qKnow 商业版全流程操作演示，助你高效 get 系统核心能力。实操视频正在精心制作中，上线后将第一时间同步，敬请期待～`,
-        type: 'danger',
-        version: '1.0'
+    'index': {
+        title: '重要提醒：本系统为演示站点，<u>每日凌晨 02:30 清除所有用户数据</u>，以保障系统整洁与稳定运行。',
+        content: `如需体验完整功能，请下载开源代码自行部署。如需 <u>开源版品牌授权</u> 或 <u>咨询商业版</u>，请点击查看详情： 👉  <a href="${DOCS_BASE_URL}/business.html" target="_blank">了解授权详情</a>`,
+        type: 'danger', version: '1.0'
     },
     // 知识图谱
     'kg/graph.list': {
