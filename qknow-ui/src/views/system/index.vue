@@ -1,23 +1,25 @@
 <!--
  Copyright © 2025-present Jiangsu Qiantong Technology Co., Ltd.
- 
+
  This file is part of qKnow Intelligent Agent Building Platform (Open Source Edition).
- 
+
  qKnow is licensed under Apache License 2.0 with additional qKnow terms.
  You may use qKnow for commercial purposes, but you may not remove, hide,
  modify, or replace the qKnow logo, copyright notices, license notices,
  or attribution information without a separate commercial license.
- 
+
  White-label use, OEM distribution, rebranding, or presenting qKnow as
  another product requires separate commercial authorization from
  Jiangsu Qiantong Technology Co., Ltd.
- 
+
  Business License: https://community.qknow.ai/business/policy.html
  See the LICENSE file in the project root for full license information.
 -->
 
 <template>
     <div class="app-container stagingIndex">
+      <!-- 演示环境重要提醒 -->
+      <GuideTip v-if="isDemo" tip-id="index" />
         <el-row :gutter="15">
             <el-col :xs="24" :sm="24" :md="18" :lg="18" class="home-gutter">
                 <div class="userInfo module-1">
@@ -388,6 +390,8 @@
 
     // 认证模式
     const authType = import.meta.env.VITE_APP_AUTH_TYPE;
+    // 演示模式标识
+    const isDemo = import.meta.env.VITE_APP_MODE === 'demo';
     function logout() {
         ElMessageBox.confirm('确定注销并退出系统吗？', '提示', {
             confirmButtonText: '确定',
