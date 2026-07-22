@@ -18,12 +18,12 @@
 
 package tech.qiantong.qknow.module.ext.controller.admin.extSchemaRelation.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 import tech.qiantong.qknow.common.annotation.Excel;
-import java.util.Date;
+
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 关系配置 Response VO 对象 ext_schema_relation

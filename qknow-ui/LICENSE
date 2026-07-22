@@ -1,20 +1,15 @@
-The MIT License (MIT)
+ Copyright © 2025-present Jiangsu Qiantong Technology Co., Ltd.
 
-Copyright (c) 2018 Anivia
+ This file is part of qKnow Intelligent Agent Building Platform (Open Source Edition).
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
+ qKnow is licensed under Apache License 2.0 with additional qKnow terms.
+ You may use qKnow for commercial purposes, but you may not remove, hide,
+ modify, or replace the qKnow logo, copyright notices, license notices,
+ or attribution information without a separate commercial license.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+ White-label use, OEM distribution, rebranding, or presenting qKnow as
+ another product requires separate commercial authorization from
+ Jiangsu Qiantong Technology Co., Ltd.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ Business License: https://community.qknow.ai/business/policy.html
+ See the LICENSE file in the project root for full license information.
