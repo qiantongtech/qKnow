@@ -1,22 +1,16 @@
-# Open Source License
+Copyright © 2025-present Jiangsu Qiantong Technology Co., Ltd.
 
-qKnow is made available under the Apache License 2.0, subject to the following additional conditions specific to qKnow:
+This file is part of qKnow Intelligent Agent Building Platform (Open Source Edition).
 
-For the purpose of this License, "qKnow" refers to the entire software project, including but not limited to its frontend, backend, API, and related documentation in whole or in part.
+qKnow is licensed under Apache License 2.0 with additional qKnow terms.
+You may use qKnow for commercial purposes, but you may not remove, hide,
+modify, or replace the qKnow logo, copyright notices, license notices,
+or attribution information without a separate commercial license.
 
-For the purpose of this License, "Producer" refers to Jiangsu Qiantong Technology Co., Ltd.
+White-label use, OEM distribution, rebranding, or presenting qKnow as
+another product requires separate commercial authorization from
+Jiangsu Qiantong Technology Co., Ltd.
 
-1. You may use qKnow for commercial purposes, provided that you do not remove, hide, or modify the qKnow logo, copyright notices, license notices, or attribution information displayed in the qKnow.
+Business License: https://community.qknow.ai/business/policy.html
+See the LICENSE file in the project root for full license information.
 
-If you wish to remove, hide, obscure, replace, or modify such logo, copyright notices, license notices, or attribution information, including but not limited to white-label use, OEM distribution, rebranding, or presenting qKnow as another product, you must obtain a separate commercial license from the Producer.
-
-2. As a contributor, you should agree that:
-
-a. The Producer can adjust the open-source agreement to be more strict or relaxed as deemed necessary.
-b. Your contributed code may be used for commercial purposes, including but not limited to its cloud business operations.
-
-Apart from the specific conditions mentioned above, all other rights and restrictions follow the Apache License 2.0. Detailed information about the Apache License 2.0 can be found at http://www.apache.org/licenses/LICENSE-2.0.
-
-The interactive design of this product is protected by appearance patent.
-
-© 2025 Jiangsu Qiantong Technology Co., Ltd
