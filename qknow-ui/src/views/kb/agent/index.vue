@@ -1,17 +1,17 @@
 <!--
  Copyright © 2025-present Jiangsu Qiantong Technology Co., Ltd.
- 
+
  This file is part of qKnow Intelligent Agent Building Platform (Open Source Edition).
- 
+
  qKnow is licensed under Apache License 2.0 with additional qKnow terms.
  You may use qKnow for commercial purposes, but you may not remove, hide,
  modify, or replace the qKnow logo, copyright notices, license notices,
  or attribution information without a separate commercial license.
- 
+
  White-label use, OEM distribution, rebranding, or presenting qKnow as
  another product requires separate commercial authorization from
  Jiangsu Qiantong Technology Co., Ltd.
- 
+
  Business License: https://community.qknow.ai/business/policy.html
  See the LICENSE file in the project root for full license information.
 -->
@@ -164,6 +164,29 @@
                             </div>
                         </el-col>
                     </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="24">
+                            <!-- Skills -->
+                            <el-form-item label="Skills">
+                                <el-button type="primary" size="small" @click="handleAddSkill" plain>
+                                   <i class="iconfont-mini icon-upload-cloud-line mr5"></i>导入Skills</el-button>
+                            </el-form-item>
+                            <div style="margin: 0 0 10px 80px">
+                                <el-table :data="form.skills" border style="width: 100%">
+                                    <el-table-column prop="name" label="Skills 名称">
+                                        <template #default="{ row }">
+                                            {{ row.name }}
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column label="操作" width="80" align="center">
+                                        <template #default="{ $index }">
+                                            <el-button type="danger" size="small" @click="handleDeleteSkill($index)">删除</el-button>
+                                        </template>
+                                    </el-table-column>
+                                </el-table>
+                            </div>
+                        </el-col>
+                    </el-row>
                 </el-form>
                 <div class="dialog-footer">
                     <!--          <el-button size="mini" @click="handleReset">清 空</el-button>-->
@@ -199,12 +222,16 @@
 
         <!-- 工具选择组件 -->
         <method-multiple-selection ref="methodMultipleSelectionRef" @confirm="handleToolConfirm" />
+
+        <!-- Skills 选择组件 -->
+        <skills-selection ref="skillsSelectionRef" @confirm="handleSkillConfirm" />
     </div>
 </template>
 
 <script setup name="Agent">
     import methodMultipleSelection from '@/views/kb/tool/selection/method-multiple-selection.vue';
     import knowledgeBaseMultiple from '@/views/kmc/knowledgeBase/selection/knowledgeBaseMultiple.vue';
+    import skillsSelection from "@/views/kb/skills/selection/skills-selection.vue"
     import { getChatModelDict } from '@/api/ai/myModel/myModel.js';
     import { addConfig, getConfigByBotId, updateConfig } from '@/api/kb/agent/config';
     import { debugAgent } from '@/api/kb/agent/debug';
@@ -217,6 +244,7 @@
     const agentFormRef = ref(null);
     const knowledgeBaseMultipleRef = ref(null);
     const methodMultipleSelectionRef = ref(null);
+    const skillsSelectionRef = ref(null);
     const messageListRef = ref(null); // 消息列表引用
 
     // 表单数据
@@ -227,7 +255,8 @@
         prePrompt: '',
         variables: [{ id: 1, name: 'input', description: '用户输入' }],
         knowledges: [],
-        tools: []
+        tools: [],
+        skills: [],
     });
 
     // 从路由获取 botId（如果有）
@@ -318,6 +347,17 @@
                         description: ''
                     }));
                 }
+
+                // 解析 skillIds 和 skillNames
+                if (config.skillIds && config.skillNames) {
+                    const ids = config.skillIds.split(',').filter(id => id.trim());
+                    const names = config.skillNames;
+                    form.skills = ids.map((id, index) => ({
+                        id: Number(id),
+                        name: names[index],
+                        description: ''
+                    }));
+                }
             })
             .catch((err) => {
                 getModelList();
@@ -388,6 +428,27 @@
         form.tools.splice(index, 1);
     }
 
+    // 处理添加 Skills
+    function handleAddSkill() {
+      skillsSelectionRef.value.open(form.skills || []);
+    }
+
+    // 处理 Skills 确认选择
+    function handleSkillConfirm(selectedData) {
+      form.skills = selectedData.map(item => ({
+        id: item.id,
+        name: item.name,
+        description: item.description
+      }));
+      proxy.$modal.msgSuccess(`已选择 ${selectedData.length} 个 Skills`);
+    }
+
+    // 处理删除 Skills
+    function handleDeleteSkill(index) {
+      form.skills.splice(index, 1);
+      proxy.$modal.msgSuccess(`已选择 ${selectedData.length} 个mcp`);
+    }
+
     // 处理发送消息
     function handleSendMessage(content) {
         if (!content || !content.trim()) {
@@ -433,7 +494,8 @@
             prePrompt: form.prePrompt,
             parameters: '{}',
             knowledgeIds: form.knowledges.map((k) => k.id).join(','),
-            toolMethodIds: form.tools.map((t) => t.id).join(',')
+            toolMethodIds: form.tools.map((t) => t.id).join(','),
+            skillIds: form.skills.map(s => s.id).join(','),
         };
 
         nextTick(() => {
@@ -502,6 +564,7 @@
         form.variables = [{ id: 1, name: 'input', description: '用户输入' }];
         form.knowledges = [];
         form.tools = [];
+        form.skills = [];
         proxy.$modal.msgSuccess('已清空表单');
     }
 
@@ -545,6 +608,8 @@
                 knowledgeIds: form.knowledges.map((k) => k.id).join(','),
                 // 工具方法 IDs（从对象数组提取 ID 数组）
                 toolMethodIds: form.tools.map((t) => t.id).join(','),
+                // Skills IDs
+                skillIds: form.skills.map(s => s.id).join(','),
                 remark: ''
             };
 

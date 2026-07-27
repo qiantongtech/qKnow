@@ -18,6 +18,8 @@
 
 package tech.qiantong.qknow.file.controller;
 
+import com.google.common.collect.Lists;
+import org.apache.commons.io.FilenameUtils;
 import tech.qiantong.qknow.config.ServerConfig;
 import tech.qiantong.qknow.file.util.FileUploadUtil;
 import org.dromara.x.file.storage.core.FileInfo;
@@ -30,6 +32,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.List;
 
 /**
  * 文件上传控制器
@@ -109,5 +113,24 @@ public class FileUploadController {
     @PostMapping("/upload-request")
     public FileInfo uploadPlatform(HttpServletRequest request) {
         return FileUploadUtil.uploadRequest(request);
+    }
+
+
+    /**
+     * 上传skills文件接口 -可用
+     * 处理文件上传请求
+     *
+     * @param file 要上传的文件，使用 MultipartFile 接收上传的文件
+     * @return 上传成功后返回文件信息（FileInfo 对象）
+     */
+    @PostMapping("/upload-skills")
+    public FileInfo uploadSkills(MultipartFile file, String platForm) {
+        List<String> extensionList = Lists.newArrayList("zip");
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename()).toLowerCase();
+        if (!extensionList.contains(extension)) {
+            throw new RuntimeException("不支持该文件类型");
+        }
+        // 直接调用上传方法，返回 ZIP 文件的信息给前端
+        return FileUploadUtil.uploadSkillFile(file, null, platForm);
     }
 }

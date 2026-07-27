@@ -1171,6 +1171,13 @@ INSERT INTO `system_menu` VALUES (2417, '我的应用修改', 2410, 0, '', NULL,
 INSERT INTO `system_menu` VALUES (2418, '我的应用删除', 2410, 1, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kac:apply:apply:remove', '#', '吴同', '2026-06-09 09:21:02', '', NULL, '');
 INSERT INTO `system_menu` VALUES (2471, '工具分类', 2472, 1, 'toolCategory', 'kb/toolCategory/index', NULL, 'toolCategory', 1, 0, 'C', '0', '0', NULL, '#', '吴同', '2026-06-24 17:19:01', '', NULL, '');
 INSERT INTO `system_menu` VALUES (2472, '工具管理', 2057, 12, 'tool', NULL, NULL, '', 1, 0, 'M', '0', '0', '', 'tool_new_icon', '吴同', '2026-06-24 17:48:09', '吴同', '2026-07-07 10:56:24', '');
+INSERT INTO `system_menu` VALUES (2473, 'Skills', 2057, 14, 'skills', 'kb/skills/index', NULL, '', 1, 0, 'C', '0', '0', 'kb:skills:skills:list', 'skill', '吴同', '2026-07-27 10:09:22', '吴同', '2026-07-27 10:09:45', '');
+INSERT INTO `system_menu` VALUES (2474, 'skills查询', 2473, 1, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kb:skills:skills:query', '#', '吴同', '2026-07-27 10:10:05', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2475, 'skills新增', 2473, 2, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kb:skills:skills:add', '#', '吴同', '2026-07-27 10:10:17', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2476, 'skills修改', 2473, 3, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kb:skills:skills:edit', '#', '吴同', '2026-07-27 10:10:39', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2477, 'skills删除', 2473, 4, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kb:skills:skills:remove', '#', '吴同', '2026-07-27 10:10:52', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2478, 'skills导出', 2473, 5, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kb:skills:skills:export', '#', '吴同', '2026-07-27 10:11:04', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2479, 'skills导入', 2473, 6, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kb:skills:skills:import', '#', '吴同', '2026-07-27 10:11:16', '', NULL, '');
 
 -- ----------------------------
 -- Table structure for system_notice
@@ -1583,6 +1590,13 @@ INSERT INTO `system_role_menu` VALUES (100, 2417);
 INSERT INTO `system_role_menu` VALUES (100, 2418);
 INSERT INTO `system_role_menu` VALUES (100, 2471);
 INSERT INTO `system_role_menu` VALUES (100, 2472);
+INSERT INTO `system_role_menu` VALUES (100, 2473);
+INSERT INTO `system_role_menu` VALUES (100, 2474);
+INSERT INTO `system_role_menu` VALUES (100, 2475);
+INSERT INTO `system_role_menu` VALUES (100, 2476);
+INSERT INTO `system_role_menu` VALUES (100, 2477);
+INSERT INTO `system_role_menu` VALUES (100, 2478);
+INSERT INTO `system_role_menu` VALUES (100, 2479);
 
 -- ----------------------------
 -- Table structure for system_user

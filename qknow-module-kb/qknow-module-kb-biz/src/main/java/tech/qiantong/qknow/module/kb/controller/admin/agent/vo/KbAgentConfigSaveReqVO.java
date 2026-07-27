@@ -69,6 +69,10 @@ public class KbAgentConfigSaveReqVO extends BaseEntity {
     @Size(max = 128, message = "工具方法ids长度不能超过128个字符")
     private String toolMethodIds;
 
+    @Schema(description = "skills ids", example = "")
+    @Size(max = 128, message = "skills ids长度不能超过128个字符")
+    private String skillIds;
+
     @Schema(description = "备注", example = "")
     @Size(max = 512, message = "备注长度不能超过512个字符")
     private String remark;

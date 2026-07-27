@@ -16,7 +16,7 @@
  * See the LICENSE file in the project root for full license information.
  */
 
-package tech.qiantong.qknow.module.kb.controller.admin.agent.vo;
+package tech.qiantong.qknow.module.kb.controller.admin.skills.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,17 +25,16 @@ import tech.qiantong.qknow.common.core.annotation.Excel;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
- * agent配置 Response VO 对象 kb_agent_config
+ * skills Response VO 对象 kb_skills
  *
  * @author qknow
- * @date 2026-03-19
+ * @date 2026-06-17
  */
-@Schema(description = "agent配置 Response VO")
+@Schema(description = "skills Response VO")
 @Data
-public class KbAgentConfigRespVO implements Serializable {
+public class KbSkillsRespVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -47,52 +46,25 @@ public class KbAgentConfigRespVO implements Serializable {
     @Schema(description = "工作区id", example = "")
     private Long workspaceId;
 
-    @Schema(description = "botid", example = "")
-    private Long botId;
+    @Excel(name = "名称")
+    @Schema(description = "名称", example = "")
+    private String name;
 
-    @Excel(name = "大模型配置")
-    @Schema(description = "大模型配置", example = "")
-    private String modelConfig;
+    @Excel(name = "描述")
+    @Schema(description = "描述", example = "")
+    private String description;
 
-    @Excel(name = "提示词")
-    @Schema(description = "提示词", example = "")
-    private String prePrompt;
+    @Excel(name = "指令")
+    @Schema(description = "指令", example = "")
+    private String prompt;
 
-    @Excel(name = "参数配置")
-    @Schema(description = "参数配置", example = "")
-    private String parameters;
+    @Excel(name = "文件路径")
+    @Schema(description = "文件路径", example = "")
+    private String filePath;
 
-    @Excel(name = "知识库ids")
-    @Schema(description = "知识库ids", example = "")
-    private String knowledgeIds;
-
-    @Excel(name = "知识图谱ids")
-    @Schema(description = "知识图谱ids", example = "")
-    private String graphIds;
-
-    @Excel(name = "工具方法 ids")
-    @Schema(description = "工具方法 ids", example = "")
-    private String toolMethodIds;
-
-    @Excel(name = "知识库名称列表")
-    @Schema(description = "知识库名称列表", example = "")
-    private List<String> knowledgeNames;
-
-    @Excel(name = "工具方法名称列表")
-    @Schema(description = "工具方法名称列表", example = "")
-    private List<String> toolMethodNames;
-
-    @Excel(name = "skills ids")
-    @Schema(description = "skills ids", example = "")
-    private String skillIds;
-
-    @Excel(name = "skills 名称列表")
-    @Schema(description = "skills 名称列表", example = "")
-    private List<String> skillNames;
-
-    @Excel(name = "是否有效")
-    @Schema(description = "是否有效", example = "")
-    private Boolean validFlag;
+    @Excel(name = "状态")
+    @Schema(description = "状态", example = "")
+    private Integer status;
 
     @Excel(name = "删除标志")
     @Schema(description = "删除标志", example = "")

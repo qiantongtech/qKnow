@@ -16,27 +16,27 @@
  * See the LICENSE file in the project root for full license information.
  */
 
-package tech.qiantong.qknow.module.kb.dal.dataobject.agent;
+package tech.qiantong.qknow.module.kb.dal.dataobject.skills;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.*;
 import tech.qiantong.qknow.common.core.domain.BaseEntity;
 
 /**
- * agent配置 DO 对象 kb_agent_config
+ * skills DO 对象 kb_skills
  *
  * @author qknow
- * @date 2026-03-19
+ * @date 2026-06-17
  */
 @Data
-@TableName(value = "kb_agent_config")
+@TableName(value = "kb_skills")
 // 用于 Oracle、PostgreSQL、Kingbase、DB2、H2 数据库的主键自增。如果是 MySQL 等数据库，可不写。
-// @KeySequence("kb_agent_config_seq")
+// @KeySequence("kb_skills_seq")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class KbAgentConfigDO extends BaseEntity {
+public class KbSkillsDO extends BaseEntity {
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
@@ -47,32 +47,20 @@ public class KbAgentConfigDO extends BaseEntity {
     /** 工作区id */
     private Long workspaceId;
 
-    /** bot id */
-    private Long botId;
+    /** 名称 */
+    private String name;
 
-    /** 大模型配置 */
-    private String modelConfig;
+    /** 描述 */
+    private String description;
 
-    /** 提示词 */
-    private String prePrompt;
+    /** 指令 */
+    private String prompt;
 
-    /** 参数配置 */
-    private String parameters;
+    /** 文件路径 */
+    private String filePath;
 
-    /** 知识库ids */
-    private String knowledgeIds;
-
-    /** 知识图谱ids */
-    private String graphIds;
-
-    /** 工具方法ids */
-    private String toolMethodIds;
-
-    /** skills ids */
-    private String skillIds;
-
-    /** 是否有效 */
-    private Boolean validFlag;
+    /** 状态 */
+    private Integer status;
 
     /** 删除标志 */
     @TableLogic

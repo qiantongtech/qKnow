@@ -186,4 +186,54 @@ public class FileUploadUtil {
     public static FileInfo uploadRequest(HttpServletRequest request) {
         return fileStorageService.of(request).upload();
     }
+
+    /**
+     * 上传文件
+     * 将 MultipartFile 根据请求参数上传到入参指定的存储平台。
+     *
+     * @param file 要上传的文件
+     * @param basePath 最前面没有 / 结尾带有 /
+     * @param platform 存储平台名称
+     * @return 返回上传后的文件信息（FileInfo 对象）
+     */
+    public static FileInfo uploadSkillFile(MultipartFile file, String basePath, String platform) {
+        String path;
+        if (StringUtils.isNotEmpty(basePath)) {
+            path = basePath + "skills/";
+        } else {
+            path = "skills/";
+        }
+
+        FileInfo fileInfo;
+        if (StringUtils.isNotEmpty(platform)) {
+            fileInfo = fileStorageService.of(file).setPlatform(platform).setPath(path).upload();
+        } else {
+            fileInfo = fileStorageService.of(file).setPath(path).upload();
+            String url = serverConfig.getUrl() + Constants.RESOURCE_PREFIX + fileInfo.getUrl();
+            fileInfo.setUrl(url);
+        }
+
+        return fileInfo;
+    }
+
+
+    /**
+     * 递归删除目录
+     */
+    public static void deleteDirectory(java.io.File dir) {
+        if (dir == null || !dir.exists()) {
+            return;
+        }
+        java.io.File[] files = dir.listFiles();
+        if (files != null) {
+            for (java.io.File f : files) {
+                if (f.isDirectory()) {
+                    deleteDirectory(f);
+                } else {
+                    f.delete();
+                }
+            }
+        }
+        dir.delete();
+    }
 }

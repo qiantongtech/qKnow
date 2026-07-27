@@ -43,8 +43,10 @@ import tech.qiantong.qknow.common.core.utils.poi.ExcelUtil;
 import tech.qiantong.qknow.module.kb.controller.admin.agent.vo.*;
 import tech.qiantong.qknow.module.kb.convert.agent.KbAgentConfigConvert;
 import tech.qiantong.qknow.module.kb.dal.dataobject.agent.KbAgentConfigDO;
+import tech.qiantong.qknow.module.kb.dal.dataobject.skills.KbSkillsDO;
 import tech.qiantong.qknow.module.kb.dal.dataobject.tool.KbToolMethodDO;
 import tech.qiantong.qknow.module.kb.service.agent.IKbAgentConfigService;
+import tech.qiantong.qknow.module.kb.service.skills.IKbSkillsService;
 import tech.qiantong.qknow.module.kb.service.tool.IKbToolMethodService;
 import tech.qiantong.qknow.module.kmc.api.knowledgeBase.dto.KmcKnowledgeBaseRespDTO;
 import tech.qiantong.qknow.module.kmc.api.service.IKmcApiService;
@@ -73,6 +75,9 @@ public class KbAgentConfigController extends BaseController {
 
     @Resource
     private IKmcApiService kmcApiService;
+
+    @Resource
+    private IKbSkillsService kbSkillsService;
 
     @Operation(summary = "查询agent配置列表")
 //    @PreAuthorize("@ss.hasPermi('kb:agent:config:list')")
@@ -136,6 +141,12 @@ public class KbAgentConfigController extends BaseController {
             Set<String> methodIdSet = StringUtils.str2Set(kbAgentConfigDO.getToolMethodIds(), ",");
             List<KbToolMethodDO> toolList = kbToolMethodService.listByIds(methodIdSet);
             respVO.setToolMethodNames(toolList.stream().map(KbToolMethodDO::getName).toList());
+        }
+        // 填充 skills 名称列表
+        if (StringUtils.isNotBlank(kbAgentConfigDO.getSkillIds())) {
+            Set<String> skillIdSet = StringUtils.str2Set(kbAgentConfigDO.getSkillIds(), ",");
+            List<KbSkillsDO> skillsList = kbSkillsService.listByIds(skillIdSet);
+            respVO.setSkillNames(skillsList.stream().map(KbSkillsDO::getName).toList());
         }
         return CommonResult.success(respVO);
     }
