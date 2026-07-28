@@ -2638,5 +2638,39 @@ INSERT INTO `system_oper_log` VALUES (10, '菜单管理', 2, 'tech.qiantong.qkno
 INSERT INTO `system_oper_log` VALUES (11, '菜单管理', 1, 'tech.qiantong.qknow.module.system.controller.admin.system.SysMenuController.add()', 'POST', 1, 'qKnow', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"createBy\":\"吴同\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"综合看板\",\"menuType\":\"M\",\"orderNum\":0,\"params\":{},\"parentId\":2056,\"path\":\"index\",\"status\":\"0\",\"visible\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2026-04-20 17:40:46', 30);
 
 -- ----------------------------
+-- Table structure for system_user
+-- ----------------------------
+DROP TABLE IF EXISTS `system_user`;
+CREATE TABLE `system_user`  (
+                                `user_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+                                `dept_id` bigint(20) NULL DEFAULT NULL COMMENT '部门ID',
+                                `user_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '用户账号',
+                                `nick_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '用户昵称',
+                                `user_type` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '00' COMMENT '用户类型（00系统用户）',
+                                `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '用户邮箱',
+                                `phonenumber` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '手机号码',
+                                `sex` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '0' COMMENT '用户性别（0男 1女 2未知）',
+                                `avatar` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '头像地址',
+                                `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '密码',
+                                `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '0' COMMENT '账号状态（0正常 1停用）',
+                                `del_flag` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '0' COMMENT '删除标志（0代表存在 2代表删除）',
+                                `login_ip` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '最后登录IP',
+                                `login_date` datetime NULL DEFAULT NULL COMMENT '最后登录时间',
+                                `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '创建者',
+                                `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '更新者',
+                                `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+                                `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
+                                PRIMARY KEY (`user_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 101 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户信息表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of system_user
+-- ----------------------------
+INSERT INTO `system_user` VALUES (1, 100, 'admin', '超级管理员', '00', 'support@qiantong.tech', '15888888888', '0', '', '$2a$10$QTX16TRIbQ00ssEAZ1RB7Ov7jhhogF3IkBDVQqLSarC0c5e5MU0Wm', '0', '0', '127.0.0.1', '2026-07-08 11:45:08', '吴同', '2026-04-20 09:32:53', '吴同', '2026-07-08 11:45:07', '管理员');
+INSERT INTO `system_user` VALUES (2, 100, 'qKnow', '吴同', '00', '', '18888888888', '0', '', '$2a$10$TXvMO3ea1uL69EMAX2WszenDhXlsMkfBkOGyOBvPK8jd3IInCbdLu', '0', '0', '127.0.0.1', '2026-07-08 11:38:01', '吴同', '2026-06-03 14:48:53', '吴同', '2026-07-08 11:38:00', NULL);
+
+
+-- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;
