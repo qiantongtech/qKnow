@@ -1,7 +1,7 @@
 {
   "name": "qknow",
-  "version": "2.2.3",
-  "description": "qknow智能体构建平台",
+  "version": "2.3.0",
+  "description": "qKnow开源智能体构建平台",
   "author": "qknow",
   "license": "MIT",
   "type": "module",

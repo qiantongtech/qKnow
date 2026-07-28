@@ -65,4 +65,7 @@ public class KbAgentConfigReqVO extends BaseEntity {
     @Schema(description = "工具ids", example = "")
     private String toolMethodIds;
 
+    @Schema(description = "skills ids", example = "")
+    private String skillIds;
+
 }

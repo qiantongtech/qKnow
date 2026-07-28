@@ -20,8 +20,11 @@ package tech.qiantong.qknow.module.kb.service.agent.impl;
 
 import com.alibaba.cloud.ai.graph.NodeOutput;
 import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+import com.alibaba.cloud.ai.graph.agent.hook.Hook;
 import com.alibaba.cloud.ai.graph.agent.hook.modelcalllimit.ModelCallLimitHook;
+import com.alibaba.cloud.ai.graph.agent.hook.skills.SkillsAgentHook;
 import com.alibaba.cloud.ai.graph.exception.GraphRunnerException;
+import com.alibaba.cloud.ai.graph.skills.registry.SkillRegistry;
 import com.alibaba.cloud.ai.graph.streaming.OutputType;
 import com.alibaba.cloud.ai.graph.streaming.StreamingOutput;
 import com.alibaba.fastjson2.JSONObject;
@@ -33,10 +36,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.tool.StaticToolCallbackProvider;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.function.FunctionToolCallback;
 import org.springframework.ai.tool.resolution.ToolCallbackResolver;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
@@ -49,9 +54,13 @@ import tech.qiantong.qknow.common.utils.StringUtils;
 import tech.qiantong.qknow.module.ai.api.modelMarket.IAiModelApiService;
 import tech.qiantong.qknow.module.kb.controller.admin.agent.vo.*;
 import tech.qiantong.qknow.module.kb.dal.dataobject.agent.KbAgentConfigDO;
+import tech.qiantong.qknow.module.kb.dal.dataobject.skills.KbSkillsDO;
 import tech.qiantong.qknow.module.kb.dal.dataobject.tool.KbToolMethodDO;
 import tech.qiantong.qknow.module.kb.dal.mapper.agent.KbAgentConfigMapper;
 import tech.qiantong.qknow.module.kb.service.agent.IKbAgentConfigService;
+import tech.qiantong.qknow.module.kb.service.agent.TargetedSkillRegistry;
+import tech.qiantong.qknow.module.kb.service.agent.tool.ReadSkillReferenceTool;
+import tech.qiantong.qknow.module.kb.service.skills.IKbSkillsService;
 import tech.qiantong.qknow.module.kb.service.tool.IKbToolMethodService;
 import tech.qiantong.qknow.module.kb.service.tool.IKbToolService;
 import tech.qiantong.qknow.module.kb.tool.function.SearchKnowledgeTool;
@@ -61,6 +70,7 @@ import tech.qiantong.qknow.module.kmc.api.knowledgeBase.dto.KmcKnowledgeBaseResp
 import tech.qiantong.qknow.module.kmc.api.service.IKmcApiService;
 import tech.qiantong.qknow.mybatis.core.query.LambdaQueryWrapperX;
 
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -84,9 +94,13 @@ public class KbAgentConfigServiceImpl extends ServiceImpl<KbAgentConfigMapper, K
     private IKmcApiService kmcApiService;
     @Resource
     private IKbToolService kbToolService;
-
+    @Resource
+    private IKbSkillsService kbSkillsService;
     @Resource
     private ToolCallbackResolver resolver;
+
+    @Value("${dromara.x-file-storage.local-plus[0].storage-path}")
+    private String storagePath;
 
     @Override
     public PageResult<KbAgentConfigDO> getKbAgentConfigPage(KbAgentConfigPageReqVO pageReqVO) {
@@ -245,11 +259,45 @@ public class KbAgentConfigServiceImpl extends ServiceImpl<KbAgentConfigMapper, K
         }
 
         // 根据工具方法id，获取工具列表信息
-        String[] toolNames = new String[0];
-        if (StringUtils.isNotEmpty(kbAgentConfig.getToolMethodIds())) {
-            Set<String> methodIdSet = StringUtils.str2Set(kbAgentConfig.getToolMethodIds(), ",");
-            List<KbToolMethodDO> kbToolMethodList = kbToolMethodService.listByIds(methodIdSet);
-            toolNames = kbToolMethodList.stream().map(KbToolMethodDO::getCode).toArray(String[]::new);
+//        String[] toolNames = new String[0];
+//        if (StringUtils.isNotEmpty(kbAgentConfig.getToolMethodIds())) {
+//            Set<String> methodIdSet = StringUtils.str2Set(kbAgentConfig.getToolMethodIds(), ",");
+//            List<KbToolMethodDO> kbToolMethodList = kbToolMethodService.listByIds(methodIdSet);
+//            toolNames = kbToolMethodList.stream().map(KbToolMethodDO::getCode).toArray(String[]::new);
+//        }
+
+        // 构建 hooks 列表
+        List<Hook> hooks = Lists.newArrayList();
+        hooks.add(ModelCallLimitHook.builder().runLimit(10).build());
+
+        if (StringUtils.isNotEmpty(kbAgentConfig.getSkillIds())) {
+            Set<String> skillIdSet = StringUtils.str2Set(kbAgentConfig.getSkillIds(), ",");
+            List<KbSkillsDO> skillsList = kbSkillsService.listByIds(skillIdSet);
+            if (!skillsList.isEmpty()) {
+                // 从 name 中提取目录名
+                Set<String> selectedDirNames = skillsList.stream()
+                        .map(KbSkillsDO::getName)
+                        .filter(StringUtils::isNotEmpty)
+                        .collect(Collectors.toSet());
+                String skillsDir = storagePath + "skills/";
+                File skillsDirectory = new File(skillsDir);
+                if (skillsDirectory.exists() && skillsDirectory.isDirectory()) {
+                    List<String> targetSkillPaths = selectedDirNames.stream()
+                            .map(dirName -> skillsDir + dirName)
+                            .collect(Collectors.toList());
+                    SkillRegistry targetedRegistry = new TargetedSkillRegistry(targetSkillPaths, null);
+                    SkillsAgentHook hook = SkillsAgentHook.builder()
+                            .skillRegistry(targetedRegistry)
+                            .autoReload(true)
+                            .build();
+                    hooks.add(hook);
+                    // 注册读取 skill references 文件的工具
+                    tools.add(ReadSkillReferenceTool.buildToolCallback(skillsDir));
+                    log.info("Skills 集成完成，加载目录: {}, 关联技能目录: {}", skillsDir, selectedDirNames);
+                } else {
+                    log.warn("Skills 目录不存在: {}", skillsDir);
+                }
+            }
         }
 
         // TODO 获取历史聊天记录，构建历史对话的Prompt
@@ -266,9 +314,10 @@ public class KbAgentConfigServiceImpl extends ServiceImpl<KbAgentConfigMapper, K
                 .name("my_agent")
                 .model(chatModel)
                 // 限制最多调用 5 次
-                .hooks(ModelCallLimitHook.builder().runLimit(10).build())
+                .hooks(hooks)
                 .systemPrompt(systemPrompt)
                 .toolCallbackProviders(toolCallbackProvider)
+                .toolCallbackProviders(new StaticToolCallbackProvider(tools))
                 .resolver(resolver)
                 .build();
 

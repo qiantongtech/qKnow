@@ -68,6 +68,9 @@ public class KbAgentConfigDO extends BaseEntity {
     /** 工具方法ids */
     private String toolMethodIds;
 
+    /** skills ids */
+    private String skillIds;
+
     /** 是否有效 */
     private Boolean validFlag;
 

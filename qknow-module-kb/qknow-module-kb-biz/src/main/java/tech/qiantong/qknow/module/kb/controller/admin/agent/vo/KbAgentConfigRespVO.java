@@ -82,6 +82,14 @@ public class KbAgentConfigRespVO implements Serializable {
     @Schema(description = "工具方法名称列表", example = "")
     private List<String> toolMethodNames;
 
+    @Excel(name = "skills ids")
+    @Schema(description = "skills ids", example = "")
+    private String skillIds;
+
+    @Excel(name = "skills 名称列表")
+    @Schema(description = "skills 名称列表", example = "")
+    private List<String> skillNames;
+
     @Excel(name = "是否有效")
     @Schema(description = "是否有效", example = "")
     private Boolean validFlag;

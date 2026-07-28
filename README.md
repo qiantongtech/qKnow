@@ -7,7 +7,6 @@
  <img src="https://img.shields.io/badge/qKnow-Agent%20Platform-blue.svg" alt="qKnow">
  <img src="https://gitee.com/qiantongtech/qKnow/badge/star.svg" alt=""/>
  <img src="https://img.shields.io/github/stars/qiantongtech/qKnow?label=Github%20Stars" alt=""/>
- <img src="https://atomgit.com/qiantongtech/qKnow/star/badge.svg" alt=""/>
 </p>
 
 <p align="center">
@@ -16,7 +15,7 @@
 
 ## 🌈 平台简介
 
-**qKnow** 是一套面向企业**知识智能化**与**行业 AI 应用**场景的开源 AI 智能体构建平台，围绕**知识图谱**、**知识库 RAG**、**Bot 构建**与**开箱即用的 AI 应用**等核心能力，支持企业文档、结构化数据、业务知识和专家经验的统一接入与智能化沉淀，帮助企业快速完成知识抽取、知识建模、智能问答、Bot 构建和 AI 应用落地，可作为企业建设知识中枢、智能问答平台、智能体开发平台和行业深度 AI 解决方案的开源基础底座，也适合开发者进行二次开发与场景扩展。
+**qKnow** 是一套面向企业**知识智能化**与**行业 AI 应用**场景的开源 AI 智能体构建平台，围绕**知识图谱**、**知识库 RAG**、**Bot 构建**与**开箱即用的 AI 应用**等核心能力，平台将行业专属 AI 能力封装为标准化模块，企业部署后即可直接应用，快速开展智能化业务。支持企业文档、结构化数据、业务知识和专家经验的统一接入与智能化沉淀，帮助企业快速完成知识抽取、知识建模、智能问答、Bot 构建和 AI 应用落地，可作为企业建设知识中枢、智能问答平台、智能体开发平台和行业深度 AI 解决方案的开源基础底座，也适合开发者进行二次开发与场景扩展。
 
 ✨✨✨**在线文档**✨✨✨ <a href="https://community.qknow.ai" target="_blank">https://community.qknow.ai</a>
 
@@ -275,10 +274,6 @@ qKnow 欢迎开发者、企业用户和行业伙伴共同参与建设。
     </tr>
     <tr>
         <td><img alt="" src=".gitee/system/ragSetting.png"/></td>
-        <td><img alt="" src=".gitee/system/kac.png"/></td>
-    </tr>
-    <tr>
-        <td><img alt="" src=".gitee/system/plugin.png"/></td>
-        <td><img alt="" src=".gitee/system/ai.png"/></td>
+        <td><img alt="" src=".gitee/system/graph.png"/></td>
     </tr>
 </table>
