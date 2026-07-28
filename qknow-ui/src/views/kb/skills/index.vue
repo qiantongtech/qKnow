@@ -752,28 +752,6 @@ getList();
 </script>
 
 <style lang="scss" scoped>
-:deep(.cu_html_text .el-textarea__inner) {
-  height: 35vh;
-  resize: vertical;
-}
-
-.skill-preview-content {
-  max-height: 70vh;
-  overflow-y: auto;
-  background-color: #1e1e1e;
-  border-radius: 4px;
-  padding: 16px;
-
-  pre {
-    margin: 0;
-    color: #e0e0e0;
-    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-    font-size: 14px;
-    line-height: 1.7;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-  }
-}
 .default-wrap {
   width: 100%;
   position: relative;
@@ -792,26 +770,42 @@ getList();
   }
 }
 
-.skills-dialog :deep(.el-dialog) {
-  overflow: auto;
+.label-wrap {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+
+  .el-icon {
+    color: #888;
+  }
 }
 
-:global(.batch-import-result-box .el-message-box__container) {
-  display: block !important;
+::v-deep(.el-form-item__error) {
+  padding-top: 6px;
 }
 
-/* 外层容器限制横向溢出隐藏 */
-.only-y-scroll :deep(.el-scrollbar__wrap) {
-  overflow-x: hidden !important;
-  overflow-y: auto;
+.el-form-item.is-error {
+  padding-bottom: 16px;
 }
-/* 隐藏横向滚动条DOM节点 */
-.only-y-scroll :deep(.el-scrollbar__bar.is-horizontal) {
-  display: none !important;
+
+.card-button-group {
+  display: flex;
+  flex-direction: column;
+  button {
+    margin-left: 0;
+  }
 }
-.only-y-scroll :deep(.el-scrollbar__bar.is-vertical) {
-  right: -6px !important;
-  border-radius: 3px;
-  background: rgba(0,0,0,0.05);
+.hint-style {
+  display: flex;
+  align-items: center;
+  .icon {
+    color: #efbd47;
+    cursor: pointer;
+  }
+  .text {
+    color: #efbd47;
+    cursor: pointer;
+    font-size: 12px;
+  }
 }
 </style>

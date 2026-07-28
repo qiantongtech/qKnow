@@ -259,12 +259,12 @@ public class KbAgentConfigServiceImpl extends ServiceImpl<KbAgentConfigMapper, K
         }
 
         // 根据工具方法id，获取工具列表信息
-        String[] toolNames = new String[0];
-        if (StringUtils.isNotEmpty(kbAgentConfig.getToolMethodIds())) {
-            Set<String> methodIdSet = StringUtils.str2Set(kbAgentConfig.getToolMethodIds(), ",");
-            List<KbToolMethodDO> kbToolMethodList = kbToolMethodService.listByIds(methodIdSet);
-            toolNames = kbToolMethodList.stream().map(KbToolMethodDO::getCode).toArray(String[]::new);
-        }
+//        String[] toolNames = new String[0];
+//        if (StringUtils.isNotEmpty(kbAgentConfig.getToolMethodIds())) {
+//            Set<String> methodIdSet = StringUtils.str2Set(kbAgentConfig.getToolMethodIds(), ",");
+//            List<KbToolMethodDO> kbToolMethodList = kbToolMethodService.listByIds(methodIdSet);
+//            toolNames = kbToolMethodList.stream().map(KbToolMethodDO::getCode).toArray(String[]::new);
+//        }
 
         // 构建 hooks 列表
         List<Hook> hooks = Lists.newArrayList();
@@ -314,7 +314,7 @@ public class KbAgentConfigServiceImpl extends ServiceImpl<KbAgentConfigMapper, K
                 .name("my_agent")
                 .model(chatModel)
                 // 限制最多调用 5 次
-                .hooks(ModelCallLimitHook.builder().runLimit(10).build())
+                .hooks(hooks)
                 .systemPrompt(systemPrompt)
                 .toolCallbackProviders(toolCallbackProvider)
                 .toolCallbackProviders(new StaticToolCallbackProvider(tools))
