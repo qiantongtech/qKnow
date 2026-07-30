@@ -358,6 +358,11 @@ INSERT INTO `system_dict_data` VALUES (178, 0, '结构化', '0', 'ext_task_log_t
 INSERT INTO `system_dict_data` VALUES (179, 1, '非结构化', '1', 'ext_task_log_type', NULL, 'primary', 'N', '0', '吴同', '2026-05-14 11:08:55', '', NULL, NULL);
 INSERT INTO `system_dict_data` VALUES (180, 0, '停用', '0', 'kac_horizontal_status', NULL, 'warning', 'N', '0', '吴同', '2026-04-23 19:35:48', '吴同', '2026-04-23 19:36:17', NULL);
 INSERT INTO `system_dict_data` VALUES (181, 1, '正常', '1', 'kac_horizontal_status', NULL, 'primary', 'N', '0', '吴同', '2026-04-23 19:36:08', '', NULL, NULL);
+INSERT INTO `system_dict_data` VALUES (182, 3, 'stdio', '3', 'bot_mcp_type', NULL, 'primary', 'N', '0', '吴同', '2026-07-30 14:11:38', '', NULL, '');
+INSERT INTO `system_dict_data` VALUES (183, 2, 'SSE', '2', 'bot_mcp_type', NULL, 'primary', 'N', '0', '吴同', '2026-07-30 14:11:38', '', NULL, '');
+INSERT INTO `system_dict_data` VALUES (184, 1, 'HTTP', '1', 'bot_mcp_type', NULL, 'primary', 'N', '0', '吴同', '2026-07-30 14:11:38', '', NULL, '');
+INSERT INTO `system_dict_data` VALUES (185, 1, '未启动', '0', 'bot_mcp_status', NULL, 'warning', 'N', '0', '吴同', '2026-07-30 14:11:38', '', NULL, '');
+INSERT INTO `system_dict_data` VALUES (186, 2, '已启动', '1', 'bot_mcp_status', NULL, 'success', 'N', '0', '吴同', '2026-07-30 14:11:38', '', NULL, '');
 
 -- ----------------------------
 -- Table structure for system_dict_type
@@ -410,6 +415,8 @@ INSERT INTO `system_dict_type` VALUES (54, 'ai模型标签', 'ai_model_tag', '0'
 INSERT INTO `system_dict_type` VALUES (56, 'Bot 类型', 'kg_bot_type', '0', '吴同', '2026-05-07 16:47:34', '', NULL, NULL);
 INSERT INTO `system_dict_type` VALUES (57, '应用插件状态', 'kac_horizontal_status', '0', '吴同', '2026-04-23 19:35:19', '', NULL, NULL);
 INSERT INTO `system_dict_type` VALUES (100, '抽取日志类型', 'ext_task_log_type', '0', '吴同', '2026-05-14 11:08:02', '', NULL, NULL);
+INSERT INTO `system_dict_type` VALUES (101, 'mcp 类型', 'bot_mcp_type', '0', 'admin', '2026-07-30 14:10:56', '', NULL, NULL);
+INSERT INTO `system_dict_type` VALUES (102, 'mcp 状态', 'bot_mcp_status', '0', 'admin', '2026-07-30 14:10:56', '', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for system_job
@@ -696,6 +703,11 @@ INSERT INTO `system_menu` VALUES (2476, 'skills修改', 2473, 3, '', NULL, NULL,
 INSERT INTO `system_menu` VALUES (2477, 'skills删除', 2473, 4, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kb:skills:skills:remove', '#', '吴同', '2026-07-27 10:10:52', '', NULL, '');
 INSERT INTO `system_menu` VALUES (2478, 'skills导出', 2473, 5, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kb:skills:skills:export', '#', '吴同', '2026-07-27 10:11:04', '', NULL, '');
 INSERT INTO `system_menu` VALUES (2479, 'skills导入', 2473, 6, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kb:skills:skills:import', '#', '吴同', '2026-07-27 10:11:16', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2452, 'MCP', 2057, 13, 'mcp', 'kb/mcp/index', NULL, 'mcp', 1, 0, 'C', '0', '0', 'kb:mcp:mcpconfig:list', 'box-3-fill', '吴同', '2026-06-16 16:07:08', '超级管理员', '2026-06-16 16:13:46', '');
+INSERT INTO `system_menu` VALUES (2453, '新增 MCP', 2452, 1, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kb:mcp:mcpconfig:add', '#', '超级管理员', '2026-06-16 16:14:36', '超级管理员', '2026-06-16 16:16:10', '');
+INSERT INTO `system_menu` VALUES (2468, '修改 MCP', 2452, 3, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kb:mcp:mcpconfig:edit', '#', '超级管理员', '2026-06-16 16:14:58', '超级管理员', '2026-06-16 16:16:02', '');
+INSERT INTO `system_menu` VALUES (2469, '删除 MCP', 2452, 2, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kb:mcp:mcpconfig:remove', '#', '超级管理员', '2026-06-16 16:15:22', '', NULL, '');
+INSERT INTO `system_menu` VALUES (2470, '获取 MCP', 2452, 0, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'kb:mcp:mcpconfig:query', '#', '超级管理员', '2026-06-16 16:15:45', '', NULL, '');
 
 -- ----------------------------
 -- Table structure for system_notice

@@ -2673,4 +2673,87 @@ INSERT INTO `system_user` VALUES (2, 100, 'qKnow', '吴同', '00', '', '18888888
 
 -- ----------------------------
 
+-- ----------------------------
+-- Table structure for kb_mcp_config
+-- ----------------------------
+DROP TABLE IF EXISTS `kb_mcp_config`;
+CREATE TABLE `kb_mcp_config`  (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '名称',
+  `description` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '描述',
+  `type` tinyint UNSIGNED NOT NULL COMMENT '类型;1:stdio，2:sse，3:http',
+  `tool_num` int NULL DEFAULT NULL COMMENT '工具数量',
+  `status` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '状态;0:未启动，1：已启动',
+  `url` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'url',
+  `url_header` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT 'url 请求头',
+  `command` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '命令',
+  `valid_flag` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否有效;0：无效，1：有效',
+  `del_flag` tinyint(1) NOT NULL DEFAULT 0 COMMENT '删除标志;1：已删除，0：未删除',
+  `create_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '创建人',
+  `creator_id` bigint NULL DEFAULT NULL COMMENT '创建人id',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '更新人',
+  `updater_id` bigint NULL DEFAULT NULL COMMENT '更新人id',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `remark` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = 'mcp 配置' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of kb_mcp_config
+-- ----------------------------
+INSERT INTO `kb_mcp_config` VALUES (1, 'HN论坛数据读取', '托管 HN MCP 服务，让 AI 一键查询黑客新闻热帖、评论、用户资料，支持全文搜索', 1, 4, 1, 'https://hn.caseyjhand.com/mcp', '', NULL, 1, 0, '吴同', 2, '2026-06-25 19:23:38', '吴同', NULL, '2026-06-25 15:41:22', NULL);
+INSERT INTO `kb_mcp_config` VALUES (2, '高德地图', '地图相关官方地图 MCP 服务，支持 AI 查询 POI、规划出行路线、定位，可联动高德 App 导航', 1, 15, 1, 'https://mcp.amap.com/mcp', '', NULL, 1, 0, '吴同', 2, '2026-06-25 19:47:21', '吴同', NULL, '2026-06-25 15:42:45', NULL);
+INSERT INTO `kb_mcp_config` VALUES (3, '天气查询', '全国气象 MCP，支持 AI 查询城市实时温度、降水、风力、未来七日天气预报', 1, 7, 0, 'https://mcp.weather-api.com/stdio', NULL, NULL, 1, 0, '吴同', 2, '2026-06-25 16:27:39', NULL, NULL, '2026-06-25 16:27:39', NULL);
+INSERT INTO `kb_mcp_config` VALUES (4, '快递物流查询', '物流 MCP 服务，输入运单号即可查询快递实时轨迹、站点、预计送达时间', 1, 6, 0, 'https://express-mcp.17track.net/api/mcp', NULL, NULL, 1, 0, '吴同', 2, '2026-06-25 16:27:40', NULL, NULL, '2026-06-25 16:27:40', NULL);
+INSERT INTO `kb_mcp_config` VALUES (5, '翻译多语言 MCP', '通用翻译 MCP，支持数十种语言互译，大模型可批量翻译文本、专业术语', 1, 7, 0, 'https://translate-mcp.volctrans.com', NULL, NULL, 1, 0, '吴同', 2, '2026-06-25 16:27:41', NULL, NULL, '2026-06-25 16:27:41', NULL);
+INSERT INTO `kb_mcp_config` VALUES (6, '系统命令工具 MCP', '受控系统 MCP，仅开放安全运维指令，查询服务器负载、磁盘、进程信息', 1, 4, 0, 'http://127.0.0.1:9001/sys-mcp', NULL, NULL, 1, 0, '吴同', 2, '2026-06-25 16:27:42', NULL, NULL, '2026-06-25 16:27:42', NULL);
+INSERT INTO `kb_mcp_config` VALUES (7, '单位换算计算', '数学换算 MCP，支持长度重量面积汇率换算，AI 可快速完成各类数值计算', 1, 8, 0, 'https://calc-mcp.math-tool.dev', NULL, NULL, 1, 0, '吴同', 2, '2026-06-25 16:27:43', NULL, NULL, '2026-06-25 16:27:43', NULL);
+INSERT INTO `kb_mcp_config` VALUES (8, 'IP 地址归属查询', '网络 IP 工具 MCP，输入 IP 获取城市运营商、地理位置，支持批量查询解析', 1, 1, 0, 'https://ip-mcp.net-api.com/locate', NULL, NULL, 1, 0, '吴同', 2, '2026-06-25 16:27:44', NULL, NULL, '2026-06-25 16:27:44', NULL);
+INSERT INTO `kb_mcp_config` VALUES (9, '开源仓库搜索', 'GitHub 仓库 MCP，检索开源项目、代码仓库，查看 star 数量与提交记录', 1, 2, 0, 'https://github-mcp.dev/open-source', NULL, NULL, 1, 0, '吴同', 2, '2026-06-25 16:27:45', NULL, NULL, '2026-06-25 16:27:45', NULL);
+INSERT INTO `kb_mcp_config` VALUES (10, '发票识别查验', '财税发票 MCP，识别增值税发票内容，对接国税接口校验发票真伪信息', 1, 19, 0, 'https://invoice-mcp.tax-api.com/verify', NULL, NULL, 1, 0, '吴同', 2, '2026-06-25 16:27:46', NULL, NULL, '2026-06-25 16:27:46', NULL);
+INSERT INTO `kb_mcp_config` VALUES (11, '知网文献检索', '学术文献 MCP，大模型可检索期刊论文、学位文献，获取摘要、作者与发表信息', 1, 11, 0, 'https://mcp.cnki.net/search', NULL, NULL, 1, 0, '吴同', 2, '2026-06-25 16:27:47', NULL, NULL, '2026-06-25 16:27:47', NULL);
+
+
+-- ----------------------------
+-- Table structure for kb_mcp_tool
+-- ----------------------------
+DROP TABLE IF EXISTS `kb_mcp_tool`;
+CREATE TABLE `kb_mcp_tool`  (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `mcp_id` bigint NOT NULL COMMENT 'mcpId',
+  `name` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '名字',
+  `description` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '描述',
+  `valid_flag` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否有效;0：无效，1：有效',
+  `del_flag` tinyint(1) NOT NULL DEFAULT 0 COMMENT '删除标志;1：已删除，0：未删除',
+  `create_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '创建人',
+  `creator_id` bigint NULL DEFAULT NULL COMMENT '创建人id',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_by` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '更新人',
+  `updater_id` bigint NULL DEFAULT NULL COMMENT '更新人id',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `remark` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 81 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = 'mcp 工具' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of kb_mcp_tool
+-- ----------------------------
+INSERT INTO `kb_mcp_tool` VALUES (66, 2, 'maps_direction_bicycling', '骑行路径规划用于规划骑行通勤方案，规划时会考虑天桥、单行线、封路等情况。最大支持 500km 的骑行路线规划', 1, 0, '超级管理员', 1, '2026-06-25 22:07:12', '超级管理员', NULL, '2026-06-25 22:07:12', NULL);
+INSERT INTO `kb_mcp_tool` VALUES (67, 2, 'maps_direction_driving', '驾车路径规划 API 可以根据用户起终点经纬度坐标规划以小客车、轿车通勤出行的方案，并且返回通勤方案的数据。', 1, 0, '超级管理员', 1, '2026-06-25 22:07:12', '超级管理员', NULL, '2026-06-25 22:07:12', NULL);
+INSERT INTO `kb_mcp_tool` VALUES (68, 2, 'maps_direction_transit_integrated', '根据用户起终点经纬度坐标规划综合各类公共（火车、公交、地铁）交通方式的通勤方案，并且返回通勤方案的数据，跨城场景下必须传起点城市与终点城市', 1, 0, '超级管理员', 1, '2026-06-25 22:07:12', '超级管理员', NULL, '2026-06-25 22:07:12', NULL);
+INSERT INTO `kb_mcp_tool` VALUES (69, 2, 'maps_direction_walking', '根据输入起点终点经纬度坐标规划100km 以内的步行通勤方案，并且返回通勤方案的数据', 1, 0, '超级管理员', 1, '2026-06-25 22:07:12', '超级管理员', NULL, '2026-06-25 22:07:12', NULL);
+INSERT INTO `kb_mcp_tool` VALUES (70, 2, 'maps_distance', '测量两个经纬度坐标之间的距离,支持驾车、步行以及球面距离测量', 1, 0, '超级管理员', 1, '2026-06-25 22:07:12', '超级管理员', NULL, '2026-06-25 22:07:12', NULL);
+INSERT INTO `kb_mcp_tool` VALUES (71, 2, 'maps_geo', '将详细的结构化地址转换为经纬度坐标。支持对地标性名胜景区、建筑物名称解析为经纬度坐标', 1, 0, '超级管理员', 1, '2026-06-25 22:07:12', '超级管理员', NULL, '2026-06-25 22:07:12', NULL);
+INSERT INTO `kb_mcp_tool` VALUES (72, 2, 'maps_regeocode', '将一个高德经纬度坐标转换为行政区划地址信息', 1, 0, '超级管理员', 1, '2026-06-25 22:07:12', '超级管理员', NULL, '2026-06-25 22:07:12', NULL);
+INSERT INTO `kb_mcp_tool` VALUES (73, 2, 'maps_ip_location', 'IP 定位根据用户输入的 IP 地址，定位 IP 的所在位置', 1, 0, '超级管理员', 1, '2026-06-25 22:07:12', '超级管理员', NULL, '2026-06-25 22:07:12', NULL);
+INSERT INTO `kb_mcp_tool` VALUES (74, 2, 'maps_schema_personal_map', '用于行程规划结果在高德地图展示。将行程规划位置点按照行程顺序填入lineList，返回结果为高德地图打开的URI链接，该结果不需总结，直接返回！', 1, 0, '超级管理员', 1, '2026-06-25 22:07:12', '超级管理员', NULL, '2026-06-25 22:07:12', NULL);
+INSERT INTO `kb_mcp_tool` VALUES (75, 2, 'maps_around_search', '周边搜，根据用户传入关键词以及坐标location，搜索出radius半径范围的POI', 1, 0, '超级管理员', 1, '2026-06-25 22:07:12', '超级管理员', NULL, '2026-06-25 22:07:12', NULL);
+INSERT INTO `kb_mcp_tool` VALUES (76, 2, 'maps_search_detail', '查询关键词搜或者周边搜获取到的POI ID的详细信息', 1, 0, '超级管理员', 1, '2026-06-25 22:07:12', '超级管理员', NULL, '2026-06-25 22:07:12', NULL);
+INSERT INTO `kb_mcp_tool` VALUES (77, 2, 'maps_text_search', '关键字搜索 API 根据用户输入的关键字进行 POI 搜索，并返回相关的信息', 1, 0, '超级管理员', 1, '2026-06-25 22:07:12', '超级管理员', NULL, '2026-06-25 22:07:12', NULL);
+INSERT INTO `kb_mcp_tool` VALUES (78, 2, 'maps_schema_navi', ' Schema唤醒客户端-导航页面，用于根据用户输入终点信息，返回一个拼装好的客户端唤醒URI，用户点击该URI即可唤起对应的客户端APP。唤起客户端后，会自动跳转到导航页面。', 1, 0, '超级管理员', 1, '2026-06-25 22:07:12', '超级管理员', NULL, '2026-06-25 22:07:12', NULL);
+INSERT INTO `kb_mcp_tool` VALUES (79, 2, 'maps_schema_take_taxi', '根据用户输入的起点和终点信息，返回一个拼装好的客户端唤醒URI，直接唤起高德地图进行打车。直接展示生成的链接，不需要总结', 1, 0, '超级管理员', 1, '2026-06-25 22:07:12', '超级管理员', NULL, '2026-06-25 22:07:12', NULL);
+INSERT INTO `kb_mcp_tool` VALUES (80, 2, 'maps_weather', '根据城市名称或者标准adcode查询指定城市的天气', 1, 0, '超级管理员', 1, '2026-06-25 22:07:12', '超级管理员', NULL, '2026-06-25 22:07:12', NULL);
+
+
 SET FOREIGN_KEY_CHECKS = 1;
