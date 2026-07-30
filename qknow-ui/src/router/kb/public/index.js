@@ -82,6 +82,12 @@ export default [
                 component: () => import('@/views/kb/bot/detail/index.vue'),
                 name: 'agentDetail',
                 meta: { title: 'agent详情', activeMenu: '/kb/bot/agent' }
+            },
+            {
+                path: 'mcp/mcpConfigDetail',
+                component: () => import('@/views/kb/mcp/detail/index.vue'),
+                name: 'mcpDetail',
+                meta: { title: 'MCP 详情', activeMenu: '/kb/mcp' }
             }
         ]
     }

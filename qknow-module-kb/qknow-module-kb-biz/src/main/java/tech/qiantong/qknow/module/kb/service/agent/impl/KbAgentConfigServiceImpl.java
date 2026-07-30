@@ -60,6 +60,7 @@ import tech.qiantong.qknow.module.kb.dal.mapper.agent.KbAgentConfigMapper;
 import tech.qiantong.qknow.module.kb.service.agent.IKbAgentConfigService;
 import tech.qiantong.qknow.module.kb.service.agent.TargetedSkillRegistry;
 import tech.qiantong.qknow.module.kb.service.agent.tool.ReadSkillReferenceTool;
+import tech.qiantong.qknow.module.kb.service.mcp.IKbMcpConfigService;
 import tech.qiantong.qknow.module.kb.service.skills.IKbSkillsService;
 import tech.qiantong.qknow.module.kb.service.tool.IKbToolMethodService;
 import tech.qiantong.qknow.module.kb.service.tool.IKbToolService;
@@ -98,6 +99,8 @@ public class KbAgentConfigServiceImpl extends ServiceImpl<KbAgentConfigMapper, K
     private IKbSkillsService kbSkillsService;
     @Resource
     private ToolCallbackResolver resolver;
+    @Resource
+    private IKbMcpConfigService mcpConfigService;
 
     @Value("${dromara.x-file-storage.local-plus[0].storage-path}")
     private String storagePath;
@@ -307,6 +310,7 @@ public class KbAgentConfigServiceImpl extends ServiceImpl<KbAgentConfigMapper, K
         String systemPrompt = NodeUtils.replacePlaceholder(kbAgentConfig.getPrePrompt(), kbAgentConfig.getInput());
 
         messages.add(new UserMessage(kbAgentConfig.getQuestion()));
+        ToolCallbackProvider mcp = mcpConfigService.getMcpAsyncCallbackProvider(kbAgentConfig.getMcpIds());
 
         ToolCallbackProvider toolCallbackProvider = kbToolService.getToolCallbackProvider(kbAgentConfig.getToolMethodIds());
         // 配置agent
@@ -316,6 +320,7 @@ public class KbAgentConfigServiceImpl extends ServiceImpl<KbAgentConfigMapper, K
                 // 限制最多调用 5 次
                 .hooks(hooks)
                 .systemPrompt(systemPrompt)
+                .toolCallbackProviders(mcp)
                 .toolCallbackProviders(toolCallbackProvider)
                 .toolCallbackProviders(new StaticToolCallbackProvider(tools))
                 .resolver(resolver)
