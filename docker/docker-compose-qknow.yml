@@ -19,7 +19,7 @@ services:
     privileged: true
     image: ${QKNOW_HUB}/qknow-server-ce:${QKNOW_TAG}
     restart: always
-    profiles: [ "qknow", "base" ]
+    profiles: ["all", "qknow", "base" ]
     env_file: .env
     environment:
       - TZ=Asia/Shanghai

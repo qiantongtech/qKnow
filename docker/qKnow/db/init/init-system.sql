@@ -833,6 +833,9 @@ CREATE TABLE `system_role_menu`  (
 -- ----------------------------
 -- Records of system_role_menu
 -- ----------------------------
+-- ----------------------------
+-- Records of system_role_menu
+-- ----------------------------
 INSERT INTO `system_role_menu` VALUES (2, 1);
 INSERT INTO `system_role_menu` VALUES (2, 2);
 INSERT INTO `system_role_menu` VALUES (2, 110);
@@ -915,13 +918,6 @@ INSERT INTO `system_role_menu` VALUES (2, 2128);
 INSERT INTO `system_role_menu` VALUES (2, 2129);
 INSERT INTO `system_role_menu` VALUES (2, 2130);
 INSERT INTO `system_role_menu` VALUES (2, 2131);
-INSERT INTO `system_role_menu` VALUES (2, 2190);
-INSERT INTO `system_role_menu` VALUES (2, 2191);
-INSERT INTO `system_role_menu` VALUES (2, 2192);
-INSERT INTO `system_role_menu` VALUES (2, 2193);
-INSERT INTO `system_role_menu` VALUES (2, 2194);
-INSERT INTO `system_role_menu` VALUES (2, 2195);
-INSERT INTO `system_role_menu` VALUES (2, 2196);
 INSERT INTO `system_role_menu` VALUES (2, 2223);
 INSERT INTO `system_role_menu` VALUES (2, 2224);
 INSERT INTO `system_role_menu` VALUES (2, 2225);
@@ -973,6 +969,11 @@ INSERT INTO `system_role_menu` VALUES (2, 2415);
 INSERT INTO `system_role_menu` VALUES (2, 2416);
 INSERT INTO `system_role_menu` VALUES (2, 2417);
 INSERT INTO `system_role_menu` VALUES (2, 2418);
+INSERT INTO `system_role_menu` VALUES (2, 2452);
+INSERT INTO `system_role_menu` VALUES (2, 2453);
+INSERT INTO `system_role_menu` VALUES (2, 2468);
+INSERT INTO `system_role_menu` VALUES (2, 2469);
+INSERT INTO `system_role_menu` VALUES (2, 2470);
 INSERT INTO `system_role_menu` VALUES (100, 1);
 INSERT INTO `system_role_menu` VALUES (100, 101);
 INSERT INTO `system_role_menu` VALUES (100, 102);
@@ -1066,13 +1067,6 @@ INSERT INTO `system_role_menu` VALUES (100, 2128);
 INSERT INTO `system_role_menu` VALUES (100, 2129);
 INSERT INTO `system_role_menu` VALUES (100, 2130);
 INSERT INTO `system_role_menu` VALUES (100, 2131);
-INSERT INTO `system_role_menu` VALUES (100, 2190);
-INSERT INTO `system_role_menu` VALUES (100, 2191);
-INSERT INTO `system_role_menu` VALUES (100, 2192);
-INSERT INTO `system_role_menu` VALUES (100, 2193);
-INSERT INTO `system_role_menu` VALUES (100, 2194);
-INSERT INTO `system_role_menu` VALUES (100, 2195);
-INSERT INTO `system_role_menu` VALUES (100, 2196);
 INSERT INTO `system_role_menu` VALUES (100, 2223);
 INSERT INTO `system_role_menu` VALUES (100, 2224);
 INSERT INTO `system_role_menu` VALUES (100, 2225);
@@ -1133,6 +1127,11 @@ INSERT INTO `system_role_menu` VALUES (100, 2476);
 INSERT INTO `system_role_menu` VALUES (100, 2477);
 INSERT INTO `system_role_menu` VALUES (100, 2478);
 INSERT INTO `system_role_menu` VALUES (100, 2479);
+INSERT INTO `system_role_menu` VALUES (100, 2452);
+INSERT INTO `system_role_menu` VALUES (100, 2453);
+INSERT INTO `system_role_menu` VALUES (100, 2468);
+INSERT INTO `system_role_menu` VALUES (100, 2469);
+INSERT INTO `system_role_menu` VALUES (100, 2470);
 
 -- ----------------------------
 -- Table structure for system_user

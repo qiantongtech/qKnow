@@ -17,7 +17,7 @@
 services:
   redis:
     image: redis:6-alpine
-    profiles: ["base"]
+    profiles: ["all","base"]
     env_file: .env
     restart: always
     environment:
@@ -33,12 +33,12 @@ services:
       test: [ 'CMD', 'redis-cli', '-a', '${REDIS_PASSWORD:-tF0cC3aE2tD2hK0dA0oT}', 'ping' ]
     networks:
       - qknownet
-    extra_hosts:    
+    extra_hosts:
       - "host.docker.internal:host-gateway"
 
   neo4j:
     image: neo4j:4.4.40
-    profiles: ["base"]
+    profiles: ["all","base"]
     restart: always
     environment:
       - NEO4J_AUTH=neo4j/${NEO4J_PASSWORD:-aA3nJ7pF1iJ2cB0fM1nJ}
@@ -63,7 +63,7 @@ services:
   nginx:
     image: nginx:1.24.0
     restart: always
-    profiles: ["base"]
+    profiles: ["all","base"]
     env_file: .env
     ports:
       - '${EXPOSE_NGINX_PORT:-80}:${NGINX_PORT:-80}'
@@ -80,7 +80,7 @@ services:
   #MySQL主库
   mysql57:
     image: mysql:5.7
-    profiles: ["base"]
+    profiles: ["all","base"]
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD:  ${MYSQL_ROOT_PASSWORD:-lJ7gP0cA5dD2dA1hA3bJ}   # ← 修改成你的
@@ -103,7 +103,7 @@ services:
 
   weaviate:
     image: semitechnologies/weaviate:1.32.23
-    profiles: ["base"]
+    profiles: ["all","base"]
     restart: always
     hostname: weaviate
     ports:
