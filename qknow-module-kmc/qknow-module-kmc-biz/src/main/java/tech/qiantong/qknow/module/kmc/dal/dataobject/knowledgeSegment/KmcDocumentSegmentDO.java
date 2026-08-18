@@ -73,6 +73,9 @@ public class KmcDocumentSegmentDO extends BaseEntity {
     /** 答案内容(如果有) */
     private String answer;
 
+    /** 思考内容 */
+    private String thinking;
+
     /** 内容长度 */
     @JSONField(name="word_count")
     private Long wordCount;

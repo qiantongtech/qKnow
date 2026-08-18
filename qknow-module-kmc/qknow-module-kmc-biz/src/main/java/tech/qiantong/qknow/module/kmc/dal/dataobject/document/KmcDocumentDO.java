@@ -143,4 +143,13 @@ public class KmcDocumentDO extends BaseEntity {
     /** 灵桐知识库id */
     private String qmDatasetId;
 
+    /** 分段数量 */
+    private Integer segmentNum;
+
+    /** 文件类型 */
+    private String fileType;
+
+    /** JSON风格 */
+    private String jsonStyle;
+
 }

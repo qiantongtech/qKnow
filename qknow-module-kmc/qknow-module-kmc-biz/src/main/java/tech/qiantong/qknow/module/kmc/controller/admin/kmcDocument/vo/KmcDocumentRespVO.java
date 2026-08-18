@@ -159,4 +159,13 @@ public class KmcDocumentRespVO implements Serializable {
     @Excel(name = "对话模型提供商")
     @Schema(description = "对话模型提供商", example = "")
     private String chatModelProvider;
+
+    @Schema(description = "分段数量", example = "")
+    private Integer segmentNum;
+
+    @Schema(description = "文件类型", example = "")
+    private String fileType;
+
+    @Schema(description = "json 风格", example = "")
+    private String jsonStyle;
 }

@@ -24,6 +24,9 @@ import tech.qiantong.qknow.module.kmc.controller.admin.knowledgeSegment.vo.KmcDo
 import tech.qiantong.qknow.module.kmc.controller.admin.knowledgeSegment.vo.KmcDocumentSegmentRespVO;
 import tech.qiantong.qknow.module.kmc.controller.admin.knowledgeSegment.vo.KmcDocumentSegmentSaveReqVO;
 import tech.qiantong.qknow.module.kmc.dal.dataobject.knowledgeSegment.KmcDocumentSegmentDO;
+import org.springframework.ai.vectorstore.weaviate.WeaviateVectorStore;
+import tech.qiantong.qknow.module.kmc.dal.dataobject.document.KmcDocumentDO;
+import tech.qiantong.qknow.module.kmc.dal.dataobject.knowledgeBase.KmcKnowledgeBaseDO;
 
 import java.util.Collection;
 import java.util.List;
@@ -67,6 +70,28 @@ public interface IKmcDocumentSegmentService extends IService<KmcDocumentSegmentD
      * @return 文件分段编号
      */
     Long createKmcDocumentSegment(KmcDocumentSegmentSaveReqVO createReqVO);
+
+    /**
+     * 创建文段分段
+     *
+     * @param vectorStore 向量数据库
+     * @param knowledgeBaseDO 知识库
+     * @param kmcDocument 文件信息
+     * @param segmentDO 文件分段信息
+     * @return 分段信息id
+     */
+    Long createKmcDocumentSegment(WeaviateVectorStore vectorStore,
+                                  KmcKnowledgeBaseDO knowledgeBaseDO,
+                                  KmcDocumentDO kmcDocument,
+                                  KmcDocumentSegmentDO segmentDO);
+
+    /**
+     * 获取分段数量
+     *
+     * @param documentId 文件id
+     * @return 分段数量
+     */
+    Long getSegmentCount(Long documentId);
 
     /**
      * 更新文件分段

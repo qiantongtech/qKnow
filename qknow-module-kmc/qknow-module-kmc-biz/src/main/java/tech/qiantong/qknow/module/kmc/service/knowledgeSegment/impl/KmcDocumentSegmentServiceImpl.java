@@ -21,6 +21,7 @@ package tech.qiantong.qknow.module.kmc.service.knowledgeSegment.impl;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -132,6 +133,44 @@ public class KmcDocumentSegmentServiceImpl extends ServiceImpl<KmcDocumentSegmen
         }
         luceneService.saveSegment(segmentDO, kmcDocument);// 保存到 lucene
         return segmentDO.getId();
+    }
+
+    /**
+     * 创建文段分段
+     *
+     * @param vectorStore 向量数据库
+     * @param knowledgeBaseDO 知识库
+     * @param kmcDocument 文件信息
+     * @param segmentDO 文件分段信息
+     * @return 分段信息id
+     */
+    @Override
+    public Long createKmcDocumentSegment(WeaviateVectorStore vectorStore,
+                                         KmcKnowledgeBaseDO knowledgeBaseDO,
+                                         KmcDocumentDO kmcDocument,
+                                         KmcDocumentSegmentDO segmentDO) {
+        segmentDO.setQmDocumentId(kmcDocument.getQmDocumentId());
+        segmentDO.setDocumentName(kmcDocument.getName());
+        segmentDO.setWorkspaceId(kmcDocument.getWorkspaceId());
+        segmentDO.setDocumentId(kmcDocument.getId());
+        kmcDocumentSegmentMapper.insert(segmentDO);// 保存到数据库
+        if (Objects.equals(knowledgeBaseDO.getIndexingTechnique(), "high_quality")) {
+            save2VectorStore(vectorStore, segmentDO, kmcDocument);// 保存到向量数据库
+        }
+        luceneService.saveSegment(segmentDO, kmcDocument);// 保存到 lucene
+        return segmentDO.getId();
+    }
+
+    /**
+     * 获取分段数量
+     *
+     * @param documentId 文件id
+     * @return 分段数量
+     */
+    @Override
+    public Long getSegmentCount(Long documentId) {
+        return super.count(Wrappers.lambdaQuery(KmcDocumentSegmentDO.class)
+                .eq(KmcDocumentSegmentDO::getDocumentId, documentId));
     }
 
     /**
@@ -434,6 +473,20 @@ public class KmcDocumentSegmentServiceImpl extends ServiceImpl<KmcDocumentSegmen
     public void save2VectorStore(KmcKnowledgeBaseDO knowledgeBaseDO,
                                  KmcDocumentSegmentDO segmentDO, KmcDocumentDO documentDO) {
         WeaviateVectorStore vectorStore = getVectorStore(knowledgeBaseDO);
+        Document document = segment2AiDocument(segmentDO, documentDO);
+        List<Document> documentList = Collections.singletonList(document);
+        vectorStore.add(documentList);
+    }
+
+    /**
+     * 保存到向量数据库
+     *
+     * @param segmentDO  片段对象
+     * @param documentDO 文档对象
+     */
+    public void save2VectorStore(WeaviateVectorStore vectorStore,
+                                 KmcDocumentSegmentDO segmentDO,
+                                 KmcDocumentDO documentDO) {
         Document document = segment2AiDocument(segmentDO, documentDO);
         List<Document> documentList = Collections.singletonList(document);
         vectorStore.add(documentList);

@@ -42,6 +42,12 @@ import tech.qiantong.qknow.ai.transformer.ContinuousWhitespaceEnricher;
 import tech.qiantong.qknow.ai.transformer.GeneralSplitter;
 import tech.qiantong.qknow.ai.transformer.QuestionAnswerEnricher;
 import tech.qiantong.qknow.ai.transformer.RemoveUrlAndEmailEnricher;
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONReader;
+import tech.qiantong.qknow.module.kmc.service.knowledgeSegment.bo.JsonStyle;
+import tech.qiantong.qknow.module.kmc.service.knowledgeSegment.bo.AlpacaBO;
+import tech.qiantong.qknow.module.kmc.service.knowledgeSegment.bo.ShareGPTBO;
+import tech.qiantong.qknow.module.kmc.service.knowledgeSegment.bo.MultilingualThinkingBO;
 import tech.qiantong.qknow.common.exception.ServiceException;
 import tech.qiantong.qknow.common.utils.FileReader;
 import tech.qiantong.qknow.common.utils.StringUtils;
@@ -63,12 +69,15 @@ import tech.qiantong.qknow.module.kmc.service.knowledgeSegment.IKmcDocumentSegme
 import tech.qiantong.qknow.module.kmc.service.sync.IKmcSyncService;
 import tech.qiantong.qknow.module.kmc.service.sync.ILuceneService;
 import tech.qiantong.qknow.mybatis.core.query.LambdaQueryWrapperX;
-import tech.qiantong.qknow.thirdparty.domain.dify.enums.DocFormEnum;
 import tech.qiantong.qknow.thirdparty.domain.dify.knowledge.CreateFile;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
+import java.util.function.Consumer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -328,11 +337,29 @@ public class KmcSyncServiceImpl extends ServiceImpl<KmcSyncMapper, KmcSyncDO> im
         log.debug("开始同步文档分块状态..............................");
         for (KmcDocumentDO kmcDocumentDO : documentDOList) {
             KmcKnowledgeBaseDO knowledgeBaseDO = kmcKnowledgeBaseService.getById(kmcDocumentDO.getKnowledgeBaseId());
+            // 如果知识库被删除或者是禁用状态，跳过
+            if (Objects.isNull(knowledgeBaseDO) ||
+                    !knowledgeBaseDO.getValidFlag() ||
+                    knowledgeBaseDO.getDelFlag()) {
+                continue;
+            }
             File file = getFile(kmcDocumentDO);
-            GeneralSplitter generalSplitter = new GeneralSplitter(kmcDocumentDO.getSeparator(), kmcDocumentDO.getMaxTokens(),
+            GeneralSplitter generalSplitter = new GeneralSplitter(kmcDocumentDO.getSeparator(),
+                    kmcDocumentDO.getMaxTokens(),
                     Integer.parseInt(kmcDocumentDO.getChunkOverlap()));
             List<Document> documentList = this.readFile(file);
 
+            List<Document> segmentList;
+            if (Objects.equals(kmcDocumentDO.getFileType(), "json")) {
+                try {
+                    streamReadSave(knowledgeBaseDO, kmcDocumentDO, file);
+                } catch (Exception e) {
+                    log.error("同步 JSON 文件失败，文件：{}，错误：{}", kmcDocumentDO.getName(), e.getMessage(), e);
+                    kmcDocumentDO.setSyncStatus(DocumentSyncStatus.ERROR.code);
+                    kmcDocumentService.updateById(kmcDocumentDO);
+                }
+                continue;
+            }
             // 文档预处理
             if (kmcDocumentDO.getRemoveExtraSpaces()) {
                 documentList = continuousWhitespaceEnricher.apply(documentList);
@@ -341,22 +368,114 @@ public class KmcSyncServiceImpl extends ServiceImpl<KmcSyncMapper, KmcSyncDO> im
                 documentList = removeUrlAndEmailEnricher.apply(documentList);
             }
 
-            List<Document> segmentList = generalSplitter.split(documentList);
+            segmentList = generalSplitter.split(documentList);
 
-            // qa 分块
-            if (Objects.equals(kmcDocumentDO.getDocForm(), DocFormEnum.QA_MODEL.getType())) {
-                // 首先获取chatModel
-                ChatModel chatModel = aiModelService.getChatModel(Long.valueOf(kmcDocumentDO.getChatModelProvider()),
-                        kmcDocumentDO.getChatModel());
-                QuestionAnswerEnricher questionAnswerEnricher = new QuestionAnswerEnricher(chatModel, kmcDocumentDO.getDocLanguage());
-                segmentList = questionAnswerEnricher.apply(segmentList);
+            try {
+                // 保存分段
+                this.saveSegment(knowledgeBaseDO, kmcDocumentDO, segmentList);
+
+                kmcDocumentDO.setSyncStatus(DocumentSyncStatus.SUCCESS.code);
+                Long segmentCount = iKmcDocumentSegmentService.getSegmentCount(kmcDocumentDO.getId());
+                kmcDocumentDO.setSegmentNum(segmentCount.intValue());
+                kmcDocumentService.updateById(kmcDocumentDO);
+            } catch (Exception e) {
+                e.printStackTrace();
+                kmcDocumentDO.setSyncStatus(DocumentSyncStatus.ERROR.code);
+                kmcDocumentService.updateById(kmcDocumentDO);
+                continue;
             }
-            // 保存分段
-            this.saveSegment(knowledgeBaseDO, kmcDocumentDO, segmentList);
 
-            kmcDocumentDO.setSyncStatus(DocumentSyncStatus.SUCCESS.code);
-            kmcDocumentService.updateById(kmcDocumentDO);
             log.debug("结束同步文档分块状态..............................");
+        }
+    }
+
+    /**
+     * 流式读取保存分段
+     *
+     * @param knowledgeBaseDO 知识库对象
+     * @param kmcDocumentDO   文档对象
+     * @param file            具体文件
+     */
+    private void streamReadSave(KmcKnowledgeBaseDO knowledgeBaseDO, KmcDocumentDO kmcDocumentDO, File file) {
+        WeaviateVectorStore vectorStore = getVectorStore(knowledgeBaseDO);
+        Class<? extends JsonStyle> clazz;
+        if (kmcDocumentDO.getJsonStyle().equals("Alpaca")) {
+            clazz = AlpacaBO.class;
+        } else if (kmcDocumentDO.getJsonStyle().equals("ShareGPT")) {
+            clazz = ShareGPTBO.class;
+        } else {
+            clazz = MultilingualThinkingBO.class;
+        }
+        if (file.getName().endsWith(".json")) {
+            readSegmentFromJson(file, clazz, segment -> {
+                segment.setCreateBy(kmcDocumentDO.getCreateBy());
+                segment.setCreatorId(kmcDocumentDO.getCreatorId());
+                iKmcDocumentSegmentService.createKmcDocumentSegment(vectorStore, knowledgeBaseDO, kmcDocumentDO, segment);
+            });
+        } else {
+            readSegmentFromJsonl(file, clazz, segment -> {
+                segment.setCreateBy(kmcDocumentDO.getCreateBy());
+                segment.setCreatorId(kmcDocumentDO.getCreatorId());
+                iKmcDocumentSegmentService.createKmcDocumentSegment(vectorStore, knowledgeBaseDO, kmcDocumentDO, segment);
+            });
+        }
+        kmcDocumentDO.setSyncStatus(DocumentSyncStatus.SUCCESS.code);
+        Long segmentCount = iKmcDocumentSegmentService.getSegmentCount(kmcDocumentDO.getId());
+        kmcDocumentDO.setSegmentNum(segmentCount.intValue());
+        kmcDocumentService.updateById(kmcDocumentDO);
+        log.debug("结束同步文档分块状态..............................");
+    }
+
+    private WeaviateVectorStore getVectorStore(KmcKnowledgeBaseDO knowledgeBaseDO) {
+        EmbeddingModel embeddingModel = aiModelService.getEmbeddingModel(
+                Long.valueOf(knowledgeBaseDO.getEmbeddingModelProvider()),
+                knowledgeBaseDO.getEmbeddingModel());
+        return vectorStoreService.getVectorStore(embeddingModel);
+    }
+
+    /**
+     * 解析JSON数组 [ {...}, {...} ]
+     *
+     * @param file     文件
+     * @param clazz    实体Class
+     * @param consumer 单条数据回调
+     */
+    public void readSegmentFromJson(File file, Class<? extends JsonStyle> clazz, Consumer<KmcDocumentSegmentDO> consumer) {
+        int index = 0;
+        try (JSONReader reader = JSONReader.of(new FileInputStream(file), StandardCharsets.UTF_8)) {
+            reader.startArray(); // 匹配开头 [
+            while (reader.nextIfObjectStart()) {
+                JsonStyle jsonStyleEntity = reader.read(clazz);
+                index++;
+                KmcDocumentSegmentDO segmentDO = jsonStyleEntity.toKmcDocumentSegmentDO(index);
+                consumer.accept(segmentDO);
+            }
+            reader.endArray();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 解析Jsonl数组 {...} {...}
+     *
+     * @param file     文件
+     * @param clazz    实体Class
+     * @param consumer 单条数据回调
+     */
+    public void readSegmentFromJsonl(File file, Class<? extends JsonStyle> clazz, Consumer<KmcDocumentSegmentDO> consumer) {
+        int index = 0;
+        try (BufferedReader br = new BufferedReader(new java.io.FileReader(file, StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                JsonStyle jsonStyleEntity = JSONObject.parseObject(line, clazz);
+                index++;
+                KmcDocumentSegmentDO segmentDO = jsonStyleEntity.toKmcDocumentSegmentDO(index);
+                consumer.accept(segmentDO);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

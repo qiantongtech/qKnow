@@ -363,8 +363,6 @@ public class ExtUnstructTaskServiceImpl extends ServiceImpl<ExtUnstructTaskMappe
         String base = StringUtils.substring(prefix, 0, prefix.length() - 1);
 
         List<CompletableFuture<Void>> futures = Lists.newArrayList();
-        // 创建任务取消标志
-        AtomicBoolean taskCancelled = new AtomicBoolean(false);
         try {
             for (KgKnowledgeDocumentRespDTO documentDO : documentList) {
                 List<DynamicEntity> list = Lists.newArrayList();
@@ -375,22 +373,20 @@ public class ExtUnstructTaskServiceImpl extends ServiceImpl<ExtUnstructTaskMappe
                 List<String> segments = FileReader.splitText2(fileText, 5000, "\n\n");
 
                 for (String segment : segments) {
+                    Map<String, String> entityMap = new HashMap<>();
+                    entityMap.put("entityCallWord", callWord.get("entity"));
+                    entityMap.put("relationCallWord", callWord.get("relation"));
+                    entityMap.put("context", String.join("", segment));
+                    entityMap.put("entityAttribute", callWord.get("entityAttributeDesc"));
+                    if (StrUtil.hasBlank(segment)) {
+                        continue;
+                    }
                     CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-                        if (taskCancelled.get()) {
-                            String count = String.valueOf(getCurrentConcurrentCount() - 1);
-                            redisService.set("ext_run_model_count", count);
-                            return; // 如果任务已被取消，则直接返回
-                        }
                         ServiceException serviceException = new ServiceException();
                         int partIndex = segments.indexOf(segment);
                         String logText = "开始抽取第" + (fileIndex + 1) + "个文件的第" + (partIndex + 1) + "个分段";
                         try {
                             extTaskLogService.recordStep(logId, logText);
-                            Map<String, String> entityMap = new HashMap<>();
-                            entityMap.put("entityCallWord", callWord.get("entity"));
-                            entityMap.put("relationCallWord", callWord.get("relation"));
-                            entityMap.put("context", String.join("", segment));
-                            entityMap.put("entityAttribute", callWord.get("entityAttributeDesc"));
                             KbRuntimeRespDTO executeFlow = botApiService.executeFlow(AiWorkflowIdEnums.TRIPLE_EXTRACTION.getId()
                                     , unStructTaskDO.getWorkspaceId()
                                     , entityMap);
@@ -414,7 +410,6 @@ public class ExtUnstructTaskServiceImpl extends ServiceImpl<ExtUnstructTaskMappe
                         }
 
                         if (StringUtils.isNotEmpty(serviceException.getMessage())) {
-                            taskCancelled.set(true);
                             String count = String.valueOf(getCurrentConcurrentCount() - 1);
                             redisService.set("ext_run_model_count", count);
                             throw serviceException;
