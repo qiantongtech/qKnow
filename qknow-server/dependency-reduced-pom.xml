@@ -116,7 +116,7 @@
               <workingDirectory>${project.basedir}</workingDirectory>
               <arguments>
                 <argument>/c</argument>
-                <argument>echo docker buildx build --platform linux/amd64,linux/arm64 --no-cache --push -t ${docker.hub}/${docker.repo}:${docker.tag} ${project.basedir} --file=docker/Dockerfile</argument>
+                <argument>echo docker buildx build --platform linux/amd64,linux/arm64 --provenance=false --sbom=false  --no-cache --push -t ${docker.hub}/${docker.repo}:${docker.tag} ${project.basedir} --file=docker/Dockerfile</argument>
               </arguments>
             </configuration>
           </execution>
@@ -155,6 +155,8 @@
               <arguments>
                 <argument>buildx</argument>
                 <argument>build</argument>
+                <argument>--provenance=false</argument>
+                <argument>--sbom=false</argument>
                 <argument>--platform</argument>
                 <argument>linux/amd64,linux/arm64</argument>
                 <argument>--no-cache</argument>

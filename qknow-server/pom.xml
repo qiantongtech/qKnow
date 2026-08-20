@@ -249,7 +249,7 @@
                             <arguments>
                                 <argument>/c</argument>
                                 <argument>
-                                    echo docker buildx build --platform linux/amd64,linux/arm64 --no-cache --push -t ${docker.hub}/${docker.repo}:${docker.tag} ${project.basedir} --file=docker/Dockerfile
+                                    echo docker buildx build --platform linux/amd64,linux/arm64 --provenance=false --sbom=false  --no-cache --push -t ${docker.hub}/${docker.repo}:${docker.tag} ${project.basedir} --file=docker/Dockerfile
                                 </argument>
                             </arguments>
                         </configuration>
@@ -293,6 +293,9 @@
                             <arguments>
                                 <argument>buildx</argument>
                                 <argument>build</argument>
+                                <!-- 阿里云个人版 ACR 不支持 Buildx 默认生成的 OCI 证明清单 -->
+                                <argument>--provenance=false</argument>
+                                <argument>--sbom=false</argument>
                                 <argument>--platform</argument>
                                 <argument>linux/amd64,linux/arm64</argument>
                                 <argument>--no-cache</argument>
