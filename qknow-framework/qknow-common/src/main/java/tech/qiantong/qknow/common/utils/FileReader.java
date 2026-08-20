@@ -69,8 +69,12 @@ public class FileReader {
      * @return
      */
     public static String safeReadFile(String path) throws TikaException, IOException {
+        File file = new File(path);
+        if (file.isFile() && file.length() == 0) {
+            return "";
+        }
         try {
-            return TIKA.parseToString(new File(path));
+            return TIKA.parseToString(file);
         } catch (Exception e) {
             // 记录日志：文件可能加密、损坏、或格式不支持
             System.err.println("无法读取文件: " + path + ", 原因: " + e.getMessage());

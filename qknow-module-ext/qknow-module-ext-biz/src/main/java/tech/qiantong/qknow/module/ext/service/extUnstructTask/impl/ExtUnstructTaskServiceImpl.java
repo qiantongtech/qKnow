@@ -263,6 +263,10 @@ public class ExtUnstructTaskServiceImpl extends ServiceImpl<ExtUnstructTaskMappe
             String base = StringUtils.substring(prefix, 0, prefix.length() - 1);
             // 获取文件内容
             String fileText = FileReader.safeReadFile(base + kgDocument.getPath());
+            if (StringUtils.isBlank(fileText)) {
+                extTaskLogService.recordStep(logId, "抽取文件为空，抽取完成");
+                continue;
+            }
             // 获取片段
             List<String> paragraphs = FileReader.splitText2(fileText, 5000, "\n\n");
 
@@ -369,6 +373,10 @@ public class ExtUnstructTaskServiceImpl extends ServiceImpl<ExtUnstructTaskMappe
                 int fileIndex = documentList.indexOf(documentDO);
                 // 获取文件内容
                 String fileText = FileReader.safeReadFile(base + documentDO.getPath());
+                if (StringUtils.isBlank(fileText)) {
+                    extTaskLogService.recordStep(logId, "抽取文件为空，抽取完成");
+                    continue;
+                }
                 // 获取片段
                 List<String> segments = FileReader.splitText2(fileText, 5000, "\n\n");
 
