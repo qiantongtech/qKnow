@@ -94,6 +94,18 @@
                   删除
                 </el-button>
               </el-col>
+              <el-col :span="1.5">
+                <el-button
+                  type="primary"
+                  plain
+                  icon="Refresh"
+                  @click="showStorageSync"
+                  v-hasPermi="['kmcDocument:kmcDocument:document:add']"
+                  @mousedown="(e) => e.preventDefault()"
+                >
+                  数据同步
+                </el-button>
+              </el-col>
               <div class="hint-style">
                 <el-icon class="icon">
                   <InfoFilled />
@@ -353,6 +365,9 @@ import excel from "@/assets/app/office/ECEL.png";
 import pdf from "@/assets/app/office/PDF.png";
 import ppt from "@/assets/app/office/PPT.png";
 import tet from "@/assets/app/office/TET.png";
+import defaultOffice from "@/assets/app/office/DEFAULT.png";
+import json from "@/assets/app/office/JSON.png";
+import jsonl from "@/assets/app/office/JSONL.png";
 
 const { proxy } = getCurrentInstance();
 
@@ -371,11 +386,13 @@ const fileImg = {
   pptx: ppt,
   pdf: pdf,
   txt: tet,
+  json: json,
+  jsonl: jsonl,
 };
 
 // 获取文件图标
 const getFileType = (name) => {
-  return fileImg[getFileFormat(name)];
+  return fileImg[getFileFormat(name)] || defaultOffice;
 };
 
 const defaultSort = ref({ prop: "createTime", order: "descending" });
@@ -411,6 +428,7 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const route = useRoute();
+const router = useRouter();
 
 const leftWidth = ref(300); // 初始左侧宽度
 const isResizing = ref(false); // 判断是否正在拖拽
@@ -645,6 +663,11 @@ function handleAdd() {
     },
   };
   proxy.$tab.openPage(obj);
+}
+
+/** 打开第三方存储数据同步页面 */
+function showStorageSync() {
+  router.push(`/kmc/${route.params.kbId}/kmcDocument/storageSync`);
 }
 
 /** 修改按钮操作 */

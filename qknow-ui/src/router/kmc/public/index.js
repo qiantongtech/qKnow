@@ -71,6 +71,13 @@ export default [
                 name: 'kmcDocumentEdit',
                 meta: { title: '修改知识文件', activeMenu: '/kmc/:kbId/kmcDocument' },
                 hidden: true
+            },
+            {
+                path: 'kmcDocument/storageSync',
+                component: () => import('@/views/kmc/kmcDocument/storageSync/index.vue'),
+                name: 'kmcDocumentStorageSync',
+                meta: { title: '数据同步', activeMenu: '/kmc/:kbId/kmcDocument' },
+                hidden: true
             }
         ]
     }

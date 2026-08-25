@@ -681,6 +681,15 @@ function resetFromWork() {
   form.value.reportExperience = null;
 }
 function clickViewMessage(msg) {
+  // 通知公告使用独立详情页，保证从顶部通知和首页公告进入的内容保持一致。
+  if (msg && msg.noticeId != null) {
+    router.push({
+      path: "/system/notice/detail",
+      query: { id: msg.noticeId },
+    });
+    return;
+  }
+
   console.log("消息 " + JSON.stringify(msg));
   openView.value = true;
   viewData.value.title = msg.title;

@@ -36,6 +36,8 @@ import org.springframework.transaction.annotation.Transactional;
 import tech.qiantong.qknow.ai.enums.model.AiPlatformEnum;
 import tech.qiantong.qknow.ai.service.IChatModelService;
 import tech.qiantong.qknow.ai.service.IEmbeddingService;
+import tech.qiantong.qknow.common.exception.ServiceException;
+import tech.qiantong.qknow.common.utils.StringUtils;
 import tech.qiantong.qknow.module.ai.dal.dataobject.modelMarket.AiApiKeyDO;
 import tech.qiantong.qknow.module.ai.dal.dataobject.modelMarket.AiModelDO;
 import tech.qiantong.qknow.module.ai.dal.mapper.modelMarket.AiApiKeyMapper;
@@ -87,6 +89,9 @@ public class AiModelApiServiceImpl extends ServiceImpl<AiModelMapper, AiModelDO>
     @Override
     public EmbeddingModel getEmbeddingModel(Long keyId, String modelName) {
         AiApiKeyDO aiApiKeyDO = apiKeyMapper.selectById(keyId);
+        if(StringUtils.isNull(aiApiKeyDO)){
+            throw new ServiceException("获取模型失败，请检查模型配置");
+        }
         return embeddingService.getEmbeddingModel(aiApiKeyDO.getPlatform(),
                 aiApiKeyDO.getUrl(),
                 aiApiKeyDO.getApiKey(),

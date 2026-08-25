@@ -90,6 +90,18 @@
                                     删除
                                 </el-button>
                             </el-col>
+                            <el-col :span="1.5">
+                                <el-button
+                                    type="primary"
+                                    plain
+                                    icon="Refresh"
+                                    @click="showStorageSync"
+                                    v-hasPermi="['kg:knowledge:document:add']"
+                                    @mousedown="(e) => e.preventDefault()"
+                                >
+                                    数据同步
+                                </el-button>
+                            </el-col>
                         </el-row>
                         <div class="justify-end top-right-btn">
                             <right-toolbar
@@ -420,6 +432,7 @@
     import pdf from '@/assets/app/office/PDF.png';
     import ppt from '@/assets/app/office/PPT.png';
     import tet from '@/assets/app/office/TET.png';
+    import defaultOffice from '@/assets/app/office/DEFAULT.png';
 
     const { proxy } = getCurrentInstance();
 
@@ -458,7 +471,6 @@
     const title = ref('');
     const defaultSort = ref({ prop: 'createTime', order: 'desc' });
     const router = useRouter();
-    const route = useRoute();
 
     const leftWidth = ref(300); // 初始左侧宽度
     const isResizing = ref(false); // 判断是否正在拖拽
@@ -634,6 +646,11 @@
         title.value = '新增知识文件';
     }
 
+    /** 打开第三方存储数据同步页面 */
+    function showStorageSync() {
+        router.push('/kg/knowledge/document/storageSync');
+    }
+
     /** 修改按钮操作 */
     function handleUpdate(row) {
         reset();
@@ -745,7 +762,7 @@
 
     // 获取文件图标
     const getFileType = (name) => {
-        return fileImg[getFileFormat(name)];
+        return fileImg[getFileFormat(name)] || defaultOffice;
     };
 
     function handleDownload(row) {

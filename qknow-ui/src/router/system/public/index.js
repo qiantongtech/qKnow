@@ -123,6 +123,24 @@ export default [
         ]
     },
     {
+        path: '/system/notice/detail',
+        component: Layout,
+        hidden: true,
+        children: [
+            {
+                path: '',
+                component: () => import('@/views/system/system/notice/detail.vue'),
+                name: 'noticeDetail',
+                meta: {
+                    title: '公告详情',
+                    noCache: true,
+                    activeMenu: '/system/notice',
+                    breadcrumbParent: [{ title: '通知公告', path: '/system/notice' }]
+                }
+            }
+        ]
+    },
+    {
         path: '/system',
         component: Layout,
         redirect: 'ai',

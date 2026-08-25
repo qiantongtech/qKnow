@@ -295,7 +295,10 @@ public class KmcSyncServiceImpl extends ServiceImpl<KmcSyncMapper, KmcSyncDO> im
     public Boolean syncToRemove(KmcDocumentDO kmcDocumentDO) {
         KmcKnowledgeBaseDO knowledgeBase = kmcKnowledgeBaseService.getKmcKnowledgeBaseById(kmcDocumentDO.getKnowledgeBaseId());
         luceneService.deleteByDocumentId(String.valueOf(kmcDocumentDO.getId()));// 删除索引
-        this.removeVectorStoreByDocument(knowledgeBase,kmcDocumentDO);// 删除向量数据库
+        //当文件解析失败是跳过删除向量数据库，避免因为模型没有配置而抽取失败，导致删除报错问题。
+        if(!kmcDocumentDO.getSyncStatus().equals(DocumentSyncStatus.ERROR.code)){
+            this.removeVectorStoreByDocument(knowledgeBase,kmcDocumentDO);// 删除向量数据库
+        }
         LambdaQueryWrapper<KmcDocumentSegmentDO> queryWrapper = Wrappers.<KmcDocumentSegmentDO>lambdaQuery()
                 .eq(KmcDocumentSegmentDO::getDocumentId, kmcDocumentDO.getId());
         iKmcDocumentSegmentService.remove(queryWrapper);

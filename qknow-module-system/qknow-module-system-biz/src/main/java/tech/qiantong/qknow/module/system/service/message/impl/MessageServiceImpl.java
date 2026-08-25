@@ -139,11 +139,13 @@ public class MessageServiceImpl  extends ServiceImpl<MessageMapper, MessageDO> i
         if (module != null) {
             updateWrapper.eq(MessageDO::getModule, module);
         }
+        // 只更新未读消息；没有未读消息时也应视为操作成功，保证“全部已读”可以重复点击。
+        updateWrapper.eq(MessageDO::getHasRead, MessageHasReadEnums.WD.code);
         updateWrapper.set(MessageDO::getHasRead, MessageHasReadEnums.YD.code);
-        boolean update = this.update(updateWrapper);
+        this.update(updateWrapper);
         // 更新消息
         this.getReceiverWDNum(getLoginUser().getUserId());
-        return update;
+        return true;
     }
 
     /**

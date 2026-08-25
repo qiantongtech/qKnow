@@ -16,23 +16,27 @@
  * See the LICENSE file in the project root for full license information.
  */
 
-import Layout from '@/layout/index.vue';
-/* 知识抽取模块公共路由 */
-import extPublicRouter from '../../ext/public/index.js';
+package tech.qiantong.qknow.module.kmc.controller.admin.sync.vo;
 
-export default [
-    {
-        path: '/kg',
-        component: Layout,
-        children: [
-            ...extPublicRouter,
-            {
-                path: 'knowledge/document/storageSync',
-                component: () => import('@/views/kg/knowledge/document/storageSync/index.vue'),
-                name: 'kgKnowledgeDocumentStorageSync',
-                meta: { title: '数据同步', activeMenu: '/kg/knowledge/document' },
-                hidden: true
-            }
-        ]
-    }
-];
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Schema(description = "第三方存储文件节点")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class KmcStorageFileRespVO {
+
+    private String name;
+    private String path;
+    private Boolean directory;
+    private Boolean hasChildren;
+    private Long size;
+    private String lastModified;
+    private String fileType;
+}
+

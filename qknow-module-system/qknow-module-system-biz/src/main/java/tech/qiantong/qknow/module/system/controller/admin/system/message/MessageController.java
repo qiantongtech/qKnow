@@ -68,6 +68,8 @@ public class MessageController extends BaseController {
 //    @PreAuthorize("@ss.hasPermi('system:message:message:list')")
     @GetMapping("/list")
     public CommonResult<PageResult<MessageRespVO>> list(MessagePageReqVO message) {
+        // 消息列表只允许查询当前登录用户收到的消息，避免把其他用户或无接收人的消息展示到顶部通知中。
+        message.setReceiverId(getUserId());
         startPage();
         PageResult<MessageDO> page = messageService.getMessagePage(message);
         return CommonResult.success(BeanUtils.toBean(page, MessageRespVO.class));

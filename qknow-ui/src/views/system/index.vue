@@ -125,7 +125,7 @@
         <div class="border-item module-6 home-gutter">
           <div class="border-item-head">
             <span class="head-title">新闻公告 </span>
-            <el-link type="primary" :underline="false" @click="goxinwen"
+            <el-link type="primary" :underline="false" @click="goxinwen('list')"
               >查看更多
             </el-link>
           </div>
@@ -134,7 +134,7 @@
               class="module-item"
               v-for="(item, index) in module6"
               :key="index"
-              @click="goxinwen"
+              @click="goxinwen(item)"
             >
               <dict-tag :options="sys_notice_type" :value="item.noticeType" />
               <div class="value" :title="item.noticeTitle">
@@ -558,9 +558,18 @@ const module1 = ref([
   },
 ]);
 
-//新闻跳转
-function goxinwen() {
-  proxy.$router.push("/system/notice"); // 内部页面路径
+// 新闻公告跳转：查看更多进入列表，点击具体公告进入详情页。
+function goxinwen(row) {
+  if (row === "list") {
+    proxy.$router.push("/system/notice");
+  } else if (row && row.noticeId != null) {
+    proxy.$router.push({
+      path: "/system/notice/detail",
+      query: { id: row.noticeId },
+    });
+  } else {
+    proxy.$router.push("/system/notice");
+  }
 }
 
 function goprofile() {

@@ -133,4 +133,10 @@ public class KmcDocumentSaveReqVO extends BaseEntity {
     @Schema(description = "对话模型提供商", example = "")
     @Size(max = 128, message = "备注长度不能超过128个字符")
     private String chatModelProvider;
+
+    @Schema(description = "文件类型", example = "text")
+    private String fileType;
+
+    @Schema(description = "JSON 数据风格", example = "Alpaca")
+    private String jsonStyle;
 }
