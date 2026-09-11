@@ -521,7 +521,7 @@ const data = reactive({
       { required: true, message: "工作区id不能为空", trigger: "blur" },
     ],
     categoryId: [
-      { required: true, message: "知识分类id不能为空", trigger: "blur" },
+      { required: true, message: "知识分类不能为空", trigger: "blur" },
     ],
     name: [{ required: true, message: "文件名称不能为空", trigger: "blur" }],
     path: [{ required: true, message: "文件路径不能为空", trigger: "blur" }],
@@ -554,7 +554,7 @@ function getKmcCategoryTree() {
         totalCount: children.reduce(
           (sum, item) => sum + (item.totalCount || 0),
           0
-        )
+        ),
       },
     ];
   });
