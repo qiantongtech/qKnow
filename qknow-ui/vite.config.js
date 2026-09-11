@@ -80,7 +80,7 @@ export default defineConfig(({ mode, command }) => {
                 // 本地开发时将同源预览路径转发到 kkFileView 容器。
                 // kkFileView 自身配置了 /kkfileview context-path，因此保留路径前缀。
                 '/kkfileview': {
-                    target: 'http://localhost:38012',
+                    target: 'http://localhost:28012',
                     changeOrigin: true
                 }
             }
