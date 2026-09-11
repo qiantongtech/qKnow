@@ -76,6 +76,12 @@ export default defineConfig(({ mode, command }) => {
                     target: VITE_APP_FLOW_API, // 本地接口地址 , 后端工程仓库地址：https://gitee.com/youlaiorg/youlai-boot
                     changeOrigin: true,
                     rewrite: (path) => path.replace(new RegExp('^/flyflow-api'), '') // 替换 /dev-api 为 target 接口地址
+                },
+                // 本地开发时将同源预览路径转发到 kkFileView 容器。
+                // kkFileView 自身配置了 /kkfileview context-path，因此保留路径前缀。
+                '/kkfileview': {
+                    target: 'http://localhost:38012',
+                    changeOrigin: true
                 }
             }
         },

@@ -16,7 +16,15 @@
  * See the LICENSE file in the project root for full license information.
  */
 
-const baseUrl = import.meta.env.VITE_APP_FILE_VIEW + '/onlinePreview?url=';
+// 默认通过当前站点的同源反向代理访问 kkFileView，避免 HTTPS 页面直接
+// 请求独立的 HTTP 端口而被浏览器拦截。独立部署时仍可通过环境变量覆盖。
+function getFileViewBaseUrl() {
+    const configuredUrl = import.meta.env.VITE_APP_FILE_VIEW;
+    if (configuredUrl) {
+        return configuredUrl.replace(/\/$/, '');
+    }
+    return window.location.origin + '/kkfileview';
+}
 
 // 获取屏幕尺寸
 const screenWidth = window.screen.width;
@@ -33,17 +41,17 @@ const top = (screenHeight - height) / 2;
 export const filePreview = (fileUrl) => {
     // 打开新窗口并居中
     const newWindow = window.open(
-        baseUrl + base64Encode(getBaseURL() + fileUrl),
+        getFileViewBaseUrl() + '/onlinePreview?url=' + base64Encode(getFileSourceUrl(fileUrl)),
         '',
         `scrollbars=yes, width=${width}, height=${height}, top=${top}, left=${left}`
     );
-    if (window.focus) {
+    if (newWindow && window.focus) {
         newWindow.focus();
     }
 };
 
 export const filePreviewUrl = (fileUrl) => {
-    return baseUrl + base64Encode(getBaseURL() + fileUrl);
+    return getFileViewBaseUrl() + '/onlinePreview?url=' + base64Encode(getFileSourceUrl(fileUrl));
 };
 
 function base64Encode(str) {
@@ -56,5 +64,18 @@ function base64Encode(str) {
 function getBaseURL() {
     const { protocol, hostname, port } = window.location;
     return `${protocol}//${hostname}${port ? ':' + port : ''}`;
-    // return "http://192.168.0.115:80"
+}
+
+// 接受站内路径或完整 URL，并仅规范化 pathname，避免破坏 http:// 协议头。
+function getFileSourceUrl(fileUrl) {
+    const sourceUrl = /^https?:\/\//i.test(fileUrl)
+        ? String(fileUrl)
+        : getBaseURL() + '/' + String(fileUrl || '').replace(/^\/+/, '');
+    try {
+        const parsedUrl = new URL(sourceUrl);
+        parsedUrl.pathname = parsedUrl.pathname.replace(/\/{2,}/g, '/');
+        return parsedUrl.toString();
+    } catch {
+        return sourceUrl;
+    }
 }
