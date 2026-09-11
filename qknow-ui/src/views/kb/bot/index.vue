@@ -295,7 +295,9 @@
                   type="primary"
                   icon="Edit"
                   @click="handleUpdate(scope.row)"
-                  :disabled="scope.row.builtinFlag === 1"
+                  :disabled="
+                    scope.row.builtinFlag === 1 && !checkRole(['admin'])
+                  "
                   v-hasPermi="['kb:bot:bot:edit']"
                   >修改
                 </el-button>
@@ -304,7 +306,9 @@
                   type="danger"
                   icon="Delete"
                   @click="handleDelete(scope.row)"
-                  :disabled="scope.row.builtinFlag === 1"
+                  :disabled="
+                    scope.row.builtinFlag === 1 && !checkRole(['admin'])
+                  "
                   v-hasPermi="['kb:bot:bot:remove']"
                   >删除
                 </el-button>
@@ -400,6 +404,7 @@
 import { listBot, getBot, delBot, addBot, updateBot } from "@/api/kb/bot/bot";
 import { getToken } from "@/utils/auth.js";
 import { useRoute, useRouter } from "vue-router";
+import { checkRole } from "@/utils/permission";
 
 const { proxy } = getCurrentInstance();
 const { kg_bot_type, sys_is_or_not } = proxy.useDict(
