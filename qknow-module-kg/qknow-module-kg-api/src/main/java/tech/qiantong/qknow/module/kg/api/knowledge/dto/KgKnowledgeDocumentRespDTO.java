@@ -61,6 +61,9 @@ public class KgKnowledgeDocumentRespDTO {
     /** 文件描述 */
     private String description;
 
+    /** 文件类型 */
+    private String fileType;
+
     /** 是否有效 */
     private Boolean validFlag;
 

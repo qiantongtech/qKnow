@@ -16,53 +16,18 @@
  * See the LICENSE file in the project root for full license information.
  */
 
-package tech.qiantong.qknow.module.kg.api.knowledge.dto;
+package tech.qiantong.qknow.module.kmc.service.knowledgeSegment.bo;
 
-import lombok.*;
+import lombok.Data;
 
-/**
- * 知识文件 DTO 对象 kg_knowledge_document
- *
- * @author qknow
- * @date 2025-10-20
- */
+import java.util.List;
+
+/** 下载 JSON 配置。 */
 @Data
-public class KgKnowledgeDocumentReqDTO {
-
-    private static final long serialVersionUID = 1L;
-
-    /** ID */
-    private Long id;
-
-    /** 工作区id */
+public class DownloadJsonConfigBO {
+    private List<Long> documentIdList;
     private Long workspaceId;
-
-    /** 图谱id */
-    private Long graphId;
-
-    /** 知识分类id */
-    private Long categoryId;
-
-    /** 知识分类名称 */
-    private String categoryName;
-
-    /** 文件名称 */
-    private String name;
-
-    /** 文件路径 */
-    private String path;
-
-    /** 文件描述 */
-    private String description;
-
-    /** 文件类型 */
     private String fileType;
-
-    /** 是否有效 */
-    private Boolean validFlag;
-
-    /** 删除标志 */
-    private Boolean delFlag;
-
-
+    private String jsonStyle;
+    private String idType;
 }

@@ -47,6 +47,22 @@
                                 @keyup.enter="handleQuery"
                             />
                         </el-form-item>
+                        <el-form-item label="文件类型" prop="fileType">
+                            <el-select
+                                class="el-form-input-width"
+                                v-model="queryParams.fileType"
+                                filterable
+                                placeholder="请选择文件类型"
+                                clearable
+                            >
+                                <el-option
+                                    v-for="item in kmc_file_type"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
+                                />
+                            </el-select>
+                        </el-form-item>
                         <el-form-item>
                             <el-button
                                 plain
@@ -169,6 +185,20 @@
                         >
                             <template #default="scope">
                                 {{ scope.row.categoryName || '-' }}
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            v-if="getColumnVisibility(10)"
+                            label="文件类型"
+                            align="center"
+                            prop="fileType"
+                            width="140px"
+                        >
+                            <template #default="scope">
+                                <dict-tag
+                                    :options="kmc_file_type"
+                                    :value="scope.row.fileType || 'text'"
+                                />
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -344,6 +374,21 @@
                     </el-col>
                 </el-row>
                 <el-row :gutter="20">
+                    <el-col :span="24">
+                        <el-form-item label="文件类型" prop="fileType">
+                            <el-radio-group v-model="form.fileType">
+                                <el-radio
+                                    v-for="item in kmc_file_type"
+                                    :key="item.value"
+                                    :value="item.value"
+                                >
+                                    {{ item.label }}
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="20">
                     <!--            <el-col :span="12">-->
                     <!--              <el-form-item label="文件名称" prop="name">-->
                     <!--                <el-input v-model="form.name" placeholder="请输入文件名称" />-->
@@ -355,19 +400,23 @@
                                 v-model="form.path"
                                 :fileName="form.name"
                                 :fileSize="15"
-                                :fileType="[
-                                    'txt',
-                                    'pdf',
-                                    'html',
-                                    'xlsx',
-                                    'xls',
-                                    'docx',
-                                    'csv',
-                                    'md',
-                                    'mdx',
-                                    'htm',
-                                    'markdown'
-                                ]"
+                                :fileType="
+                                    form.fileType === 'json'
+                                        ? ['json', 'jsonl']
+                                        : [
+                                              'txt',
+                                              'pdf',
+                                              'html',
+                                              'xlsx',
+                                              'xls',
+                                              'docx',
+                                              'csv',
+                                              'md',
+                                              'mdx',
+                                              'htm',
+                                              'markdown'
+                                          ]
+                                "
                                 @update:fileName="updateFormFileName"
                                 @delete:index="handleDeleteFile"
                             ></FileUpload>
@@ -433,8 +482,11 @@
     import ppt from '@/assets/app/office/PPT.png';
     import tet from '@/assets/app/office/TET.png';
     import defaultOffice from '@/assets/app/office/DEFAULT.png';
+    import json from '@/assets/app/office/JSON.png';
+    import jsonl from '@/assets/app/office/JSONL.png';
 
     const { proxy } = getCurrentInstance();
+    const { kmc_file_type } = proxy.useDict('kmc_file_type');
 
     const deptTreeRef = ref(null);
     const documentList = ref([]);
@@ -445,6 +497,7 @@
         { key: 2, label: '文件名称', visible: true },
         { key: 3, label: '文件描述', visible: true },
         { key: 4, label: '分类', visible: true },
+        { key: 10, label: '文件类型', visible: true },
         { key: 5, label: '文件大小', visible: true },
         { key: 6, label: '备注', visible: true },
         { key: 7, label: '创建人', visible: true },
@@ -489,13 +542,15 @@
             categoryName: null,
             id: null,
             name: null,
+            fileType: null,
             orderByColumn: 'createTime',
             isAsc: 'descending'
         },
         rules: {
             categoryId: [{ required: true, message: '知识分类id不能为空', trigger: 'blur' }],
             name: [{ required: true, message: '文件名称不能为空', trigger: 'blur' }],
-            path: [{ required: true, message: '文件路径不能为空', trigger: 'blur' }]
+            path: [{ required: true, message: '文件路径不能为空', trigger: 'blur' }],
+            fileType: [{ required: true, message: '文件类型不能为空', trigger: 'blur' }]
         }
     });
 
@@ -587,6 +642,7 @@
             // name: null,
             path: null,
             description: null,
+            fileType: 'text',
             validFlag: null,
             delFlag: null,
             createBy: null,
@@ -657,6 +713,7 @@
         const _id = row.id || ids.value;
         getDocument(_id).then((response) => {
             form.value = response.data;
+            form.value.fileType = response.data.fileType || 'text';
             form.value.name = response.data.name.split(',');
             open.value = true;
             title.value = '修改知识文件';
@@ -675,23 +732,33 @@
     function submitForm() {
         proxy.$refs['documentRef'].validate((valid) => {
             if (valid) {
-                form.value.name = form.value.name.join(',');
+                const payload = {
+                    ...form.value,
+                    name: Array.isArray(form.value.name)
+                        ? form.value.name.join(',')
+                        : form.value.name,
+                    fileType: form.value.fileType
+                };
                 if (form.value.id != null) {
-                    updateDocument(form.value)
+                    updateDocument(payload)
                         .then((response) => {
                             proxy.$modal.msgSuccess('修改成功');
                             open.value = false;
                             getList();
                         })
-                        .catch((error) => {});
+                        .catch((error) => {
+                            proxy.$modal.msgError(error?.msg || error?.message || '修改失败');
+                        });
                 } else {
-                    addDocument(form.value)
+                    addDocument(payload)
                         .then((response) => {
                             proxy.$modal.msgSuccess('新增成功');
                             open.value = false;
                             getList();
                         })
-                        .catch((error) => {});
+                        .catch((error) => {
+                            proxy.$modal.msgError(error?.msg || error?.message || '新增失败');
+                        });
                 }
             }
         });
@@ -757,7 +824,9 @@
         ppt: ppt,
         pptx: ppt,
         pdf: pdf,
-        txt: tet
+        txt: tet,
+        json: json,
+        jsonl: jsonl
     };
 
     // 获取文件图标

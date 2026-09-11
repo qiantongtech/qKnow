@@ -18,10 +18,16 @@
 
 package tech.qiantong.qknow.module.kmc.service.knowledgeSegment.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONWriter;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +36,10 @@ import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.vectorstore.filter.Filter;
 import org.springframework.ai.vectorstore.filter.FilterExpressionBuilder;
 import org.springframework.ai.vectorstore.weaviate.WeaviateVectorStore;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import tech.qiantong.qknow.ai.constant.WeaviateConstant;
 import tech.qiantong.qknow.ai.service.IVectorStoreService;
 import tech.qiantong.qknow.common.enums.DataConstant;
@@ -50,9 +58,22 @@ import tech.qiantong.qknow.module.kmc.dal.mapper.knowledgeSegment.KmcDocumentSeg
 import tech.qiantong.qknow.module.kmc.service.kmcDocument.IKmcDocumentService;
 import tech.qiantong.qknow.module.kmc.service.knowledgeBase.IKmcKnowledgeBaseService;
 import tech.qiantong.qknow.module.kmc.service.knowledgeSegment.IKmcDocumentSegmentService;
+import tech.qiantong.qknow.module.kmc.service.knowledgeSegment.bo.*;
 import tech.qiantong.qknow.module.kmc.service.sync.ILuceneService;
+import tech.qiantong.qknow.redis.service.IRedisService;
 import tech.qiantong.qknow.thirdparty.domain.dify.enums.DocFormEnum;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -78,10 +99,56 @@ public class KmcDocumentSegmentServiceImpl extends ServiceImpl<KmcDocumentSegmen
     private ILuceneService luceneService;
     @Resource
     private IKmcKnowledgeBaseService iKmcKnowledgeBaseService;
+    @Resource
+    private IRedisService redisService;
+
+    @Value("${dromara.x-file-storage.local-plus[0].storage-path}")
+    private String prefix;
+
+
+    private final String CHUNK_FILE_PREFIX = "chunk_";
+    // 缓冲区 8MB，可按需调整
+    private static final int BUFFER_SIZE = 8 * 1024 * 1024;
 
     @Override
     public PageResult<KmcDocumentSegmentDO> getKmcDocumentSegmentPage(KmcDocumentSegmentPageReqVO pageReqVO) {
         return kmcDocumentSegmentMapper.selectPage(pageReqVO);
+    }
+
+    /**
+     * 获取下载分页列表
+     *
+     * @param page     分页数据
+     * @param configBO 下载配置
+     * @return 文件分段分页列表
+     */
+    @Override
+    public IPage<JSONObject> queryDownloadPage(IPage<JSONObject> page, DownloadJsonConfigBO configBO) {
+        LambdaQueryWrapper<KmcDocumentSegmentDO> queryWrapper = Wrappers.lambdaQuery(KmcDocumentSegmentDO.class);
+        if(Objects.equals(configBO.getIdType(), "document")){
+            queryWrapper.in(KmcDocumentSegmentDO::getDocumentId, configBO.getDocumentIdList());
+        }else {
+            queryWrapper.in(KmcDocumentSegmentDO::getId, configBO.getDocumentIdList());
+        }
+
+        IPage<KmcDocumentSegmentDO> DOPage = new Page<>(page.getCurrent(), page.getSize());
+        IPage<KmcDocumentSegmentDO> DOResultPage = super.page(DOPage, queryWrapper);
+        if (CollUtil.isEmpty(DOResultPage.getRecords())) {
+            page.setRecords(null);
+            return page;
+        }
+
+        List<JSONObject> jsonObjectList;
+        if (Objects.equals(configBO.getJsonStyle(), "Alpaca")) {
+            jsonObjectList = toAlpacaJsonList(DOResultPage.getRecords());
+        } else if (Objects.equals(configBO.getJsonStyle(), "ShareGPT")) {
+            jsonObjectList = toShareGPTJsonList(DOResultPage.getRecords());
+        } else {
+            jsonObjectList = toMultilingualThinkingJsonList(DOResultPage.getRecords());
+        }
+
+        page.setRecords(jsonObjectList);
+        return page;
     }
 
     @Override
@@ -162,18 +229,6 @@ public class KmcDocumentSegmentServiceImpl extends ServiceImpl<KmcDocumentSegmen
     }
 
     /**
-     * 获取分段数量
-     *
-     * @param documentId 文件id
-     * @return 分段数量
-     */
-    @Override
-    public Long getSegmentCount(Long documentId) {
-        return super.count(Wrappers.lambdaQuery(KmcDocumentSegmentDO.class)
-                .eq(KmcDocumentSegmentDO::getDocumentId, documentId));
-    }
-
-    /**
      * 更新分段信息
      *
      * @param updateReqVO 文件分段信息
@@ -221,215 +276,258 @@ public class KmcDocumentSegmentServiceImpl extends ServiceImpl<KmcDocumentSegmen
         return kmcDocumentSegmentMapper.selectById(id);
     }
 
+    /**
+     * 获取已上传的索引
+     *
+     * @param fileMd5 文件md5
+     * @return 已上传的索引
+     */
     @Override
-    public List<KmcDocumentSegmentDO> getKmcDocumentSegmentList() {
-        return kmcDocumentSegmentMapper.selectList();
-    }
-
-    @Override
-    public Map<Long, KmcDocumentSegmentDO> getKmcDocumentSegmentMap() {
-        List<KmcDocumentSegmentDO> kmcDocumentSegmentList = kmcDocumentSegmentMapper.selectList();
-        return kmcDocumentSegmentList.stream()
-                .collect(Collectors.toMap(
-                        KmcDocumentSegmentDO::getId,
-                        kmcDocumentSegmentDO -> kmcDocumentSegmentDO,
-                        // 保留已存在的值
-                        (existing, replacement) -> existing
-                ));
+    public List<Integer> getUploadedIndex(String fileMd5) {
+        Path chunkDir = Paths.get(getChunkDir(), fileMd5);
+        if (!Files.exists(chunkDir)) {
+            return new ArrayList<>(0);
+        }
+        File file = chunkDir.toFile();
+        File[] files = file.listFiles();
+        if (Objects.isNull(files)) {
+            return new ArrayList<>(0);
+        }
+        List<Integer> indexList = new ArrayList<>(files.length);
+        for (File chunkFile : files) {
+            String fileName = chunkFile.getName();
+            if (fileName.startsWith(CHUNK_FILE_PREFIX)) {
+                String indexStr = fileName.replace(CHUNK_FILE_PREFIX, "");
+                indexList.add(Integer.parseInt(indexStr));
+            }
+        }
+        return indexList;
     }
 
     /**
-     * 导入文件分段数据
+     * 保存分片
      *
-     * @param importExcelList 文件分段数据列表
-     * @param isUpdateSupport 是否更新支持，如果已存在，则进行更新数据
-     * @param operName        操作用户
-     * @return 结果
+     * @param chunk      分片
+     * @param fileMd5    文件md5
+     * @param chunkIndex 分片索引
+     * @return 是否保存成功
      */
     @Override
-    public String importKmcDocumentSegment(List<KmcDocumentSegmentRespVO> importExcelList, boolean isUpdateSupport, String operName) {
-        if (StringUtils.isNull(importExcelList) || importExcelList.size() == 0) {
-            throw new ServiceException("导入数据不能为空！");
+    public Boolean saveChunk(MultipartFile chunk, String fileMd5, Integer chunkIndex) throws IOException {
+        // 分片保存路径
+        Path chunkDir = Paths.get(getChunkDir(), fileMd5);
+        if (!Files.exists(chunkDir)) {
+            Files.createDirectories(chunkDir);
         }
+        Path chunkPath = chunkDir.resolve(CHUNK_FILE_PREFIX + chunkIndex);
+        // 写入分片文件
+        chunk.transferTo(chunkPath);
+        return true;
+    }
 
-        int successNum = 0;
-        int failureNum = 0;
-        List<String> successMessages = new ArrayList<>();
-        List<String> failureMessages = new ArrayList<>();
+    /**
+     * 合并分片
+     *
+     * @param md5      文件md5
+     * @param fileName 文件名
+     * @param total    分片总数
+     * @return 是否合并成功
+     */
+    @Override
+    public String mergeChunk(String md5, String fileName, Integer total) throws IOException {
+        Path chunkDir = Paths.get(getChunkDir(), md5);
+        String baseDir = getChunkDir();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd/");
 
-        for (KmcDocumentSegmentRespVO respVO : importExcelList) {
-            try {
-                KmcDocumentSegmentDO kmcDocumentSegmentDO = BeanUtils.toBean(respVO, KmcDocumentSegmentDO.class);
-                Long kmcDocumentSegmentId = respVO.getId();
-                if (isUpdateSupport) {
-                    if (kmcDocumentSegmentId != null) {
-                        KmcDocumentSegmentDO existingKmcDocumentSegment = kmcDocumentSegmentMapper.selectById(kmcDocumentSegmentId);
-                        if (existingKmcDocumentSegment != null) {
-                            kmcDocumentSegmentMapper.updateById(kmcDocumentSegmentDO);
-                            successNum++;
-                            successMessages.add("数据更新成功，ID为 " + kmcDocumentSegmentId + " 的文件分段记录。");
-                        } else {
-                            failureNum++;
-                            failureMessages.add("数据更新失败，ID为 " + kmcDocumentSegmentId + " 的文件分段记录不存在。");
-                        }
-                    } else {
-                        failureNum++;
-                        failureMessages.add("数据更新失败，某条记录的ID不存在。");
-                    }
-                } else {
-                    QueryWrapper<KmcDocumentSegmentDO> queryWrapper = new QueryWrapper<>();
-                    queryWrapper.eq("id", kmcDocumentSegmentId);
-                    KmcDocumentSegmentDO existingKmcDocumentSegment = kmcDocumentSegmentMapper.selectOne(queryWrapper);
-                    if (existingKmcDocumentSegment == null) {
-                        kmcDocumentSegmentMapper.insert(kmcDocumentSegmentDO);
-                        successNum++;
-                        successMessages.add("数据插入成功，ID为 " + kmcDocumentSegmentId + " 的文件分段记录。");
-                    } else {
-                        failureNum++;
-                        failureMessages.add("数据插入失败，ID为 " + kmcDocumentSegmentId + " 的文件分段记录已存在。");
-                    }
+        String targetPath = baseDir.concat("/").concat(formatter.format(new Date()));
+        String targetName = md5 + getFileSuffix(fileName);
+        // 构造路径
+        Path targetFile = Paths.get(targetPath, targetName);
+
+        // 创建父目录，不存在则新建
+        Path parent = targetFile.getParent();
+        if (parent != null && !Files.exists(parent)) {
+            Files.createDirectories(parent); // 递归创建多级目录
+        }
+        // NIO零拷贝合并所有分片
+        try (FileChannel out = FileChannel.open(targetFile, StandardOpenOption.CREATE, StandardOpenOption.WRITE)) {
+            for (int i = 0; i < total; i++) {
+                Path chunkFile = chunkDir.resolve(CHUNK_FILE_PREFIX + i);
+                try (FileChannel in = FileChannel.open(chunkFile, StandardOpenOption.READ)) {
+                    in.transferTo(0, in.size(), out);
                 }
-            } catch (Exception e) {
-                failureNum++;
-                String errorMsg = "数据导入失败，错误信息：" + e.getMessage();
-                failureMessages.add(errorMsg);
-                log.error(errorMsg, e);
+                Files.delete(chunkFile); // 合并后删除分片
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        StringBuilder resultMsg = new StringBuilder();
-        if (failureNum > 0) {
-            resultMsg.append("很抱歉，导入失败！共 ").append(failureNum).append(" 条数据格式不正确，错误如下：");
-            resultMsg.append("<br/>").append(String.join("<br/>", failureMessages));
-            throw new ServiceException(resultMsg.toString());
-        } else {
-            resultMsg.append("恭喜您，数据已全部导入成功！共 ").append(successNum).append(" 条。");
+        Files.delete(chunkDir);
+        // 校验文件
+        String fileMD5 = getFileMD5(targetFile);
+        if (!Objects.equals(md5, fileMD5)) {
+            throw new ServiceException("");
         }
-        return resultMsg.toString();
+        Path baseDirPath = Paths.get(baseDir);
+        String s = targetFile.toString();
+        return s.replace(baseDirPath.toString(), "");
     }
 
     /**
-     * 处理分段数据及其子分段
+     * 生成json文件
      *
-     * @param segmentObject 分段对象
-     * @param kmcDocumentDO 文档信息
-     * @param segments      结果集合
-     * @param parentId      父节点ID
+     * @param configBO 配置信息
+     * @return json文件
      */
-    private void processSegmentRecursively(JSONObject segmentObject, KmcDocumentDO kmcDocumentDO,
-                                           List<KmcDocumentSegmentDO> segments, String parentId, String qmDocumentId) {
-        // 转换当前节点字段
-        convertSegmentFields(segmentObject, kmcDocumentDO, parentId, qmDocumentId);
-        segments.add(segmentObject.to(KmcDocumentSegmentDO.class));
-        // 递归处理子节点
-        Object child = segmentObject.get("child_chunks");
-        if (StringUtils.isNotNull(child)) {
-            JSONArray childList = segmentObject.getJSONArray("child_chunks");
-            for (Object ch : childList) {
-                JSONObject childObject = (JSONObject) ch;
-                processSegmentRecursively(childObject, kmcDocumentDO, segments,
-                        segmentObject.getString("qmSegmentId"), String.valueOf(segmentObject.get("document_id")));
-            }
-        }
+    @Override
+    public String genJsonFile(DownloadJsonConfigBO configBO) {
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        String key = StrUtil.format(DOWNLOAD_FILE_ID_FORMAT, uuid);
+        redisService.set(key, JSONObject.toJSONString(configBO), DOWNLOAD_FILE_TIME_OUT);
+        return uuid;
     }
 
     /**
-     * 同步分段数据到数据库
+     * 获取分段数量
      *
-     * @param segments 灵桐获取到的分段信息
+     * @param documentId 文件id
+     * @return 分段数量
      */
-    private void syncSegmentsToDatabase(List<KmcDocumentSegmentDO> segments) {
+    @Override
+    public Long getSegmentCount(Long documentId) {
+        LambdaQueryWrapper<KmcDocumentSegmentDO> queryWrapper = Wrappers.lambdaQuery(KmcDocumentSegmentDO.class)
+                .eq(KmcDocumentSegmentDO::getDocumentId, documentId);
+        return super.count(queryWrapper);
+    }
+
+    /**
+     * 转换为Alpaca 风格的数据
+     *
+     * @param segmentDOList 文件分段列表
+     * @return Alpaca格式列表
+     */
+    private List<JSONObject> toAlpacaJsonList(List<KmcDocumentSegmentDO> segmentDOList) {
+        List<JSONObject> resultList = new ArrayList<>(segmentDOList.size());
+        for (KmcDocumentSegmentDO segmentDO : segmentDOList) {
+            AlpacaBO alpacaBO = new AlpacaBO();
+            if(StrUtil.isBlank(segmentDO.getAnswer()) || Objects.equals(segmentDO.getAnswer(), "null")){
+                alpacaBO.setInstruction("");
+                alpacaBO.setOutput(segmentDO.getContent());
+            }else {
+                alpacaBO.setInstruction(segmentDO.getContent());
+                alpacaBO.setOutput(segmentDO.getAnswer());
+            }
+
+            alpacaBO.setSystem("");
+            alpacaBO.setInput("");
+            resultList.add(JSONObject.from(alpacaBO, JSONWriter.Feature.WriteNonStringValueAsString));
+        }
+        return resultList;
+    }
+
+    /**
+     * 转换为ShareGPT风格数据
+     *
+     * @param segmentDOList 文件分段列表
+     * @return ShareGPT格式列表
+     */
+    private List<JSONObject> toShareGPTJsonList(List<KmcDocumentSegmentDO> segmentDOList) {
+        List<JSONObject> resultList = new ArrayList<>(segmentDOList.size());
+        for (KmcDocumentSegmentDO segmentDO : segmentDOList) {
+            ShareGPTBO shareGPTBO = new ShareGPTBO();
+            ShareGPTMessageBO userMessageBO = new ShareGPTMessageBO();
+            ShareGPTMessageBO assistantMessageBO = new ShareGPTMessageBO();
+
+            userMessageBO.setRole("user");
+            if(StrUtil.isBlank(segmentDO.getAnswer()) || Objects.equals(segmentDO.getAnswer(), "null")){
+                userMessageBO.setContent("");
+                assistantMessageBO.setContent(segmentDO.getContent());
+            }else {
+                userMessageBO.setContent(segmentDO.getContent());
+                assistantMessageBO.setContent(segmentDO.getAnswer());
+            }
+            assistantMessageBO.setRole("assistant");
+            shareGPTBO.setMessages(Arrays.asList(userMessageBO, assistantMessageBO));
+            resultList.add(JSONObject.from(shareGPTBO));
+        }
+        return resultList;
+    }
+
+    /**
+     * 转换为 MultilingualThinking 风格数据
+     *
+     * @param segmentDOList 文件分段列表
+     * @return 多语言思考格式列表
+     */
+    private List<JSONObject> toMultilingualThinkingJsonList(List<KmcDocumentSegmentDO> segmentDOList) {
+        List<JSONObject> resultList = new ArrayList<>(segmentDOList.size());
+        for (KmcDocumentSegmentDO segmentDO : segmentDOList) {
+            MultilingualThinkingBO multilingualThinkingBO = new MultilingualThinkingBO();
+            MultilingualThinkingMessageBO userMessageBO = new MultilingualThinkingMessageBO();
+            MultilingualThinkingMessageBO assistantMessageBO = new MultilingualThinkingMessageBO();
+
+            userMessageBO.setRole("user");
+            assistantMessageBO.setRole("assistant");
+
+            if(StrUtil.isBlank(segmentDO.getAnswer()) || Objects.equals(segmentDO.getAnswer(), "null")){
+                userMessageBO.setContent("");
+                assistantMessageBO.setContent(segmentDO.getContent());
+            }else {
+                userMessageBO.setContent(segmentDO.getContent());
+                assistantMessageBO.setContent(segmentDO.getAnswer());
+                assistantMessageBO.setThinking(segmentDO.getThinking());
+            }
+
+            multilingualThinkingBO.setReasoning_language("");
+            multilingualThinkingBO.setDeveloper("");
+            multilingualThinkingBO.setUser(segmentDO.getContent());
+            multilingualThinkingBO.setAnalysis(segmentDO.getThinking());
+            multilingualThinkingBO.setMessages(List.of(userMessageBO, assistantMessageBO));
+            JSONObject jsonObject = JSONObject.from(multilingualThinkingBO);
+            jsonObject.put("final", segmentDO.getAnswer());// final 是关键字，只能在 JSONObject 中使用
+
+            resultList.add(jsonObject);
+        }
+        return resultList;
+    }
+
+    /**
+     * 获取文件MD5字符串（小写32位）
+     */
+    public static String getFileMD5(Path filePath) throws IOException {
+        if (!Files.exists(filePath) || Files.isDirectory(filePath)) {
+            throw new IOException("文件不存在或为目录：" + filePath);
+        }
+        MessageDigest md5;
         try {
-            Set<String> allSegmentsId = segments.stream()
-                    .filter(Objects::nonNull)
-                    .map(KmcDocumentSegmentDO::getQmSegmentId)
-                    .filter(StringUtils::isNotEmpty)
-                    .collect(Collectors.toSet());
-
-            if (allSegmentsId.isEmpty()) {
-                return;
-            }
-            // 查询现有数据
-            List<KmcDocumentSegmentDO> existingList = lambdaQuery()
-                    .select(KmcDocumentSegmentDO::getId, KmcDocumentSegmentDO::getQmSegmentId)
-                    .in(KmcDocumentSegmentDO::getQmSegmentId, allSegmentsId)
-                    .eq(KmcDocumentSegmentDO::getDelFlag, DataConstant.TrueOrFalse.FALSE.getVal())
-                    .list();
-
-            if (existingList == null) {
-                existingList = Collections.emptyList();
-            }
-
-            // 修改为Map<String, Long> 用qmSegmentId作为key，Id作为value
-            Map<String, Long> existMap = existingList.stream()
-                    .filter(Objects::nonNull)
-                    .filter(segment -> StringUtils.isNotEmpty(segment.getQmSegmentId()))
-                    .collect(Collectors.toMap(
-                            KmcDocumentSegmentDO::getQmSegmentId,
-                            KmcDocumentSegmentDO::getId,
-                            // 处理重复key的情况，保留第一个
-                            (existing, replacement) -> existing
-                    ));
-
-            // 分类处理
-            List<KmcDocumentSegmentDO> update = new ArrayList<>();
-            List<KmcDocumentSegmentDO> insert = new ArrayList<>();
-
-            for (KmcDocumentSegmentDO segment : segments) {
-                if (segment == null || StringUtils.isEmpty(segment.getQmSegmentId())) {
-                    continue;
-                }
-                if (existMap.containsKey(segment.getQmSegmentId())) {
-                    //设置ID用于更新操作
-                    segment.setId(existMap.get(segment.getQmSegmentId()));
-                    update.add(segment);
-                } else {
-                    insert.add(segment);
-                }
-            }
-            // 批量操作
-            if (!insert.isEmpty()) {
-                baseMapper.insertBatch(insert);
-            }
-            if (!update.isEmpty()) {
-                baseMapper.updateBatch(update);
-            }
-        } catch (Exception e) {
-            log.error("批量同步分段数据到数据库失败", e);
+            md5 = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
         }
+        ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
+
+        try (FileChannel channel = FileChannel.open(filePath)) {
+            while (channel.read(buffer) != -1) {
+                buffer.flip();
+                md5.update(buffer);
+                buffer.clear();
+            }
+        }
+        return bytesToHex(md5.digest());
     }
 
     /**
-     * 转换分段对象字段
-     *
-     * @param segmentObject 分段JSON对象
-     * @param kmcDocumentDO 文档信息
-     * @param parentId      父节点ID
-     * @param qmDocumentId  分段文档ID
+     * byte数组转32位小写MD5字符串
      */
-    private void convertSegmentFields(JSONObject segmentObject, KmcDocumentDO kmcDocumentDO,
-                                      String parentId, String qmDocumentId) {
-        // 设置分段ID
-        segmentObject.put("qmSegmentId", segmentObject.get("id"));
-
-        // 设置文档ID
-        if (StringUtils.isNotNull(segmentObject.get("document_id"))) {
-            segmentObject.put("qmDocumentId", segmentObject.get("document_id"));
-        } else {
-            segmentObject.put("qmDocumentId", qmDocumentId);
+    private static String bytesToHex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) {
+                sb.append('0');
+            }
+            sb.append(hex);
         }
-        // 移除原始字段
-        segmentObject.remove("id");
-        segmentObject.remove("documentId");
-        // 添加文档相关信息
-        segmentObject.put("workspaceId", kmcDocumentDO.getWorkspaceId());
-        segmentObject.put("documentName", kmcDocumentDO.getName());
-        segmentObject.put("documentId", kmcDocumentDO.getId());
-        segmentObject.put("syncStatus", 1);
-
-        // 设置父节点ID
-        if (StringUtils.isNotEmpty(parentId)) {
-            segmentObject.put("parentId", parentId);
-        }
+        return sb.toString();
     }
 
     /**
@@ -522,5 +620,22 @@ public class KmcDocumentSegmentServiceImpl extends ServiceImpl<KmcDocumentSegmen
             metaData.put("answer", segmentDO.getAnswer());
         }
         return new Document(segmentDO.getContent(), metaData);
+    }
+
+    /**
+     * 获取文件后缀（带点 .zip .txt）
+     * 无后缀返回空字符串
+     */
+    public static String getFileSuffix(String fileName) {
+        int lastDot = fileName.lastIndexOf(".");
+        if (lastDot > 0) {
+            return fileName.substring(lastDot);
+        }
+        return "";
+    }
+
+    private String getChunkDir() {
+//    private final String CHUNK_DIR = "data/upload/temp/";
+        return StringUtils.substring(prefix, 0, prefix.length() - 1);
     }
 }

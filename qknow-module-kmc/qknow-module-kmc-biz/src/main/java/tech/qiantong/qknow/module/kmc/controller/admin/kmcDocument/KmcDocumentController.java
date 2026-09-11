@@ -112,10 +112,6 @@ public class KmcDocumentController extends BaseController {
         kmcDocument.setCreateBy(getNickName());
         kmcDocument.setCreateTime(DateUtil.date());
         kmcDocument.setWorkspaceId(super.getWorkSpaceId());
-        if (Objects.equals(kmcDocument.getDocForm(), DocFormEnum.QA_MODEL.getType())){
-            Assert.notBlank(kmcDocument.getMode(),"对话模型不能为空");
-            Assert.notBlank(kmcDocument.getChatModelProvider(),"对话模型不能为空");
-        }
         return CommonResult.toAjax(kmcDocumentService.createKmcDocument(kmcDocument));
     }
 

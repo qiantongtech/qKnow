@@ -65,6 +65,10 @@ public class KgKnowledgeDocumentRespVO implements Serializable {
     @Schema(description = "文件描述", example = "")
     private String description;
 
+    @Excel(name = "文件类型")
+    @Schema(description = "文件类型", example = "")
+    private String fileType;
+
     @Excel(name = "是否有效")
     @Schema(description = "是否有效", example = "")
     private Boolean validFlag;

@@ -43,6 +43,7 @@ public interface KmcDocumentSegmentMapper extends BaseMapperX<KmcDocumentSegment
         // 构造动态查询条件
         return selectPage(reqVO, new LambdaQueryWrapperX<KmcDocumentSegmentDO>()
                 .likeIfPresent(KmcDocumentSegmentDO::getContent, reqVO.getContent())
+                .likeIfPresent(KmcDocumentSegmentDO::getAnswer, reqVO.getAnswer())
                 .eqIfPresent(KmcDocumentSegmentDO::getSyncStatus, reqVO.getSyncStatus())
                 .eqIfPresent(KmcDocumentSegmentDO::getDocumentId, reqVO.getDocumentId())
                 //.isNull(KmcDocumentSegmentDO::getParentId)

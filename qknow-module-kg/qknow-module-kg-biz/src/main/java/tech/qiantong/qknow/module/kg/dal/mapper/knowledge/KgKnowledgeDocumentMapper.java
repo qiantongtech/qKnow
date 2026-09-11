@@ -47,6 +47,7 @@ public interface KgKnowledgeDocumentMapper extends BaseMapperX<KgKnowledgeDocume
                 .likeIfPresent(KgKnowledgeDocumentDO::getName, reqVO.getName())
                 .eqIfPresent(KgKnowledgeDocumentDO::getPath, reqVO.getPath())
                 .eqIfPresent(KgKnowledgeDocumentDO::getDescription, reqVO.getDescription())
+                .eqIfPresent(KgKnowledgeDocumentDO::getFileType, reqVO.getFileType())
                 .eqIfPresent(KgKnowledgeDocumentDO::getCreateTime, reqVO.getCreateTime())
                 .inIfPresent(KgKnowledgeDocumentDO::getCategoryId, reqVO.getIds())
                 // 如果 reqVO.getName() 不为空，则添加 name 的精确匹配条件（name = '<name>'）

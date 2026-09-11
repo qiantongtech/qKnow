@@ -48,6 +48,22 @@
                 @keyup.enter="handleQuery"
               />
             </el-form-item>
+            <el-form-item label="文件类型" prop="fileType">
+              <el-select
+                class="el-form-input-width"
+                v-model="queryParams.fileType"
+                filterable
+                placeholder="请选择文件类型"
+                clearable
+              >
+                <el-option
+                  v-for="item in kmc_file_type"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
             <el-form-item>
               <el-button
                 plain
@@ -88,10 +104,22 @@
                   :disabled="multiple"
                   @click="handleDelete"
                   icon="Delete"
-                  v-hasPermi="['kg:knowledge:document:remove']"
+                  v-hasPermi="['kmcDocument:kmcDocument:document:remove']"
                   @mousedown="(e) => e.preventDefault()"
                 >
                   删除
+                </el-button>
+              </el-col>
+              <el-col :span="1.5">
+                <el-button
+                  type="warning"
+                  plain
+                  :disabled="multiple"
+                  @click="handleSegmentExport"
+                  v-hasPermi="['kmcDocument:kmcDocument:document:export']"
+                >
+                  <i class="iconfont-mini icon-daochu"></i>
+                  导出
                 </el-button>
               </el-col>
               <el-col :span="1.5">
@@ -100,21 +128,12 @@
                   plain
                   icon="Refresh"
                   @click="showStorageSync"
-                  v-hasPermi="['kmcDocument:kmcDocument:document:add']"
+                  v-hasPermi="['kmcDocument:kmcDocument:document:export']"
                   @mousedown="(e) => e.preventDefault()"
                 >
                   数据同步
                 </el-button>
               </el-col>
-              <div class="hint-style">
-                <el-icon class="icon">
-                  <InfoFilled />
-                </el-icon>
-                <span class="text"
-                  >当前模型资源紧张，该功能暂不可用。建议您进行本地部署并自行配置模型密钥（API
-                  Key）来开启使用。</span
-                >
-              </div>
             </el-row>
             <div class="justify-end top-right-btn">
               <right-toolbar
@@ -187,25 +206,28 @@
               </template>
             </el-table-column>
             <el-table-column
-              v-if="getColumnVisibility(10)"
-              label="文件大小"
+              v-if="getColumnVisibility(6)"
+              label="文件类型"
               align="center"
-              prop="fileSize"
-              width="100"
+              prop="fileType"
+              width="200px"
             >
               <template #default="scope">
-                {{ (Math.random() * 3 + 0).toFixed(2) }} MB
+                <dict-tag
+                  :options="kmc_file_type"
+                  :value="scope.row.fileType"
+                />
               </template>
             </el-table-column>
             <el-table-column
               v-if="getColumnVisibility(11)"
               label="文件分段数量"
               align="center"
-              prop="fileSize"
+              prop="segmentNum"
               width="120"
             >
               <template #default="scope">
-                {{ Math.floor(Math.random() * 10 + 1) }}
+                {{ scope.row.segmentNum || "-" }}
               </template>
             </el-table-column>
             <el-table-column
@@ -341,6 +363,11 @@
         </div>
       </el-main>
     </el-container>
+    <SegmentExportDialog
+      ref="segmentExportDialogRef"
+      idType="document"
+      :documentIdList="ids"
+    />
   </div>
 </template>
 
@@ -368,13 +395,18 @@ import tet from "@/assets/app/office/TET.png";
 import defaultOffice from "@/assets/app/office/DEFAULT.png";
 import json from "@/assets/app/office/JSON.png";
 import jsonl from "@/assets/app/office/JSONL.png";
+import SegmentExportDialog from "@/views/kmc/knowledgeSegment/selection/segmentExportDialog.vue";
 
 const { proxy } = getCurrentInstance();
 
-const { document_sync_status } = proxy.useDict("document_sync_status");
+const { document_sync_status, kmc_file_type } = proxy.useDict(
+  "document_sync_status",
+  "kmc_file_type"
+);
 
 const deptTreeRef = ref(null);
 const documentList = ref([]);
+const segmentExportDialogRef = ref(null);
 
 // 文件类型图标映射
 const fileImg = {
@@ -402,9 +434,9 @@ const columns = ref([
   { key: 1, label: "编号", visible: true },
   { key: 2, label: "文件名称", visible: true },
   { key: 3, label: "文件描述", visible: true },
-  { key: 10, label: "文件大小", visible: true },
   { key: 11, label: "文件分段数量", visible: true },
   { key: 4, label: "分类", visible: true },
+  { key: 6, label: "文件类型", visible: true },
   { key: 5, label: "解析状态", visible: true },
   // { key: 6, label: "备注", visible: true },
   { key: 7, label: "创建人", visible: true },
@@ -479,6 +511,7 @@ const data = reactive({
     pageNum: 1,
     pageSize: 10,
     name: null,
+    fileType: null,
     knowledgeBaseId: null,
     orderByColumn: "createTime",
     isAsc: "descending",
@@ -511,16 +544,17 @@ async function treeQuery() {
 /** 查询部门下拉树结构 */
 function getKmcCategoryTree() {
   getFileTypes(queryParams.value.knowledgeBaseId).then((response) => {
+    const children = response.data || [];
     KcOptions.value = [
       {
         id: 0,
         name: "知识分类",
-        children: response.data,
-        count: response.data.length,
-        totalCount: response.data.reduce(
-          (sum, item) => sum + item.totalCount,
+        children,
+        count: children.length,
+        totalCount: children.reduce(
+          (sum, item) => sum + (item.totalCount || 0),
           0
-        ),
+        )
       },
     ];
   });
@@ -694,10 +728,14 @@ function handleSegment(row) {
   proxy.$tab.openPage(obj);
 }
 
+/** 导出分段按钮操作 */
+function handleSegmentExport() {
+  segmentExportDialogRef.value.open();
+}
+
 /** 删除按钮操作 */
-function handleDelete(row) {
+function handleDelete(row = {}) {
   const _ids = row.id || ids.value;
-  const name = row.name;
   proxy.$modal
     .confirm('是否确认删除知识文件编号为"' + _ids + '"的数据项？')
     .then(function () {

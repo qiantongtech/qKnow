@@ -39,6 +39,9 @@ public class KmcDocumentSegmentPageReqVO extends PageParam {
     @Schema(description = "分段内容文本", example = "")
     private String content;
 
+    /** 答案 */
+    private String answer;
+
     @Schema(description = "分段添加dify状态", example = "")
     private Integer syncStatus;
 

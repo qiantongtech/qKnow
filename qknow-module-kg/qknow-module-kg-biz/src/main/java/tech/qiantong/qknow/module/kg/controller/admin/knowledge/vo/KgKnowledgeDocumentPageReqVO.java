@@ -56,6 +56,9 @@ public class KgKnowledgeDocumentPageReqVO extends PageParam {
     @Schema(description = "文件描述", example = "")
     private String description;
 
+    @Schema(description = "文件类型", example = "")
+    private String fileType;
+
     @TableField(exist = false)
     private List<Long> ids ;
 

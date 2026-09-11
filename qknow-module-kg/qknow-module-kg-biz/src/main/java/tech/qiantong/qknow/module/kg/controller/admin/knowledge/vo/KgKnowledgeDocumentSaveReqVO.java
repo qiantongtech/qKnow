@@ -64,6 +64,9 @@ public class KgKnowledgeDocumentSaveReqVO extends BaseEntity {
     @Size(max = 1024, message = "文件描述长度不能超过1024个字符")
     private String description;
 
+    @Schema(description = "文件类型", example = "text")
+    private String fileType;
+
     @Schema(description = "备注", example = "")
     @Size(max = 512, message = "备注长度不能超过512个字符")
     private String remark;

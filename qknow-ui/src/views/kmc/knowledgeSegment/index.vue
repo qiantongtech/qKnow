@@ -28,11 +28,29 @@
                 v-show="showSearch"
                 @submit.prevent
             >
-                <el-form-item label="分段内容" prop="content">
+                <el-form-item label="分段内容" v-if="model === 'text_model'" prop="content">
                     <el-input
                         class="el-form-input-width"
                         v-model="queryParams.content"
                         placeholder="请输入分段内容"
+                        clearable
+                        @keyup.enter="handleQuery"
+                    />
+                </el-form-item>
+                <el-form-item label="问题" v-if="model === 'qa_model'" prop="content">
+                    <el-input
+                        class="el-form-input-width"
+                        v-model="queryParams.content"
+                        placeholder="请输入问题"
+                        clearable
+                        @keyup.enter="handleQuery"
+                    />
+                </el-form-item>
+                <el-form-item label="答案" v-if="model === 'qa_model'" prop="answer">
+                    <el-input
+                        class="el-form-input-width"
+                        v-model="queryParams.answer"
+                        placeholder="请输入答案"
                         clearable
                         @keyup.enter="handleQuery"
                     />
@@ -78,6 +96,18 @@
                             @mousedown="(e) => e.preventDefault()"
                         >
                             删除
+                        </el-button>
+                    </el-col>
+                    <el-col :span="1.5">
+                        <el-button
+                            type="warning"
+                            plain
+                            :disabled="multiple"
+                            @click="handleSegmentExport"
+                            v-hasPermi="['kmc:knowledgeSegment:knowledgesegment:export']"
+                        >
+                            <i class="iconfont-mini icon-daochu"></i>
+                            导出
                         </el-button>
                     </el-col>
                     <el-col :span="1.5">
@@ -471,6 +501,12 @@
                 </div>
             </template>
         </el-dialog>
+        <SegmentExportDialog
+            ref="segmentExportDialogRef"
+            idType="segment"
+            :documentIdList="ids"
+        />
+
         <!-- 用户导入对话框 -->
         <el-dialog
             :title="upload.title"
@@ -534,6 +570,7 @@
         updateKnowledgeSegment
     } from '@/api/kmc/knowledgeSegment/knowledgeSegment';
     import { getToken } from '@/utils/auth.js';
+    import SegmentExportDialog from '@/views/kmc/knowledgeSegment/selection/segmentExportDialog.vue';
     const route = useRoute();
     const { proxy } = getCurrentInstance();
     const { sync_status, segment_type } = proxy.useDict('sync_status', 'segment_type');
@@ -574,6 +611,7 @@
     const defaultSort = ref({ prop: 'createTime', order: 'desc' });
     const router = useRouter();
     const model = ref(proxy.$route.query.mode);
+    const segmentExportDialogRef = ref(null);
 
     /*** 用户导入参数 */
     const upload = reactive({
@@ -936,6 +974,11 @@
                 });
             }
         }
+    }
+
+    /** 导出分段按钮操作 */
+    function handleSegmentExport() {
+        segmentExportDialogRef.value.open();
     }
 
     getList();

@@ -77,3 +77,29 @@ export function delKnowledgeSegment(id) {
         method: 'delete'
     });
 }
+
+/** 查询文件已上传的分片下标 */
+export function uploadCheck(fileMd5) {
+    return request({
+        url: '/kmc/knowledgeSegment/upload/check?fileMd5=' + fileMd5,
+        method: 'get'
+    });
+}
+
+/** 合并文件分片 */
+export function uploadMerge(data) {
+    return request({
+        url: '/kmc/knowledgeSegment/upload/merge',
+        method: 'post',
+        data
+    });
+}
+
+/** 生成 JSON/JSONL 导出文件 */
+export function genJsonFile(data) {
+    return request({
+        url: '/kmc/knowledgeSegment/gen/jsonFile',
+        method: 'get',
+        params: data
+    });
+}

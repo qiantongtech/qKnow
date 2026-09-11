@@ -104,6 +104,9 @@ public class KmcDocumentPageReqVO extends PageParam {
     /** 子分段分隔符 */
     private String subchunkSeparator;
 
+    @Schema(description = "文件类型", example = "")
+    private String fileType;
+
     @TableField(exist = false)
     private List<Long> ids ;
 }

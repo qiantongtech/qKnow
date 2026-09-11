@@ -47,6 +47,7 @@ public interface KmcDocumentMapper extends BaseMapperX<KmcDocumentDO> {
                 .likeIfPresent(KmcDocumentDO::getCategoryName, reqVO.getCategoryName())
                 .likeIfPresent(KmcDocumentDO::getName, reqVO.getName())
                 .eqIfPresent(KmcDocumentDO::getPath, reqVO.getPath())
+                .eqIfPresent(KmcDocumentDO::getFileType, reqVO.getFileType())
                 .eqIfPresent(KmcDocumentDO::getDescription, reqVO.getDescription())
                 .eqIfPresent(KmcDocumentDO::getSyncStatus, reqVO.getSyncStatus())
                 .eqIfPresent(KmcDocumentDO::getCreateTime, reqVO.getCreateTime())

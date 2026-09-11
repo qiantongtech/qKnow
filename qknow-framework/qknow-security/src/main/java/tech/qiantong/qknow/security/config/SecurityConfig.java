@@ -158,6 +158,8 @@ public class SecurityConfig
                             "/oauth2/**",
                             "/api/app/**"
                     ).permitAll()
+                    // 文档静态文件，可匿名访问
+                    .requestMatchers("/docs/**").permitAll()
                     // WebFlux 异步请求，无需认证，目的：SSE 场景
                     .dispatcherTypeMatchers(DispatcherType.ASYNC).permitAll()
                     // 除上面外的所有请求全部需要鉴权认证

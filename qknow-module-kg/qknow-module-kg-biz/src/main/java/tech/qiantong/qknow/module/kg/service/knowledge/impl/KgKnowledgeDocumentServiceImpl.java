@@ -73,11 +73,13 @@ public class KgKnowledgeDocumentServiceImpl  extends ServiceImpl<KgKnowledgeDocu
 
         String[] names = createReqVO.getName().split(",");
         String[] paths = createReqVO.getPath().split(",");
+        String fileType = resolveFileType(createReqVO.getFileType(), names);
         List<KgKnowledgeDocumentDO> documentList = new ArrayList<>();
         for (int i = 0; i < paths.length; i++) {
             KgKnowledgeDocumentDO dictType = BeanUtils.toBean(createReqVO, KgKnowledgeDocumentDO.class);
             dictType.setName(names[i]);
             dictType.setPath(paths[i]);
+            dictType.setFileType(fileType);
             documentList.add(dictType);
         }
         //批量添加
@@ -91,11 +93,13 @@ public class KgKnowledgeDocumentServiceImpl  extends ServiceImpl<KgKnowledgeDocu
 
         String[] names = updateReqVO.getName().split(",");
         String[] paths = updateReqVO.getPath().split(",");
+        String fileType = resolveFileType(updateReqVO.getFileType(), names);
         List<KgKnowledgeDocumentDO> documentList = Lists.newArrayList();
         for (int i = 0; i < paths.length; i++) {
             KgKnowledgeDocumentDO dictType = BeanUtils.toBean(updateReqVO, KgKnowledgeDocumentDO.class);
             dictType.setName(names[i]);
             dictType.setPath(paths[i]);
+            dictType.setFileType(fileType);
             if (i != 0) {
                 dictType.setId(null);
             }
@@ -113,6 +117,20 @@ public class KgKnowledgeDocumentServiceImpl  extends ServiceImpl<KgKnowledgeDocu
 
         return kgKnowledgeDocumentMapper.updateById(kgDocument);
     }
+
+    private String resolveFileType(String fileType, String[] names) {
+        if ("json".equalsIgnoreCase(fileType)) {
+            return "json";
+        }
+        for (String name : names) {
+            String lowerName = name.toLowerCase(Locale.ROOT);
+            if (lowerName.endsWith(".json") || lowerName.endsWith(".jsonl")) {
+                return "json";
+            }
+        }
+        return "text";
+    }
+
     @Override
     public int removeKgKnowledgeDocument(Collection<Long> idList) {
         // 批量删除知识文件

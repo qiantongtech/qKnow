@@ -18,6 +18,7 @@
 
 package tech.qiantong.qknow.module.kmc.controller.admin.knowledgeSegment;
 
+import com.alibaba.fastjson2.JSONObject;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -42,7 +43,10 @@ import tech.qiantong.qknow.module.kmc.controller.admin.knowledgeSegment.vo.KmcDo
 import tech.qiantong.qknow.module.kmc.convert.knowledgeSegment.KmcDocumentSegmentConvert;
 import tech.qiantong.qknow.module.kmc.dal.dataobject.knowledgeSegment.KmcDocumentSegmentDO;
 import tech.qiantong.qknow.module.kmc.service.knowledgeSegment.IKmcDocumentSegmentService;
+import tech.qiantong.qknow.module.kmc.service.knowledgeSegment.bo.DownloadJsonConfigBO;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -95,18 +99,6 @@ public class KmcDocumentSegmentController extends BaseController {
         util.exportExcel(response, KmcDocumentSegmentConvert.INSTANCE.convertToRespVOList(list), "应用管理数据");
     }
 
-    @Operation(summary = "导入文件分段列表")
-    @PreAuthorize("@ss.hasPermi('kmc:knowledgeSegment:knowledgesegment:import')")
-    @Log(title = "文件分段", businessType = BusinessType.IMPORT)
-    @PostMapping("/importData")
-    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
-        ExcelUtil<KmcDocumentSegmentRespVO> util = new ExcelUtil<>(KmcDocumentSegmentRespVO.class);
-        List<KmcDocumentSegmentRespVO> importExcelList = util.importExcel(file.getInputStream());
-        String operName = getUsername();
-        String message = kmcDocumentSegmentService.importKmcDocumentSegment(importExcelList, updateSupport, operName);
-        return success(message);
-    }
-
     @Operation(summary = "获取文件分段详细信息")
     @PreAuthorize("@ss.hasPermi('kmc:knowledgeSegment:knowledgesegment:query')")
     @GetMapping(value = "/{id}")
@@ -140,5 +132,47 @@ public class KmcDocumentSegmentController extends BaseController {
     public CommonResult<Integer> remove(@PathVariable Long ids) {
         int i = kmcDocumentSegmentService.removeKmcDocumentSegment(Collections.singletonList(ids));
         return CommonResult.success(i);
+    }
+
+    @Operation(summary = "查询文件已上传的分片下标")
+    @PreAuthorize("@ss.hasPermi('kmc:knowledgeSegment:knowledgesegment:export')")
+    @GetMapping("/upload/check")
+    public CommonResult<List<Integer>> checkChunk(@RequestParam("fileMd5") String fileMd5) {
+        return CommonResult.success(kmcDocumentSegmentService.getUploadedIndex(fileMd5));
+    }
+
+    @Operation(summary = "上传文件分片")
+    @PostMapping("/upload/chunk")
+    public CommonResult<Boolean> uploadChunk(@RequestParam("chunk") MultipartFile chunk,
+                                             @RequestParam("fileMd5") String fileMd5,
+                                             @RequestParam("chunkIndex") Integer chunkIndex) throws IOException {
+        return CommonResult.success(kmcDocumentSegmentService.saveChunk(chunk, fileMd5, chunkIndex));
+    }
+
+    @Operation(summary = "合并文件分片")
+    @PostMapping("/upload/merge")
+    public CommonResult<String> mergeChunk(@RequestBody JSONObject request) throws IOException {
+        return CommonResult.success(kmcDocumentSegmentService.mergeChunk(
+                request.getString("fileMd5"),
+                request.getString("fileName"),
+                request.getInteger("chunkTotal")));
+    }
+
+    @Operation(summary = "生成要下载的 JSON 文件")
+    @PreAuthorize("(#idType == 'document' and @ss.hasPermi('kmcDocument:kmcDocument:document:export')) " +
+            "or (#idType == 'segment' and @ss.hasPermi('kmc:knowledgeSegment:knowledgesegment:export'))")
+    @GetMapping("/gen/jsonFile")
+    public CommonResult<String> genJsonFile(@RequestParam("documentIds") String documentIds,
+                                            @RequestParam("fileType") String fileType,
+                                            @RequestParam("jsonStyle") String jsonStyle,
+                                            @RequestParam("idType") String idType) {
+        List<Long> documentIdList = Arrays.stream(documentIds.split(",")).map(Long::parseLong).toList();
+        DownloadJsonConfigBO configBO = new DownloadJsonConfigBO();
+        configBO.setDocumentIdList(documentIdList);
+        configBO.setWorkspaceId(super.getWorkSpaceId());
+        configBO.setJsonStyle(jsonStyle);
+        configBO.setFileType(fileType);
+        configBO.setIdType(idType);
+        return CommonResult.success(kmcDocumentSegmentService.genJsonFile(configBO));
     }
 }

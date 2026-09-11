@@ -1,17 +1,17 @@
 <!--
  Copyright © 2025-present Jiangsu Qiantong Technology Co., Ltd.
- 
+
  This file is part of qKnow Intelligent Agent Building Platform (Open Source Edition).
- 
+
  qKnow is licensed under Apache License 2.0 with additional qKnow terms.
  You may use qKnow for commercial purposes, but you may not remove, hide,
  modify, or replace the qKnow logo, copyright notices, license notices,
  or attribution information without a separate commercial license.
- 
+
  White-label use, OEM distribution, rebranding, or presenting qKnow as
  another product requires separate commercial authorization from
  Jiangsu Qiantong Technology Co., Ltd.
- 
+
  Business License: https://community.qknow.ai/business/policy.html
  See the LICENSE file in the project root for full license information.
 -->
@@ -80,6 +80,60 @@
                 </el-row>
                 <el-row :gutter="20">
                     <el-col :span="24">
+                      <el-form-item label="文件类型" prop="fileType">
+                        <div>
+                          <el-radio-group v-model="form.fileType">
+                            <el-radio v-for="item in kmc_file_type"
+                                      :value="item.value"
+                                      :key="item.value">
+                              {{ item.label }}
+                            </el-radio>
+                          </el-radio-group>
+                        </div>
+
+                      </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row v-if="form.fileType === 'json'" :gutter="20">
+                    <el-col :span="24">
+                        <el-form-item label="数据风格" prop="jsonStyle">
+                            <div class="json-style-wrap">
+                                <el-select
+                                    v-model="form.jsonStyle"
+                                    clearable
+                                    placeholder="请选择数据风格"
+                                    style="width: 755px"
+                                >
+                                    <el-option
+                                        v-for="item in jsonStyleDict"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                    />
+                                </el-select>
+                                <div class="json-style-tip">
+                                    <el-icon><InfoFilled /></el-icon>
+                                    <span>所选择数据风格应和上传文件中数据风格保持一致，否则文件会解析失败。</span>
+                                </div>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row v-if="form.fileType === 'json'" :gutter="20">
+                    <el-col :span="24">
+                        <el-form-item label="文件路径" prop="path">
+                            <div style="width: 755px">
+                                <BigFileImport
+                                    ref="bigFileImportRef"
+                                    v-model="form.path"
+                                    v-model:fileName="form.name"
+                                />
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row v-else :gutter="20">
+                    <el-col :span="24">
                         <el-form-item label="文件路径" prop="path">
                             <div style="width: 755px">
                                 <FileUpload
@@ -108,6 +162,7 @@
                     </el-col>
                 </el-row>
             </el-form>
+            <div v-if="form.fileType !== 'json'">
             <div class="underline"></div>
             <div
                 v-if="settingBase == null || settingBase.mode === 'custom'"
@@ -196,54 +251,13 @@
                     <div class="bottomCheck">
                         <el-checkbox
                             v-model="checkedyy"
-                            @change="eckboxChange"
-                            :disabled="settingBase"
+                            @change="checkboxChange"
                         >
-                            <span>使用Q&A分段,语言</span>
-                            <el-select
-                                v-model="form.docLanguage"
-                                placeholder="请选择"
-                                style="width: 160px; border: none"
-                                :disabled="!checkedyy"
-                            >
-                                <el-option
-                                    v-for="dict in kmc_language_type"
-                                    :key="dict.value"
-                                    :label="dict.label"
-                                    :value="dict.value"
-                                />
-                            </el-select>
-                            <span style="margin-left: 8px">模型</span>
-                            <el-select
-                                v-model="form.chatModel"
-                                placeholder="请选择"
-                                style="width: 160px; border: none"
-                                :disabled="!checkedyy"
-                            >
-                                <el-option-group
-                                    v-for="group in chatModel"
-                                    :key="group.label.zh_Hans"
-                                    :label="group.label.zh_Hans"
-                                >
-                                    <el-option
-                                        v-for="item in group.models"
-                                        :key="item.model"
-                                        :label="item.model"
-                                        :value="item.model"
-                                    />
-                                </el-option-group>
-                            </el-select>
+                            <span>使用 Q&A 分段</span>
                         </el-checkbox>
-                        <!--                      <span style="font-size: 14px;color: #333;margin-left: 8px;">模型</span>-->
-                        <el-tooltip content="开启后将会消耗额外的 token">
-                            <img
-                                class="imgicon"
-                                src="../../../../assets/kmc/QuestionFilled.png"
-                                alt=""
-                            />
-                        </el-tooltip>
                     </div>
                 </div>
+            </div>
             </div>
             <div class="underline3"></div>
             <div class="btnBox">
@@ -266,6 +280,7 @@
     } from '@/api/kmc/kmcDocument/kmcDocument.js';
     import { getChatModelDict } from '@/api/ai/myModel/myModel.js';
     import moment from 'moment/moment.js';
+    import BigFileImport from '@/views/kmc/kmcDocument/selection/bigFileImport.vue';
     const platForm = ref('aliyun-oss-qt');
     const { proxy } = getCurrentInstance();
     const title = ref('新增知识文件');
@@ -276,7 +291,21 @@
             knowledgeBaseId: [{ required: true, message: '所属知识库不能为空', trigger: 'blur' }],
             categoryId: [{ required: true, message: '所属分类不能为空', trigger: 'blur' }],
             // name: [{ required: true, message: '文件名称不能为空', trigger: 'blur' }],
-            path: [{ required: true, message: '文件路径不能为空', trigger: 'blur' }]
+            path: [{ required: true, message: '文件路径不能为空', trigger: 'blur' }],
+            fileType: [{ required: true, message: '文件类型不能为空', trigger: 'change' }],
+            jsonStyle: [
+                {
+                    required: true,
+                    validator: (rule, value, callback) => {
+                        if (data.form.fileType === 'json' && !value) {
+                            callback(new Error('请选择数据风格'));
+                            return;
+                        }
+                        callback();
+                    },
+                    trigger: ['change', 'blur']
+                }
+            ]
         }
     });
     const checkedyy = ref(false);
@@ -287,6 +316,13 @@
     const route = useRoute();
     const { form, rules } = toRefs(data);
     const chatModel = ref([]);
+    const bigFileImportRef = ref(null);
+    const { kmc_file_type } = proxy.useDict('kmc_file_type');
+    const jsonStyleDict = [
+        { value: 'Alpaca', label: 'Alpaca' },
+        { value: 'ShareGPT', label: 'ShareGPT' },
+        { value: 'Multilingual Thinking', label: 'Multilingual Thinking' }
+    ];
 
     function handleMode(model) {
         form.value.mode = model;
@@ -300,7 +336,7 @@
         kmcCategoryTree({ knowledgeBaseId: form.value.knowledgeBaseId }).then((response) => {
             KcOptions.value = response.data;
             if (!proxy.$route.query.id) {
-                handleTypeChange(form.value.query.categoryId);
+                handleTypeChange(form.value.categoryId);
             }
         });
     }
@@ -311,7 +347,7 @@
             form.value.categoryName = selectedNode.label;
         }
     };
-    const eckboxChange = () => {
+    const checkboxChange = () => {
         if (checkedyy) {
             form.value.docForm = 'qa_model';
         } else {
@@ -339,7 +375,16 @@
     };
 
     function submitForm() {
-        form.value.docForm = checkedyy.value ? 'qa_model' : 'text_model';
+        if (form.value.fileType === 'json') {
+            form.value.docForm = 'qa_model';
+            const uploadStatus = bigFileImportRef.value.uploadStatus();
+            if (uploadStatus === 'update') {
+                proxy.$modal.msgError('请等待文件上传完成');
+                return;
+            }
+        } else {
+            form.value.docForm = checkedyy.value ? 'qa_model' : 'text_model';
+        }
         proxy.$refs['documentRef'].validate((valid) => {
             if (valid) {
                 proxy.$modal.loading('正在保存，请稍候...');
@@ -427,7 +472,8 @@
             subchunkMaxTokens: 512,
             subchunkSeparator: '\n',
             chatModel: null,
-            chatModelProvider: null
+            chatModelProvider: null,
+            fileType: 'text'
         };
         form.value.separator = form.value.separator.replace(/\n/g, '\\n');
         form.value.subchunkSeparator = form.value.subchunkSeparator.replace(/\n/g, '\\n');
@@ -441,10 +487,11 @@
     function handleUpdate(id) {
         getDocument(id).then((response) => {
             form.value = response.data;
+            checkedyy.value = response.data.docForm === 'qa_model';
             if (form.value.separator) {
                 form.value.separator = form.value.separator.replace(/\n/g, '\\n');
             }
-            getFirstConfig(response.data.knowledgeBaseId);
+            // getFirstConfig(response.data.knowledgeBaseId);
             if (response.data.knowledgeBaseId !== Number(proxy.$route.params.kbId)) {
                 proxy.$modal.msgSuccess('文档与知识库不匹配，当前页面进行关闭。');
                 cancel();
@@ -499,7 +546,7 @@
             if (proxy.$route.params.kbId) {
                 form.value.knowledgeBaseId = Number(proxy.$route.params.kbId);
                 getKmcCategoryTree();
-                getFirstConfig(proxy.$route.params.kbId);
+                // getFirstConfig(proxy.$route.params.kbId);
             }
         },
         { deep: true, immediate: true }
@@ -555,6 +602,18 @@
         margin-top: 0;
         .formFlex {
             display: flex;
+        }
+        .json-style-wrap {
+            width: 100%;
+        }
+        .json-style-tip {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            padding-top: 4px;
+            color: #888;
+            font-size: 12px;
+            line-height: 1.5;
         }
         .underline {
             border-bottom: 2px solid #f4f4f4;
@@ -754,9 +813,6 @@
     :deep(.el-upload__text) {
         margin-top: -10px;
         font-size: 14px;
-    }
-    :deep(.el-radio__label) {
-        display: none;
     }
     :deep(.checkbox__label) {
         width: 375px;

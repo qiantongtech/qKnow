@@ -18,6 +18,8 @@
 
 package tech.qiantong.qknow.module.kmc.service.knowledgeSegment;
 
+import com.alibaba.fastjson2.JSONObject;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import tech.qiantong.qknow.common.core.page.PageResult;
 import tech.qiantong.qknow.module.kmc.controller.admin.knowledgeSegment.vo.KmcDocumentSegmentPageReqVO;
@@ -25,9 +27,12 @@ import tech.qiantong.qknow.module.kmc.controller.admin.knowledgeSegment.vo.KmcDo
 import tech.qiantong.qknow.module.kmc.controller.admin.knowledgeSegment.vo.KmcDocumentSegmentSaveReqVO;
 import tech.qiantong.qknow.module.kmc.dal.dataobject.knowledgeSegment.KmcDocumentSegmentDO;
 import org.springframework.ai.vectorstore.weaviate.WeaviateVectorStore;
+import org.springframework.web.multipart.MultipartFile;
 import tech.qiantong.qknow.module.kmc.dal.dataobject.document.KmcDocumentDO;
 import tech.qiantong.qknow.module.kmc.dal.dataobject.knowledgeBase.KmcKnowledgeBaseDO;
+import tech.qiantong.qknow.module.kmc.service.knowledgeSegment.bo.DownloadJsonConfigBO;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +44,9 @@ import java.util.Map;
  */
 public interface IKmcDocumentSegmentService extends IService<KmcDocumentSegmentDO> {
 
+    String DOWNLOAD_FILE_ID_FORMAT = "kmc:documentSegment:download:{}";// 下载key
+    Integer DOWNLOAD_FILE_TIME_OUT = 30 * 60;// 下载超时时间
+
     /**
      * 获得文件分段分页列表
      *
@@ -47,6 +55,14 @@ public interface IKmcDocumentSegmentService extends IService<KmcDocumentSegmentD
      */
     PageResult<KmcDocumentSegmentDO> getKmcDocumentSegmentPage(KmcDocumentSegmentPageReqVO pageReqVO);
 
+    /**
+     * 获取下载分页列表
+     *
+     * @param page     分页数据
+     * @param configBO 下载配置
+     * @return 文件分段分页列表
+     */
+    IPage<JSONObject> queryDownloadPage(IPage<JSONObject> page,DownloadJsonConfigBO configBO);
 
     /**
      * 获得文件分段分页列表树形结构
@@ -58,6 +74,7 @@ public interface IKmcDocumentSegmentService extends IService<KmcDocumentSegmentD
 
     /**
      * 根据文件id获取所有顶层分段节点
+     *
      * @param documentId 文件id
      * @return 顶层分段节点
      */
@@ -86,14 +103,6 @@ public interface IKmcDocumentSegmentService extends IService<KmcDocumentSegmentD
                                   KmcDocumentSegmentDO segmentDO);
 
     /**
-     * 获取分段数量
-     *
-     * @param documentId 文件id
-     * @return 分段数量
-     */
-    Long getSegmentCount(Long documentId);
-
-    /**
      * 更新文件分段
      *
      * @param updateReqVO 文件分段信息
@@ -107,9 +116,6 @@ public interface IKmcDocumentSegmentService extends IService<KmcDocumentSegmentD
      */
     int removeKmcDocumentSegment(Collection<Long> idList);
 
-
-
-
     /**
      * 获得文件分段详情
      *
@@ -119,28 +125,46 @@ public interface IKmcDocumentSegmentService extends IService<KmcDocumentSegmentD
     KmcDocumentSegmentDO getKmcDocumentSegmentById(Long id);
 
     /**
-     * 获得全部文件分段列表
+     * 获取已上传的索引
      *
-     * @return 文件分段列表
+     * @param fileMd5 文件md5
+     * @return 已上传的索引
      */
-    List<KmcDocumentSegmentDO> getKmcDocumentSegmentList();
+    List<Integer> getUploadedIndex(String fileMd5);
 
     /**
-     * 获得全部文件分段 Map
+     * 保存分片
      *
-     * @return 文件分段 Map
+     * @param chunk      分片
+     * @param fileMd5    文件md5
+     * @param chunkIndex 分片索引
+     * @return 是否保存成功
      */
-    Map<Long, KmcDocumentSegmentDO> getKmcDocumentSegmentMap();
-
+    Boolean saveChunk(MultipartFile chunk, String fileMd5, Integer chunkIndex) throws IOException;
 
     /**
-     * 导入文件分段数据
+     * 合并分片
      *
-     * @param importExcelList 文件分段数据列表
-     * @param isUpdateSupport 是否更新支持，如果已存在，则进行更新数据
-     * @param operName 操作用户
-     * @return 结果
+     * @param md5      文件md5
+     * @param fileName 文件名
+     * @param total    分片总数
+     * @return 是否合并成功
      */
-    String importKmcDocumentSegment(List<KmcDocumentSegmentRespVO> importExcelList, boolean isUpdateSupport, String operName);
+    String mergeChunk(String md5, String fileName, Integer total) throws IOException;
 
+    /**
+     * 生成json文件
+     *
+     * @param configBO 配置信息
+     * @return json文件
+     */
+    String genJsonFile(DownloadJsonConfigBO configBO);
+
+    /**
+     * 获取分段数量
+     *
+     * @param documentId 文件id
+     * @return 分段数量
+     */
+    Long getSegmentCount(Long documentId);
 }
