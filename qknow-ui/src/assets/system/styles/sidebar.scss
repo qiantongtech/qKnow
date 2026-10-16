@@ -156,6 +156,21 @@
     }
   }
 
+  // desktop sidebar collapsed
+  .hideSidebar {
+    .sidebar-container {
+      width: 60px !important;
+    }
+
+    .main-container {
+      padding-left: 60px;
+    }
+
+    .sidebar-container .el-menu {
+      width: 60px !important;
+    }
+  }
+
   // mobile responsive
   .mobile {
     .main-container {
