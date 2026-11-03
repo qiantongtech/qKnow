@@ -22,6 +22,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import tech.qiantong.qknow.common.core.page.PageParam;
 
+import java.util.List;
+
 /**
  * bot 管理 Request VO 对象 kb_bot
  *
@@ -44,11 +46,20 @@ public class KbBotPageReqVO extends PageParam {
     @Schema(description = "类型", example = "")
     private Integer type;
 
+    @Schema(description = "类型列表", example = "0,2")
+    private List<Integer> types;
+
+    @Schema(description = "排除的 Bot ID", example = "1")
+    private Long excludeId;
+
     @Schema(description = "描述", example = "")
     private String description;
 
     @Schema(description = "是否内置", example = "")
     private Integer builtinFlag;
+
+    @Schema(description = "是否有效", example = "true")
+    private Boolean validFlag;
 
 
 }

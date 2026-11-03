@@ -36,4 +36,13 @@ public interface IChatModelService {
      * @return chatModel
      */
     ChatModel getChatModel(String platForm, String baseUrl, String apiKey, String modelName);
+
+    /**
+     * 获取支持推理参数的 chatModel。
+     *
+     * @param thinkingEnabled 是否启用深度思考；null 表示不控制
+     * @param reasoningEffort 推理强度：low、medium、high
+     */
+    ChatModel getChatModel(String platForm, String baseUrl, String apiKey, String modelName,
+                           Boolean thinkingEnabled, String reasoningEffort);
 }

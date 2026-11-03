@@ -57,6 +57,7 @@ public class KbBotController extends BaseController {
     @PreAuthorize("@ss.hasPermi('kb:bot:bot:list')")
     @GetMapping("/list")
     public CommonResult<PageResult<KbBotRespVO>> list(KbBotPageReqVO kbBot) {
+        kbBot.setWorkspaceId(super.getWorkSpaceId());
         PageResult<KbBotDO> page = kbBotService.getKbBotPage(kbBot);
         PageResult<KbBotRespVO> kbBotRespVOPageResult = BeanUtils.toBean(page, KbBotRespVO.class);
         kbBotRespVOPageResult.getList().forEach(item -> {

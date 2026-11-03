@@ -44,6 +44,16 @@ public interface IAiModelApiService {
      */
     ChatModel getChatModel(Long keyId, String modelName);
 
+    /**
+     * 获取支持推理参数的聊天模型。
+     *
+     * @param keyId 模型平台id
+     * @param modelName 模型名称
+     * @param thinkingEnabled 是否启用深度思考；null 表示不控制
+     * @param reasoningEffort 推理强度：low、medium、high
+     */
+    ChatModel getChatModel(Long keyId, String modelName, Boolean thinkingEnabled, String reasoningEffort);
+
 
     /**
      * 获取具体的 embedding 模型

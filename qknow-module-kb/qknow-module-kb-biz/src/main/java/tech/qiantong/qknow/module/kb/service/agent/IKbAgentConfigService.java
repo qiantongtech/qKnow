@@ -114,4 +114,9 @@ public interface IKbAgentConfigService extends IService<KbAgentConfigDO> {
      * @return
      */
     public Flux<KbChatMessageSendRespVO> chatMessage(KbAgentConfigReqVO kbAgentConfig) throws GraphRunnerException;
+
+    /**
+     * 作为主 Agent 的工具执行一级子 Agent。
+     */
+    String executeSubAgent(Long botId, String question, Long workspaceId);
 }

@@ -82,6 +82,20 @@ public interface IKbToolService extends IService<KbToolDO> {
     ToolCallbackProvider getToolCallbackProvider(String toolIds);
 
     /**
+     * 获取指定工作区内的工具回调提供者。
+     *
+     * <p>当前开源版工具服务沿用原有查询逻辑，默认忽略工作区参数，
+     * 同时兼容新版 Agent 调用接口。</p>
+     *
+     * @param toolIds 工具 ID，多个用逗号分隔
+     * @param workspaceId 工作区编号
+     * @return 工具回调提供者
+     */
+    default ToolCallbackProvider getToolCallbackProvider(String toolIds, Long workspaceId) {
+        return getToolCallbackProvider(toolIds);
+    }
+
+    /**
      * 更新工具状态
      *
      * @param kbTool 工具信息

@@ -42,6 +42,7 @@ import tech.qiantong.qknow.ai.enums.model.AiModelTypeEnum;
 import tech.qiantong.qknow.ai.enums.model.AiPlatformEnum;
 import tech.qiantong.qknow.ai.service.IChatModelService;
 import tech.qiantong.qknow.ai.service.IEmbeddingService;
+import tech.qiantong.qknow.ai.utils.AiModelCapabilityUtils;
 import tech.qiantong.qknow.common.core.page.PageResult;
 import tech.qiantong.qknow.common.exception.ServiceException;
 import tech.qiantong.qknow.common.utils.object.BeanUtils;
@@ -192,6 +193,9 @@ public class AiModelServiceImpl extends ServiceImpl<AiModelMapper, AiModelDO> im
             }
             JSONObject valObj = new JSONObject();
             valObj.put("model", aiModelDO.getName());
+            if (AiModelCapabilityUtils.supportsThinking(aiModelDO.getName())) {
+                valObj.put("features", List.of("thinking"));
+            }
             valueList.add(valObj);
             resultMap.put(key, valueList);
         }

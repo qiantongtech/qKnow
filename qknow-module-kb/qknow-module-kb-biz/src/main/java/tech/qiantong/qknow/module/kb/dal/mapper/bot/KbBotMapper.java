@@ -48,8 +48,11 @@ public interface KbBotMapper extends BaseMapperX<KbBotDO> {
                 .eqIfPresent(KbBotDO::getWorkspaceId, reqVO.getWorkspaceId())
                 .likeIfPresent(KbBotDO::getName, reqVO.getName())
                 .eqIfPresent(KbBotDO::getType, reqVO.getType())
+                .inIfPresent(KbBotDO::getType, reqVO.getTypes())
+                .neIfPresent(KbBotDO::getId, reqVO.getExcludeId())
                 .eqIfPresent(KbBotDO::getDescription, reqVO.getDescription())
                 .eqIfPresent(KbBotDO::getBuiltinFlag, reqVO.getBuiltinFlag())
+                .eqIfPresent(KbBotDO::getValidFlag, reqVO.getValidFlag())
                 .eqIfPresent(KbBotDO::getCreateTime, reqVO.getCreateTime())
                 // 如果 reqVO.getName() 不为空，则添加 name 的精确匹配条件（name = '<name>'）
                 // .likeIfPresent(KbBotDO::getName, reqVO.getName())

@@ -22,6 +22,7 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;
 import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatModel;
 import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
+import jakarta.annotation.Resource;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.deepseek.DeepSeekChatModel;
 import org.springframework.ai.deepseek.DeepSeekChatOptions;
@@ -38,10 +39,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import tech.qiantong.qknow.ai.enums.model.AiPlatformEnum;
 import tech.qiantong.qknow.ai.service.IChatModelService;
+import tech.qiantong.qknow.ai.utils.AiModelCapabilityUtils;
 import tech.qiantong.qknow.common.exception.ServiceException;
 
-import jakarta.annotation.Resource;
 import java.net.http.HttpClient;
+import java.util.Map;
 
 /**
  * springAi chatModel 服务
@@ -66,9 +68,26 @@ public class ChatModelServiceImpl implements IChatModelService {
     public ChatModel getChatModel(String platForm, String baseUrl, String apiKey, String modelName) {
         ChatModel chatModel;
         switch (AiPlatformEnum.validatePlatform(platForm)) {
-            case OPENAI -> chatModel = this.getOpenAiChatModel(baseUrl, apiKey, modelName);
-            case TONG_YI -> chatModel = this.getDashScopeChatModel(apiKey, modelName);
-            case OLLAMA -> chatModel = this.getOllamaChatModel(baseUrl, modelName);
+            case OPENAI -> chatModel = this.getOpenAiChatModel(baseUrl, apiKey, modelName, null, null);
+            case TONG_YI -> chatModel = this.getDashScopeChatModel(baseUrl, apiKey, modelName, null, null);
+            case OLLAMA -> chatModel = this.getOllamaChatModel(baseUrl, modelName, null, null);
+            case DEEP_SEEK -> chatModel = this.getDeepSeekChatModel(apiKey, modelName);
+            default -> throw new ServiceException("暂时不支持该平台");
+        }
+        return chatModel;
+    }
+
+    @Override
+    public ChatModel getChatModel(String platForm, String baseUrl, String apiKey, String modelName,
+                                  Boolean thinkingEnabled, String reasoningEffort) {
+        ChatModel chatModel;
+        switch (AiPlatformEnum.validatePlatform(platForm)) {
+            case OPENAI -> chatModel = this.getOpenAiChatModel(baseUrl, apiKey, modelName,
+                    thinkingEnabled, reasoningEffort);
+            case TONG_YI -> chatModel = this.getDashScopeChatModel(baseUrl, apiKey, modelName,
+                    thinkingEnabled, reasoningEffort);
+            case OLLAMA -> chatModel = this.getOllamaChatModel(baseUrl, modelName,
+                    thinkingEnabled, reasoningEffort);
             case DEEP_SEEK -> chatModel = this.getDeepSeekChatModel(apiKey, modelName);
             default -> throw new ServiceException("暂时不支持该平台");
         }
@@ -83,7 +102,8 @@ public class ChatModelServiceImpl implements IChatModelService {
      * @param modelName modelName（必需）
      * @return OpenAiChatModel
      */
-    private OpenAiChatModel getOpenAiChatModel(String baseUrl, String apiKey, String modelName) {
+    private OpenAiChatModel getOpenAiChatModel(String baseUrl, String apiKey, String modelName,
+                                               Boolean thinkingEnabled, String reasoningEffort) {
         if (StrUtil.hasBlank(baseUrl, apiKey, modelName)) {
             throw new ServiceException("必要字段不能为空");
         }
@@ -93,26 +113,60 @@ public class ChatModelServiceImpl implements IChatModelService {
                         HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).build()
                 )
         );
+        OpenAiChatOptions.Builder optionsBuilder = OpenAiChatOptions.builder().model(modelName);
+        if (thinkingEnabled != null && AiModelCapabilityUtils.isGlmThinkingModel(modelName)) {
+            optionsBuilder.extraBody(Map.of(
+                    "thinking", Map.of("type", thinkingEnabled ? "enabled" : "disabled")
+            ));
+        } else if (Boolean.TRUE.equals(thinkingEnabled)) {
+            optionsBuilder.reasoningEffort(normalizeReasoningEffort(reasoningEffort));
+        } else if (Boolean.FALSE.equals(thinkingEnabled)) {
+            optionsBuilder.reasoningEffort("none");
+        }
         return OpenAiChatModel.builder()
                 .openAiApi(OpenAiApi.builder().baseUrl(baseUrl).apiKey(apiKey).webClientBuilder(webClientBuilder).build())
-                .defaultOptions(OpenAiChatOptions.builder().model(modelName).build())
+                .defaultOptions(optionsBuilder.build())
                 .build();
     }
 
     /**
      * 获取 阿里百炼 聊天模型
      *
+     * @param baseUrl   baseUrl（可选，为空时使用默认 https://dashscope.aliyuncs.com）
      * @param apiKey    apiKey（必需）
      * @param modelName modelName（必需）
      * @return DashScopeChatModel
      */
-    private DashScopeChatModel getDashScopeChatModel(String apiKey, String modelName) {
+    private DashScopeChatModel getDashScopeChatModel(String baseUrl, String apiKey, String modelName,
+                                                     Boolean thinkingEnabled, String reasoningEffort) {
         if (StrUtil.hasBlank(apiKey, modelName)) {
-            throw new ServiceException("必要字段不能为空");
+            throw new ServiceException("模型 API 密钥为空，请检查后重新配置");
+        }
+
+        // DashScopeApi 默认 baseUrl 是 https://dashscope.aliyuncs.com，
+        // 只有调用业务空间专属域名（{wsId}.{region}.maas.aliyuncs.com）时才需要显式覆盖。
+        DashScopeApi.Builder apiBuilder = DashScopeApi.builder()
+                .apiKey(apiKey);
+        if (StrUtil.isNotBlank(baseUrl)) {
+            apiBuilder.baseUrl(baseUrl);
+        }
+
+        // 多模态模型需要走 multimodal-generation endpoint，否则阿里云返回 url error。
+        if (AiModelCapabilityUtils.usesDashScopeMultimodalEndpoint(modelName)) {
+            apiBuilder.completionsPath("/api/v1/services/aigc/multimodal-generation/generation");
+        }
+
+        DashScopeChatOptions.DashScopeChatOptionsBuilder optionsBuilder = DashScopeChatOptions.builder()
+                .model(modelName);
+        if (thinkingEnabled != null) {
+            optionsBuilder.enableThinking(thinkingEnabled);
+        }
+        if (Boolean.TRUE.equals(thinkingEnabled)) {
+            optionsBuilder.thinkingBudget(getThinkingBudget(reasoningEffort));
         }
         return DashScopeChatModel.builder()
-                .dashScopeApi(DashScopeApi.builder().apiKey(apiKey).build())
-                .defaultOptions(DashScopeChatOptions.builder().model(modelName).build())
+                .dashScopeApi(apiBuilder.build())
+                .defaultOptions(optionsBuilder.build())
                 .build();
     }
 
@@ -123,13 +177,24 @@ public class ChatModelServiceImpl implements IChatModelService {
      * @param modelName modelName（必需）
      * @return OllamaChatModel
      */
-    private OllamaChatModel getOllamaChatModel(String baseUrl, String modelName) {
+    private OllamaChatModel getOllamaChatModel(String baseUrl, String modelName,
+                                               Boolean thinkingEnabled, String reasoningEffort) {
         if (StrUtil.hasBlank(baseUrl, modelName)) {
             throw new ServiceException("必要字段不能为空");
         }
+        OllamaChatOptions.Builder optionsBuilder = OllamaChatOptions.builder().model(modelName);
+        if (Boolean.FALSE.equals(thinkingEnabled)) {
+            optionsBuilder.disableThinking();
+        } else if (Boolean.TRUE.equals(thinkingEnabled)) {
+            switch (normalizeReasoningEffort(reasoningEffort)) {
+                case "low" -> optionsBuilder.thinkLow();
+                case "high" -> optionsBuilder.thinkHigh();
+                default -> optionsBuilder.thinkMedium();
+            }
+        }
         return OllamaChatModel.builder()
                 .ollamaApi(OllamaApi.builder().baseUrl(baseUrl).build())
-                .defaultOptions(OllamaChatOptions.builder().model(modelName).build())
+                .defaultOptions(optionsBuilder.build())
                 .build();
     }
 
@@ -148,5 +213,20 @@ public class ChatModelServiceImpl implements IChatModelService {
                 .deepSeekApi(DeepSeekApi.builder().apiKey(apiKey).build())
                 .defaultOptions(DeepSeekChatOptions.builder().model(modelName).build())
                 .build();
+    }
+
+    private String normalizeReasoningEffort(String reasoningEffort) {
+        if ("low".equals(reasoningEffort) || "high".equals(reasoningEffort)) {
+            return reasoningEffort;
+        }
+        return "medium";
+    }
+
+    private int getThinkingBudget(String reasoningEffort) {
+        return switch (normalizeReasoningEffort(reasoningEffort)) {
+            case "low" -> 1024;
+            case "high" -> 8192;
+            default -> 4096;
+        };
     }
 }

@@ -19,8 +19,13 @@
 package tech.qiantong.qknow.module.kb.controller.admin.agent.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import tech.qiantong.qknow.common.core.domain.BaseEntity;
+
+import java.util.List;
 
 /**
  * agent配置 Request VO 对象 kb_agent_config
@@ -43,6 +48,9 @@ public class KbAgentConfigReqVO extends BaseEntity {
 
     @Schema(description = "问题", example = "")
     private String question;
+
+    @Schema(description = "数据源ID", example = "1")
+    private Long datasourceId;
 
     @Schema(description = "入参", example = "")
     private String input;
@@ -68,7 +76,28 @@ public class KbAgentConfigReqVO extends BaseEntity {
     @Schema(description = "skills ids", example = "")
     private String skillIds;
 
-    @Schema(description = "mcpIds", example = "")
-    private String mcpIds;
+    @Schema(description = "mcpConfigIds", example = "")
+    private String mcpConfigIds;
+
+    @Schema(description = "Agent 可调用的 Agent、工作流 Bot IDs，多个用逗号分隔", example = "1,3")
+    @Size(max = 128, message = "可调用Bot ids长度不能超过128个字符")
+    private String callableBotIds;
+
+    @Valid
+    @Size(max = 40, message = "历史消息不能超过40条")
+    @Schema(description = "历史聊天消息（不包含本轮问题）")
+    private List<HistoryMessage> historyMessages;
+
+    @Data
+    public static class HistoryMessage {
+
+        @Pattern(regexp = "user|assistant", message = "历史消息角色只能是user或assistant")
+        @Schema(description = "消息角色", allowableValues = {"user", "assistant"})
+        private String role;
+
+        @Size(max = 16000, message = "单条历史消息不能超过16000个字符")
+        @Schema(description = "消息内容")
+        private String content;
+    }
 
 }

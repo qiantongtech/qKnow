@@ -70,7 +70,7 @@ public enum ParamType {
             case Integer:
                 try {
                     if(obj != null){
-                        return new Integer(obj.toString());
+                        return java.lang.Integer.valueOf(obj.toString());
                     }
                 } catch (Exception e) {
                     throw new ServiceException("参数值[" + obj + "]不是" + Integer.getVal() + "数据类型]");

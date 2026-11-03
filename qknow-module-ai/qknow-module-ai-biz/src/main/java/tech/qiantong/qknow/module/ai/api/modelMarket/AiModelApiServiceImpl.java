@@ -36,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tech.qiantong.qknow.ai.enums.model.AiPlatformEnum;
 import tech.qiantong.qknow.ai.service.IChatModelService;
 import tech.qiantong.qknow.ai.service.IEmbeddingService;
+import tech.qiantong.qknow.ai.utils.AiModelCapabilityUtils;
 import tech.qiantong.qknow.common.exception.ServiceException;
 import tech.qiantong.qknow.common.utils.StringUtils;
 import tech.qiantong.qknow.module.ai.dal.dataobject.modelMarket.AiApiKeyDO;
@@ -77,6 +78,22 @@ public class AiModelApiServiceImpl extends ServiceImpl<AiModelMapper, AiModelDO>
                 aiApiKeyDO.getUrl(),
                 aiApiKeyDO.getApiKey(),
                 modelName);
+    }
+
+    @Override
+    public ChatModel getChatModel(Long keyId, String modelName, Boolean thinkingEnabled, String reasoningEffort) {
+        AiApiKeyDO aiApiKeyDO = apiKeyMapper.selectById(keyId);
+        if (StringUtils.isNull(aiApiKeyDO)) {
+            throw new ServiceException("获取模型失败，请检查模型配置");
+        }
+        Boolean effectiveThinkingEnabled = AiModelCapabilityUtils.supportsThinking(modelName)
+                ? thinkingEnabled : null;
+        return chatModelService.getChatModel(aiApiKeyDO.getPlatform(),
+                aiApiKeyDO.getUrl(),
+                aiApiKeyDO.getApiKey(),
+                modelName,
+                effectiveThinkingEnabled,
+                reasoningEffort);
     }
 
     /**
@@ -121,6 +138,9 @@ public class AiModelApiServiceImpl extends ServiceImpl<AiModelMapper, AiModelDO>
             }
             JSONObject valObj = new JSONObject();
             valObj.put("model", aiModelDO.getName());
+            if (AiModelCapabilityUtils.supportsThinking(aiModelDO.getName())) {
+                valObj.put("features", List.of("thinking"));
+            }
             valueList.add(valObj);
             resultMap.put(key, valueList);
         }

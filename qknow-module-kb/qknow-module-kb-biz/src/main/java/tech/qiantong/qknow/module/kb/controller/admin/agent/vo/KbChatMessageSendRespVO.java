@@ -47,6 +47,9 @@ public class KbChatMessageSendRespVO {
         @Schema(description = "聊天内容", requiredMode = Schema.RequiredMode.REQUIRED, example = "你好，你好啊")
         private String content;
 
+        @Schema(description = "模型推理内容")
+        private String reasoningContent;
+
         @Schema(description = "创建时间", requiredMode = Schema.RequiredMode.REQUIRED)
         private Date createTime;
 

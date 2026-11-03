@@ -20,6 +20,7 @@ package tech.qiantong.qknow.common.core.page;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import tech.qiantong.qknow.common.utils.StringUtils;
 import tech.qiantong.qknow.common.core.domain.BaseEntity;
 
@@ -30,6 +31,7 @@ import java.io.Serializable;
 
 @Schema(description="分页参数")
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class PageParam extends BaseEntity implements Serializable  {
 
     private static final Integer PAGE_NO = 1;

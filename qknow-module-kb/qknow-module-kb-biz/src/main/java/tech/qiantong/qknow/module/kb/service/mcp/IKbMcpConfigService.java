@@ -91,6 +91,20 @@ public interface IKbMcpConfigService extends IService<KbMcpConfigDO> {
     ToolCallbackProvider getMcpAsyncCallbackProvider(String mcpIds);
 
     /**
+     * 获取指定工作区内的 MCP 工具回调提供者。
+     *
+     * <p>当前开源版的 MCP 服务尚未按工作区拆分实现，默认复用原有逻辑，
+     * 同时为 Agent 调用链保留工作区参数，便于后续平滑增强隔离能力。</p>
+     *
+     * @param mcpIds mcpIds，多个用逗号分隔
+     * @param workspaceId 工作区编号
+     * @return MCP 回调提供者
+     */
+    default ToolCallbackProvider getMcpAsyncCallbackProvider(String mcpIds, Long workspaceId) {
+        return getMcpAsyncCallbackProvider(mcpIds);
+    }
+
+    /**
      * 更新mcp状态
      *
      * @param mcpId mcpId

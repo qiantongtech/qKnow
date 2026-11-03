@@ -18,8 +18,6 @@
 
 package tech.qiantong.qknow.module.system.convert.message;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 import tech.qiantong.qknow.module.system.controller.admin.system.message.vo.MessagePageReqVO;
 import tech.qiantong.qknow.module.system.controller.admin.system.message.vo.MessageRespVO;
 import tech.qiantong.qknow.module.system.controller.admin.system.message.vo.MessageSaveReqVO;
@@ -33,35 +31,105 @@ import java.util.List;
  * @author qknow
  * @date 2024-10-31
  */
-@Mapper
-public interface MessageConvert {
-    MessageConvert INSTANCE = Mappers.getMapper(MessageConvert.class);
+public final class MessageConvert {
+    public static final MessageConvert INSTANCE = new MessageConvert();
+
+    private MessageConvert() {
+    }
 
     /**
      * PageReqVO 转换为 DO
      * @param messagePageReqVO 请求参数
      * @return MessageDO
      */
-     MessageDO convertToDO(MessagePageReqVO messagePageReqVO);
+    public MessageDO convertToDO(MessagePageReqVO messagePageReqVO) {
+        if (messagePageReqVO == null) {
+            return null;
+        }
+        return MessageDO.builder()
+                .id(messagePageReqVO.getId())
+                .senderId(messagePageReqVO.getSenderId())
+                .receiverId(messagePageReqVO.getReceiverId())
+                .title(messagePageReqVO.getTitle())
+                .content(messagePageReqVO.getContent())
+                .category(messagePageReqVO.getCategory())
+                .msgLevel(messagePageReqVO.getMsgLevel())
+                .module(messagePageReqVO.getModule())
+                .entityType(messagePageReqVO.getEntityType())
+                .entityId(messagePageReqVO.getEntityId())
+                .entityUrl(messagePageReqVO.getEntityUrl())
+                .hasRead(messagePageReqVO.getHasRead())
+                .hasRetraction(messagePageReqVO.getHasRetraction())
+                .validFlag(messagePageReqVO.getValidFlag())
+                .delFlag(messagePageReqVO.getDelFlag())
+                .build();
+    }
 
     /**
      * SaveReqVO 转换为 DO
      * @param messageSaveReqVO 保存请求参数
      * @return MessageDO
      */
-     MessageDO convertToDO(MessageSaveReqVO messageSaveReqVO);
+    public MessageDO convertToDO(MessageSaveReqVO messageSaveReqVO) {
+        if (messageSaveReqVO == null) {
+            return null;
+        }
+        return MessageDO.builder()
+                .id(messageSaveReqVO.getId() == null ? null : Long.parseLong(messageSaveReqVO.getId()))
+                .senderId(messageSaveReqVO.getSenderId())
+                .receiverId(messageSaveReqVO.getReceiverId())
+                .module(messageSaveReqVO.getModule())
+                .entityType(messageSaveReqVO.getEntityType())
+                .entityId(messageSaveReqVO.getEntityId())
+                .entityUrl(messageSaveReqVO.getEntityUrl())
+                .hasRead(messageSaveReqVO.getHasRead())
+                .delFlag(messageSaveReqVO.getDelFlag())
+                .build();
+    }
 
     /**
      * DO 转换为 RespVO
      * @param messageDO 实体对象
      * @return MessageRespVO
      */
-     MessageRespVO convertToRespVO(MessageDO messageDO);
+    public MessageRespVO convertToRespVO(MessageDO messageDO) {
+        if (messageDO == null) {
+            return null;
+        }
+        MessageRespVO response = new MessageRespVO();
+        response.setId(messageDO.getId());
+        response.setSenderId(messageDO.getSenderId());
+        response.setReceiverId(messageDO.getReceiverId());
+        response.setTitle(messageDO.getTitle());
+        response.setContent(messageDO.getContent());
+        response.setCategory(messageDO.getCategory());
+        response.setMsgLevel(messageDO.getMsgLevel());
+        response.setModule(messageDO.getModule());
+        response.setEntityType(messageDO.getEntityType());
+        response.setEntityId(messageDO.getEntityId());
+        response.setEntityUrl(messageDO.getEntityUrl());
+        response.setHasRead(messageDO.getHasRead());
+        response.setHasRetraction(messageDO.getHasRetraction());
+        response.setValidFlag(messageDO.getValidFlag());
+        response.setDelFlag(messageDO.getDelFlag());
+        response.setCreateBy(messageDO.getCreateBy());
+        response.setCreatorId(messageDO.getCreatorId());
+        response.setCreateTime(messageDO.getCreateTime());
+        response.setUpdateBy(messageDO.getUpdateBy());
+        response.setUpdateTime(messageDO.getUpdateTime());
+        response.setRemark(messageDO.getRemark());
+        return response;
+    }
 
     /**
      * DOList 转换为 RespVOList
      * @param messageDOList 实体对象列表
      * @return List<MessageRespVO>
      */
-     List<MessageRespVO> convertToRespVOList(List<MessageDO> messageDOList);
+    public List<MessageRespVO> convertToRespVOList(List<MessageDO> messageDOList) {
+        if (messageDOList == null) {
+            return null;
+        }
+        return messageDOList.stream().map(this::convertToRespVO).toList();
+    }
 }

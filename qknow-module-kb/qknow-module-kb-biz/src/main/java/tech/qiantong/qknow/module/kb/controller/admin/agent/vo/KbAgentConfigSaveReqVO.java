@@ -54,6 +54,15 @@ public class KbAgentConfigSaveReqVO extends BaseEntity {
     @Schema(description = "提示词", example = "")
     private String prePrompt;
 
+    @Schema(description = "历史记录条数", example = "1")
+    private Integer historyMessageCount;
+
+    @Schema(description = "是否启用长期记忆;0否1是", example = "false")
+    private Boolean longTermMemoryEnabled;
+
+    @Schema(description = "是否展示思考过程;0否1是", example = "true")
+    private Boolean showThinkingProcess;
+
     @Schema(description = "参数配置", example = "")
     private String parameters;
 
@@ -72,6 +81,14 @@ public class KbAgentConfigSaveReqVO extends BaseEntity {
     @Schema(description = "skills ids", example = "")
     @Size(max = 128, message = "skills ids长度不能超过128个字符")
     private String skillIds;
+
+    @Schema(description = "mcpConfig ids", example = "")
+    @Size(max = 128, message = "mcpConfig ids长度不能超过128个字符")
+    private String mcpConfigIds;
+
+    @Schema(description = "Agent 可调用的 Agent、工作流 Bot IDs，多个用逗号分隔", example = "1,3")
+    @Size(max = 128, message = "可调用Bot ids长度不能超过128个字符")
+    private String callableBotIds;
 
     @Schema(description = "备注", example = "")
     @Size(max = 512, message = "备注长度不能超过512个字符")

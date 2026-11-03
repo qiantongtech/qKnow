@@ -56,6 +56,15 @@ public class KbAgentConfigDO extends BaseEntity {
     /** 提示词 */
     private String prePrompt;
 
+    /** 历史记录条数 */
+    private Integer historyMessageCount;
+
+    /** 是否启用长期记忆;0否1是 */
+    private Boolean longTermMemoryEnabled;
+
+    /** 是否展示思考过程;0否1是 */
+    private Boolean showThinkingProcess;
+
     /** 参数配置 */
     private String parameters;
 
@@ -70,6 +79,12 @@ public class KbAgentConfigDO extends BaseEntity {
 
     /** skills ids */
     private String skillIds;
+
+    /** mcpConfig ids */
+    private String mcpConfigIds;
+
+    /** Agent 可调用的 Agent、工作流 Bot ids */
+    private String callableBotIds;
 
     /** 是否有效 */
     private Boolean validFlag;

@@ -544,17 +544,10 @@ public enum PromptEnums {
     );
 
 
-    @Getter
     private final String template;
 
     // 构造方法
     private PromptEnums(String template) {
         this.template = template;
     }
-
-
-    public String getTemplate() {
-        return this.template;
-    }
-
 }

@@ -58,6 +58,18 @@ public class KbAgentConfigRespVO implements Serializable {
     @Schema(description = "提示词", example = "")
     private String prePrompt;
 
+    @Excel(name = "历史记录条数")
+    @Schema(description = "历史记录条数", example = "1")
+    private Integer historyMessageCount;
+
+    @Excel(name = "是否启用长期记忆")
+    @Schema(description = "是否启用长期记忆;0否1是", example = "false")
+    private Boolean longTermMemoryEnabled;
+
+    @Excel(name = "是否展示思考过程")
+    @Schema(description = "是否展示思考过程;0否1是", example = "true")
+    private Boolean showThinkingProcess;
+
     @Excel(name = "参数配置")
     @Schema(description = "参数配置", example = "")
     private String parameters;
@@ -89,6 +101,25 @@ public class KbAgentConfigRespVO implements Serializable {
     @Excel(name = "skills 名称列表")
     @Schema(description = "skills 名称列表", example = "")
     private List<String> skillNames;
+
+
+    @Excel(name = "mcpConfig ids")
+    @Schema(description = "mcpConfig ids", example = "")
+    private String mcpConfigIds;
+
+    @Excel(name = "mcpConfig 名称列表")
+    @Schema(description = "mcpConfig 名称列表", example = "")
+    private List<String> mcpConfigNames;
+
+    @Excel(name = "可调用 Bot ids")
+    @Schema(description = "Agent 可调用的 Agent、工作流 Bot IDs，多个用逗号分隔", example = "1,3")
+    private String callableBotIds;
+
+    @Schema(description = "可调用 Bot 名称列表", example = "")
+    private List<String> callableBotNames;
+
+    @Schema(description = "可调用 Bot 类型列表；0工作流、2 Agent", example = "")
+    private List<Integer> callableBotTypes;
 
     @Excel(name = "是否有效")
     @Schema(description = "是否有效", example = "")
