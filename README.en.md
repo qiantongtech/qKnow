@@ -21,7 +21,7 @@
 
 ✨✨✨**Open Source Edition Demo**✨✨✨ <a href="https://demo.qknow.ai" target="_blank">https://demo.qknow.ai</a>，Account: qKnow Password: qKnow123
 
-✨✨✨**Professional Edition Demo**✨✨✨ <a href="https://pro-demo.qknow.ai" target="_blank">https://pro-demo.qknow.ai</a>，Please [contact customer service](https://qknow.qiantong.tech/business.html) to obtain a demo account.
+✨✨✨**Professional Edition Demo**✨✨✨ <a href="https://pro-demo.qknow.ai" target="_blank">https://pro-demo.qknow.ai</a>，Please [contact customer service](https://community.qknow.ai/business/policy.html) to obtain a demo account.
 
 ![framework.png](.gitee/framework.png)
 
@@ -219,15 +219,15 @@ Before deploying qKnow, make sure the following environments and tools have been
 
 qKnow provides two editions: **Professional Edition** and **Open Source Edition**, meeting the needs of users in different scales and scenarios. The two editions each have their own strengths and complement each other: the Open Source Edition is more like an introductory mentor, helping users get started at low cost; the Professional Edition is more like an expert consultant, providing greater depth and assurance. No matter which edition you choose, qKnow will become a reliable partner, helping enterprises move toward intelligent agent building and AI-integrated applications.
 
-👉 For **Open Source Edition brand customization licensing** or **Professional Edition consultation**, please click the button for details: [💼 Learn More About Licensing](https://qknow.qiantong.tech/business.html)
+👉 For **Open Source Edition brand customization licensing** or **Professional Edition consultation**, please click the button for details: [💼 Learn More About Licensing](https://community.qknow.ai/business/policy.html)
 
 
 ## 🚀 Quick Start
 
 | Deployment Method | Description | Applicable Scenarios |
 |---------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|------------------------|
-| [Docker Compose Deployment](https://qknow.qiantong.tech/docs/deploy/docker-compose-deployment.html) | All components (DeepKE, Neo4j, MySQL, Nginx, Redis, etc.) and the qKnow source code are started with Docker Compose in one step | **Quick start for beginners**, feature demos, test environments |
-| [Self-managed Deployment (Manual Installation)](https://qknow.qiantong.tech/docs/deploy/manual-deployment/) | All dependent components and qKnow services need to be manually installed and configured | **Production environments**, large-scale deployment, personalized customization scenarios |
+| [Docker Compose Deployment](https://community.qknow.ai/docs/deploy/docker-compose-deployment.html) | All components (DeepKE, Neo4j, MySQL, Nginx, Redis, etc.) and the qKnow source code are started with Docker Compose in one step | **Quick start for beginners**, feature demos, test environments |
+| [Self-managed Deployment (Manual Installation)](https://community.qknow.ai/docs/deploy/manual-deployment/system.html) | All dependent components and qKnow services need to be manually installed and configured | **Production environments**, large-scale deployment, personalized customization scenarios |
 
 > For your first experience, Docker Compose deployment is recommended because it helps you complete environment startup and feature verification more quickly.
 
@@ -236,7 +236,7 @@ qKnow provides two editions: **Professional Edition** and **Open Source Edition*
 
 You are welcome to join the official qKnow QQ group to get the latest platform updates, deployment support, and community communication.
 
-👉 [Click to Join the QQ Group](https://qknow.qiantong.tech/discuss.html)
+👉 [Click to Join the QQ Group](https://community.qknow.ai/discuss.html)
 
 You can also report issues, submit suggestions, or participate in project co-building through Issues.
 

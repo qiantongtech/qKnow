@@ -21,7 +21,7 @@
 
 ✨✨✨**开源版演示地址**✨✨✨ <a href="https://demo.qknow.ai" target="_blank">https://demo.qknow.ai</a> ，账号：qKnow 密码：qKnow123
 
-✨✨✨**专业版演示地址**✨✨✨ <a href="https://pro-demo.qknow.ai" target="_blank">https://pro-demo.qknow.ai</a> ，演示账号请 [联系客服获取](https://qknow.qiantong.tech/business.html)
+✨✨✨**专业版演示地址**✨✨✨ <a href="https://pro-demo.qknow.ai" target="_blank">https://pro-demo.qknow.ai</a> ，演示账号请 [联系客服获取](https://community.qknow.ai/business/policy.html)
 
 ![framework.png](.gitee/framework.png)
 
@@ -219,15 +219,15 @@ qKnow 采用前后端分离架构，后端基于 Spring Boot 3 与 JDK 17，前�
 
 qKnow 提供 **专业版** 与 **开源版** 两种形态，满足不同规模与场景下的用户需求。两者既各具特色，又形成互补：开源版更像启蒙老师，帮助低成本起步；专业版更像专家顾问，提供深度与保障。无论选择哪种版本，qKnow 都将成为可靠的伙伴，帮助企业迈向智能化智能体构建与 AI 融合应用。
 
-👉 如需 **开源版品牌定制授权** 或 **咨询专业版**，请点击按钮查看详情：[💼 了解授权详情](https://qknow.qiantong.tech/business.html)
+👉 如需 **开源版品牌定制授权** 或 **咨询专业版**，请点击按钮查看详情：[💼 了解授权详情](https://community.qknow.ai/business/policy.html)
 
 
 ## 🚀 快速开始
 
 | 部署方式                                                                                        | 说明                                                                       | 适用场景                   |
 |---------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|------------------------|
-| [Docker Compose 部署](https://qknow.qiantong.tech/docs/deploy/docker-compose-deployment.html) | 所有组件（DeepKE、Neo4j、Mysql、Nginx、Redis 等）以及 qKnow 源码都通过 Docker Compose 一键启动 | **初学者快速上手**、功能演示、测试环境  |
-| [自主部署（纯手工安装）](https://qknow.qiantong.tech/docs/deploy/manual-deployment/)                   | 所有依赖组件及 qKnow 服务均需手工安装和配置                                                | **生产环境**、大规模部署、个性化定制场景 |
+| [Docker Compose 部署](https://community.qknow.ai/docs/deploy/docker-compose-deployment.html) | 所有组件（DeepKE、Neo4j、Mysql、Nginx、Redis 等）以及 qKnow 源码都通过 Docker Compose 一键启动 | **初学者快速上手**、功能演示、测试环境  |
+| [自主部署（纯手工安装）](https://community.qknow.ai/docs/deploy/manual-deployment/system.html)                   | 所有依赖组件及 qKnow 服务均需手工安装和配置                                                | **生产环境**、大规模部署、个性化定制场景 |
 
 > 首次体验推荐使用 Docker Compose 部署方式，可以更快完成环境启动和功能验证。
 
@@ -236,7 +236,7 @@ qKnow 提供 **专业版** 与 **开源版** 两种形态，满足不同规模�
 
 欢迎加入 qKnow 官方 QQ 交流群，获取平台最新动态、部署支持和社区交流。
 
-👉 [点击加入 QQ 交流群](https://qknow.qiantong.tech/discuss.html)
+👉 [点击加入 QQ 交流群](https://community.qknow.ai/discuss.html)
 
 你也可以通过 Issue 反馈问题、提交建议或参与项目共建。
 

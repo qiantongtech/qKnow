@@ -70,7 +70,7 @@
  */
 
 // 定义文档基础路径
-const DOCS_BASE_URL = 'https://qknow.qiantong.tech';
+const DOCS_BASE_URL = 'https://community.qknow.ai/business/policy.html';
 
 export const guideTipConfig = {
     'index': {
