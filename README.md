@@ -30,7 +30,7 @@
 
 > 如果 qKnow 对您有帮助，请点个 **Star ⭐️**，这是我们持续更新的最大动力！ 🚀
 
-许可：Apache License 2.0 及 qData 附加条件，详见 [LICENSE](LICENSE) 与[商用说明](#license-and-services)。
+许可：Apache License 2.0 及 qKnow 附加条件，详见 [LICENSE](LICENSE) 与[商用说明](#license-and-services)。
 
 ## 核心特点
 
