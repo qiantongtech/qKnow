@@ -8,6 +8,7 @@
  <img src="https://img.shields.io/badge/qKnow-Agent%20Platform-blue.svg" alt="qKnow">
  <img src="https://gitee.com/qiantongtech/qKnow/badge/star.svg" alt=""/>
  <img src="https://img.shields.io/github/stars/qiantongtech/qKnow?label=Github%20Stars" alt=""/>
+ <img src="https://atomgit.com/qiantongtech/qKnow/star/badge.svg" alt="AtomGit Star"/>
 </p>
 
 <p align="center">
@@ -40,9 +41,9 @@
 
 如果回答漏掉了一条规定，可以先用同一个问题做**召回测试**，查看命中了哪些原文段落，再切换全文、向量或混合检索，调整返回段落数（Top-K）和相似度阈值。在问答结果中，点击引用即可回到对应的原文段落。
 
-### 可视化编排，把知识和工具接入同一个 Bot
+### 可视化编排，把知识、工具和 MCP 服务接入同一个 Bot
 
-在 AI 工作台创建工作流（Workflow）、对话流（Chatflow）或 Agent，通过画布连接模型、知识、工具和逻辑节点。例如，产品支持 Bot 可以用知识节点检索手册。如果团队已有工单查询接口，还可以通过工具节点查询处理进度，交给模型整理答复。工具连接器和提示词模板可以复用。发布前，先用实际问题在线调试，查看运行结果。
+在 AI 工作台创建工作流（Workflow）、对话流（Chatflow）或 Agent，通过拖拽和连线，将模型、知识、工具与逻辑节点编排成业务流程。接入 MCP 服务、调用内置工具或已有业务接口，让 Bot 既能基于知识回答问题，也能调用工具完成任务。例如，产品支持 Bot 可以检索产品手册，再调用工单查询工具获取处理进度，由模型整理成完整答复，让知识解答与业务查询一步衔接。发布前，用实际问题在线调试、实时预览并查看运行结果，让每一步效果可验证，让业务想法更快落地。
 
 ### 应用复用，一套 Bot 可以生成多个业务应用
 
@@ -98,7 +99,7 @@ Bot 定义“这个任务怎么做”，应用实例决定“这次用哪个 Bot
 | 模型接入    | 支持统一配置和管理大模型服务，基于 Spring AI 接入不同模型厂商，为智能体和应用提供模型能力。 |
 | Bot 管理  | 支持智能体的创建、编辑、复制、发布、调试和运行状态管理。                        |
 | 可视化编排中心 | 支持通过拖拽式画布编排 Workflow、Chatflow 与 Agent，快速构建业务智能体。    |
-| 资产中心    | 支持统一管理工具、插件、提示词、知识组件和可复用智能体资产。                      |
+| 资产中心    | 支持统一管理工具、MCP、插件、提示词、知识组件和可复用智能体资产。                  |
 | 应用中心    | 支持集中展示、访问和管理平台内置应用及用户自建应用。                          |
 | 应用配置    | 支持为应用绑定知识库、知识图谱、Bot 和参数配置，生成专属应用。                   |
 | 知识问答    | 基于统一的应用插件开发架构，支持知识问答及后续各类智能应用以插件化方式标准接入、独立扩展和统一管理。  |
@@ -127,9 +128,7 @@ qKnow 采用前后端分离与模块化设计，便于开发者理解代码、�
 源码开发环境的配置步骤见[后端运行指南](https://community.qknow.ai/docs/deploy/manual-deployment/system.html)和[前端运行指南](https://community.qknow.ai/docs/deploy/manual-deployment/vue.html)。
 
 ## QQ交流群
-欢迎加入 qKnow 官方 QQ 交流群，获取最新动态、技术支持与使用交流。 
-
-**👉 <a href="https://community.qknow.ai/discuss.html">点击加入 QQ 交流群</a>**
+欢迎加入 qKnow 官方 QQ 交流群，获取最新动态、技术支持与使用交流。 **👉 <a href="https://community.qknow.ai/discuss.html">点击加入 QQ 交流群</a>**
 
 <a id="license-and-services"></a>
 
