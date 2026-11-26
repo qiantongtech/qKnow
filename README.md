@@ -25,7 +25,7 @@ Organize manuals, policies, and business data into knowledge bases and knowledge
 
 ✨✨✨**Documentation**✨✨✨ <a href="https://community.qknow.ai" target="_blank">https://community.qknow.ai</a>
 
-✨✨✨**Open-Source Edition Demo**✨✨✨ <a href="https://demo.qknow.ai" target="_blank">https://demo.qknow.ai</a> — Username: `qKnow` Password: `qKnow123`
+✨✨✨**Open-Source Edition Demo**✨✨✨ <a href="https://demo.qknow.ai" target="_blank">https://demo.qknow.ai</a> (username: `qKnow` password: `qKnow123`)
 
 ✨✨✨**Professional Edition Demo**✨✨✨ <a href="https://pro-demo.qknow.ai" target="_blank">https://pro-demo.qknow.ai</a> — [Contact us for demo credentials](https://community.qknow.ai/business/policy.html).
 
