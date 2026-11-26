@@ -70,28 +70,25 @@ After signing in, open the Application Center to explore the Knowledge Q&A appli
 
 ## Screenshots
 
-<table>
-    <tr>
-        <td><img alt="Login" src=".gitee/system/login.png"/></td>
-        <td><img alt="Workbench" src=".gitee/system/workbench.png"/></td>
-    </tr>
-    <tr>
-        <td><img alt="Bot Management" src=".gitee/system/bot.png"/></td>
-        <td><img alt="Knowledge Documents" src=".gitee/system/kmcDocument.png"/></td>
-    </tr>
-    <tr>
-        <td><img alt="Concept Configuration" src=".gitee/system/extSchema.png"/></td>
-        <td><img alt="Relationship Configuration" src=".gitee/system/extRelation.png"/></td>
-    </tr>
-    <tr>
-        <td><img alt="Extraction Tasks" src=".gitee/system/extTask.png"/></td>
-        <td><img alt="Extraction Results" src=".gitee/system/extResult.png"/></td>
-    </tr>
-    <tr>
-        <td><img alt="RAG Configuration" src=".gitee/system/ragSetting.png"/></td>
-        <td><img alt="Knowledge Graph" src=".gitee/system/graph.png"/></td>
-    </tr>
-</table>
+![Login](.gitee/system/login.png)
+
+![Workbench](.gitee/system/workbench.png)
+
+![Bot Management](.gitee/system/bot.png)
+
+![Knowledge Documents](.gitee/system/kmcDocument.png)
+
+![Concept Configuration](.gitee/system/extSchema.png)
+
+![Relationship Configuration](.gitee/system/extRelation.png)
+
+![Extraction Tasks](.gitee/system/extTask.png)
+
+![Extraction Results](.gitee/system/extResult.png)
+
+![RAG Configuration](.gitee/system/ragSetting.png)
+
+![Knowledge Graph](.gitee/system/graph.png)
 
 ## Core Features
 
