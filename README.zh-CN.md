@@ -23,11 +23,11 @@
 
 你可以把手册、制度和业务数据整理成知识库与知识图谱，在画布上把模型、知识和工具编排成 Bot，再为不同团队绑定各自的知识资源，生成可以直接使用的应用。
 
-✨✨✨**在线文档**✨✨✨ <a href="https://community.qknow.ai" target="_blank">https://community.qknow.ai</a>
+✨✨✨**在线文档**✨✨✨ <a href="https://docs.qknow.tech" target="_blank">https://docs.qknow.tech</a>
 
-✨✨✨**开源版演示地址**✨✨✨ <a href="https://demo.qknow.ai" target="_blank">https://demo.qknow.ai</a> ，账号：`qKnow` 密码：`qKnow123`
+✨✨✨**开源版演示地址**✨✨✨ <a href="https://demo.qknow.tech" target="_blank">https://demo.qknow.tech</a> ，账号：`qKnow` 密码：`qKnow123`
 
-✨✨✨**专业版演示地址**✨✨✨ <a href="https://pro-demo.qknow.ai" target="_blank">https://pro-demo.qknow.ai</a> ，演示账号请 [联系客服获取](https://community.qknow.ai/business/policy.html)
+✨✨✨**专业版演示地址**✨✨✨ <a href="https://pro3-demo.qknow.tech" target="_blank">https://pro3-demo.qknow.tech</a> ，演示账号请 [联系客服获取](https://docs.qknow.tech/business/policy.html)
 
 > 如果 qKnow 对您有帮助，请点个 **Star ⭐️**，这是我们持续更新的最大动力！ 🚀
 

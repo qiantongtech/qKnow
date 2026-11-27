@@ -23,11 +23,11 @@
 
 Organize manuals, policies, and business data into knowledge bases and knowledge graphs. Connect models, knowledge, and tools on a visual canvas to build Bots, then bind each team's knowledge resources to create ready-to-use applications.
 
-✨✨✨**Documentation**✨✨✨ <a href="https://community.qknow.ai" target="_blank">https://community.qknow.ai</a>
+✨✨✨**Documentation**✨✨✨ <a href="https://docs.qknow.tech" target="_blank">https://docs.qknow.tech</a>
 
-✨✨✨**Open-Source Edition Demo**✨✨✨ <a href="https://demo.qknow.ai" target="_blank">https://demo.qknow.ai</a> (username: `qKnow` password: `qKnow123`)
+✨✨✨**Open-Source Edition Demo**✨✨✨ <a href="https://demo.qknow.tech" target="_blank">https://demo.qknow.tech</a> (username: `qKnow` password: `qKnow123`)
 
-✨✨✨**Professional Edition Demo**✨✨✨ <a href="https://pro-demo.qknow.ai" target="_blank">https://pro-demo.qknow.ai</a> — [Contact us for demo credentials](https://community.qknow.ai/business/policy.html).
+✨✨✨**Professional Edition Demo**✨✨✨ <a href="https://pro3-demo.qknow.tech" target="_blank">https://pro3-demo.qknow.tech</a> — [Contact us for demo credentials](https://docs.qknow.tech/business/policy.html).
 
 > If you find qKnow useful, give us a **Star ⭐️**! Your support keeps us building and improving. 🚀
 
